@@ -4,11 +4,11 @@ Welcome to **OrniFlight**, the open-source flight control software specifically 
 
 ## Introduction
 
-**OrniFlight** is an innovative flight control solution aimed at enthusiasts and researchers working with ornithopters. Unlike traditional quadcopters and fixed-wing aircraft, ornithopters mimic the natural flight mechanics of birds, requiring precise control of servo mechanisms to achieve efficient and stable flight. OrniFlight is tailored to meet these unique requirements, providing a versatile and powerful tool for anyone looking to explore this exciting field.
+**OrniFlight** is an innovative flight control solution built on top of Betaflight 4.0.6, aimed at enthusiasts and researchers working with ornithopters. Unlike traditional quadcopters and fixed-wing aircraft, ornithopters mimic the natural flight mechanics of birds, requiring precise control of servo mechanisms to achieve efficient and stable flight. OrniFlight is tailored to meet these unique requirements, providing a versatile and powerful tool for anyone looking to explore this exciting field.
 
 ### Focus on Servo-Based Flapping Propulsion
 
-OrniFlight replaces traditional motor outputs with oscillating servos that drive the flapping motion of the wings. This servo-based propulsion system enables realistic and efficient flapping wing motion, closely emulating the flight mechanics of birds and other flying creatures. The precise control offered by servos allows for fine-tuning of wing motion, resulting in improved flight stability and performance.
+OrniFlight replaces traditional motor outputs with oscillating servos that drive the flapping motion of the wings. This servo-based propulsion system enables realistic and efficient flapping wing motion, closely emulating the flight mechanics of birds and other flying creatures. The precise control offered by servos allows for fine-tuning of wing motion, resulting in improved flight stability and performance. OrniFlight supports any configuration with any number of wings, making it adaptable to various ornithopter designs and innovations.
 
 ## Key Features
 
