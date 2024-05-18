@@ -148,10 +148,10 @@
 #define USE_PPM
 #define USE_SERIAL_RX
 #define USE_SERIALRX_CRSF       // Team Black Sheep Crossfire protocol
-#define USE_SERIALRX_IBUS       // FlySky and Turnigy receivers
+// #define USE_SERIALRX_IBUS       // FlySky and Turnigy receivers
 #define USE_SERIALRX_SBUS       // Frsky and Futaba receivers
-#define USE_SERIALRX_SPEKTRUM   // SRXL, DSM2 and DSMX protocol
-#define USE_SERIALRX_SUMD       // Graupner Hott protocol
+// #define USE_SERIALRX_SPEKTRUM   // SRXL, DSM2 and DSMX protocol
+// #define USE_SERIALRX_SUMD       // Graupner Hott protocol
 
 #if (FLASH_SIZE > 128)
 #define PID_PROFILE_COUNT 3
@@ -166,7 +166,7 @@
 #define USE_BLACKBOX
 #define USE_CLI_BATCH
 #define USE_RESOURCE_MGMT
-#define USE_RUNAWAY_TAKEOFF     // Runaway Takeoff Prevention (anti-taz)
+// #define USE_RUNAWAY_TAKEOFF     // Runaway Takeoff Prevention (anti-taz)
 #define USE_SERVOS
 #define USE_TELEMETRY
 #define USE_TELEMETRY_FRSKY_HUB
@@ -175,7 +175,7 @@
 
 #if (FLASH_SIZE > 128)
 #define USE_GYRO_OVERFLOW_CHECK
-#define USE_YAW_SPIN_RECOVERY
+// #define USE_YAW_SPIN_RECOVERY
 #define USE_DSHOT_DMAR
 #define USE_SERIALRX_FPORT      // FrSky FPort
 #define USE_TELEMETRY_CRSF
@@ -251,8 +251,8 @@
 #if ((FLASH_SIZE > 256) || (FEATURE_CUT_LEVEL < 2))
 #define USE_TELEMETRY_HOTT
 #define USE_TELEMETRY_LTM
-#define USE_SERIALRX_SUMH       // Graupner legacy protocol
-#define USE_SERIALRX_XBUS       // JR
+// #define USE_SERIALRX_SUMH       // Graupner legacy protocol
+// #define USE_SERIALRX_XBUS       // JR
 #endif
 
 #if ((FLASH_SIZE > 256) || (FEATURE_CUT_LEVEL < 1))
@@ -269,14 +269,14 @@
 #if (FLASH_SIZE > 256)
 #define USE_AIRMODE_LPF
 #define USE_DASHBOARD
-#define USE_GPS
-#define USE_GPS_NMEA
-#define USE_GPS_UBLOX
-#define USE_GPS_RESCUE
-#define USE_GYRO_DLPF_EXPERIMENTAL
+// #define USE_GPS
+// #define USE_GPS_NMEA
+// #define USE_GPS_UBLOX
+// #define USE_GPS_RESCUE
+// #define USE_GYRO_DLPF_EXPERIMENTAL
 #define USE_OSD
 #define USE_OSD_OVER_MSP_DISPLAYPORT
-#define USE_MULTI_GYRO
+// #define USE_MULTI_GYRO
 #define USE_OSD_ADJUSTMENTS
 #define USE_SENSOR_NAMES
 #define USE_SERIALRX_JETIEXBUS
@@ -284,9 +284,10 @@
 #define USE_TELEMETRY_IBUS_EXTENDED
 #define USE_TELEMETRY_JETIEXBUS
 #define USE_TELEMETRY_MAVLINK
+#define USE_ORNI_MIXER_ONLY
 #define USE_UNCOMMON_MIXERS
 #define USE_SIGNATURE
-#define USE_ABSOLUTE_CONTROL
+// #define USE_ABSOLUTE_CONTROL
 #define USE_HOTT_TEXTMODE
 #define USE_LED_STRIP_STATUS_MODE
 #define USE_VARIO

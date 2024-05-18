@@ -711,7 +711,7 @@ void cmsMenuOpen(void)
         cmsInMenu = true;
         currentCtx = (cmsCtx_t){ &menuMain, 0, 0 };
         menuStackIdx = 0;
-        setArmingDisabled(ARMING_DISABLED_CMS_MENU);
+        //setArmingDisabled(ARMING_DISABLED_CMS_MENU);
     } else {
         // Switch display
         displayPort_t *pNextDisplay = cmsDisplayPortSelectNext();

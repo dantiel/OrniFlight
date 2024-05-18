@@ -59,8 +59,7 @@ extern mixerMode_e currentMixerMode;
 
 PG_REGISTER_WITH_RESET_FN(servoConfig_t, servoConfig, PG_SERVO_CONFIG, 0);
 
-void pgResetFn_servoConfig(servoConfig_t *servoConfig)
-{
+void pgResetFn_servoConfig(servoConfig_t *servoConfig) {
     servoConfig->dev.servoCenterPulse = 1500;
     servoConfig->dev.servoPwmRate = 50;
     servoConfig->tri_unarmed_servo = 1;
@@ -101,6 +100,8 @@ static int useServo;
 
 #define COUNT_SERVO_RULES(rules) (sizeof(rules) / sizeof(servoMixer_t))
 // mixer rule format servo, input, rate, speed, min, max, box
+
+#ifndef USE_ORNI_MIXER_ONLY
 static const servoMixer_t servoMixerAirplane[] = {
     { SERVO_FLAPPERON_1, INPUT_STABILIZED_ROLL,  100, 0, 0, 100, 0 },
     { SERVO_FLAPPERON_2, INPUT_STABILIZED_ROLL,  100, 0, 0, 100, 0 },
@@ -162,11 +163,34 @@ static const servoMixer_t servoMixerHeli[] = {
 #define servoMixerSingle NULL
 #define servoMixerHeli NULL
 #endif // USE_UNCOMMON_MIXERS
+#else
+#define servoMixerBI NULL
+#define servoMixerDual NULL
+#define servoMixerSingle NULL
+#define servoMixerHeli NULL
+#define servoMixerTri NULL
+#define servoMixerFlyingWing NULL
+#define servoMixerAirplane NULL
+
+#endif // !USE_ORNI_MIXER_ONLY
+
+
 
 static const servoMixer_t servoMixerGimbal[] = {
     { SERVO_GIMBAL_PITCH, INPUT_GIMBAL_PITCH, 125, 0, 0, 100, 0 },
     { SERVO_GIMBAL_ROLL, INPUT_GIMBAL_ROLL,  125, 0, 0, 100, 0 },
 };
+
+
+static const servoMixer_t servoMixerOrni[] = {
+    { SERVO_ORNITHOPTER_1, INPUT_STABILIZED_ROLL,   100, 0, 0, 100, 0 },
+    { SERVO_ORNITHOPTER_1, INPUT_STABILIZED_PITCH, 100, 0, 0, 100, 0 },
+    { SERVO_ORNITHOPTER_1, INPUT_STABILIZED_FLAPPING_FRONT_LEFT, 100, 0, 0, 100, 0 },
+    { SERVO_ORNITHOPTER_2, INPUT_STABILIZED_YAW,   100, 0, 0, 100, 0 },
+    { SERVO_ORNITHOPTER_2, INPUT_STABILIZED_PITCH, 100, 0, 0, 100, 0 },
+    { SERVO_ORNITHOPTER_2, INPUT_STABILIZED_FLAPPING_FRONT_RIGHT, 100, 0, 0, 100, 0 },
+};
+
 
 const mixerRules_t servoMixers[] = {
     { 0, NULL },                // entry 0
@@ -196,6 +220,7 @@ const mixerRules_t servoMixers[] = {
     { 0, NULL },                // MULTITYPE_CUSTOM_PLANE
     { 0, NULL },                // MULTITYPE_CUSTOM_TRI
     { 0, NULL },
+    { COUNT_SERVO_RULES(servoMixerOrni), servoMixerOrni } // servoMixerOrni
 };
 
 int16_t determineServoMiddleOrForwardFromChannel(servoIndex_e servoIndex)
@@ -268,10 +293,12 @@ void servoConfigureOutput(void)
     // set flag that we're on something with wings
     if (currentMixerMode == MIXER_FLYING_WING ||
         currentMixerMode == MIXER_AIRPLANE ||
-        currentMixerMode == MIXER_CUSTOM_AIRPLANE
+        currentMixerMode == MIXER_CUSTOM_AIRPLANE ||
+        currentMixerMode == MIXER_SERVO_ORNITHOPTER
     ) {
         ENABLE_STATE(FIXED_WING);
-        if (currentMixerMode == MIXER_CUSTOM_AIRPLANE) {
+        if (currentMixerMode == MIXER_CUSTOM_AIRPLANE ||  
+          currentMixerMode == MIXER_SERVO_ORNITHOPTER) {
             loadCustomServoMixer();
         }
     } else {
@@ -347,6 +374,11 @@ void writeServos(void)
             pwmWriteServo(servoIndex++, servo[i]);
         }
         break;
+    case MIXER_SERVO_ORNITHOPTER:
+      for (int i = SERVO_ORNITHOPTER_INDEX_MIN; i <= SERVO_ORNITHOPTER_INDEX_MAX; i++) {
+          pwmWriteServo(servoIndex++, servo[i]);
+      }
+      break;
 
 #ifdef USE_UNCOMMON_MIXERS
     case MIXER_BICOPTER:
@@ -412,6 +444,15 @@ void servoMixer(void)
         }
     }
 
+    // input[INPUT_STABILIZED_FLAPPING_FRONT_LEFT]  = rcData[THROTTLE];
+    input[INPUT_STABILIZED_FLAPPING_FRONT_RIGHT] = rcData[THROTTLE];
+    applyFlappingToServos(input);
+    
+    //input[INPUT_STABILIZED_FLAPPING_FRONT_LEFT] = motor[0];
+    //input[INPUT_STABILIZED_FLAPPING_FRONT_RIGHT] = motor[1];
+    //input[INPUT_STABILIZED_FLAPPING_BACK_LEFT] = motor[2];
+    //input[INPUT_STABILIZED_FLAPPING_BACK_RIGHT] = motor[3];
+
     input[INPUT_GIMBAL_PITCH] = scaleRange(attitude.values.pitch, -1800, 1800, -500, +500);
     input[INPUT_GIMBAL_ROLL] = scaleRange(attitude.values.roll, -1800, 1800, -500, +500);
 
@@ -468,6 +509,56 @@ void servoMixer(void)
 }
 
 
+#define SERVO_TRAVEL_SPEED 0.052 // in s/60deg
+#define GLIDE_MODE_THRESHOLD 1040
+#define GLIDE_DEG 7
+int millisold = 0;
+int millinow = 0;
+float dt = 0;
+float flap_factor = 0;
+float tcommand = 0;
+float floattime = 0;
+float omegadot = 0.0;
+float thetadot = 0.0;
+float omega = 0.0;
+float theta = 0.0;
+float k0 = 1.0;
+float k2 = 10.0;
+float rc_flap_speed_modifier = 1500; // TODO
+
+// Function to apply flapping logic to servos based on motor output
+void applyFlappingToServos(int16_t *input) {
+  millinow = millis();
+  floattime = millinow * 0.001;
+  dt = (millinow - millisold) * 0.001;
+  millisold = millinow;
+  
+  tcommand = (rcData[THROTTLE] - 480.0) * ((1.0 / (100 * SERVO_TRAVEL_SPEED)) + ((rc_flap_speed_modifier - 1500) * 0.0000725));
+
+  omegadot = k0 * tcommand - k2 * omega;
+  thetadot = omega;
+
+  theta = theta + omega * dt;
+  omega = omega + omegadot * dt;
+
+  flap_factor = sin(theta) * 0.04 * (1 - (rc_flap_speed_modifier - 1500) * 0.0003);
+
+  // enable glide mode when throttle is below threshold
+  if (rcData[THROTTLE] > GLIDE_MODE_THRESHOLD) {
+    input[INPUT_STABILIZED_FLAPPING_FRONT_LEFT]  = flap_factor * (motor[0] - 1000) ;
+    input[INPUT_STABILIZED_FLAPPING_FRONT_RIGHT] = flap_factor * (motor[3] - 1000) ;
+    input[INPUT_STABILIZED_FLAPPING_BACK_LEFT]   = flap_factor * (motor[1] - 1000) ;
+    input[INPUT_STABILIZED_FLAPPING_BACK_RIGHT]  = flap_factor * (motor[2] - 1000) ;
+  } 
+  else {
+    input[INPUT_STABILIZED_FLAPPING_FRONT_LEFT]  = GLIDE_DEG * 5;
+    input[INPUT_STABILIZED_FLAPPING_FRONT_RIGHT] = -GLIDE_DEG * 5;
+    input[INPUT_STABILIZED_FLAPPING_BACK_LEFT]   = GLIDE_DEG * 5;
+    input[INPUT_STABILIZED_FLAPPING_BACK_RIGHT]  = -GLIDE_DEG * 5;
+  }
+}
+
+
 static void servoTable(void)
 {
     // airplane / servo mixes
@@ -486,7 +577,9 @@ static void servoTable(void)
     case MIXER_GIMBAL:
         servoMixer();
         break;
-
+    case MIXER_SERVO_ORNITHOPTER:
+        servoMixer();
+        break;
     /*
     case MIXER_GIMBAL:
         servo[SERVO_GIMBAL_PITCH] = (((int32_t)servoParams(SERVO_GIMBAL_PITCH)->rate * attitude.values.pitch) / 50) + determineServoMiddleOrForwardFromChannel(SERVO_GIMBAL_PITCH);

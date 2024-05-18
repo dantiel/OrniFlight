@@ -2305,28 +2305,28 @@ static mspResult_e mspProcessInCommand(uint8_t cmdMSP, sbuf_t *src)
 
     case MSP_SET_ARMING_DISABLED:
         {
-            const uint8_t command = sbufReadU8(src);
-            uint8_t disableRunawayTakeoff = 0;
-#ifndef USE_RUNAWAY_TAKEOFF
-            UNUSED(disableRunawayTakeoff);
-#endif
-            if (sbufBytesRemaining(src)) {
-                disableRunawayTakeoff = sbufReadU8(src);
-            }
-            if (command) {
-                setArmingDisabled(ARMING_DISABLED_MSP);
-                if (ARMING_FLAG(ARMED)) {
-                    disarm();
-                }
-#ifdef USE_RUNAWAY_TAKEOFF
-                runawayTakeoffTemporaryDisable(false);
-#endif
-            } else {
-                unsetArmingDisabled(ARMING_DISABLED_MSP);
-#ifdef USE_RUNAWAY_TAKEOFF
-                runawayTakeoffTemporaryDisable(disableRunawayTakeoff);
-#endif
-            }
+//             const uint8_t command = sbufReadU8(src);
+//             uint8_t disableRunawayTakeoff = 0;
+// #ifndef USE_RUNAWAY_TAKEOFF
+//             UNUSED(disableRunawayTakeoff);
+// #endif
+//             if (sbufBytesRemaining(src)) {
+//                 disableRunawayTakeoff = sbufReadU8(src);
+//             }
+//             if (command) {
+//                 setArmingDisabled(ARMING_DISABLED_MSP);
+//                 if (ARMING_FLAG(ARMED)) {
+//                     disarm();
+//                 }
+// #ifdef USE_RUNAWAY_TAKEOFF
+//                 runawayTakeoffTemporaryDisable(false);
+// #endif
+//             } else {
+//                 unsetArmingDisabled(ARMING_DISABLED_MSP);
+// #ifdef USE_RUNAWAY_TAKEOFF
+//                 runawayTakeoffTemporaryDisable(disableRunawayTakeoff);
+// #endif
+//             }
         }
         break;
 

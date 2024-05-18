@@ -40,6 +40,10 @@ enum {
     INPUT_RC_AUX4,
     INPUT_GIMBAL_PITCH,
     INPUT_GIMBAL_ROLL,
+    INPUT_STABILIZED_FLAPPING_FRONT_LEFT, // 14
+    INPUT_STABILIZED_FLAPPING_FRONT_RIGHT,
+    INPUT_STABILIZED_FLAPPING_BACK_LEFT, 
+    INPUT_STABILIZED_FLAPPING_BACK_RIGHT,
     INPUT_SOURCE_COUNT
 };
 
@@ -68,7 +72,12 @@ typedef enum {
     SERVO_HELI_LEFT = 0,
     SERVO_HELI_RIGHT = 1,
     SERVO_HELI_TOP = 2,
-    SERVO_HELI_RUD = 3
+    SERVO_HELI_RUD = 3,
+    
+    SERVO_ORNITHOPTER_1 = 3,
+    SERVO_ORNITHOPTER_2 = 4,
+    SERVO_ORNITHOPTER_3 = 5,
+    SERVO_ORNITHOPTER_4 = 6,
 
 } servoIndex_e; // FIXME rename to servoChannel_e
 
@@ -80,6 +89,9 @@ typedef enum {
 
 #define SERVO_SINGLECOPTER_INDEX_MIN SERVO_SINGLECOPTER_1
 #define SERVO_SINGLECOPTER_INDEX_MAX SERVO_SINGLECOPTER_4
+
+#define SERVO_ORNITHOPTER_INDEX_MIN SERVO_ORNITHOPTER_1
+#define SERVO_ORNITHOPTER_INDEX_MAX SERVO_ORNITHOPTER_4
 
 #define SERVO_FLAPPERONS_MIN SERVO_FLAPPERON_1
 #define SERVO_FLAPPERONS_MAX SERVO_FLAPPERON_2
@@ -125,6 +137,14 @@ typedef struct servoConfig_s {
     uint16_t servo_lowpass_freq;            // lowpass servo filter frequency selection; 1/1000ths of loop freq
     uint8_t tri_unarmed_servo;              // send tail servo correction pulses even when unarmed
     uint8_t channelForwardingStartChannel;
+    
+    
+
+    // Add new fields below
+    // bool oscillatingServoEnabled;           // Enable oscillating servo mode
+    // float amplitudeCoefficient;             // Coefficient for amplitude control
+    // float frequencyCoefficient;             // Coefficient for frequency control
+
 } servoConfig_t;
 
 PG_DECLARE(servoConfig_t, servoConfig);

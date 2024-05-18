@@ -133,6 +133,8 @@ static motorMixer_t launchControlMixer[MAX_SUPPORTED_MOTORS];
 static FAST_RAM_ZERO_INIT int throttleAngleCorrection;
 
 
+#ifndef USE_ORNI_MIXER_ONLY
+
 static const motorMixer_t mixerQuadX[] = {
     { 1.0f, -1.0f,  1.0f, -1.0f },          // REAR_R
     { 1.0f, -1.0f, -1.0f,  1.0f },          // FRONT_R
@@ -288,6 +290,28 @@ static const motorMixer_t mixerQuadX1234[] = {
     { 1.0f,  1.0f,  1.0f,  1.0f },          // REAR_L
 };
 
+#else
+#define mixerOctoX8 NULL
+#define mixerOctoFlatP NULL
+#define mixerOctoFlatX NULL
+#define mixerQuadX NULL
+#define mixerTricopter NULL
+#define mixerQuadP NULL
+#define mixerQuadX1234 NULL
+#define mixerSingleProp NULL
+#define mixerDualcopter NULL
+#define mixerAtail4 NULL
+#define mixerVtail4 NULL
+
+#endif
+
+static const motorMixer_t mixerOrnithopter[] = {
+    { 1.0f,  1.0f, -1.0f, -1.0f },          // FRONT_L
+    { 1.0f, -1.0f, -1.0f,  1.0f },          // FRONT_R
+    { 1.0f, -1.0f,  1.0f, -1.0f },          // REAR_R
+    { 1.0f,  1.0f,  1.0f,  1.0f },          // REAR_L
+};
+
 // Keep synced with mixerMode_e
 // Some of these entries are bogus when servos (USE_SERVOS) are not configured,
 // but left untouched to keep ordinals synced with mixerMode_e (and configurator).
@@ -319,7 +343,8 @@ const mixer_t mixers[] = {
     { 0, false, NULL },                // MIXER_CUSTOM
     { 2, true,  NULL },                // MIXER_CUSTOM_AIRPLANE
     { 3, true,  NULL },                // MIXER_CUSTOM_TRI
-    { 4, false, mixerQuadX1234 },
+    { 4, false, mixerQuadX1234 },      // MIXER_QUADX
+    { 4, true,  mixerOrnithopter },    // MIXER_ORNI
 };
 #endif // !USE_QUAD_MIXER_ONLY
 
