@@ -1,4 +1,4 @@
-![OrniFlight](/orniflight_logo_.png)
+![OrniFlight](/orniflight_logo.png)
 
 Welcome to **OrniFlight**, the open-source flight control software specifically designed for servo flapping ornithopters. Built on the robust Betaflight platform, OrniFlight brings advanced servo-based propulsion and cutting-edge aerodynamic optimization to the fascinating realm of flapping wing flight.
 
