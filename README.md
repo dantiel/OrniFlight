@@ -23,7 +23,7 @@ To get started with OrniFlight, follow these steps:
 
 1. **Clone the Repository**:
    ```bash
-   git clone https://github.com/yourusername/OrniFlight.git
+   git clone https://github.com/dantiel/OrniFlight.git
    cd OrniFlight
    ```
 
