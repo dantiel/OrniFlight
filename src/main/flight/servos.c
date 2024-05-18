@@ -541,7 +541,7 @@ void applyFlappingToServos(int16_t *input) {
   theta = theta + omega * dt;
   omega = omega + omegadot * dt;
 
-  flap_factor = sin(theta) * 0.04 * (1 - (rc_flap_speed_modifier - 1500) * 0.0003);
+  flap_factor = sin(theta) * 0.07 * (1 - (rc_flap_speed_modifier - 1500) * 0.0003);
 
   // enable glide mode when throttle is below threshold
   if (rcData[THROTTLE] > GLIDE_MODE_THRESHOLD) {
