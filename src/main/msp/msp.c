@@ -136,7 +136,7 @@
 #include "msp.h"
 
 
-static const char * const flightControllerIdentifier = BETAFLIGHT_IDENTIFIER; // 4 UPPER CASE alpha numeric characters that identify the flight controller.
+static const char * const flightControllerIdentifier = ORNIFLIGHT_IDENTIFIER; // 4 UPPER CASE alpha numeric characters that identify the flight controller.
 
 enum {
     MSP_REBOOT_FIRMWARE = 0,
@@ -919,6 +919,8 @@ static bool mspProcessOutCommand(uint8_t cmdMSP, sbuf_t *dst)
             sbufWriteU8(dst, servoParams(i)->forwardFromChannel);
             sbufWriteU32(dst, servoParams(i)->reversedSources);
         }
+        
+        sbufWriteU8(dst, servoConfigMutable()->ornithopter_glide_deg + 128);
         break;
 
     case MSP_SERVO_MIX_RULES:
@@ -1387,7 +1389,6 @@ static bool mspProcessOutCommand(uint8_t cmdMSP, sbuf_t *dst)
         sbufWriteU16(dst, gyroConfig()->gyroCalibrationDuration);
         sbufWriteU16(dst, gyroConfig()->gyro_offset_yaw);
         sbufWriteU8(dst, gyroConfig()->checkOverflow);
-
         break;
     case MSP_FILTER_CONFIG :
         sbufWriteU8(dst, gyroConfig()->gyro_lowpass_hz);
@@ -1420,7 +1421,7 @@ static bool mspProcessOutCommand(uint8_t cmdMSP, sbuf_t *dst)
         sbufWriteU16(dst, 0);
         sbufWriteU16(dst, 0);
 #endif
-
+        sbufWriteU8(dst, servoConfigMutable()->ondas_gain);
         break;
     case MSP_PID_ADVANCED:
         sbufWriteU16(dst, 0);
@@ -1493,7 +1494,10 @@ static bool mspProcessOutCommand(uint8_t cmdMSP, sbuf_t *dst)
         sbufWriteU8(dst, 0);
         sbufWriteU8(dst, 0);
 #endif
-
+        
+        sbufWriteU8(dst, servoConfigMutable()->flap_base_frequency);
+        sbufWriteU8(dst, servoConfigMutable()->flap_base_amplitude + 128);
+        
         break;
     case MSP_SENSOR_CONFIG:
 #if defined(USE_ACC)
@@ -1714,7 +1718,7 @@ static mspResult_e mspProcessInCommand(uint8_t cmdMSP, sbuf_t *src)
         break;
 
     case MSP_COPY_PROFILE:
-        value = sbufReadU8(src);        // 0 = pid profile, 1 = control rate profile
+        value = sbufReadU8(src); // 0 = pid profile, 1 = control rate profile
         uint8_t dstProfileIndex = sbufReadU8(src);
         uint8_t srcProfileIndex = sbufReadU8(src);
         if (value == 0) {
@@ -1926,19 +1930,23 @@ static mspResult_e mspProcessInCommand(uint8_t cmdMSP, sbuf_t *src)
 
     case MSP_SET_SERVO_CONFIGURATION:
 #ifdef USE_SERVOS
-        if (dataSize != 1 + 12) {
-            return MSP_RESULT_ERROR;
-        }
-        i = sbufReadU8(src);
-        if (i >= MAX_SUPPORTED_SERVOS) {
-            return MSP_RESULT_ERROR;
+        if (dataSize <= 2) {
+            servoConfigMutable()->ornithopter_glide_deg = sbufReadU8(src) - 128;
         } else {
-            servoParamsMutable(i)->min = sbufReadU16(src);
-            servoParamsMutable(i)->max = sbufReadU16(src);
-            servoParamsMutable(i)->middle = sbufReadU16(src);
-            servoParamsMutable(i)->rate = sbufReadU8(src);
-            servoParamsMutable(i)->forwardFromChannel = sbufReadU8(src);
-            servoParamsMutable(i)->reversedSources = sbufReadU32(src);
+            if (dataSize != 1 + 12) {
+                return MSP_RESULT_ERROR;
+            }
+            i = sbufReadU8(src);
+            if (i >= MAX_SUPPORTED_SERVOS) {
+                return MSP_RESULT_ERROR;
+            } else {
+                servoParamsMutable(i)->min = sbufReadU16(src);
+                servoParamsMutable(i)->max = sbufReadU16(src);
+                servoParamsMutable(i)->middle = sbufReadU16(src);
+                servoParamsMutable(i)->rate = sbufReadU8(src);
+                servoParamsMutable(i)->forwardFromChannel = sbufReadU8(src);
+                servoParamsMutable(i)->reversedSources = sbufReadU32(src);
+            }
         }
 #endif
         break;
@@ -2086,6 +2094,8 @@ static mspResult_e mspProcessInCommand(uint8_t cmdMSP, sbuf_t *src)
             sbufReadU16(src);
             sbufReadU16(src);
 #endif
+            
+            servoConfigMutable()->ondas_gain = sbufReadU8(src);           
         }
 
         // reinitialize the gyro filters with the new values
@@ -2178,6 +2188,8 @@ static mspResult_e mspProcessInCommand(uint8_t cmdMSP, sbuf_t *src)
             sbufReadU8(src);
             sbufReadU8(src);
 #endif
+            servoConfigMutable()->flap_base_frequency = sbufReadU8(src);
+            servoConfigMutable()->flap_base_amplitude = sbufReadU8(src) - 128; 
         }
         pidInitConfig(currentPidProfile);
 
@@ -2616,6 +2628,9 @@ static mspResult_e mspProcessInCommand(uint8_t cmdMSP, sbuf_t *src)
 
         break;
 #endif
+    case MSP_SET_ORNITHOPTER_GLIDE_DEGREE:
+
+        break;
 #endif // USE_BOARD_INFO
     default:
         // we do not know how to handle the (valid) message, indicate error MSP $M!

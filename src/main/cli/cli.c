@@ -1433,7 +1433,7 @@ static void cliAdjustmentRange(char *cmdline)
                 cliShowParseError();
                 return;
             }
-
+            
             // Optional arguments
             ar->adjustmentCenter = 0;
             ar->adjustmentScale = 0;

@@ -40,10 +40,10 @@ enum {
     INPUT_RC_AUX4,
     INPUT_GIMBAL_PITCH,
     INPUT_GIMBAL_ROLL,
-    INPUT_STABILIZED_FLAPPING_FRONT_LEFT, // 14
-    INPUT_STABILIZED_FLAPPING_FRONT_RIGHT,
-    INPUT_STABILIZED_FLAPPING_BACK_LEFT, 
-    INPUT_STABILIZED_FLAPPING_BACK_RIGHT,
+    INPUT_STABILIZED_FLAPPING_0, // 14
+    INPUT_STABILIZED_FLAPPING_1,
+    INPUT_STABILIZED_FLAPPING_2, 
+    INPUT_STABILIZED_FLAPPING_3,
     INPUT_SOURCE_COUNT
 };
 
@@ -74,10 +74,10 @@ typedef enum {
     SERVO_HELI_TOP = 2,
     SERVO_HELI_RUD = 3,
     
-    SERVO_ORNITHOPTER_1 = 3,
-    SERVO_ORNITHOPTER_2 = 4,
-    SERVO_ORNITHOPTER_3 = 5,
-    SERVO_ORNITHOPTER_4 = 6,
+    SERVO_ORNITHOPTER_1 = 0,
+    SERVO_ORNITHOPTER_2 = 1,
+    SERVO_ORNITHOPTER_3 = 2,
+    SERVO_ORNITHOPTER_4 = 3,
 
 } servoIndex_e; // FIXME rename to servoChannel_e
 
@@ -136,15 +136,12 @@ typedef struct servoConfig_s {
     servoDevConfig_t dev;
     uint16_t servo_lowpass_freq;            // lowpass servo filter frequency selection; 1/1000ths of loop freq
     uint8_t tri_unarmed_servo;              // send tail servo correction pulses even when unarmed
-    uint8_t channelForwardingStartChannel;
-    
-    
+    uint8_t channel_forwarding_start_channel;
 
-    // Add new fields below
-    // bool oscillatingServoEnabled;           // Enable oscillating servo mode
-    // float amplitudeCoefficient;             // Coefficient for amplitude control
-    // float frequencyCoefficient;             // Coefficient for frequency control
-
+    uint8_t flap_base_frequency;
+    int8_t flap_base_amplitude;
+    int8_t ornithopter_glide_deg;
+    uint8_t ondas_gain;
 } servoConfig_t;
 
 PG_DECLARE(servoConfig_t, servoConfig);

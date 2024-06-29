@@ -46,6 +46,11 @@
 #include "flight/gps_rescue.h"
 #include "flight/imu.h"
 #include "flight/mixer.h"
+#include "flight/servos.h"
+
+#include "rx/rx.h"
+#include "pg/rx.h"
+
 
 #include "io/gps.h"
 
@@ -78,6 +83,10 @@ static FAST_RAM_ZERO_INIT float pidFrequency;
 
 static FAST_RAM_ZERO_INIT uint8_t antiGravityMode;
 static FAST_RAM_ZERO_INIT float antiGravityThrottleHpf;
+// static FAST_RAM_ZERO_INIT float flapping;
+FAST_RAM_ZERO_INIT float throttle_;
+FAST_RAM_ZERO_INIT float flapping;
+FAST_RAM_ZERO_INIT float flappingAmplitude;
 static FAST_RAM_ZERO_INIT uint16_t itermAcceleratorGain;
 static FAST_RAM float antiGravityOsdCutoff = 1.0f;
 static FAST_RAM_ZERO_INIT bool antiGravityEnabled;
@@ -296,6 +305,7 @@ static FAST_RAM_ZERO_INIT pt1Filter_t airmodeThrottleLpf2;
 #endif
 
 static FAST_RAM_ZERO_INIT pt1Filter_t antiGravityThrottleLpf;
+
 
 void pidInitFilters(const pidProfile_t *pidProfile)
 {
@@ -540,11 +550,62 @@ FAST_RAM_ZERO_INIT float thrustLinearizationReciprocal;
 FAST_RAM_ZERO_INIT float thrustLinearizationB;
 #endif
 
-void pidUpdateAntiGravityThrottleFilter(float throttle)
-{
+
+
+int millisold = 0;
+int millinow = 0;
+float dt = 0;
+float flap_factor = 0;
+float tcommand = 0;
+float floattime = 0;
+float omegadot = 0.0;
+float thetadot = 0.0;
+float omega = 0.0;
+float theta = 0.0;
+float k0 = 1.0;
+float k2 = 10.0;
+float rc_flap_speed_modifier = 1500; // TODO
+
+
+
+float calculateFlappingFromThrottle(float rc_throttle) {
+    millinow = millis();
+    floattime = millinow * 0.001;
+    dt = (millinow - millisold) * 0.001;
+    millisold = millinow;
+  
+    tcommand = (rc_throttle - 480.0) * ((1.0 / (0.1 * (float)servoConfig()->flap_base_frequency)) + ((currentControlRateProfile->flap_speed_modificator - 1500) * 0.000725));
+
+    omegadot = k0 * tcommand - k2 * omega;
+    thetadot = omega;
+
+    theta = theta + omega * dt;
+    omega = omega + omegadot * dt;
+
+    if (rc_throttle > GLIDE_MODE_THRESHOLD) {
+        return sin(theta) * flappingAmplitude;
+    }
+    else {
+        return 0;
+    }
+}
+
+float getFlappingAmplitude(float rc_throttle) {
+    if (rc_throttle > GLIDE_MODE_THRESHOLD) {
+        return ((rc_throttle - GLIDE_MODE_THRESHOLD) * 0.04) * (float)servoConfig()->flap_base_amplitude * 0.1 * (1 - (rc_flap_speed_modifier - 1500) * 0.0003);
+    }
+    else return 0;
+}
+
+
+void pidUpdateThrottle(float throttle) {
     if (antiGravityMode == ANTI_GRAVITY_SMOOTH) {
         antiGravityThrottleHpf = throttle - pt1FilterApply(&antiGravityThrottleLpf, throttle);
     }
+    
+    throttle_ = throttle;
+    flappingAmplitude = getFlappingAmplitude(throttle * 1000 + 1000);
+    flapping = calculateFlappingFromThrottle(throttle * 1000 + 1000);
 }
 
 #ifdef USE_DYN_LPF
@@ -1340,13 +1401,23 @@ void FAST_CODE pidController(const pidProfile_t *pidProfile, timeUs_t currentTim
 
         const float previousIterm = pidData[axis].I;
         float itermErrorRate = errorRate;
-
+        
 #if defined(USE_ITERM_RELAX)
         if (!launchControlActive && !inCrashRecoveryMode) {
             applyItermRelax(axis, previousIterm, gyroRate, &itermErrorRate, &currentPidSetpoint);
             errorRate = currentPidSetpoint - gyroRate;
         }
 #endif
+
+        // --------introduce ONDAS alpha filter. -----------------------------------
+        // apply only on PITCH axis for now. attenuation of filter can be tuned.
+        if (axis == FD_PITCH && rcData[THROTTLE] > GLIDE_MODE_THRESHOLD) {
+          errorRate = errorRate 
+            * (1.0 - ((fabs(flapping) / flappingAmplitude) 
+              * sqrtf(throttle_)
+              * (float)servoConfig()->ondas_gain * 0.01));
+        }
+
 
         // --------low-level gyro-based PID based on 2DOF PID controller. ----------
         // 2-DOF PID controller with optional filter on derivative term.

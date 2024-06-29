@@ -69,6 +69,7 @@
 #define MULTIWII_IDENTIFIER "MWII";
 #define BASEFLIGHT_IDENTIFIER "BAFL";
 #define BETAFLIGHT_IDENTIFIER "BTFL"
+#define ORNIFLIGHT_IDENTIFIER "ORNI"
 #define CLEANFLIGHT_IDENTIFIER "CLFL"
 #define INAV_IDENTIFIER "INAV"
 #define RACEFLIGHT_IDENTIFIER "RCFL"
@@ -336,3 +337,4 @@
 #define MSP_RTC                  247    //out message         Gets the RTC clock
 #define MSP_SET_BOARD_INFO       248    //in message          Sets the board information for this board
 #define MSP_SET_SIGNATURE        249    //in message          Sets the signature of the board and serial number
+#define MSP_SET_ORNITHOPTER_GLIDE_DEGREE 244 //in message     sets the ornithopter glide degree

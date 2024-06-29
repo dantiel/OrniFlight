@@ -54,7 +54,6 @@
 
 #include "rx/rx.h"
 
-
 extern mixerMode_e currentMixerMode;
 
 PG_REGISTER_WITH_RESET_FN(servoConfig_t, servoConfig, PG_SERVO_CONFIG, 0);
@@ -64,7 +63,12 @@ void pgResetFn_servoConfig(servoConfig_t *servoConfig) {
     servoConfig->dev.servoPwmRate = 50;
     servoConfig->tri_unarmed_servo = 1;
     servoConfig->servo_lowpass_freq = 0;
-    servoConfig->channelForwardingStartChannel = AUX1;
+    servoConfig->channel_forwarding_start_channel = AUX1;
+    
+    servoConfig->flap_base_frequency = 12;
+    servoConfig->flap_base_amplitude = 60;
+    servoConfig->ornithopter_glide_deg = -30;
+    servoConfig->ondas_gain = 50;
 
     for (unsigned servoIndex = 0; servoIndex < MAX_SUPPORTED_SERVOS; servoIndex++) {
         servoConfig->dev.ioTags[servoIndex] = timerioTagGetByUsage(TIM_USE_SERVO, servoIndex);
@@ -103,10 +107,10 @@ static int useServo;
 
 #ifndef USE_ORNI_MIXER_ONLY
 static const servoMixer_t servoMixerAirplane[] = {
-    { SERVO_FLAPPERON_1, INPUT_STABILIZED_ROLL,  100, 0, 0, 100, 0 },
-    { SERVO_FLAPPERON_2, INPUT_STABILIZED_ROLL,  100, 0, 0, 100, 0 },
-    { SERVO_RUDDER,      INPUT_STABILIZED_YAW,   100, 0, 0, 100, 0 },
-    { SERVO_ELEVATOR,    INPUT_STABILIZED_PITCH, 100, 0, 0, 100, 0 },
+    { SERVO_FLAPPERON_1, INPUT_STABILIZED_ROLL,     100, 0, 0, 100, 0 },
+    { SERVO_FLAPPERON_2, INPUT_STABILIZED_ROLL,     100, 0, 0, 100, 0 },
+    { SERVO_RUDDER,      INPUT_STABILIZED_YAW,      100, 0, 0, 100, 0 },
+    { SERVO_ELEVATOR,    INPUT_STABILIZED_PITCH,    100, 0, 0, 100, 0 },
     { SERVO_THROTTLE,    INPUT_STABILIZED_THROTTLE, 100, 0, 0, 100, 0 },
 };
 
@@ -183,13 +187,52 @@ static const servoMixer_t servoMixerGimbal[] = {
 
 
 static const servoMixer_t servoMixerOrni[] = {
-    { SERVO_ORNITHOPTER_1, INPUT_STABILIZED_ROLL,   100, 0, 0, 100, 0 },
-    { SERVO_ORNITHOPTER_1, INPUT_STABILIZED_PITCH, 100, 0, 0, 100, 0 },
-    { SERVO_ORNITHOPTER_1, INPUT_STABILIZED_FLAPPING_FRONT_LEFT, 100, 0, 0, 100, 0 },
-    { SERVO_ORNITHOPTER_2, INPUT_STABILIZED_YAW,   100, 0, 0, 100, 0 },
-    { SERVO_ORNITHOPTER_2, INPUT_STABILIZED_PITCH, 100, 0, 0, 100, 0 },
-    { SERVO_ORNITHOPTER_2, INPUT_STABILIZED_FLAPPING_FRONT_RIGHT, 100, 0, 0, 100, 0 },
+    { SERVO_ORNITHOPTER_1, INPUT_STABILIZED_ROLL,       100, 0, 0, 100, 0 },
+    { SERVO_ORNITHOPTER_1, INPUT_STABILIZED_PITCH,      100, 0, 0, 100, 0 },
+    { SERVO_ORNITHOPTER_1, INPUT_STABILIZED_FLAPPING_0, 100, 0, 0, 100, 0 },
+    { SERVO_ORNITHOPTER_2, INPUT_STABILIZED_YAW,        100, 0, 0, 100, 0 },
+    { SERVO_ORNITHOPTER_2, INPUT_STABILIZED_PITCH,      100, 0, 0, 100, 0 },
+    { SERVO_ORNITHOPTER_2, INPUT_STABILIZED_FLAPPING_1, 100, 0, 0, 100, 0 },
 };
+
+/*
+four flapping servos 
+mmix 0  1.000  1.000 -1.000 -1.000
+mmix 1  1.000 -1.000 -1.000  1.000
+mmix 2  1.000 -1.000  1.000 -1.000
+mmix 3  1.000  1.000  1.000  1.000
+
+
+
+
+smix 0 3 1 100 0 0 100 0
+smix 1 3 0 100 0 0 100 0
+smix 2 3 14 100 0 0 100 0
+smix 3 4 1 100 0 0 100 0
+smix 4 4 0 -100 0 0 100 0
+smix 5 4 15 100 0 0 100 0
+
+smix 6 5 1 -100 0 0 100 0
+smix 7 5 0 100 0 0 100 0
+smix 8 5 16 100 0 0 100 0
+smix 9 6 1 -100 0 0 100 0
+smix 10 6 0 -100 0 0 100 0
+smix 11 6 17 100 0 0 100 0
+
+
+
+
+## two flapping servos 
+mmix 0  1.000 0.000 0.000 -1.000
+mmix 1  1.000 0.000 0.000  1.000
+
+smix 0 3 0  100 0 0 100 0
+smix 1 3 1  -100 0 0 100 0
+smix 2 3 14 100 0 0 100 0
+smix 3 5 0  100 0 0 100 0
+smix 4 5 1  100 0 0 100 0
+smix 5 5 15 -100 0 0 100 0
+*/
 
 
 const mixerRules_t servoMixers[] = {
@@ -326,7 +369,7 @@ void servoMixerLoadMix(int index)
 STATIC_UNIT_TESTED void forwardAuxChannelsToServos(uint8_t firstServoIndex)
 {
     // start forwarding from this channel
-    int channelOffset = servoConfig()->channelForwardingStartChannel;
+    int channelOffset = servoConfig()->channel_forwarding_start_channel;
     const int maxAuxChannelCount = MIN(MAX_AUX_CHANNEL_COUNT, rxConfig()->max_aux_channel);
     for (int servoOffset = 0; servoOffset < maxAuxChannelCount && channelOffset < MAX_SUPPORTED_RC_CHANNEL_COUNT; servoOffset++) {
         pwmWriteServo(firstServoIndex + servoOffset, rcData[channelOffset++]);
@@ -444,14 +487,7 @@ void servoMixer(void)
         }
     }
 
-    // input[INPUT_STABILIZED_FLAPPING_FRONT_LEFT]  = rcData[THROTTLE];
-    input[INPUT_STABILIZED_FLAPPING_FRONT_RIGHT] = rcData[THROTTLE];
     applyFlappingToServos(input);
-    
-    //input[INPUT_STABILIZED_FLAPPING_FRONT_LEFT] = motor[0];
-    //input[INPUT_STABILIZED_FLAPPING_FRONT_RIGHT] = motor[1];
-    //input[INPUT_STABILIZED_FLAPPING_BACK_LEFT] = motor[2];
-    //input[INPUT_STABILIZED_FLAPPING_BACK_RIGHT] = motor[3];
 
     input[INPUT_GIMBAL_PITCH] = scaleRange(attitude.values.pitch, -1800, 1800, -500, +500);
     input[INPUT_GIMBAL_ROLL] = scaleRange(attitude.values.roll, -1800, 1800, -500, +500);
@@ -509,53 +545,25 @@ void servoMixer(void)
 }
 
 
-#define SERVO_TRAVEL_SPEED 0.052 // in s/60deg
-#define GLIDE_MODE_THRESHOLD 1040
-#define GLIDE_DEG 7
-int millisold = 0;
-int millinow = 0;
-float dt = 0;
-float flap_factor = 0;
-float tcommand = 0;
-float floattime = 0;
-float omegadot = 0.0;
-float thetadot = 0.0;
-float omega = 0.0;
-float theta = 0.0;
-float k0 = 1.0;
-float k2 = 10.0;
-float rc_flap_speed_modifier = 1500; // TODO
+
+// void calculateFlapping()
 
 // Function to apply flapping logic to servos based on motor output
 void applyFlappingToServos(int16_t *input) {
-  millinow = millis();
-  floattime = millinow * 0.001;
-  dt = (millinow - millisold) * 0.001;
-  millisold = millinow;
-  
-  tcommand = (rcData[THROTTLE] - 480.0) * ((1.0 / (100 * SERVO_TRAVEL_SPEED)) + ((rc_flap_speed_modifier - 1500) * 0.0000725));
-
-  omegadot = k0 * tcommand - k2 * omega;
-  thetadot = omega;
-
-  theta = theta + omega * dt;
-  omega = omega + omegadot * dt;
-
-  flap_factor = sin(theta) * 0.07 * (1 - (rc_flap_speed_modifier - 1500) * 0.0003);
-
   // enable glide mode when throttle is below threshold
   if (rcData[THROTTLE] > GLIDE_MODE_THRESHOLD) {
-    input[INPUT_STABILIZED_FLAPPING_FRONT_LEFT]  = flap_factor * (motor[0] - 1000) ;
-    input[INPUT_STABILIZED_FLAPPING_FRONT_RIGHT] = flap_factor * (motor[3] - 1000) ;
-    input[INPUT_STABILIZED_FLAPPING_BACK_LEFT]   = flap_factor * (motor[1] - 1000) ;
-    input[INPUT_STABILIZED_FLAPPING_BACK_RIGHT]  = flap_factor * (motor[2] - 1000) ;
-  } 
-  else {
-    input[INPUT_STABILIZED_FLAPPING_FRONT_LEFT]  = GLIDE_DEG * 5;
-    input[INPUT_STABILIZED_FLAPPING_FRONT_RIGHT] = -GLIDE_DEG * 5;
-    input[INPUT_STABILIZED_FLAPPING_BACK_LEFT]   = GLIDE_DEG * 5;
-    input[INPUT_STABILIZED_FLAPPING_BACK_RIGHT]  = -GLIDE_DEG * 5;
+    input[INPUT_STABILIZED_FLAPPING_0] = (flapping / 100) * (motor[0] - 1000);
+    input[INPUT_STABILIZED_FLAPPING_1] = (flapping / 100) * (motor[1] - 1000);
+    input[INPUT_STABILIZED_FLAPPING_2] = (flapping / 100) * (motor[2] - 1000);
+    input[INPUT_STABILIZED_FLAPPING_3] = (flapping / 100) * (motor[3] - 1000);
+  } else {
+    input[INPUT_STABILIZED_FLAPPING_0] = servoConfig()->ornithopter_glide_deg * 5;
+    input[INPUT_STABILIZED_FLAPPING_1] = servoConfig()->ornithopter_glide_deg * 5;
+    input[INPUT_STABILIZED_FLAPPING_2] = servoConfig()->ornithopter_glide_deg * 5;
+    input[INPUT_STABILIZED_FLAPPING_3] = servoConfig()->ornithopter_glide_deg * 5;
   }
+
+
 }
 
 

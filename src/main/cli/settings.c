@@ -819,7 +819,7 @@ const clivalue_t valueTable[] = {
     { "servo_pwm_rate",             VAR_UINT16 | MASTER_VALUE, .config.minmaxUnsigned = { 50, 498 }, PG_SERVO_CONFIG, offsetof(servoConfig_t, dev.servoPwmRate) },
     { "servo_lowpass_hz",           VAR_UINT16 | MASTER_VALUE, .config.minmaxUnsigned = { 0, 400}, PG_SERVO_CONFIG, offsetof(servoConfig_t, servo_lowpass_freq) },
     { "tri_unarmed_servo",          VAR_INT8   | MASTER_VALUE | MODE_LOOKUP, .config.lookup = { TABLE_OFF_ON }, PG_SERVO_CONFIG, offsetof(servoConfig_t, tri_unarmed_servo) },
-    { "channel_forwarding_start",   VAR_UINT8  | MASTER_VALUE, .config.minmaxUnsigned = { AUX1, MAX_SUPPORTED_RC_CHANNEL_COUNT }, PG_SERVO_CONFIG, offsetof(servoConfig_t, channelForwardingStartChannel) },
+    { "channel_forwarding_start",   VAR_UINT8  | MASTER_VALUE, .config.minmaxUnsigned = { AUX1, MAX_SUPPORTED_RC_CHANNEL_COUNT }, PG_SERVO_CONFIG, offsetof(servoConfig_t, channel_forwarding_start_channel) },
 #endif
 
 // PG_CONTROLRATE_PROFILES
@@ -840,6 +840,7 @@ const clivalue_t valueTable[] = {
 #ifdef USE_TPA_MODE
     { "tpa_mode",                   VAR_UINT8  | PROFILE_RATE_VALUE | MODE_LOOKUP, .config.lookup = { TABLE_TPA_MODE }, PG_CONTROL_RATE_PROFILES, offsetof(controlRateConfig_t, tpaMode) },
 #endif
+    { "flap_speed_modificator",     VAR_UINT16 | PROFILE_RATE_VALUE, .config.minmaxUnsigned = { PWM_PULSE_MIN, PWM_PULSE_MAX }, PG_CONTROL_RATE_PROFILES, offsetof(controlRateConfig_t, flap_speed_modificator) },
     { "throttle_limit_type",        VAR_UINT8  | PROFILE_RATE_VALUE | MODE_LOOKUP, .config.lookup = { TABLE_THROTTLE_LIMIT_TYPE }, PG_CONTROL_RATE_PROFILES, offsetof(controlRateConfig_t, throttle_limit_type) },
     { "throttle_limit_percent",     VAR_UINT8  | PROFILE_RATE_VALUE, .config.minmaxUnsigned = { 25, 100 }, PG_CONTROL_RATE_PROFILES, offsetof(controlRateConfig_t, throttle_limit_percent) },
     { "roll_rate_limit",            VAR_UINT16 | PROFILE_RATE_VALUE, .config.minmaxUnsigned = { CONTROL_RATE_CONFIG_RATE_LIMIT_MIN, CONTROL_RATE_CONFIG_RATE_LIMIT_MAX }, PG_CONTROL_RATE_PROFILES, offsetof(controlRateConfig_t, rate_limit[FD_ROLL]) },
@@ -1420,6 +1421,11 @@ const clivalue_t valueTable[] = {
     { "flysky_spi_tx_id",       VAR_UINT32 | MASTER_VALUE, .config.u32Max = UINT32_MAX, PG_FLYSKY_CONFIG, offsetof(flySkyConfig_t, txId) },
     { "flysky_spi_rf_channels", VAR_UINT8 | MASTER_VALUE | MODE_ARRAY, .config.array.length = 16, PG_FLYSKY_CONFIG, offsetof(flySkyConfig_t, rfChannelMap) },
 #endif
+    
+    { "flap_base_frequency",            VAR_UINT8 | MASTER_VALUE, .config.minmaxUnsigned = { 0, 255 }, PG_SERVO_CONFIG, offsetof(servoConfig_t, flap_base_frequency) },
+    { "flap_base_amplitude",            VAR_INT8 | MASTER_VALUE, .config.minmax = { -128, 127 }, PG_SERVO_CONFIG, offsetof(servoConfig_t, flap_base_amplitude) },
+    { "ornithopter_glide_deg",          VAR_INT8 | MASTER_VALUE, .config.minmax = { -128, 127 }, PG_SERVO_CONFIG, offsetof(servoConfig_t, ornithopter_glide_deg) },
+    { "ondas_gain",                     VAR_UINT8 | MASTER_VALUE, .config.minmax = { 0, 100 }, PG_SERVO_CONFIG, offsetof(servoConfig_t, ondas_gain) },
 };
 
 const uint16_t valueTableEntryCount = ARRAYLEN(valueTable);

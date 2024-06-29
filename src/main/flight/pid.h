@@ -167,7 +167,7 @@ typedef struct pidProfile_s {
     uint8_t d_min_advance;                  // Percentage multiplier for setpoint input to boost algorithm
     uint8_t motor_output_limit;             // Upper limit of the motor output (percent)
     int8_t auto_profile_cell_count;         // Cell count for this profile to be used with if auto PID profile switching is used
-    uint8_t transient_throttle_limit;       // Maximum DC component of throttle change to mix into throttle to prevent airmode mirroring noise
+    uint8_t transient_throttle_limit;       // Maximum DC component of throttle change to mix into throttle to prevent airmode mirroring noise    
 } pidProfile_t;
 
 PG_DECLARE_ARRAY(pidProfile_t, PID_PROFILE_COUNT, pidProfiles);
@@ -200,6 +200,9 @@ extern pidAxisData_t pidData[3];
 extern uint32_t targetPidLooptime;
 
 extern float throttleBoost;
+extern float flapping;
+extern float flappingAmplitude;
+extern float throttle_;
 extern pt1Filter_t throttleLpf;
 
 void pidResetIterm(void);
@@ -214,7 +217,7 @@ void pidAcroTrainerInit(void);
 void pidSetAcroTrainerState(bool newState);
 void pidInitSetpointDerivativeLpf(uint16_t filterCutoff, uint8_t debugAxis, uint8_t filterType);
 void pidUpdateSetpointDerivativeLpf(uint16_t filterCutoff);
-void pidUpdateAntiGravityThrottleFilter(float throttle);
+void pidUpdateThrottle(float throttle);
 bool pidOsdAntiGravityActive(void);
 bool pidOsdAntiGravityMode(void);
 void pidSetAntiGravityState(bool newState);

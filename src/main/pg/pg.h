@@ -195,3 +195,7 @@ void pgResetAll(void);
 void pgResetInstance(const pgRegistry_t *reg, uint8_t *base);
 bool pgResetCopy(void *copy, pgn_t pgn);
 void pgReset(const pgRegistry_t* reg);
+
+
+
+#define GLIDE_MODE_THRESHOLD 1040
