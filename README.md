@@ -75,7 +75,7 @@ We welcome contributions from the community! Whether you're fixing bugs, adding 
 
 ## License
 
-OrniFlight is licensed under the MIT License. See the [LICENSE](LICENSE) file for more information.
+OrniFlight is licensed under the GPL-3.0 License. See the [LICENSE](LICENSE) file for more information.
 
 ## Community
 
