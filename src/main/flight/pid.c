@@ -81,15 +81,41 @@ static FAST_RAM_ZERO_INIT bool inCrashRecoveryMode = false;
 static FAST_RAM_ZERO_INIT float dT;
 static FAST_RAM_ZERO_INIT float pidFrequency;
 
+#ifndef USE_ORNI_MIXER_ONLY
 static FAST_RAM_ZERO_INIT uint8_t antiGravityMode;
 static FAST_RAM_ZERO_INIT float antiGravityThrottleHpf;
-// static FAST_RAM_ZERO_INIT float flapping;
+#endif
+
 FAST_RAM_ZERO_INIT float throttle_;
-FAST_RAM_ZERO_INIT float flapping;
-FAST_RAM_ZERO_INIT float flappingAmplitude;
+static FAST_RAM_ZERO_INIT float flappingSinusoid;
+static FAST_RAM_ZERO_INIT float flappingCosinusoid;
+static FAST_RAM_ZERO_INIT float flappingAmplitude;
+FAST_RAM_ZERO_INIT float ornithopterFlapping;
+static FAST_RAM_ZERO_INIT float flappingDerivative;
+static FAST_RAM_ZERO_INIT float shapedFlappingSinusoid;
+
+// Three-channel breathing-pause modulation — computed from PID terms each cycle,
+// consumed by calculateFlappingFromThrottle on the next iteration (one-frame lag).
+// P-term → phase advance (k0 scaling): "push harder now"
+// D-term → ferocity/wave-sharpness: "delay the next opposite stroke"
+// I-term → up/down ferocity asymmetry: "shift the center of flapping"
+static FAST_RAM_ZERO_INIT float flappingPhaseModulation;
+static FAST_RAM_ZERO_INIT float flappingFerocityModulation;
+static FAST_RAM_ZERO_INIT float flappingAsymmetryBias;
+
+// SSFF: Stroke-Synchronous Feed-Forward — measures pitch error per half-stroke
+// and biases the next stroke's ferocity to cancel repetitive flap-frequency error
+static FAST_RAM_ZERO_INIT float prevFlappingSinusoid;
+static FAST_RAM_ZERO_INIT float ssffAccumError;
+static FAST_RAM_ZERO_INIT uint16_t ssffAccumCount;
+static FAST_RAM_ZERO_INIT float ssffFerocityDownBias;
+static FAST_RAM_ZERO_INIT float ssffFerocityUpBias;
+
 static FAST_RAM_ZERO_INIT uint16_t itermAcceleratorGain;
+#ifndef USE_ORNI_MIXER_ONLY
 static FAST_RAM float antiGravityOsdCutoff = 1.0f;
 static FAST_RAM_ZERO_INIT bool antiGravityEnabled;
+#endif
 static FAST_RAM_ZERO_INIT bool zeroThrottleItermReset;
 
 PG_REGISTER_WITH_RESET_TEMPLATE(pidConfig_t, pidConfig, PG_PID_CONFIG, 2);
@@ -189,7 +215,11 @@ void resetPidProfile(pidProfile_t *pidProfile)
         .abs_control_limit = 90,
         .abs_control_error_limit = 20,
         .abs_control_cutoff = 11,
+#ifndef USE_ORNI_MIXER_ONLY
         .antiGravityMode = ANTI_GRAVITY_SMOOTH,
+#else
+        .antiGravityMode = 0,
+#endif
         .dterm_lowpass_hz = 150,    // NOTE: dynamic lpf is enabled by default so this setting is actually
                                     // overridden and the static lowpass 1 is disabled. We can't set this
                                     // value to 0 otherwise Configurator versions 10.4 and earlier will also
@@ -238,12 +268,20 @@ static FAST_RAM float itermAccelerator = 1.0f;
 
 void pidSetItermAccelerator(float newItermAccelerator)
 {
+#ifndef USE_ORNI_MIXER_ONLY
     itermAccelerator = newItermAccelerator;
+#else
+    UNUSED(newItermAccelerator);
+#endif
 }
 
 bool pidOsdAntiGravityActive(void)
 {
+#ifndef USE_ORNI_MIXER_ONLY
     return (itermAccelerator > antiGravityOsdCutoff);
+#else
+    return false;
+#endif
 }
 
 void pidStabilisationState(pidStabilisationState_e pidControllerState)
@@ -304,7 +342,9 @@ static FAST_RAM_ZERO_INIT pt1Filter_t airmodeThrottleLpf1;
 static FAST_RAM_ZERO_INIT pt1Filter_t airmodeThrottleLpf2;
 #endif
 
+#ifndef USE_ORNI_MIXER_ONLY
 static FAST_RAM_ZERO_INIT pt1Filter_t antiGravityThrottleLpf;
+#endif
 
 
 void pidInitFilters(const pidProfile_t *pidProfile)
@@ -442,7 +482,9 @@ void pidInitFilters(const pidProfile_t *pidProfile)
     }
 #endif
 
+#ifndef USE_ORNI_MIXER_ONLY
     pt1FilterInit(&antiGravityThrottleLpf, pt1FilterGain(ANTI_GRAVITY_THROTTLE_FILTER_CUTOFF, dT));
+#endif
 }
 
 #ifdef USE_RC_SMOOTHING_FILTER
@@ -551,62 +593,188 @@ FAST_RAM_ZERO_INIT float thrustLinearizationB;
 #endif
 
 
-
-int millisold = 0;
-int millinow = 0;
-float dt = 0;
-float flap_factor = 0;
 float tcommand = 0;
-float floattime = 0;
 float omegadot = 0.0;
 float thetadot = 0.0;
 float omega = 0.0;
 float theta = 0.0;
 float k0 = 1.0;
 float k2 = 10.0;
-float rc_flap_speed_modifier = 1500; // TODO
 
 
 
-float calculateFlappingFromThrottle(float rc_throttle) {
-    millinow = millis();
-    floattime = millinow * 0.001;
-    dt = (millinow - millisold) * 0.001;
-    millisold = millinow;
-  
-    tcommand = (rc_throttle - 480.0) * ((1.0 / (0.1 * (float)servoConfig()->flap_base_frequency)) + ((currentControlRateProfile->flap_speed_modificator - 1500) * 0.000725));
+static inline float ferocityParamToFloat(int8_t param) {
+    return 1.0f + ((float)(param - 1) * 7.0f / 99.0f);
+}
 
-    omegadot = k0 * tcommand - k2 * omega;
+// Stroke-Synchronous Feed-Forward: measures pitch error over each half-stroke
+// and biases the next stroke's ferocity to cancel repetitive flap-frequency error.
+// Called from PID loop on PITCH axis with the raw pitch errorRate (deg/s).
+// Accumulating errorRate over a half-stroke gives total angle error accumulated.
+static void applyStrokeSynchronousFF(float pitchErrorRate) {
+    if (servoConfig()->ssff_gain == 0) return;
+
+    // Detect zero crossing of flapping sinusoid
+    if (prevFlappingSinusoid * flappingSinusoid <= 0.0f
+        && prevFlappingSinusoid != flappingSinusoid) {
+
+        if (ssffAccumCount > 0) {
+            float meanError = ssffAccumError / (float)ssffAccumCount;
+            float bias = (float)servoConfig()->ssff_gain * 0.001f * meanError;
+
+            if (prevFlappingSinusoid > 0.0f) {
+                // Just finished downstroke → bias NEXT upstroke
+                // pitch error > 0 → nose going up → more upstroke ferocity → nose-down thrust
+                ssffFerocityUpBias = bias;
+            } else {
+                // Just finished upstroke → bias NEXT downstroke
+                // pitch error < 0 → nose going down → more downstroke ferocity → nose-up thrust
+                ssffFerocityDownBias = -bias;
+            }
+        }
+        ssffAccumError = 0.0f;
+        ssffAccumCount = 0;
+    }
+
+    ssffAccumError += pitchErrorRate;
+    ssffAccumCount++;
+    prevFlappingSinusoid = flappingSinusoid;
+}
+
+static void applyFerocityWaveShaping(float sinTheta, float dMod, float iBias) {
+    // dMod: D-term ferocity modulation factor ∈ [-0.5, +0.5]
+    //        positive → sharper wave → more dwell → "delay the next opposite stroke"
+    // iBias: I-term asymmetry bias ∈ [-3.0, +3.0]
+    //        positive → more upstroke ferocity, less downstroke → pitch-down thrust
+
+    float fDown = ferocityParamToFloat(servoConfig()->ornithopter_ferocity_downstroke)
+                  + ssffFerocityDownBias - iBias;
+    float fUp   = ferocityParamToFloat(servoConfig()->ornithopter_ferocity_upstroke)
+                  + ssffFerocityUpBias   + iBias;
+
+    // D-term ferocity scaling: sharpens/blunts both strokes equally
+    float dFactor = 1.0f + dMod;
+    fDown *= dFactor;
+    fUp   *= dFactor;
+
+    // Clamp ferocity to valid range [1.0, 8.0]
+    if (fDown < 1.0f) fDown = 1.0f;
+    if (fDown > 8.0f) fDown = 8.0f;
+    if (fUp < 1.0f)   fUp = 1.0f;
+    if (fUp > 8.0f)   fUp = 8.0f;
+
+    float ferocity;
+    if (sinTheta >= 0.1f) {
+        ferocity = fDown;
+    } else if (sinTheta <= -0.1f) {
+        ferocity = fUp;
+    } else {
+        float t = (sinTheta + 0.1f) * 5.0f; // map [-0.1,0.1] → [0,1]
+        ferocity = fUp + (fDown - fUp) * t;
+    }
+
+    float tanhF = tanhf(ferocity);
+    if (fabsf(tanhF) < 1e-6f) {
+        shapedFlappingSinusoid = sinTheta;
+        return;
+    }
+
+    shapedFlappingSinusoid = tanhf(ferocity * sinTheta) / tanhF;
+
+    if (shapedFlappingSinusoid >  1.0f) shapedFlappingSinusoid =  1.0f;
+    if (shapedFlappingSinusoid < -1.0f) shapedFlappingSinusoid = -1.0f;
+}
+
+void calculateFlappingFromThrottle(float rc_throttle) {
+    tcommand = (rc_throttle - 480.0)
+        * ((1.0 / (0.1 * (float)servoConfig()->flap_base_frequency))
+            + ((float)(currentControlRateProfile->flap_speed_modificator - 1500)
+                * 0.000725));
+
+    // P-term phase modulation: scales k0 drive term
+    // When P demands correction: wing moves faster through current stroke
+    // flappingPhaseModulation pinned to [0.5, 2.0] for safety
+    float modulatedK0 = k0 * flappingPhaseModulation;
+    omegadot = modulatedK0 * tcommand - k2 * omega;
     thetadot = omega;
 
-    theta = theta + omega * dt;
-    omega = omega + omegadot * dt;
+    theta = theta + omega * dT;
+    omega = omega + omegadot * dT;
 
     if (rc_throttle > GLIDE_MODE_THRESHOLD) {
-        return sin(theta) * flappingAmplitude;
+        flappingSinusoid = sin(theta);
+        flappingCosinusoid = cos(theta);
+
+        // Ferocity wave shaping: transform sin(θ) → tanh(F·sinθ)/tanh(F)
+        // D-term modulates wave sharpness (breathing pause depth)
+        // I-term biases up/down asymmetry (center of flapping)
+        applyFerocityWaveShaping(flappingSinusoid, flappingFerocityModulation, flappingAsymmetryBias);
+
+        // Shaped derivative: d/dt[shapedWave] for phase-shift and aeroelastic PID scaling
+        float fDown = ferocityParamToFloat(servoConfig()->ornithopter_ferocity_downstroke);
+        float fUp   = ferocityParamToFloat(servoConfig()->ornithopter_ferocity_upstroke);
+        float fDeriv;
+        if (flappingSinusoid >= 0.1f) fDeriv = fDown;
+        else if (flappingSinusoid <= -0.1f) fDeriv = fUp;
+        else {
+            float tDeriv = (flappingSinusoid + 0.1f) * 5.0f;
+            fDeriv = fUp + (fDown - fUp) * tDeriv;
+        }
+        float tanhFd = tanhf(fDeriv);
+        float tanhArg = tanhf(fDeriv * flappingSinusoid);
+        float sech2 = 1.0f - tanhArg * tanhArg;
+        float shapedDerivative = fDeriv * flappingCosinusoid * sech2 / tanhFd;
+
+        flappingDerivative = shapedDerivative * thetadot;
+
+        ornithopterFlapping = shapedFlappingSinusoid * flappingAmplitude;
     }
     else {
-        return 0;
+        shapedFlappingSinusoid = 0.0f;
+        flappingDerivative = 0.0;
+        ornithopterFlapping = 0.0;
     }
 }
 
+
+float aerolastic_Kp_scaling = 0.01;
+float aerolastic_Ki_scaling = 0.005;
+float aerolastic_Kd_scaling = -0.005;
+
+
+void adjustAerolasticPIDGains(float errorRate, float* Kp, float* Ki, float* Kd) {
+    float glide_aeroelasticity = servoConfig()->aeroelastic_glide_coefficient;
+    float flap_aeroelasticity = servoConfig()->aeroelastic_flap_coefficient;
+    float aeroelastic_glide = (errorRate < 0 ? -1 : 1) * glide_aeroelasticity;
+    float aeroelastic_flap = flappingDerivative * flap_aeroelasticity * 0.001;
+    
+    *Kp *= 1 + (aeroelastic_glide * aerolastic_Kp_scaling - aeroelastic_flap * aerolastic_Kp_scaling);
+    *Ki *= 1 + (aeroelastic_glide * aerolastic_Ki_scaling - aeroelastic_flap * aerolastic_Ki_scaling);
+    *Kd *= 1 + (aeroelastic_glide * aerolastic_Kd_scaling - aeroelastic_flap * aerolastic_Kd_scaling);
+}
+
+
 float getFlappingAmplitude(float rc_throttle) {
     if (rc_throttle > GLIDE_MODE_THRESHOLD) {
-        return ((rc_throttle - GLIDE_MODE_THRESHOLD) * 0.04) * (float)servoConfig()->flap_base_amplitude * 0.1 * (1 - (rc_flap_speed_modifier - 1500) * 0.0003);
-    }
-    else return 0;
+        return ((rc_throttle - GLIDE_MODE_THRESHOLD) * 0.04) 
+            * (float)servoConfig()->flap_base_amplitude * 0.1 
+                * (1 - (currentControlRateProfile->flap_speed_modificator - 1500) * 0.003);
+    } else return 0.0;
 }
 
 
 void pidUpdateThrottle(float throttle) {
+#ifndef USE_ORNI_MIXER_ONLY
     if (antiGravityMode == ANTI_GRAVITY_SMOOTH) {
         antiGravityThrottleHpf = throttle - pt1FilterApply(&antiGravityThrottleLpf, throttle);
     }
+#else
+    UNUSED(throttle);
+#endif
     
     throttle_ = throttle;
-    flappingAmplitude = getFlappingAmplitude(throttle * 1000 + 1000);
-    flapping = calculateFlappingFromThrottle(throttle * 1000 + 1000);
 }
+
 
 #ifdef USE_DYN_LPF
 static FAST_RAM uint8_t dynLpfFilter = DYN_LPF_NONE;
@@ -619,6 +787,7 @@ static FAST_RAM_ZERO_INIT float dMinPercent[XYZ_AXIS_COUNT];
 static FAST_RAM_ZERO_INIT float dMinGyroGain;
 static FAST_RAM_ZERO_INIT float dMinSetpointGain;
 #endif
+
 
 void pidInitConfig(const pidProfile_t *pidProfile)
 {
@@ -667,17 +836,17 @@ void pidInitConfig(const pidProfile_t *pidProfile)
     throttleBoost = pidProfile->throttle_boost * 0.1f;
 #endif
     itermRotation = pidProfile->iterm_rotation;
+#ifndef USE_ORNI_MIXER_ONLY
     antiGravityMode = pidProfile->antiGravityMode;
     
     // Calculate the anti-gravity value that will trigger the OSD display.
-    // For classic AG it's either 1.0 for off and > 1.0 for on.
-    // For the new AG it's a continuous floating value so we want to trigger the OSD
-    // display when it exceeds 25% of its possible range. This gives a useful indication
-    // of AG activity without excessive display.
     antiGravityOsdCutoff = 1.0f;
     if (antiGravityMode == ANTI_GRAVITY_SMOOTH) {
         antiGravityOsdCutoff += ((itermAcceleratorGain - 1000) / 1000.0f) * 0.25f;
     }
+#else
+    antiGravityMode = 0;
+#endif
 
 #if defined(USE_SMART_FEEDFORWARD)
     smartFeedforward = pidProfile->smart_feedforward;
@@ -764,6 +933,7 @@ void pidInitConfig(const pidProfile_t *pidProfile)
     airmodeThrottleOffsetLimit = pidProfile->transient_throttle_limit / 100.0f;
 #endif
 }
+
 
 void pidInit(const pidProfile_t *pidProfile)
 {
@@ -1272,10 +1442,13 @@ static float applyLaunchControl(int axis, const rollAndPitchTrims_t *angleTrim)
 }
 #endif
 
-// Betaflight pid controller, which will be maintained in the future with additional features specialised for current (mini) multirotor usage.
+// Orniflight pid controller, which will be maintained in the future with additional features specialised for current (mini) multirotor usage.
 // Based on 2DOF reference design (matlab)
 void FAST_CODE pidController(const pidProfile_t *pidProfile, timeUs_t currentTimeUs)
-{
+{  
+    static float Kp;
+    static float Ki;
+    static float Kd;
     static float previousGyroRateDterm[XYZ_AXIS_COUNT];
 
 #if defined(USE_ACC)
@@ -1321,12 +1494,14 @@ void FAST_CODE pidController(const pidProfile_t *pidProfile, timeUs_t currentTim
     gpsRescuePreviousState = gpsRescueIsActive;
 #endif
 
+#ifndef USE_ORNI_MIXER_ONLY
     // Dynamic i component,
     if ((antiGravityMode == ANTI_GRAVITY_SMOOTH) && antiGravityEnabled) {
         itermAccelerator = 1 + fabsf(antiGravityThrottleHpf) * 0.01f * (itermAcceleratorGain - 1000);
         DEBUG_SET(DEBUG_ANTI_GRAVITY, 1, lrintf(antiGravityThrottleHpf * 1000));
     }
     DEBUG_SET(DEBUG_ANTI_GRAVITY, 0, lrintf(itermAccelerator * 1000));
+#endif
 
     // gradually scale back integration when above windup point
     float dynCi = dT * itermAccelerator;
@@ -1337,6 +1512,10 @@ void FAST_CODE pidController(const pidProfile_t *pidProfile, timeUs_t currentTim
     // Precalculate gyro deta for D-term here, this allows loop unrolling
     float gyroRateDterm[XYZ_AXIS_COUNT];
     for (int axis = FD_ROLL; axis <= FD_YAW; ++axis) {
+        Kp = pidCoefficient[axis].Kp;
+        Ki = pidCoefficient[axis].Ki;
+        Kd = pidCoefficient[axis].Kd;
+      
         gyroRateDterm[axis] = gyro.gyroADCf[axis];
 #ifdef USE_RPM_FILTER
         gyroRateDterm[axis] = rpmFilterDterm(axis,gyroRateDterm[axis]);
@@ -1350,11 +1529,13 @@ void FAST_CODE pidController(const pidProfile_t *pidProfile, timeUs_t currentTim
 #ifdef USE_RPM_FILTER
     rpmFilterUpdate();
 #endif
-
-
+    
+    // init flapping
+    flappingAmplitude = getFlappingAmplitude(throttle_ * 1000 + 1000);
+    calculateFlappingFromThrottle(throttle_ * 1000 + 1000);
+    
     // ----------PID controller----------
     for (int axis = FD_ROLL; axis <= FD_YAW; ++axis) {
-
         float currentPidSetpoint = getSetpointRate(axis);
         if (maxVelocity[axis]) {
             currentPidSetpoint = accelerationLimit(axis, currentPidSetpoint);
@@ -1408,35 +1589,78 @@ void FAST_CODE pidController(const pidProfile_t *pidProfile, timeUs_t currentTim
             errorRate = currentPidSetpoint - gyroRate;
         }
 #endif
-
-        // --------introduce ONDAS alpha filter. -----------------------------------
+        
         // apply only on PITCH axis for now. attenuation of filter can be tuned.
-        if (axis == FD_PITCH && rcData[THROTTLE] > GLIDE_MODE_THRESHOLD) {
-          errorRate = errorRate 
-            * (1.0 - ((fabs(flapping) / flappingAmplitude) 
-              * sqrtf(throttle_)
-              * (float)servoConfig()->ondas_gain * 0.01));
+        if (axis == FD_PITCH) {
+
+            // Stroke-synchronous feed-forward: accumulate pitch error over half-stroke
+            // and bias next stroke's ferocity to cancel repetitive flap-frequency error
+            applyStrokeSynchronousFF(errorRate);
+
+            // -------- Three-channel breathing-pause modulation --------------
+            // Replaces the old ONDAS authority gate + feed-forward subtraction.
+            // Each PID term modulates a different wing-trajectory parameter:
+            //
+            //   P-term → phase advance (k0 scaling): "push harder now"
+            //     Compresses/stretches the current ramp to bring corrective
+            //     thrust sooner. Scaled by ondas_gain.
+            //
+            //   D-term → ferocity (wave sharpness): "delay the next opposite stroke"
+            //     Predicts where error is heading; sharpens wave for more
+            //     breathing pause, blunts for less. Scaled by ondas_gain2.
+            //
+            //   I-term → asymmetry (up/down bias): "shift the center of flapping"
+            //     Persistent error biases upstroke vs downstroke ferocity
+            //     for sustained pitch authority. Scaled by ondas_gain3.
+            //
+            // Values are stored for use on next calculateFlappingFromThrottle call.
+            if (servoConfig()->ondas_gain != 0) {
+                flappingPhaseModulation = constrainf(
+                    1.0f + pidData[axis].P * (float)servoConfig()->ondas_gain * 0.00005f,
+                    0.5f, 2.0f);
+            } else {
+                flappingPhaseModulation = 1.0f;
+            }
+
+            if (servoConfig()->ondas_gain2 != 0) {
+                flappingFerocityModulation = constrainf(
+                    pidData[axis].D * (float)servoConfig()->ondas_gain2 * 0.0003f,
+                    -0.5f, 0.5f);
+            } else {
+                flappingFerocityModulation = 0.0f;
+            }
+
+            if (servoConfig()->ondas_gain3 != 0) {
+                flappingAsymmetryBias = constrainf(
+                    pidData[axis].I * (float)servoConfig()->ondas_gain3 * 0.0001f,
+                    -3.0f, 3.0f);
+            } else {
+                flappingAsymmetryBias = 0.0f;
+            }
+
+            adjustAerolasticPIDGains(errorRate, &Kp, &Ki, &Kd);
         }
-
-
+        
+        
         // --------low-level gyro-based PID based on 2DOF PID controller. ----------
         // 2-DOF PID controller with optional filter on derivative term.
         // b = 1 and only c (feedforward weight) can be tuned (amount derivative on measurement or error).
 
-        // -----calculate P component
-        pidData[axis].P = pidCoefficient[axis].Kp * errorRate * tpaFactorKp;
+        // -----calculate P ocmponent
+        pidData[axis].P = Kp * errorRate * tpaFactorKp;
         if (axis == FD_YAW) {
             pidData[axis].P = ptermYawLowpassApplyFn((filter_t *) &ptermYawLowpass, pidData[axis].P);
         }
-
+        
         // -----calculate I component
 #ifdef USE_LAUNCH_CONTROL
         // if launch control is active override the iterm gains
-        const float Ki = launchControlActive ? launchControlKi : pidCoefficient[axis].Ki;
-#else
-        const float Ki = pidCoefficient[axis].Ki;
+        if (launchControlActive) {
+            Ki = launchControlKi;
+        }
 #endif
-        pidData[axis].I = constrainf(previousIterm + Ki * itermErrorRate * dynCi, -itermLimit, itermLimit);
+        pidData[axis].I = constrainf(previousIterm + 
+          Ki * itermErrorRate * dynCi, -itermLimit, itermLimit);
 
         // -----calculate pidSetpointDelta
         float pidSetpointDelta = 0;
@@ -1449,15 +1673,16 @@ void FAST_CODE pidController(const pidProfile_t *pidProfile, timeUs_t currentTim
 
         // -----calculate D component
         // disable D if launch control is active
-        if ((pidCoefficient[axis].Kd > 0) && !launchControlActive){
-
+        if ((Kd > 0) && !launchControlActive) {
             // Divide rate change by dT to get differential (ie dr/dt).
             // dT is fixed and calculated from the target PID loop time
             // This is done to avoid DTerm spikes that occur with dynamically
             // calculated deltaT whenever another task causes the PID
             // loop execution to be delayed.
-            const float delta =
-                - (gyroRateDterm[axis] - previousGyroRateDterm[axis]) * pidFrequency;
+            // NOTE: D-term for pitch is now routed through ferocity modulation
+            // (breathing pause depth) rather than being attenuated by wing velocity.
+            const float delta = -(gyroRateDterm[axis]
+                - previousGyroRateDterm[axis]) * pidFrequency;
 
 #if defined(USE_ACC)
             if (cmpTimeUs(currentTimeUs, levelModeStartTimeUs) > CRASH_RECOVERY_DETECTION_DELAY_US) {
@@ -1478,13 +1703,13 @@ void FAST_CODE pidController(const pidProfile_t *pidProfile, timeUs_t currentTim
                 if (axis == FD_ROLL) {
                     DEBUG_SET(DEBUG_D_MIN, 0, lrintf(dMinGyroFactor * 100));
                     DEBUG_SET(DEBUG_D_MIN, 1, lrintf(dMinSetpointFactor * 100));
-                    DEBUG_SET(DEBUG_D_MIN, 2, lrintf(pidCoefficient[axis].Kd * dMinFactor * 10 / DTERM_SCALE));
+                    DEBUG_SET(DEBUG_D_MIN, 2, lrintf(Kd * dMinFactor * 10 / DTERM_SCALE));
                 } else if (axis == FD_PITCH) {
-                    DEBUG_SET(DEBUG_D_MIN, 3, lrintf(pidCoefficient[axis].Kd * dMinFactor * 10 / DTERM_SCALE));
+                    DEBUG_SET(DEBUG_D_MIN, 3, lrintf(Kd * dMinFactor * 10 / DTERM_SCALE));
                 }
             }
 #endif
-            pidData[axis].D = pidCoefficient[axis].Kd * delta * tpaFactor * dMinFactor;
+            pidData[axis].D = Kd * delta * tpaFactor * dMinFactor;
         } else {
             pidData[axis].D = 0;
         }
@@ -1583,16 +1808,24 @@ void pidSetAcroTrainerState(bool newState)
 
 void pidSetAntiGravityState(bool newState)
 {
+#ifndef USE_ORNI_MIXER_ONLY
     if (newState != antiGravityEnabled) {
         // reset the accelerator on state changes
         itermAccelerator = 1.0f;
     }
     antiGravityEnabled = newState;
+#else
+    UNUSED(newState);
+#endif
 }
 
 bool pidAntiGravityEnabled(void)
 {
+#ifndef USE_ORNI_MIXER_ONLY
     return antiGravityEnabled;
+#else
+    return false;
+#endif
 }
 
 #ifdef USE_DYN_LPF

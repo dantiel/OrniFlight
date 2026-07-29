@@ -304,3 +304,14 @@
 //#define USE_VTX_TABLE
 #endif
 
+// OrniFlight: strip propeller-oriented Betaflight features not needed for ornithopters
+#ifdef USE_ORNI_MIXER_ONLY
+#undef USE_DSHOT
+#undef USE_DSHOT_TELEMETRY
+#undef USE_RPM_FILTER
+#undef USE_BRUSHED_ESC_AUTODETECT
+#undef USE_LAUNCH_CONTROL
+#undef USE_THROTTLE_BOOST
+#undef USE_SMART_FEEDFORWARD
+#undef USE_INTEGRATED_YAW_CONTROL
+#endif

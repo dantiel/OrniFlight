@@ -200,10 +200,16 @@ extern pidAxisData_t pidData[3];
 extern uint32_t targetPidLooptime;
 
 extern float throttleBoost;
-extern float flapping;
-extern float flappingAmplitude;
-extern float throttle_;
 extern pt1Filter_t throttleLpf;
+
+// float flappingSinusoid;
+// float flappingCosinusoid;
+extern float ornithopterFlapping;
+// float coFlapping;
+// float flappingAmplitude;
+extern float throttle_;
+// float flappingSquared;
+// float flappingDerivative;
 
 void pidResetIterm(void);
 void pidStabilisationState(pidStabilisationState_e pidControllerState);

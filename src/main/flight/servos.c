@@ -68,7 +68,14 @@ void pgResetFn_servoConfig(servoConfig_t *servoConfig) {
     servoConfig->flap_base_frequency = 12;
     servoConfig->flap_base_amplitude = 60;
     servoConfig->ornithopter_glide_deg = -30;
-    servoConfig->ondas_gain = 50;
+    servoConfig->ondas_gain = 20;   // P→phase advance: "push harder now"
+    servoConfig->ondas_gain2 = 20;  // D→ferocity: "delay next opposite stroke"
+    servoConfig->ondas_gain3 = 10;  // I→asymmetry: "shift center of flapping"
+    servoConfig->aeroelastic_glide_coefficient = 40;
+    servoConfig->aeroelastic_flap_coefficient = 40;
+    servoConfig->ornithopter_ferocity_downstroke = 12;  // ~1.78 — mild shaping, near-sine
+    servoConfig->ornithopter_ferocity_upstroke = 12;
+    servoConfig->ssff_gain = 0;  // off by default — enable with nonzero value
 
     for (unsigned servoIndex = 0; servoIndex < MAX_SUPPORTED_SERVOS; servoIndex++) {
         servoConfig->dev.ioTags[servoIndex] = timerioTagGetByUsage(TIM_USE_SERVO, servoIndex);
@@ -353,6 +360,24 @@ void servoConfigureOutput(void)
 }
 
 
+// void calculateFlapping()
+
+// Function to apply flapping logic to servos based on motor output
+void applyFlappingToServos(int16_t *input) {
+  // enable glide mode when throttle is below threshold
+  if (rcData[THROTTLE] > GLIDE_MODE_THRESHOLD) {
+    input[INPUT_STABILIZED_FLAPPING_0] = (ornithopterFlapping / 100) * (motor[0] - 1000);
+    input[INPUT_STABILIZED_FLAPPING_1] = (ornithopterFlapping / 100) * (motor[1] - 1000);
+    input[INPUT_STABILIZED_FLAPPING_2] = (ornithopterFlapping / 100) * (motor[2] - 1000);
+    input[INPUT_STABILIZED_FLAPPING_3] = (ornithopterFlapping / 100) * (motor[3] - 1000);
+  } else {
+    input[INPUT_STABILIZED_FLAPPING_0] = servoConfig()->ornithopter_glide_deg * 5;
+    input[INPUT_STABILIZED_FLAPPING_1] = servoConfig()->ornithopter_glide_deg * 5;
+    input[INPUT_STABILIZED_FLAPPING_2] = servoConfig()->ornithopter_glide_deg * 5;
+    input[INPUT_STABILIZED_FLAPPING_3] = servoConfig()->ornithopter_glide_deg * 5;
+  }
+}
+
 void servoMixerLoadMix(int index)
 {
     // we're 1-based
@@ -546,25 +571,6 @@ void servoMixer(void)
 
 
 
-// void calculateFlapping()
-
-// Function to apply flapping logic to servos based on motor output
-void applyFlappingToServos(int16_t *input) {
-  // enable glide mode when throttle is below threshold
-  if (rcData[THROTTLE] > GLIDE_MODE_THRESHOLD) {
-    input[INPUT_STABILIZED_FLAPPING_0] = (flapping / 100) * (motor[0] - 1000);
-    input[INPUT_STABILIZED_FLAPPING_1] = (flapping / 100) * (motor[1] - 1000);
-    input[INPUT_STABILIZED_FLAPPING_2] = (flapping / 100) * (motor[2] - 1000);
-    input[INPUT_STABILIZED_FLAPPING_3] = (flapping / 100) * (motor[3] - 1000);
-  } else {
-    input[INPUT_STABILIZED_FLAPPING_0] = servoConfig()->ornithopter_glide_deg * 5;
-    input[INPUT_STABILIZED_FLAPPING_1] = servoConfig()->ornithopter_glide_deg * 5;
-    input[INPUT_STABILIZED_FLAPPING_2] = servoConfig()->ornithopter_glide_deg * 5;
-    input[INPUT_STABILIZED_FLAPPING_3] = servoConfig()->ornithopter_glide_deg * 5;
-  }
-
-
-}
 
 
 static void servoTable(void)

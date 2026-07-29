@@ -141,7 +141,14 @@ typedef struct servoConfig_s {
     uint8_t flap_base_frequency;
     int8_t flap_base_amplitude;
     int8_t ornithopter_glide_deg;
-    uint8_t ondas_gain;
+    int8_t ondas_gain;                       // P-term → phase advance modulation (k0 scaling)
+    int8_t ondas_gain2;                      // D-term → ferocity modulation (breathing pause depth)
+    int8_t ondas_gain3;                      // I-term → up/down ferocity asymmetry bias
+    int8_t aeroelastic_glide_coefficient;
+    int8_t aeroelastic_flap_coefficient;
+    int8_t ornithopter_ferocity_downstroke;  // 1-100 maps to 1.0-8.0 ferocity on downstroke
+    int8_t ornithopter_ferocity_upstroke;    // 1-100 maps to 1.0-8.0 ferocity on upstroke
+    int8_t ssff_gain;                        // stroke-synchronous feed-forward gain (0=off)
 } servoConfig_t;
 
 PG_DECLARE(servoConfig_t, servoConfig);

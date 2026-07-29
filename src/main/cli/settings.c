@@ -840,6 +840,7 @@ const clivalue_t valueTable[] = {
 #ifdef USE_TPA_MODE
     { "tpa_mode",                   VAR_UINT8  | PROFILE_RATE_VALUE | MODE_LOOKUP, .config.lookup = { TABLE_TPA_MODE }, PG_CONTROL_RATE_PROFILES, offsetof(controlRateConfig_t, tpaMode) },
 #endif
+    { "phase_shift_scale",          VAR_INT8   | PROFILE_RATE_VALUE, .config.minmaxUnsigned = { INT8_MIN, INT8_MAX }, PG_CONTROL_RATE_PROFILES, offsetof(controlRateConfig_t, phase_shift_scale) },
     { "flap_speed_modificator",     VAR_UINT16 | PROFILE_RATE_VALUE, .config.minmaxUnsigned = { PWM_PULSE_MIN, PWM_PULSE_MAX }, PG_CONTROL_RATE_PROFILES, offsetof(controlRateConfig_t, flap_speed_modificator) },
     { "throttle_limit_type",        VAR_UINT8  | PROFILE_RATE_VALUE | MODE_LOOKUP, .config.lookup = { TABLE_THROTTLE_LIMIT_TYPE }, PG_CONTROL_RATE_PROFILES, offsetof(controlRateConfig_t, throttle_limit_type) },
     { "throttle_limit_percent",     VAR_UINT8  | PROFILE_RATE_VALUE, .config.minmaxUnsigned = { 25, 100 }, PG_CONTROL_RATE_PROFILES, offsetof(controlRateConfig_t, throttle_limit_percent) },
@@ -1422,10 +1423,17 @@ const clivalue_t valueTable[] = {
     { "flysky_spi_rf_channels", VAR_UINT8 | MASTER_VALUE | MODE_ARRAY, .config.array.length = 16, PG_FLYSKY_CONFIG, offsetof(flySkyConfig_t, rfChannelMap) },
 #endif
     
-    { "flap_base_frequency",            VAR_UINT8 | MASTER_VALUE, .config.minmaxUnsigned = { 0, 255 }, PG_SERVO_CONFIG, offsetof(servoConfig_t, flap_base_frequency) },
-    { "flap_base_amplitude",            VAR_INT8 | MASTER_VALUE, .config.minmax = { -128, 127 }, PG_SERVO_CONFIG, offsetof(servoConfig_t, flap_base_amplitude) },
-    { "ornithopter_glide_deg",          VAR_INT8 | MASTER_VALUE, .config.minmax = { -128, 127 }, PG_SERVO_CONFIG, offsetof(servoConfig_t, ornithopter_glide_deg) },
-    { "ondas_gain",                     VAR_UINT8 | MASTER_VALUE, .config.minmax = { 0, 100 }, PG_SERVO_CONFIG, offsetof(servoConfig_t, ondas_gain) },
+    { "flap_base_frequency",   VAR_UINT8 | MASTER_VALUE, .config.minmaxUnsigned = { 0, 255 }, PG_SERVO_CONFIG, offsetof(servoConfig_t, flap_base_frequency) },
+    { "flap_base_amplitude",   VAR_INT8 | MASTER_VALUE, .config.minmax = { -128, 127 }, PG_SERVO_CONFIG, offsetof(servoConfig_t, flap_base_amplitude) },
+    { "ornithopter_glide_deg", VAR_INT8 | MASTER_VALUE, .config.minmax = { -128, 127 }, PG_SERVO_CONFIG, offsetof(servoConfig_t, ornithopter_glide_deg) },
+    { "ondas_gain",            VAR_INT8 | MASTER_VALUE, .config.minmax = { -100, 100 }, PG_SERVO_CONFIG, offsetof(servoConfig_t, ondas_gain) },   // P→phase advance modulation
+    { "ondas_gain2",           VAR_INT8 | MASTER_VALUE, .config.minmax = { -100, 100 }, PG_SERVO_CONFIG, offsetof(servoConfig_t, ondas_gain2) },  // D→ferocity (breathing pause depth)
+    { "ondas_gain3",           VAR_INT8 | MASTER_VALUE, .config.minmax = { -100, 100 }, PG_SERVO_CONFIG, offsetof(servoConfig_t, ondas_gain3) },  // I→up/down asymmetry bias
+    { "aeroelastic_glide_coefficient", VAR_INT8 | MASTER_VALUE, .config.minmax = { INT8_MIN, INT8_MAX }, PG_SERVO_CONFIG, offsetof(servoConfig_t, aeroelastic_glide_coefficient) },
+    { "aeroelastic_flap_coefficient", VAR_INT8 | MASTER_VALUE, .config.minmax = { INT8_MIN, INT8_MAX }, PG_SERVO_CONFIG, offsetof(servoConfig_t, aeroelastic_flap_coefficient) },
+    { "ornithopter_ferocity_downstroke", VAR_INT8 | MASTER_VALUE, .config.minmax = { 1, 100 }, PG_SERVO_CONFIG, offsetof(servoConfig_t, ornithopter_ferocity_downstroke) },
+    { "ornithopter_ferocity_upstroke",   VAR_INT8 | MASTER_VALUE, .config.minmax = { 1, 100 }, PG_SERVO_CONFIG, offsetof(servoConfig_t, ornithopter_ferocity_upstroke) },
+    { "ssff_gain",                       VAR_INT8 | MASTER_VALUE, .config.minmax = { 0, 100 }, PG_SERVO_CONFIG, offsetof(servoConfig_t, ssff_gain) },
 };
 
 const uint16_t valueTableEntryCount = ARRAYLEN(valueTable);

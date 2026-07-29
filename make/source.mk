@@ -228,7 +228,6 @@ SPEED_OPTIMISED_SRC := $(SPEED_OPTIMISED_SRC) \
             fc/runtime_config.c \
             flight/imu.c \
             flight/mixer.c \
-            flight/pid.c \
             rx/ibus.c \
             rx/rx.c \
             rx/rx_spi.c \
@@ -249,6 +248,7 @@ SPEED_OPTIMISED_SRC := $(SPEED_OPTIMISED_SRC) \
             $(DEVICE_STDPERIPH_SRC) \
 
 SIZE_OPTIMISED_SRC := $(SIZE_OPTIMISED_SRC) \
+            flight/pid.c \
             bus_bst_stm32f30x.c \
             cli/cli.c \
             cli/settings.c \
