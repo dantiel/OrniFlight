@@ -19,7 +19,7 @@ OrniFlight replaces traditional motor outputs with oscillating servos that drive
 
 ## ONDAS — The Wave
 
-ONDAS is a flapping-wing control architecture built on a single insight: the wing is a driven nonlinear oscillator. Rather than gating PID authority by wing position (the old approach), ONDAS modulates the *wing's own parameters* — spring constant, dwell ratio, and thrust asymmetry — in real time, locked to the flapping phase θ.
+ONDAS — **O**scillator **N**onlinear **D**ynamic **A**ttitude **S**tabilization — is a trajectory-domain control architecture for flapping-wing vehicles. Rather than gating PID authority by wing position (the old approach), ONDAS modulates the *wing's own parameters* — spring constant, dwell ratio, and thrust asymmetry — in real time, locked to the flapping phase θ. The wing is a driven nonlinear oscillator; the controller doesn't command forces, it modulates oscillator parameters.
 
 ### The 8 Layers
 

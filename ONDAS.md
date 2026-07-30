@@ -1,8 +1,12 @@
-## ONDAS: The Wave — Flapping Wing Control Architecture
+## ONDAS: Oscillator Nonlinear Dynamic Attitude Stabilization
 
-Three control layers operating at different timescales, unified through the flapping phase θ. ONDAS is the umbrella; the channels beneath it are **Cadence**, **Ferocity**, and **Balance**.
+> /ˈõ.dɐʃ/ — Portuguese: *waves*. Pronounced "OHN-dahsh."
 
-> **Updated 2026-07-30**: Channels renamed from `ondas_gain[1-3]`. PD blend on Ferocity. Added **Warp** (roll/yaw ferocity differential), **Anchor** (variable k₂ damping), **Resonance** (phase-locked error filter), and **per-axis ferocity** (roll/yaw common-mode contributions).
+Trajectory-domain control architecture for flapping-wing vehicles. The wing is a driven nonlinear oscillator (`θ̈ = k₀·T_cmd − k₂·ω`); ONDAS decomposes attitude error and modulates oscillator parameters in real time, synchronous with the flapping phase θ.
+
+Eight layers + Anchor, all modulating parameters of the wing oscillator synchronous with flapping phase θ: **Cadence**, **Ferocity**, **Balance**, **Warp**, **Resonance**, **Prescience**, **Espelho**, **Saudade**, plus **Anchor**.
+
+> **2026-07-30**: All eight frontiers implemented. 16 CLI parameters. Flash 89.93%.
 
 ### Architecture Overview
 
