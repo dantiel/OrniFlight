@@ -41,7 +41,7 @@ This is the fundamental paradigm shift. In a quadcopter, PID directly sets motor
 | Feature | Description | Novelty |
 |---------|-------------|---------|
 | **ONDAS** | Oscillating Normalized Dynamic Adaptive Stabilization — phase-gated PID authority | **Original** — novel control paradigm |
-| **Ferocity Wave-Shaping** | `tanh(F·sinθ)/tanh(F)` — tunable wave sharpness from sine to near-square | **Original** — physically meaningful nonlinearity |
+| **Ferocity Wave-Shaping** | Trapezoidal dwell+cos ramp — tunable wave sharpness from cosine to square wave | **Original** — shared limiar for stable stroke reversal |
 | **Three-Channel Breathing-Pause** | P→phase advance, D→wave sharpness, I→up/down asymmetry | **Original** — each PID term has distinct physical role |
 | **SSFF** | Stroke-synchronous feed-forward learning flap-frequency error patterns | **Adapted** — repurposed feed-forward concept for oscillatory systems |
 | **Glide Mode** | Wings hold position when throttle below threshold | **Original** — natural for ornithopters |

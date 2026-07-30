@@ -30,22 +30,22 @@ However, the range accepted over MSP is [−128,127] (full int8_t range from uin
 
 ### ferocityParamToFloat Mapping
 
-CLI range [1, 100] maps to ferocity [1.0, 8.0]:
+CLI range [1, 100] maps to ferocity [0, 8]:
 
 ```
-F = 1.0 + (param − 1) × 7.0 / 99.0
+F = (param − 1) × 8.0 / 99.0   → ferocity ∉ [0, 8]
 ```
 
 | CLI Value | Ferocity F |
 |-----------|------------|
-| 1 | 1.00 (near-sine) |
-| 12 | 1.78 (default) |
-| 25 | 2.70 |
-| 50 | 4.46 |
-| 75 | 6.23 |
-| 100 | 8.00 (maximum) |
+| 1 | 0.00 (pure cosine) |
+| 12 | 0.89 (default) |
+| 25 | 1.94 |
+| 50 | 3.96 |
+| 75 | 5.98 |
+| 100 | 8.00 (pure square wave) |
 
-**⚠️ Saturation**: Values 81-100 all produce F ∈ [6.66, 8.0] which are clamped identically to 8.0 by `applyFerocityWaveShaping`. The last 20% of the CLI range is indistinguishable — misleading UX.
+**F = 0**: Pure cosine wave — symmetric, no dwell. **F = 8**: Pure square wave via `sign(sinθ)` — maximum breathing pause with infinite cos ramp slope. The dwell ratio `d = F/8` ∈ [0,1] determines the portion of each half-stroke spent at ±1 before the cos ramp begins.
 
 ## PID Profile Parameters (pidProfile_t)
 
@@ -117,7 +117,6 @@ ondas_gain3 dominant (I → asymmetry):
 | `ONDAS_PHASE_SCALE` | 0.00005f | P→phase scaling |
 | `ONDAS_FEROCITY_SCALE` | 0.0003f | D→ferocity scaling |
 | `ONDAS_ASYMMETRY_SCALE` | 0.0001f | I→asymmetry scaling |
-| `FEROCITY_BLEND_ZONE` | 0.1f | Half-stroke blend zone (rad) |
 | `GLIDE_MODE_THRESHOLD` | 1040 | Throttle value below which glide engages |
 
 ## CLI Value Table Entry Format
