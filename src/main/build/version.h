@@ -23,8 +23,8 @@
 #include "common/utils.h"
 
 #define FC_FIRMWARE_NAME            "Orniflight"
-#define FC_VERSION_MAJOR       1  // OrniFlight 1.0 — ONDAS: Cadence/Ferocity/Balance + WARP + Anchor + Resonance
-#define FC_VERSION_MINOR       0
+#define FC_VERSION_MAJOR       0  // OrniFlight 0.1 — ONDAS Alpha: Cadence/Ferocity/Balance + WARP + Anchor + Resonance
+#define FC_VERSION_MINOR       1
 #define FC_VERSION_PATCH_LEVEL 0
 
 #define FC_VERSION_STRING STR(FC_VERSION_MAJOR) "." STR(FC_VERSION_MINOR) "." STR(FC_VERSION_PATCH_LEVEL)
