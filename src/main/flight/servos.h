@@ -153,6 +153,7 @@ typedef struct servoConfig_s {
     int8_t resonance_gain;                   // phase-locked error filter: amplify flap-coherent error (0=off)
     int8_t prescience_gain;                  // stroke-ahead prediction: eliminate SSFF delay (0=off, blends with ssff_gain)
     int8_t espelho_gain;                     // wing-self-noise cancellation: subtract flap-coherent gyro signal (0=off)
+    int8_t saudade_gain;                     // per-stroke learning: absorb persistent SSFF bias into trim (0=off)
     int8_t aeroelastic_glide_coefficient;
     int8_t aeroelastic_flap_coefficient;
     int8_t ornithopter_ferocity_downstroke;  // 1-100 maps to 1.0-8.0 ferocity on downstroke

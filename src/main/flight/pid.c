@@ -120,6 +120,11 @@ static FAST_RAM_ZERO_INIT uint16_t ssffAccumCount;
 static FAST_RAM_ZERO_INIT float ssffFerocityDownBias;
 static FAST_RAM_ZERO_INIT float ssffFerocityUpBias;
 
+// Saudade: per-stroke online learning — slowly absorbs persistent SSFF biases
+// into a learned trim. SSFF handles transients; Saudade remembers patterns.
+static FAST_RAM_ZERO_INIT float saudadeTrimUp;
+static FAST_RAM_ZERO_INIT float saudadeTrimDown;
+
 static FAST_RAM_ZERO_INIT bool zeroThrottleItermReset;
 
 PG_REGISTER_WITH_RESET_TEMPLATE(pidConfig_t, pidConfig, PG_PID_CONFIG, 2);
@@ -632,14 +637,29 @@ static void applyStrokeSynchronousFF(float pitchErrorRate) {
         float ssffBias = (float)servoConfig()->ssff_gain * 0.001f * meanError;
         float totalBias = ssffBias + prescienceBias;
 
-        if (prevFlappingSinusoid > 0.0f) {
-            // Just finished downstroke → bias NEXT upstroke
-            // pitch error > 0 → nose going up → more upstroke ferocity → nose-down thrust
-            ssffFerocityUpBias = totalBias;
+        // Saudade: slowly absorb persistent SSFF bias into learned trim.
+        // If SSFF keeps pushing upstroke ferocity positive, Saudade shifts
+        // the baseline so SSFF only fights transients — the wing remembers.
+        int8_t saudadeGain = servoConfig()->saudade_gain;
+        if (saudadeGain != 0) {
+            float learnRate = (float)saudadeGain * 0.0001f;  // very slow: ~0.1%/stroke at gain=10
+            if (prevFlappingSinusoid > 0.0f) {
+                // Finished downstroke → learn for upstroke
+                saudadeTrimUp += learnRate * totalBias;
+                saudadeTrimUp = constrainf(saudadeTrimUp, -2.0f, 2.0f);
+                ssffFerocityUpBias = totalBias + saudadeTrimUp;
+            } else {
+                // Finished upstroke → learn for downstroke
+                saudadeTrimDown += learnRate * totalBias;
+                saudadeTrimDown = constrainf(saudadeTrimDown, -2.0f, 2.0f);
+                ssffFerocityDownBias = -(totalBias + saudadeTrimDown);
+            }
         } else {
-            // Just finished upstroke → bias NEXT downstroke
-            // pitch error < 0 → nose going down → more downstroke ferocity → nose-up thrust
-            ssffFerocityDownBias = -totalBias;
+            if (prevFlappingSinusoid > 0.0f) {
+                ssffFerocityUpBias = totalBias;
+            } else {
+                ssffFerocityDownBias = -totalBias;
+            }
         }
 
         ssffAccumError = 0.0f;

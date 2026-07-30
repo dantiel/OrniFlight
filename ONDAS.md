@@ -134,7 +134,25 @@ gyro_clean = gyro_raw − gyro_self
 
 Applied to all three axes before error computation. `espelho_gain = 0` (default) disables it.
 
-### Layer 7: Anchor — Variable k₂ Damping ⚓
+### Layer 7: Saudade — Per-Stroke Online Learning 🕯️
+
+The wing remembers. SSFF discovers the same bias pattern every stroke — Saudade slowly absorbs the persistent component into a learned trim. SSFF then only handles transients; the baseline shifts toward optimal. Named for the Portuguese word for a deep, melancholic longing: the wing *longs* for the trim it learned.
+
+```
+At each half-stroke boundary:
+  saudadeTrim += saudade_gain · 0.0001 · totalBias    (very slow leak)
+  saudadeTrim = clamp(saudadeTrim, −2.0, +2.0)
+
+  effective_bias = totalBias + saudadeTrim
+```
+
+- `saudade_gain = 0`: SSFF only (default, no learning)
+- `saudade_gain = 10`: ~0.1% absorption per stroke — ~1000 strokes to fully learn a bias
+- `saudade_gain = 100`: ~1% per stroke — aggressive learning
+
+Separate trims for upstroke and downstroke. Both clamped to ±2.0 ferocity units.
+
+### Layer 8: Anchor — Variable k₂ Damping ⚓
 
 Controls the wing ODE's frequency lock strength. Higher k₂ means the wing snaps to commanded frequency faster (agile, energy-hungry). Lower k₂ lets the wing resonate freely (efficient cruise, sluggish transients).
 
@@ -165,6 +183,7 @@ k₂ = ANCHOR_BASE_K2 + anchor_gain · ANCHOR_SCALE
 | `resonance_gain` | 0–100 | 0 | Phase-locked error filter (0=off) |
 | `prescience_gain` | 0–100 | 0 | Stroke-ahead prediction (0=off, blends with ssff_gain) |
 | `espelho_gain` | 0–100 | 0 | Wing-self-noise cancellation (0=off) |
+| `saudade_gain` | 0–100 | 0 | Per-stroke learning (0=off) |
 
 ### New Frontiers (Roadmap)
 
@@ -176,7 +195,7 @@ k₂ = ANCHOR_BASE_K2 + anchor_gain · ANCHOR_SCALE
 | **Per-axis Ferocity** | Roll/Yaw P→common-mode ferocity — inertia gate per axis | ✅ Implemented |
 | **Prescience** | Stroke-ahead prediction — pre-compute modulation for next reversal | ✅ Implemented |
 | **Espelho** | Wing-self-noise cancellation — subtract wing-coupled gyro signal | ✅ Implemented |
-| **Saudade** | Per-stroke online learning — optimal cadence/ferocity/balance per condition | 🔜 Next |
+| **Saudade** | Per-stroke online learning — optimal cadence/ferocity/balance per condition | ✅ Implemented |
 
 ### Simulation
 
