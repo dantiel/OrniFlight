@@ -106,6 +106,11 @@ static FAST_RAM_ZERO_INIT float flappingFerocityDifferentialRoll;
 static FAST_RAM_ZERO_INIT float flappingFerocityDifferentialYaw;
 static FAST_RAM_ZERO_INIT float flappingAsymmetryBias;
 
+// Resonance: phase-locked error filter — lock-in amplifier for attitude error.
+// Extracts the flap-coherent component via error×sin(θ) + leaky integrator,
+// then amplifies it: the wing "resonates" with errors at its own frequency.
+static FAST_RAM_ZERO_INIT float resonanceLockInState;
+
 // SSFF: Stroke-Synchronous Feed-Forward — measures pitch error per half-stroke
 // and biases the next stroke's ferocity to cancel repetitive flap-frequency error
 static FAST_RAM_ZERO_INIT float prevFlappingSinusoid;
@@ -607,6 +612,7 @@ float theta = 0.0;
 #define CADENCE_SCALE            0.00005f  // P-term→k0 modulation: PID-P × gain × scale → phase advance
 #define FEROCITY_D_SCALE         0.0003f   // D-term→ferocity modulation: PID-D × gain × scale → wave sharpness
 #define FEROCITY_P_SCALE         0.00015f  // P-term→ferocity modulation: PID-P × gain × scale → wave sharpness
+#define RESONANCE_TAU            0.15f     // Lock-in LPF time constant (s): ~1.5 flap periods at 10 Hz
 #define BALANCE_SCALE            0.0001f   // I-term→asymmetry: PID-I × gain × scale → up/down bias
 #define WARP_SCALE               0.0002f   // Roll/Yaw P→ferocity differential: PID-P × gain → L/R or fore/aft
 #define FEROCITY_RANGE           8.0f      // Max ferocity for trapezoidal model (f=0→pure cosine, f=8→square)
@@ -650,6 +656,33 @@ static void applyStrokeSynchronousFF(float pitchErrorRate) {
     ssffAccumError += pitchErrorRate;
     ssffAccumCount++;
     prevFlappingSinusoid = flappingSinusoid;
+}
+
+// Resonance: phase-locked error filter (lock-in amplifier for attitude).
+// Multiplies error by sin(θ) to shift flap-coherent content to DC,
+// leaky-integrates to extract the in-phase amplitude, then remodulates
+// and blends: errors that beat WITH the wing get amplified — the wing
+// "resonates" with them. Errors at other frequencies pass through normally.
+// This is the inverse of a noise filter: it enhances signal, not rejects noise.
+static float applyResonanceFilter(float errorRate, float sinTheta) {
+    int8_t gain = servoConfig()->resonance_gain;
+    if (gain == 0) return errorRate;
+
+    float g = (float)gain * 0.01f;  // [0 → 1]
+
+    // Phase-lock: modulated = error × sin(θ)
+    // DC component = 0.5 × (in-phase amplitude of error at ω_flap)
+    // 2ω component gets rejected by the leaky integrator below
+    float modulated = errorRate * sinTheta;
+
+    // Leaky integrator: extracts the DC amplitude
+    resonanceLockInState += (modulated - resonanceLockInState) * targetPidLooptime * 1e-6f / RESONANCE_TAU;
+
+    // Remodulate and blend: amplify the flap-coherent component
+    // lockInState × sin(θ) reconstructs the AC component in-phase with the wing
+    float resonanceBoost = resonanceLockInState * sinTheta * g;
+
+    return errorRate + resonanceBoost;
 }
 
 static void applyFerocityWaveShaping(float theta, float dMod, float iBias,
@@ -1597,6 +1630,13 @@ void FAST_CODE pidController(const pidProfile_t *pidProfile, timeUs_t currentTim
     calculateFlappingFromThrottle(throttle_ * 1000 + 1000);
     
     // ----------PID controller----------
+    // Reset per-frame accumulators for the NEXT calculateFlappingFromThrottle call
+    flappingFerocityModulation = 0.0f;
+    flappingFerocityDifferentialRoll = 0.0f;
+    flappingFerocityDifferentialYaw = 0.0f;
+    flappingPhaseModulation = 1.0f;
+    flappingAsymmetryBias = 0.0f;
+
     for (int axis = FD_ROLL; axis <= FD_YAW; ++axis) {
         float currentPidSetpoint = getSetpointRate(axis);
         if (maxVelocity[axis]) {
@@ -1655,6 +1695,13 @@ void FAST_CODE pidController(const pidProfile_t *pidProfile, timeUs_t currentTim
         // apply only on PITCH axis for now. attenuation of filter can be tuned.
         if (axis == FD_PITCH) {
 
+            // Resonance: phase-locked error filter — amplify error components
+            // coherent with the wing's flapping frequency. The wing "resonates"
+            // with errors at its own rhythm, making corrections more efficient.
+            // Filter the I-term error (most vulnerable to wing-frequency noise)
+            // while leaving P and D on raw error for fast response.
+            itermErrorRate = applyResonanceFilter(itermErrorRate, flappingSinusoid);
+
             // Stroke-synchronous feed-forward: accumulate pitch error over half-stroke
             // and bias next stroke's ferocity to cancel repetitive flap-frequency error
             applyStrokeSynchronousFF(errorRate);
@@ -1681,11 +1728,9 @@ void FAST_CODE pidController(const pidProfile_t *pidProfile, timeUs_t currentTim
                 flappingPhaseModulation = constrainf(
                     1.0f + pidData[axis].P * (float)servoConfig()->cadence_gain * CADENCE_SCALE,
                     0.5f, 2.0f);
-            } else {
-                flappingPhaseModulation = 1.0f;
             }
 
-            // --- FEROCITY: PD blend → wave sharpness ---
+            // --- FEROCITY: PD blend → wave sharpness (accumulates with roll/yaw) ---
             {
                 float ferocityP = 0.0f;
                 float ferocityD = 0.0f;
@@ -1697,9 +1742,9 @@ void FAST_CODE pidController(const pidProfile_t *pidProfile, timeUs_t currentTim
                     ferocityD = pidData[axis].D * (float)servoConfig()->ferocity_d_gain * FEROCITY_D_SCALE;
                 }
 
-                flappingFerocityModulation = constrainf(
+                flappingFerocityModulation += constrainf(
                     ferocityP + ferocityD,
-                    -0.5f, 0.5f);
+                    -0.35f, 0.35f);
             }
 
             // --- BALANCE: I → up/down thrust symmetry ---
@@ -1707,25 +1752,28 @@ void FAST_CODE pidController(const pidProfile_t *pidProfile, timeUs_t currentTim
                 flappingAsymmetryBias = constrainf(
                     pidData[axis].I * (float)servoConfig()->balance_gain * BALANCE_SCALE,
                     -3.0f, 3.0f);
-            } else {
-                flappingAsymmetryBias = 0.0f;
             }
 
             adjustAerolasticPIDGains(errorRate, &Kp, &Ki, &Kd);
         }
 
-        // --- WARP: roll/yaw ferocity differential ---
-        // Applies on ALL axes so roll/yaw error also shapes the wing.
-        // Ferocity controls inertia transfer: sharper wave = more impulse
-        // coupling from wing to airframe. Differential ferocity replaces
-        // ailerons and rudder for flapping-wing craft.
+        // --- WARP: roll/yaw ferocity shaping (differential + common-mode) ---
+        // Ferocity controls inertia transfer from wing to airframe.
+        // Each axis contributes both:
+        //   - DIFFERENTIAL (left/right or fore/aft): replaces ailerons/rudder
+        //   - COMMON-MODE: both wings sharper during aggressive maneuvers
+        // Common-mode uses dedicated gains (ferocity_roll_gain, ferocity_yaw_gain)
+        // and blends with pitch's PD ferocity for a unified wave-sharpness command.
         if (axis == FD_ROLL) {
             if (servoConfig()->warp_gain != 0) {
                 flappingFerocityDifferentialRoll = constrainf(
                     pidData[axis].P * (float)servoConfig()->warp_gain * WARP_SCALE,
                     -0.5f, 0.5f);
-            } else {
-                flappingFerocityDifferentialRoll = 0.0f;
+            }
+            if (servoConfig()->ferocity_roll_gain != 0) {
+                flappingFerocityModulation += constrainf(
+                    pidData[axis].P * (float)servoConfig()->ferocity_roll_gain * FEROCITY_P_SCALE,
+                    -0.15f, 0.15f);
             }
         }
 
@@ -1734,8 +1782,11 @@ void FAST_CODE pidController(const pidProfile_t *pidProfile, timeUs_t currentTim
                 flappingFerocityDifferentialYaw = constrainf(
                     pidData[axis].P * (float)servoConfig()->warp_yaw_gain * WARP_SCALE,
                     -0.5f, 0.5f);
-            } else {
-                flappingFerocityDifferentialYaw = 0.0f;
+            }
+            if (servoConfig()->ferocity_yaw_gain != 0) {
+                flappingFerocityModulation += constrainf(
+                    pidData[axis].P * (float)servoConfig()->ferocity_yaw_gain * FEROCITY_P_SCALE,
+                    -0.15f, 0.15f);
             }
         }
         
@@ -1870,6 +1921,9 @@ void FAST_CODE pidController(const pidProfile_t *pidProfile, timeUs_t currentTim
             pidData[axis].Sum = pidSum;
         }
     }
+
+    // Clamp accumulated ferocity modulation from all axes (pitch PD + roll P + yaw P)
+    flappingFerocityModulation = constrainf(flappingFerocityModulation, -0.5f, 0.5f);
 
     // Disable PID control if at zero throttle or if gyro overflow detected
     // This may look very innefficient, but it is done on purpose to always show real CPU usage as in flight

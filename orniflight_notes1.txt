@@ -1,0 +1,73 @@
+OrniFlight Mixes
+
+
+resource MOTOR 3 none
+resource MOTOR 4 none
+resource SERVO 1 B08
+resource SERVO 2 B09
+resource SERVO 3 A03
+resource SERVO 4 A02
+
+
+smix 0 3 0 100 0 0 100 0
+smix 1 3 1 100 0 0 100 0
+smix 2 3 14 100 0 0 100 0
+smix 3 4 2 100 0 0 100 0
+smix 4 4 1 100 0 0 100 0
+smix 5 4 15 100 0 0 100 0
+
+
+
+smix 0 3 1 100 0 0 100 0
+smix 1 3 0 100 0 0 100 0
+smix 2 3 14 100 0 0 100 0
+smix 3 4 1 100 0 0 100 0
+smix 4 4 0 -100 0 0 100 0
+smix 5 4 15 100 0 0 100 0
+
+smix 6 5 1 -100 0 0 100 0
+smix 7 5 0 100 0 0 100 0
+smix 8 5 16 100 0 0 100 0
+smix 9 6 1 -100 0 0 100 0
+smix 10 6 0 -100 0 0 100 0
+smix 11 6 17 100 0 0 100 0
+
+
+
+
+
+OrniFlight
+
+mmix 0  1.000  0.000  0.000 -0.42
+mmix 1  1.000  0.000  0.000  0.42
+
+smix 0 3 0 -100 0 0 80 0 #ROLL
+smix 1 3 1 -100 0 0 100 0 #PITCH
+smix 2 3 2 -100 0 0 72 0 #YAW
+smix 3 3 14 100 0 0 100 0 #FLAPPING
+smix 4 5 0 -100 0 0 80 0 #ROLL
+smix 5 5 1 100 0 0 100 0 #PITCH
+smix 6 5 2 -100 0 0 72 0 #YAW
+smix 7 5 15 -100 0 0 100 0 #FLAPPING
+
+
+
+
+
+
+
+smix 3 3 14 100 0 0 25 0 #FLAPPING
+smix 7 5 15 -100 0 0 25 0 #FLAPPING
+
+
+
+
+set ondas_gain = 10
+set ondas_gain2 = 10
+set ondas_gain3 = 10
+save
+
+set ondas_gain = 0
+set ondas_gain2 = 0
+set ondas_gain3 = 0
+save

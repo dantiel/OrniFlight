@@ -74,7 +74,10 @@ void pgResetFn_servoConfig(servoConfig_t *servoConfig) {
     servoConfig->balance_gain = 10;          // I→thrust symmetry: "trim the list"
     servoConfig->warp_gain = 0;              // Roll→L/R ferocity diff: off by default
     servoConfig->warp_yaw_gain = 0;          // Yaw→fore/aft ferocity diff: off by default
+    servoConfig->ferocity_roll_gain = 0;     // Roll→common-mode ferocity: off by default
+    servoConfig->ferocity_yaw_gain = 0;      // Yaw→common-mode ferocity: off by default
     servoConfig->anchor_gain = 0;            // k₂ = 10.0 base (anchor_gain=0=default tightness)
+    servoConfig->resonance_gain = 0;         // resonance: phase-locked error filter off by default
     servoConfig->aeroelastic_glide_coefficient = 40;
     servoConfig->aeroelastic_flap_coefficient = 40;
     servoConfig->ornithopter_ferocity_downstroke = 12;  // ~1.78 — mild shaping, near-sine
