@@ -56,7 +56,7 @@
 
 extern mixerMode_e currentMixerMode;
 
-PG_REGISTER_WITH_RESET_FN(servoConfig_t, servoConfig, PG_SERVO_CONFIG, 0);
+PG_REGISTER_WITH_RESET_FN(servoConfig_t, servoConfig, PG_SERVO_CONFIG, 1);
 
 void pgResetFn_servoConfig(servoConfig_t *servoConfig) {
     servoConfig->dev.servoCenterPulse = 1500;

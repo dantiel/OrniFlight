@@ -23,9 +23,9 @@
 #include "common/utils.h"
 
 #define FC_FIRMWARE_NAME            "Orniflight"
-#define FC_VERSION_MAJOR            4  // increment when a major release is made (big new feature, etc)
+#define FC_VERSION_MAJOR            5  // ONDAS: Cadence/Ferocity/Balance/Warp/Anchor/Resonance
 #define FC_VERSION_MINOR            0  // increment when a minor release is made (small new feature, change etc)
-#define FC_VERSION_PATCH_LEVEL      7  // increment when a bug is fixed
+#define FC_VERSION_PATCH_LEVEL      0  // increment when a bug is fixed
 
 #define FC_VERSION_STRING STR(FC_VERSION_MAJOR) "." STR(FC_VERSION_MINOR) "." STR(FC_VERSION_PATCH_LEVEL)
 
