@@ -106,7 +106,6 @@ PG_DECLARE(motorConfig_t, motorConfig);
 
 #define CHANNEL_FORWARDING_DISABLED (uint8_t)0xFF
 
-extern const mixer_t mixers[];
 extern float motor[MAX_SUPPORTED_MOTORS];
 extern float motor_disarmed[MAX_SUPPORTED_MOTORS];
 extern float motorOutputHigh, motorOutputLow;
@@ -135,4 +134,3 @@ bool mixerIsTricopter(void);
 
 void mixerSetThrottleAngleCorrection(int correctionValue);
 float mixerGetLoggingThrottle(void);
-bool isDshotTelemetryActive(void);

@@ -81,10 +81,6 @@ static FAST_RAM_ZERO_INIT bool inCrashRecoveryMode = false;
 static FAST_RAM_ZERO_INIT float dT;
 static FAST_RAM_ZERO_INIT float pidFrequency;
 
-#ifndef USE_ORNI_MIXER_ONLY
-static FAST_RAM_ZERO_INIT uint8_t antiGravityMode;
-static FAST_RAM_ZERO_INIT float antiGravityThrottleHpf;
-#endif
 
 FAST_RAM_ZERO_INIT float throttle_;
 static FAST_RAM_ZERO_INIT float flappingSinusoid;
@@ -119,11 +115,6 @@ static FAST_RAM_ZERO_INIT uint16_t ssffAccumCount;
 static FAST_RAM_ZERO_INIT float ssffFerocityDownBias;
 static FAST_RAM_ZERO_INIT float ssffFerocityUpBias;
 
-#ifndef USE_ORNI_MIXER_ONLY
-static FAST_RAM_ZERO_INIT uint16_t itermAcceleratorGain;
-static FAST_RAM float antiGravityOsdCutoff = 1.0f;
-static FAST_RAM_ZERO_INIT bool antiGravityEnabled;
-#endif
 static FAST_RAM_ZERO_INIT bool zeroThrottleItermReset;
 
 PG_REGISTER_WITH_RESET_TEMPLATE(pidConfig_t, pidConfig, PG_PID_CONFIG, 2);
@@ -223,11 +214,7 @@ void resetPidProfile(pidProfile_t *pidProfile)
         .abs_control_limit = 90,
         .abs_control_error_limit = 20,
         .abs_control_cutoff = 11,
-#ifndef USE_ORNI_MIXER_ONLY
-        .antiGravityMode = ANTI_GRAVITY_SMOOTH,
-#else
         .antiGravityMode = 0,
-#endif
         .dterm_lowpass_hz = 150,    // NOTE: dynamic lpf is enabled by default so this setting is actually
                                     // overridden and the static lowpass 1 is disabled. We can't set this
                                     // value to 0 otherwise Configurator versions 10.4 and earlier will also
@@ -276,20 +263,12 @@ static FAST_RAM float itermAccelerator = 1.0f;
 
 void pidSetItermAccelerator(float newItermAccelerator)
 {
-#ifndef USE_ORNI_MIXER_ONLY
-    itermAccelerator = newItermAccelerator;
-#else
     UNUSED(newItermAccelerator);
-#endif
 }
 
 bool pidOsdAntiGravityActive(void)
 {
-#ifndef USE_ORNI_MIXER_ONLY
-    return (itermAccelerator > antiGravityOsdCutoff);
-#else
     return false;
-#endif
 }
 
 void pidStabilisationState(pidStabilisationState_e pidControllerState)
@@ -350,9 +329,6 @@ static FAST_RAM_ZERO_INIT pt1Filter_t airmodeThrottleLpf1;
 static FAST_RAM_ZERO_INIT pt1Filter_t airmodeThrottleLpf2;
 #endif
 
-#ifndef USE_ORNI_MIXER_ONLY
-static FAST_RAM_ZERO_INIT pt1Filter_t antiGravityThrottleLpf;
-#endif
 
 
 void pidInitFilters(const pidProfile_t *pidProfile)
@@ -490,9 +466,6 @@ void pidInitFilters(const pidProfile_t *pidProfile)
     }
 #endif
 
-#ifndef USE_ORNI_MIXER_ONLY
-    pt1FilterInit(&antiGravityThrottleLpf, pt1FilterGain(ANTI_GRAVITY_THROTTLE_FILTER_CUTOFF, dT));
-#endif
 }
 
 #ifdef USE_RC_SMOOTHING_FILTER
@@ -851,14 +824,7 @@ float getFlappingAmplitude(float rc_throttle) {
 
 
 void pidUpdateThrottle(float throttle) {
-#ifndef USE_ORNI_MIXER_ONLY
-    if (antiGravityMode == ANTI_GRAVITY_SMOOTH) {
-        antiGravityThrottleHpf = throttle - pt1FilterApply(&antiGravityThrottleLpf, throttle);
-    }
-#else
     UNUSED(throttle);
-#endif
-    
     throttle_ = throttle;
 }
 
@@ -909,9 +875,6 @@ void pidInitConfig(const pidProfile_t *pidProfile)
         const float itermWindupPoint = pidProfile->itermWindupPointPercent / 100.0f;
         itermWindupPointInv = 1.0f / (1.0f - itermWindupPoint);
     }
-#ifndef USE_ORNI_MIXER_ONLY
-    itermAcceleratorGain = pidProfile->itermAcceleratorGain;
-#endif
     crashTimeLimitUs = pidProfile->crash_time * 1000;
     crashTimeDelayUs = pidProfile->crash_delay * 1000;
     crashRecoveryAngleDeciDegrees = pidProfile->crash_recovery_angle * 10;
@@ -925,17 +888,6 @@ void pidInitConfig(const pidProfile_t *pidProfile)
     throttleBoost = pidProfile->throttle_boost * 0.1f;
 #endif
     itermRotation = pidProfile->iterm_rotation;
-#ifndef USE_ORNI_MIXER_ONLY
-    antiGravityMode = pidProfile->antiGravityMode;
-    
-    // Calculate the anti-gravity value that will trigger the OSD display.
-    antiGravityOsdCutoff = 1.0f;
-    if (antiGravityMode == ANTI_GRAVITY_SMOOTH) {
-        antiGravityOsdCutoff += ((itermAcceleratorGain - 1000) / 1000.0f) * 0.25f;
-    }
-#else
-    // antiGravityMode, antiGravityOsdCutoff not declared under USE_ORNI_MIXER_ONLY
-#endif
 
 #if defined(USE_SMART_FEEDFORWARD)
     smartFeedforward = pidProfile->smart_feedforward;
@@ -1583,14 +1535,6 @@ void FAST_CODE pidController(const pidProfile_t *pidProfile, timeUs_t currentTim
     gpsRescuePreviousState = gpsRescueIsActive;
 #endif
 
-#ifndef USE_ORNI_MIXER_ONLY
-    // Dynamic i component,
-    if ((antiGravityMode == ANTI_GRAVITY_SMOOTH) && antiGravityEnabled) {
-        itermAccelerator = 1 + fabsf(antiGravityThrottleHpf) * 0.01f * (itermAcceleratorGain - 1000);
-        DEBUG_SET(DEBUG_ANTI_GRAVITY, 1, lrintf(antiGravityThrottleHpf * 1000));
-    }
-    DEBUG_SET(DEBUG_ANTI_GRAVITY, 0, lrintf(itermAccelerator * 1000));
-#endif
 
     // gradually scale back integration when above windup point
     float dynCi = dT * itermAccelerator;
@@ -1960,24 +1904,12 @@ void pidSetAcroTrainerState(bool newState)
 
 void pidSetAntiGravityState(bool newState)
 {
-#ifndef USE_ORNI_MIXER_ONLY
-    if (newState != antiGravityEnabled) {
-        // reset the accelerator on state changes
-        itermAccelerator = 1.0f;
-    }
-    antiGravityEnabled = newState;
-#else
     UNUSED(newState);
-#endif
 }
 
 bool pidAntiGravityEnabled(void)
 {
-#ifndef USE_ORNI_MIXER_ONLY
-    return antiGravityEnabled;
-#else
     return false;
-#endif
 }
 
 #ifdef USE_DYN_LPF

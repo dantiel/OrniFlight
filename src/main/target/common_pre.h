@@ -284,7 +284,6 @@
 #define USE_TELEMETRY_IBUS_EXTENDED
 #define USE_TELEMETRY_JETIEXBUS
 #define USE_TELEMETRY_MAVLINK
-#define USE_ORNI_MIXER_ONLY
 #define USE_UNCOMMON_MIXERS
 #define USE_SIGNATURE
 // #define USE_ABSOLUTE_CONTROL
@@ -304,8 +303,7 @@
 //#define USE_VTX_TABLE
 #endif
 
-// OrniFlight: strip propeller/quadcopter Betaflight features not needed for ornithopters
-#ifdef USE_ORNI_MIXER_ONLY
+// OrniFlight: strip propeller/quadcopter Betaflight features — unconditional
 // Motor protocols (no ESCs on ornithopters)
 #undef USE_DSHOT
 #undef USE_DSHOT_TELEMETRY
@@ -330,4 +328,3 @@
 #undef USE_DYN_LPF
 // Virtual motor current meter
 #undef USE_VIRTUAL_CURRENT_METER
-#endif

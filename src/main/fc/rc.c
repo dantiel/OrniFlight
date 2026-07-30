@@ -216,15 +216,6 @@ static void checkForThrottleErrorResetState(uint16_t rxRefreshRate)
 
     const int16_t rcCommandSpeed = rcCommand[THROTTLE] - rcCommandThrottlePrevious[index];
 
-#ifndef USE_ORNI_MIXER_ONLY
-    if (currentPidProfile->antiGravityMode == ANTI_GRAVITY_STEP) {
-        if (ABS(rcCommandSpeed) > throttleVelocityThreshold) {
-            pidSetItermAccelerator(CONVERT_PARAMETER_TO_FLOAT(currentPidProfile->itermAcceleratorGain));
-        } else {
-            pidSetItermAccelerator(1.0f);
-        }
-    }
-#endif
 }
 
 FAST_CODE uint8_t processRcInterpolation(void)
