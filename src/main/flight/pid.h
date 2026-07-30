@@ -202,14 +202,8 @@ extern uint32_t targetPidLooptime;
 extern float throttleBoost;
 extern pt1Filter_t throttleLpf;
 
-// float flappingSinusoid;
-// float flappingCosinusoid;
 extern float ornithopterFlapping;
-// float coFlapping;
-// float flappingAmplitude;
 extern float throttle_;
-// float flappingSquared;
-// float flappingDerivative;
 
 void pidResetIterm(void);
 void pidStabilisationState(pidStabilisationState_e pidControllerState);
@@ -251,4 +245,3 @@ float calcHorizonLevelStrength(void);
 void dynLpfDTermUpdate(float throttle);
 void pidSetItermReset(bool enabled);
 float pidGetPreviousSetpoint(int axis);
-

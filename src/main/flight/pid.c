@@ -88,7 +88,6 @@ static FAST_RAM_ZERO_INIT float antiGravityThrottleHpf;
 
 FAST_RAM_ZERO_INIT float throttle_;
 static FAST_RAM_ZERO_INIT float flappingSinusoid;
-static FAST_RAM_ZERO_INIT float flappingCosinusoid;
 static FAST_RAM_ZERO_INIT float flappingAmplitude;
 FAST_RAM_ZERO_INIT float ornithopterFlapping;
 static FAST_RAM_ZERO_INIT float flappingDerivative;
@@ -111,8 +110,8 @@ static FAST_RAM_ZERO_INIT uint16_t ssffAccumCount;
 static FAST_RAM_ZERO_INIT float ssffFerocityDownBias;
 static FAST_RAM_ZERO_INIT float ssffFerocityUpBias;
 
-static FAST_RAM_ZERO_INIT uint16_t itermAcceleratorGain;
 #ifndef USE_ORNI_MIXER_ONLY
+static FAST_RAM_ZERO_INIT uint16_t itermAcceleratorGain;
 static FAST_RAM float antiGravityOsdCutoff = 1.0f;
 static FAST_RAM_ZERO_INIT bool antiGravityEnabled;
 #endif
@@ -598,13 +597,18 @@ float omegadot = 0.0;
 float thetadot = 0.0;
 float omega = 0.0;
 float theta = 0.0;
-float k0 = 1.0;
-float k2 = 10.0;
+#define ONDAS_K0               1.0f     // Wing ODE spring constant: scales torque→angular acceleration
+#define ONDAS_K2              10.0f     // Wing ODE damping constant: scales velocity→deceleration
+#define ONDAS_PHASE_SCALE      0.00005f  // P-term→k0 modulation: PID-P × gain × scale → phase advance
+#define ONDAS_FEROCITY_SCALE   0.0003f   // D-term→ferocity modulation: PID-D × gain × scale → wave sharpness
+#define ONDAS_ASYMMETRY_SCALE  0.0001f   // I-term→asymmetry: PID-I × gain × scale → up/down bias
+#define FEROCITY_RANGE         8.0f      // Max ferocity for trapezoidal model (f=0→pure cosine, f=8→square)
 
-
+float k0 = ONDAS_K0;
+float k2 = ONDAS_K2;
 
 static inline float ferocityParamToFloat(int8_t param) {
-    return 1.0f + ((float)(param - 1) * 7.0f / 99.0f);
+    return ((float)(param - 1) * FEROCITY_RANGE / 99.0f);  // [1, 100] → [0, 8]
 }
 
 // Stroke-Synchronous Feed-Forward: measures pitch error over each half-stroke
@@ -641,48 +645,92 @@ static void applyStrokeSynchronousFF(float pitchErrorRate) {
     prevFlappingSinusoid = flappingSinusoid;
 }
 
-static void applyFerocityWaveShaping(float sinTheta, float dMod, float iBias) {
-    // dMod: D-term ferocity modulation factor ∈ [-0.5, +0.5]
-    //        positive → sharper wave → more dwell → "delay the next opposite stroke"
-    // iBias: I-term asymmetry bias ∈ [-3.0, +3.0]
-    //        positive → more upstroke ferocity, less downstroke → pitch-down thrust
+static void applyFerocityWaveShaping(float theta, float dMod, float iBias) {
+    // Trapezoidal wave shaping with cos-ramp between dwell zones.
+    // Replaces old tanh(F·sinθ)/tanh(F) with explicit breathing pause.
+    //
+    // dMod: D-term ferocity modulation ∈ [-0.5, +0.5]
+    //        scales both strokes' dwell ratio — deeper pause = sharper wave
+    // iBias: I-term asymmetry ∈ [-3.0, +3.0]
+    //        positive → more upstroke ferocity → pitch-down thrust bias
+    //
+    // Shared limiar (reversal θ) computed from RAW config ferocities
+    // so PID activity doesn't shift stroke reversal timing.
 
-    float fDown = ferocityParamToFloat(servoConfig()->ornithopter_ferocity_downstroke)
-                  + ssffFerocityDownBias - iBias;
-    float fUp   = ferocityParamToFloat(servoConfig()->ornithopter_ferocity_upstroke)
-                  + ssffFerocityUpBias   + iBias;
+    const float pi    = 3.14159265358979f;
+    const float twoPi = 2.0f * pi;
 
-    // D-term ferocity scaling: sharpens/blunts both strokes equally
+    // Normalize theta to [0, 2π)
+    float tNorm = fmodf(theta, twoPi);
+    if (tNorm < 0.0f) tNorm += twoPi;
+
+    // Base ferocities from config (raw, before modulation)
+    float fDRaw = ferocityParamToFloat(servoConfig()->ornithopter_ferocity_downstroke);
+    float fURaw = ferocityParamToFloat(servoConfig()->ornithopter_ferocity_upstroke);
+
+    // Per-stroke ferocities with SSFF bias and I-term asymmetry
+    float fD = fDRaw + ssffFerocityDownBias - iBias;
+    float fU = fURaw + ssffFerocityUpBias   + iBias;
+
+    // D-term scales both equally (deepens/shallows breathing pause)
     float dFactor = 1.0f + dMod;
-    fDown *= dFactor;
-    fUp   *= dFactor;
+    fD *= dFactor;
+    fU *= dFactor;
 
-    // Clamp ferocity to valid range [1.0, 8.0]
-    if (fDown < 1.0f) fDown = 1.0f;
-    if (fDown > 8.0f) fDown = 8.0f;
-    if (fUp < 1.0f)   fUp = 1.0f;
-    if (fUp > 8.0f)   fUp = 8.0f;
+    fD = constrainf(fD, 0.0f, FEROCITY_RANGE);
+    fU = constrainf(fU, 0.0f, FEROCITY_RANGE);
 
-    float ferocity;
-    if (sinTheta >= 0.1f) {
-        ferocity = fDown;
-    } else if (sinTheta <= -0.1f) {
-        ferocity = fUp;
-    } else {
-        float t = (sinTheta + 0.1f) * 5.0f; // map [-0.1,0.1] → [0,1]
-        ferocity = fUp + (fDown - fUp) * t;
-    }
+    // Shared limiar from RAW ferocities — stable reversal point
+    float wD = fmaxf(FEROCITY_RANGE - fDRaw, 0.01f);
+    float wU = fmaxf(FEROCITY_RANGE - fURaw, 0.01f);
+    float limiar = twoPi * wD / (wD + wU);
 
-    float tanhF = tanhf(ferocity);
-    if (fabsf(tanhF) < 1e-6f) {
-        shapedFlappingSinusoid = sinTheta;
+    // Fast-path: max ferocity → pure square wave (no float math in ramp)
+    if (fD >= FEROCITY_RANGE - 0.001f && fU >= FEROCITY_RANGE - 0.001f) {
+        shapedFlappingSinusoid = (tNorm < limiar) ? 1.0f : -1.0f;
+        flappingDerivative = 0.0f;
         return;
     }
 
-    shapedFlappingSinusoid = tanhf(ferocity * sinTheta) / tanhF;
+    bool descida = (tNorm < limiar);
+    float t, ferocity, d, dh, dt_dtheta;
+    if (descida) {
+        t = tNorm / limiar;
+        ferocity = fD;
+        dt_dtheta = 1.0f / limiar;
+    } else {
+        t = (tNorm - limiar) / (twoPi - limiar);
+        ferocity = fU;
+        dt_dtheta = 1.0f / (twoPi - limiar);
+    }
 
-    if (shapedFlappingSinusoid >  1.0f) shapedFlappingSinusoid =  1.0f;
-    if (shapedFlappingSinusoid < -1.0f) shapedFlappingSinusoid = -1.0f;
+    d  = ferocity / FEROCITY_RANGE;  // f/8 ∈ [0, 1]
+    dh = d * 0.5f;                    // d/2 per extreme
+
+    float dShaped_dTheta;
+
+    if (d >= 1.0f || t < dh) {
+        // Initial dwell at stroke peak
+        shapedFlappingSinusoid = descida ? 1.0f : -1.0f;
+        dShaped_dTheta = 0.0f;
+    } else if (t > 1.0f - dh) {
+        // Final dwell at opposite peak
+        shapedFlappingSinusoid = descida ? -1.0f : 1.0f;
+        dShaped_dTheta = 0.0f;
+    } else {
+        // Cos ramp: cos(π·(t-dh)/(1-d))
+        float k = pi / (1.0f - d);
+        float rampArg = k * (t - dh);
+        float rampVal = cosf(rampArg);
+        shapedFlappingSinusoid = descida ? rampVal : -rampVal;
+
+        // Derivative: d/dθ[±cos(k·(t(θ)-dh))] = ∓k·sin(k·(t-dh)) · dt/dθ
+        float dRamp_dt = -k * sinf(rampArg);
+        dShaped_dTheta = dRamp_dt * dt_dtheta;
+        if (!descida) dShaped_dTheta = -dShaped_dTheta;
+    }
+
+    flappingDerivative = dShaped_dTheta * thetadot;
 }
 
 void calculateFlappingFromThrottle(float rc_throttle) {
@@ -702,37 +750,19 @@ void calculateFlappingFromThrottle(float rc_throttle) {
     omega = omega + omegadot * dT;
 
     if (rc_throttle > GLIDE_MODE_THRESHOLD) {
-        flappingSinusoid = sin(theta);
-        flappingCosinusoid = cos(theta);
+        flappingSinusoid = sinf(theta);
 
-        // Ferocity wave shaping: transform sin(θ) → tanh(F·sinθ)/tanh(F)
-        // D-term modulates wave sharpness (breathing pause depth)
-        // I-term biases up/down asymmetry (center of flapping)
-        applyFerocityWaveShaping(flappingSinusoid, flappingFerocityModulation, flappingAsymmetryBias);
-
-        // Shaped derivative: d/dt[shapedWave] for phase-shift and aeroelastic PID scaling
-        float fDown = ferocityParamToFloat(servoConfig()->ornithopter_ferocity_downstroke);
-        float fUp   = ferocityParamToFloat(servoConfig()->ornithopter_ferocity_upstroke);
-        float fDeriv;
-        if (flappingSinusoid >= 0.1f) fDeriv = fDown;
-        else if (flappingSinusoid <= -0.1f) fDeriv = fUp;
-        else {
-            float tDeriv = (flappingSinusoid + 0.1f) * 5.0f;
-            fDeriv = fUp + (fDown - fUp) * tDeriv;
-        }
-        float tanhFd = tanhf(fDeriv);
-        float tanhArg = tanhf(fDeriv * flappingSinusoid);
-        float sech2 = 1.0f - tanhArg * tanhArg;
-        float shapedDerivative = fDeriv * flappingCosinusoid * sech2 / tanhFd;
-
-        flappingDerivative = shapedDerivative * thetadot;
+        // Trapezoidal wave shaping: cos-ramp between dwell zones
+        // D-term → breathing pause depth, I-term → up/down asymmetry
+        // flappingDerivative is computed inside applyFerocityWaveShaping
+        applyFerocityWaveShaping(theta, flappingFerocityModulation, flappingAsymmetryBias);
 
         ornithopterFlapping = shapedFlappingSinusoid * flappingAmplitude;
     }
     else {
         shapedFlappingSinusoid = 0.0f;
-        flappingDerivative = 0.0;
-        ornithopterFlapping = 0.0;
+        flappingDerivative = 0.0f;
+        ornithopterFlapping = 0.0f;
     }
 }
 
@@ -822,7 +852,9 @@ void pidInitConfig(const pidProfile_t *pidProfile)
         const float itermWindupPoint = pidProfile->itermWindupPointPercent / 100.0f;
         itermWindupPointInv = 1.0f / (1.0f - itermWindupPoint);
     }
+#ifndef USE_ORNI_MIXER_ONLY
     itermAcceleratorGain = pidProfile->itermAcceleratorGain;
+#endif
     crashTimeLimitUs = pidProfile->crash_time * 1000;
     crashTimeDelayUs = pidProfile->crash_delay * 1000;
     crashRecoveryAngleDeciDegrees = pidProfile->crash_recovery_angle * 10;
@@ -845,7 +877,7 @@ void pidInitConfig(const pidProfile_t *pidProfile)
         antiGravityOsdCutoff += ((itermAcceleratorGain - 1000) / 1000.0f) * 0.25f;
     }
 #else
-    antiGravityMode = 0;
+    // antiGravityMode, antiGravityOsdCutoff not declared under USE_ORNI_MIXER_ONLY
 #endif
 
 #if defined(USE_SMART_FEEDFORWARD)
@@ -1616,7 +1648,7 @@ void FAST_CODE pidController(const pidProfile_t *pidProfile, timeUs_t currentTim
             // Values are stored for use on next calculateFlappingFromThrottle call.
             if (servoConfig()->ondas_gain != 0) {
                 flappingPhaseModulation = constrainf(
-                    1.0f + pidData[axis].P * (float)servoConfig()->ondas_gain * 0.00005f,
+                    1.0f + pidData[axis].P * (float)servoConfig()->ondas_gain * ONDAS_PHASE_SCALE,
                     0.5f, 2.0f);
             } else {
                 flappingPhaseModulation = 1.0f;
@@ -1624,7 +1656,7 @@ void FAST_CODE pidController(const pidProfile_t *pidProfile, timeUs_t currentTim
 
             if (servoConfig()->ondas_gain2 != 0) {
                 flappingFerocityModulation = constrainf(
-                    pidData[axis].D * (float)servoConfig()->ondas_gain2 * 0.0003f,
+                    pidData[axis].D * (float)servoConfig()->ondas_gain2 * ONDAS_FEROCITY_SCALE,
                     -0.5f, 0.5f);
             } else {
                 flappingFerocityModulation = 0.0f;
@@ -1632,7 +1664,7 @@ void FAST_CODE pidController(const pidProfile_t *pidProfile, timeUs_t currentTim
 
             if (servoConfig()->ondas_gain3 != 0) {
                 flappingAsymmetryBias = constrainf(
-                    pidData[axis].I * (float)servoConfig()->ondas_gain3 * 0.0001f,
+                    pidData[axis].I * (float)servoConfig()->ondas_gain3 * ONDAS_ASYMMETRY_SCALE,
                     -3.0f, 3.0f);
             } else {
                 flappingAsymmetryBias = 0.0f;
