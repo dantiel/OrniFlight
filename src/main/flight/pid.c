@@ -602,7 +602,8 @@ float thetadot = 0.0;
 float omega = 0.0;
 float theta = 0.0;
 #define CADENCE_K0               1.0f     // Wing ODE spring constant: scales torque→angular acceleration
-#define CADENCE_K2              10.0f     // Wing ODE damping constant: scales velocity→deceleration
+#define ANCHOR_BASE_K2           10.0f     // Wing ODE base damping: scales velocity→deceleration
+#define ANCHOR_SCALE             0.1f      // anchor_gain→k2: k2 = BASE + gain × scale
 #define CADENCE_SCALE            0.00005f  // P-term→k0 modulation: PID-P × gain × scale → phase advance
 #define FEROCITY_D_SCALE         0.0003f   // D-term→ferocity modulation: PID-D × gain × scale → wave sharpness
 #define FEROCITY_P_SCALE         0.00015f  // P-term→ferocity modulation: PID-P × gain × scale → wave sharpness
@@ -611,7 +612,7 @@ float theta = 0.0;
 #define FEROCITY_RANGE           8.0f      // Max ferocity for trapezoidal model (f=0→pure cosine, f=8→square)
 
 float k0 = CADENCE_K0;
-float k2 = CADENCE_K2;
+float k2 = ANCHOR_BASE_K2;
 
 static inline float ferocityParamToFloat(int8_t param) {
     return ((float)(param - 1) * FEROCITY_RANGE / 99.0f);  // [1, 100] → [0, 8]
@@ -1587,6 +1588,12 @@ void FAST_CODE pidController(const pidProfile_t *pidProfile, timeUs_t currentTim
     
     // init flapping
     flappingAmplitude = getFlappingAmplitude(throttle_ * 1000 + 1000);
+
+    // Anchor: variable k₂ damping — controls frequency lock strength.
+    // Higher = wing snaps to commanded frequency faster (agile, energy-hungry).
+    // Lower = wing resonates freely (efficient cruise, sluggish transients).
+    k2 = ANCHOR_BASE_K2 + (float)servoConfig()->anchor_gain * ANCHOR_SCALE;
+
     calculateFlappingFromThrottle(throttle_ * 1000 + 1000);
     
     // ----------PID controller----------

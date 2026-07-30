@@ -1432,6 +1432,7 @@ const clivalue_t valueTable[] = {
     { "balance_gain",          VAR_INT8 | MASTER_VALUE, .config.minmax = { -100, 100 }, PG_SERVO_CONFIG, offsetof(servoConfig_t, balance_gain) },         // I→thrust symmetry (up/down bias)
     { "warp_gain",             VAR_INT8 | MASTER_VALUE, .config.minmax = { -100, 100 }, PG_SERVO_CONFIG, offsetof(servoConfig_t, warp_gain) },            // Roll P→L/R ferocity differential
     { "warp_yaw_gain",         VAR_INT8 | MASTER_VALUE, .config.minmax = { -100, 100 }, PG_SERVO_CONFIG, offsetof(servoConfig_t, warp_yaw_gain) },        // Yaw P→fore/aft ferocity differential
+    { "anchor_gain",           VAR_INT8 | MASTER_VALUE, .config.minmax = { 0, 100 }, PG_SERVO_CONFIG, offsetof(servoConfig_t, anchor_gain) },             // k₂ damping: frequency lock strength
     { "aeroelastic_glide_coefficient", VAR_INT8 | MASTER_VALUE, .config.minmax = { INT8_MIN, INT8_MAX }, PG_SERVO_CONFIG, offsetof(servoConfig_t, aeroelastic_glide_coefficient) },
     { "aeroelastic_flap_coefficient", VAR_INT8 | MASTER_VALUE, .config.minmax = { INT8_MIN, INT8_MAX }, PG_SERVO_CONFIG, offsetof(servoConfig_t, aeroelastic_flap_coefficient) },
     { "ornithopter_ferocity_downstroke", VAR_INT8 | MASTER_VALUE, .config.minmax = { 1, 100 }, PG_SERVO_CONFIG, offsetof(servoConfig_t, ornithopter_ferocity_downstroke) },

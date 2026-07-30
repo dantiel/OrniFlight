@@ -147,6 +147,7 @@ typedef struct servoConfig_s {
     int8_t balance_gain;                     // I-term → thrust symmetry (up/down bias): "trim the list"
     int8_t warp_gain;                        // Roll P-term → L/R ferocity differential: "bank the wings"
     int8_t warp_yaw_gain;                    // Yaw P-term → fore/aft ferocity differential: "turn the head"
+    int8_t anchor_gain;                      // k₂ damping coefficient: "lock the rhythm" (0=loose, 100=tight)
     int8_t aeroelastic_glide_coefficient;
     int8_t aeroelastic_flap_coefficient;
     int8_t ornithopter_ferocity_downstroke;  // 1-100 maps to 1.0-8.0 ferocity on downstroke
