@@ -13,39 +13,31 @@ OrniFlight replaces traditional motor outputs with oscillating servos that drive
 ## Key Features
 
 - **Servo-Based Propulsion:** Tailored for precise control of servo mechanisms, enabling realistic and efficient flapping wing motion.
-- **Advanced Aerodynamics:** Integrates the latest aerodynamic theories to enhance flight stability and performance.
-	- **ONDAS:** Oscillating Normalized Dynamic Adaptive Stabilization. ONDAS facilitates gyroscopic PID stabilization specifically designed for optimizing flapping flight dynamics, ensuring consistent and controlled wing motion throughout flight.
-- **Customizable Settings:** Offers a wide range of configurable options to fine-tune flight characteristics according to specific designs and requirements.
+- **ONDAS Control Architecture:** A multi-layered flapping-wing stabilization system with 8 modulation layers + variable damping anchor. PID terms directly modulate wing trajectory parameters — phase timing, wave sharpness, and thrust symmetry — through a nonlinear ODE-driven wing model. [Full documentation →](ONDAS.md)
+- **Customizable Settings:** 16 CLI-tunable parameters for fine-tuning ferocity, cadence, balance, and advanced filters.
 - **Open Source:** Developed as an open-source project, encouraging community involvement and continuous improvement.
 
-## Oscillating Normalized Dynamic Adaptive Stabilization (ONDAS)
+## ONDAS — The Wave
 
-Oscillating Normalized Dynamic Adaptive Stabilization (ONDAS) is an innovative stabilization system specifically designed for flapping or oscillating systems. 
-By focusing on the central, most powerful part of the oscillating wave, ONDAS dynamically adapts to real-time data to maintain optimal stability and control while preventing the system from being destabilized by its own oscillations. This system leverages advanced normalization and dynamic adjustment techniques to minimize the impact of extreme errors, ensuring efficient and stable performance in varying conditions.
+ONDAS is a flapping-wing control architecture built on a single insight: the wing is a driven nonlinear oscillator. Rather than gating PID authority by wing position (the old approach), ONDAS modulates the *wing's own parameters* — spring constant, dwell ratio, and thrust asymmetry — in real time, locked to the flapping phase θ.
 
+### The 8 Layers
 
-### Key Features
+| # | Layer | Source | Modulates | Description |
+|---|-------|--------|-----------|-------------|
+| 1 | **Cadence** | P | k₀ (ODE spring) | Shifts thrust timing within the stroke — "push harder *now*" |
+| 2 | **Ferocity** | PD + Roll P + Yaw P | Dwell ratio | Wave sharpness per axis — the inertia gate |
+| 3 | **Balance** | I | Up/down bias | Persistent thrust asymmetry trim |
+| 4 | **Warp** | Roll/Yaw P | L/R ferocity differential | Asymmetric wing sharpness for turning |
+| 5 | **Resonance** | Phase-locked | Error amplification | Lock-in amplifier — only flap-coherent corrections pass |
+| 6 | **Prescience** | ω-based prediction | Feed-forward | Stroke-ahead error prediction via wing ODE state |
+| 7 | **Espelho** | Reverse lock-in | Self-noise cancel | Subtracts wing's own gyro signature from error |
+| 8 | **Saudade** | Per-stroke learning | Bias accumulation | Slowly absorbs persistent SSFF bias into trim |
+| ⚓ | **Anchor** | — | k₂ damping | Variable frequency-lock strength |
 
-* **Oscillating Focus:** Stabilizes systems with oscillating or flapping motions by adjusting to the system’s natural rhythm for smooth operation.
-* **Normalized Management:** Reduces the impact of extreme deviations by focusing on the central part of the oscillation where the most thrust is generated.
-* **Dynamic Adjustment:** Adjusts control parameters in real-time to maintain stability during varying conditions.
-* **Adaptive Phasing:** Reacts differently to various flap phases, enabling clear control and a more steady wave by adapting to the setpoint flap by flap.
-* **Central Stabilization:** Ensures precise control by focusing on the central phase of the oscillation, enhancing stability.
+All layers default to off (gains = 0). Tune progressively — start with Cadence + Ferocity + Balance, then layer in Warp, Resonance, Prescience, Espelho, and Saudade as needed.
 
-
-### How It Works
-
-1. *Error Filtering:* ONDAS applies an alpha filter to the error term based on the oscillation phase, throttle input, and user-defined control variables. This filtering process reduces the influence of extreme errors and focuses on the most controllable, predictable but also impactful part of the wave.
-2. *Adaptive PID Control:* The filtered error is used in the PID (Proportional-Integral-Derivative) control loop. The PID parameters are dynamically adjusted to adapt to changing conditions, ensuring responsive and stable control.
-3. *Seamless Integration:* ONDAS integrates with the flapping control loop, ensuring that stabilization efforts complement the natural motion of the system without interfering with its power and efficiency.
-
-
-### Benefits
-
-* *Improved Stability:* Prevents destabilization caused by the system’s own oscillations, ensuring smooth and efficient operation. A more steady wave and trajectory generated by the stabilization system enhances overall efficiency and flight predictability.
-* *Optimized Control:* Focuses on the central part of the oscillation to achieve precise stabilization and avoid overshooting.
-* *Real-Time Adaptation:* Continuously adapts to real-time conditions, providing robust stabilization even in rapidly changing environments. This technology expands operational capabilities, enabling models that previously struggled or couldn’t fly without active stabilization to achieve sustained flight.
-	
+**[→ Full ONDAS documentation](ONDAS.md)** — architecture diagrams, signal flow, CLI parameter table, tuning guide.
 	
 ## Installation
 
