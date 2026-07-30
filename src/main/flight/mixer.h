@@ -29,6 +29,7 @@
 #include "drivers/pwm_output.h"
 
 #define QUAD_MOTOR_COUNT 4
+#define ORNI_MOTOR_COUNT 4
 #define BRUSHED_MOTORS_PWM_RATE 16000
 #define BRUSHLESS_MOTORS_PWM_RATE 480
 

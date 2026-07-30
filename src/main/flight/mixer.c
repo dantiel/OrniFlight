@@ -469,6 +469,26 @@ void loadLaunchControlMixer(void)
 }
 #endif
 
+#ifdef USE_ORNI_MIXER_ONLY
+// OrniFlight: ornithopter-only mixer — bypasses the multirotor mixers[] table
+void mixerConfigureOutput(void)
+{
+    motorCount = ORNI_MOTOR_COUNT;
+    for (int i = 0; i < motorCount; i++) {
+        currentMixer[i] = mixerOrnithopter[i];
+    }
+    mixerResetDisarmedMotors();
+}
+
+void mixerLoadMix(int index, motorMixer_t *customMixers)
+{
+    UNUSED(index);
+    // Ornithopter does not support custom motor mixers
+    for (int i = 0; i < MAX_SUPPORTED_MOTORS; i++) {
+        customMixers[i].throttle = 0.0f;
+    }
+}
+#else
 #ifndef USE_QUAD_MIXER_ONLY
 
 void mixerConfigureOutput(void)
@@ -530,6 +550,7 @@ void mixerConfigureOutput(void)
     mixerResetDisarmedMotors();
 }
 #endif // USE_QUAD_MIXER_ONLY
+#endif // USE_ORNI_MIXER_ONLY
 
 void mixerResetDisarmedMotors(void)
 {
@@ -539,6 +560,7 @@ void mixerResetDisarmedMotors(void)
     }
 }
 
+#ifndef USE_ORNI_MIXER_ONLY
 void writeMotors(void)
 {
     if (pwmAreMotorsEnabled()) {
@@ -574,6 +596,13 @@ void stopPwmAllMotors(void)
     pwmShutdownPulsesForAllMotors(motorCount);
     delayMicroseconds(1500);
 }
+#else
+// OrniFlight: no physical motors — servos only
+void writeMotors(void) {}
+static void writeAllMotors(int16_t mc) { UNUSED(mc); }
+void stopMotors(void) {}
+void stopPwmAllMotors(void) {}
+#endif
 
 static FAST_RAM_ZERO_INIT float throttle = 0;
 static FAST_RAM_ZERO_INIT float loggingThrottle = 0;
@@ -585,10 +614,13 @@ static FAST_RAM_ZERO_INIT int8_t motorOutputMixSign;
 
 static void calculateThrottleAndCurrentMotorEndpoints(timeUs_t currentTimeUs)
 {
+#ifndef USE_ORNI_MIXER_ONLY
     static uint16_t rcThrottlePrevious = 0;   // Store the last throttle direction for deadband transitions
     static timeUs_t reversalTimeUs = 0; // time when motors last reversed in 3D mode
+#endif
     float currentThrottleInputRange = 0;
 
+#ifndef USE_ORNI_MIXER_ONLY
     if (featureIsEnabled(FEATURE_3D)) {
         uint16_t rcCommand3dDeadBandLow;
         uint16_t rcCommand3dDeadBandHigh;
@@ -679,7 +711,9 @@ static void calculateThrottleAndCurrentMotorEndpoints(timeUs_t currentTimeUs)
             // keep iterm zero for 250ms after motor reversal
             pidResetIterm();
         }
-    } else {
+    } else
+#endif
+    {
         throttle = rcCommand[THROTTLE] - PWM_RANGE_MIN + throttleAngleCorrection;
         currentThrottleInputRange = rcCommandThrottleRange;
         motorRangeMin = motorOutputLow;
@@ -695,6 +729,7 @@ static void calculateThrottleAndCurrentMotorEndpoints(timeUs_t currentTimeUs)
 #define CRASH_FLIP_DEADBAND 20
 #define CRASH_FLIP_STICK_MINF 0.15f
 
+#ifndef USE_ORNI_MIXER_ONLY
 static void applyFlipOverAfterCrashModeToMotors(void)
 {
     if (ARMING_FLAG(ARMED)) {
@@ -745,7 +780,7 @@ static void applyFlipOverAfterCrashModeToMotors(void)
                 } else {
                     motorOutputNormalised = 0;
                 }
-            } 
+            }
             motorOutputNormalised = MIN(1.0f, flipPower * motorOutputNormalised);
             float motorOutput = motorOutputMin + motorOutputNormalised * motorOutputRange;
 
@@ -761,6 +796,9 @@ static void applyFlipOverAfterCrashModeToMotors(void)
         }
     }
 }
+#else
+static void applyFlipOverAfterCrashModeToMotors(void) {}
+#endif
 
 static void applyMixToMotors(float motorMix[MAX_SUPPORTED_MOTORS], motorMixer_t *activeMixer)
 {
@@ -812,12 +850,16 @@ float applyThrottleLimit(float throttle)
     return throttle;
 }
 
+#ifndef USE_ORNI_MIXER_ONLY
 void applyMotorStop(void)
 {
     for (int i = 0; i < motorCount; i++) {
         motor[i] = disarmMotorOutput;
     }
 }
+#else
+void applyMotorStop(void) {}
+#endif
 
 #ifdef USE_DYN_LPF
 void updateDynLpfCutoffs(timeUs_t currentTimeUs, float throttle)

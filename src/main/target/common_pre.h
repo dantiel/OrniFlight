@@ -304,14 +304,30 @@
 //#define USE_VTX_TABLE
 #endif
 
-// OrniFlight: strip propeller-oriented Betaflight features not needed for ornithopters
+// OrniFlight: strip propeller/quadcopter Betaflight features not needed for ornithopters
 #ifdef USE_ORNI_MIXER_ONLY
+// Motor protocols (no ESCs on ornithopters)
 #undef USE_DSHOT
 #undef USE_DSHOT_TELEMETRY
-#undef USE_RPM_FILTER
+#undef USE_DSHOT_DMAR
+#undef USE_ESCSERIAL_SIMONK
+#undef USE_SERIAL_4WAY_SK_BOOTLOADER
+#undef USE_SERIAL_4WAY_BLHELI_BOOTLOADER
 #undef USE_BRUSHED_ESC_AUTODETECT
+// ESC sensors / telemetry
+#undef USE_ESC_SENSOR
+#undef USE_ESC_SENSOR_INFO
+#undef USE_ESC_SENSOR_TELEMETRY
+// Quad-specific PID features
 #undef USE_LAUNCH_CONTROL
 #undef USE_THROTTLE_BOOST
 #undef USE_SMART_FEEDFORWARD
 #undef USE_INTEGRATED_YAW_CONTROL
+#undef USE_TPA_MODE
+#undef USE_THRUST_LINEARIZATION
+#undef USE_D_MIN
+#undef USE_AIRMODE_LPF
+#undef USE_DYN_LPF
+// Virtual motor current meter
+#undef USE_VIRTUAL_CURRENT_METER
 #endif
