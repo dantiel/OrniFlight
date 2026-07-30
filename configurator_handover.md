@@ -86,7 +86,31 @@ Each axis independently gates how much wing inertia passes through to the airfra
 
 ---
 
-## 5. Files Changed (OrniFlight — for reference)
+## 5. Quadcopter Feature Stripping (commit 6221913)
+
+16 Betaflight quadcopter/propeller features disabled for ornithopter builds:
+
+| Category | Features #undef'd |
+|---|---|
+| Motor protocols | USE_DSHOT, USE_DSHOT_DMAR, USE_ESCSERIAL_SIMONK, USE_SERIAL_4WAY_SK_BOOTLOADER, USE_SERIAL_4WAY_BLHELI_BOOTLOADER |
+| ESC sensors | USE_ESC_SENSOR, USE_ESC_SENSOR_INFO, USE_ESC_SENSOR_TELEMETRY |
+| Quad PID | USE_TPA_MODE, USE_THRUST_LINEARIZATION, USE_D_MIN, USE_AIRMODE_LPF, USE_DYN_LPF |
+| Metering | USE_VIRTUAL_CURRENT_METER |
+| (prior) | USE_DSHOT_TELEMETRY, USE_RPM_FILTER, USE_BRUSHED_ESC_AUTODETECT, USE_LAUNCH_CONTROL, USE_THROTTLE_BOOST, USE_SMART_FEEDFORWARD, USE_INTEGRATED_YAW_CONTROL |
+
+Motor output path neutered (#ifndef USE_ORNI_MIXER_ONLY):
+- `writeMotors()`, `stopMotors()`, `stopPwmAllMotors()` → no-ops
+- `applyFlipOverAfterCrashModeToMotors()`, `applyMotorStop()` → no-ops
+- 3D mode stripped from `calculateThrottleAndCurrentMotorEndpoints()`
+- `mixerConfigureOutput()` / `mixerLoadMix()` use orni-only path (ORNI_MOTOR_COUNT=4)
+
+### PteronautOS / Configurator impact:
+- **PteronautOS**: No impact — these were already BF-specific features.
+- **Configurator**: If GUI exposes TPA, Thrust Linearization, D_MIN, or DSHOT settings, they can be hidden for OrniFlight targets (detected via `mixerMode == MIXER_ORNI` or firmware name).
+
+---
+
+## 6. Files Changed (OrniFlight — for reference)
 
 | File | Change |
 |---|---|
@@ -96,11 +120,14 @@ Each axis independently gates how much wing inertia passes through to the airfra
 | `src/main/flight/servos.c` | Left/right wing servo mapping, `anchor_k2` computation |
 | `src/main/cli/settings.c` | 10 CLI parameters |
 | `src/main/msp/msp.c` | MSP get/set for all 10 params |
+| `src/main/flight/mixer.c` | Motor output no-ops, 3D strip, orni-only mixer config |
+| `src/main/flight/mixer.h` | ORNI_MOTOR_COUNT define |
+| `src/main/target/common_pre.h` | 14 additional #undefs for quad features |
 | `ONDAS.md` | Full architecture documentation |
 
 ---
 
-## 6. PteronautOS Porting Guide
+## 7. PteronautOS Porting Guide
 
 ### What to rename in `OrnithopterConfig.h`:
 ```
@@ -148,20 +175,20 @@ float resonanceGain;
 
 ---
 
-## 7. Simulator Note
+## 8. Simulator Note
 
 `sim_ferocity.rb` still uses the old tanh wave shaping. Needs updating to match the trapezoidal shaper in firmware. Add mode for PD-blend and per-axis ferocity testing.
 
 ---
 
-## 8. Build Status (OrniFlight)
+## 9. Build Status (OrniFlight)
 
-- Flash: **99.15%** (~700 bytes remaining)
-- Build: clean, commit `de11518`
+- Flash: **95.55%** (~1484 bytes remaining on TINYFISH, 252 KB flash)
+- Build: clean, commit `6221913`
 
 ---
 
-## 9. Future Frontiers (Not Yet Implemented)
+## 10. Future Frontiers (Not Yet Implemented)
 
 | Name | Concept | Priority |
 |---|---|---|
