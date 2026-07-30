@@ -203,6 +203,9 @@ extern float throttleBoost;
 extern pt1Filter_t throttleLpf;
 
 extern float ornithopterFlapping;
+extern float flappingAmplitude;
+extern float shapedFlappingSinusoidLeft;
+extern float shapedFlappingSinusoidRight;
 extern float throttle_;
 
 void pidResetIterm(void);

@@ -1,16 +1,58 @@
-## ONDAS + Ferocity + SSFF: Unified Three-Layer Flapping Stabilization
+## ONDAS: The Wave — Flapping Wing Control Architecture
 
-Three control layers operating at different timescales, unified through the flapping phase θ.
+Three control layers operating at different timescales, unified through the flapping phase θ. ONDAS is the umbrella; the channels beneath it are **Cadence**, **Ferocity**, and **Balance**.
 
-> **Updated 2026-07-29**: Wave shaping ported from GralhaAzul `formaDoBaterDasAsas()` — now trapezoidal (dwell + cos ramp), not tanh.
+> **Updated 2026-07-30**: Channels renamed from `ondas_gain[1-3]`. PD blend on Ferocity. Added **Warp** — roll/yaw ferocity differential. Dual wave shaping (left/right wings).
 
-### The Three Layers
+### Architecture Overview
 
-| Layer | Timescale | Mechanism | What It Does |
-|-------|-----------|-----------|--------------|
-| **Ferocity** | Instantaneous | Trapezoidal: dwell + cos ramp | Shapes wing trajectory — higher F = longer dwell (breathing pause), sharper transitions |
-| **Three-Channel** | Intra-stroke (~1 ms) | P→phase, D→dwell depth, I→asymmetry | PID modulates wing trajectory parameters, not servo offset |
-| **SSFF** | Stroke boundary (~40 ms) | Per-half-stroke error integration | Biases next stroke's ferocity to cancel repetitive flap-frequency error |
+```
+                        ┌──────────────────────────────────────┐
+                        │           WING ODE                   │
+                        │   θ̈ = k₀·T_cmd − k₂·ω               │
+                        │   θ → sin(θ) → trapezoidal shaper    │
+                        └──────────┬───────────────────────────┘
+                                   │
+        ┌──────────────────────────┼──────────────────────────┐
+        │                          │                          │
+   ┌────▼─────┐            ┌──────▼──────┐           ┌───────▼──────┐
+   │ CADENCE  │            │  FEROCITY   │           │   BALANCE    │
+   │ P→k₀     │            │ PD→dwell    │           │   I→bias     │
+   │ phase    │            │ sharpness   │           │   symmetry   │
+   └──────────┘            └──────┬──────┘           └──────────────┘
+                                  │
+                    ┌─────────────┼─────────────┐
+                    │                           │
+              ┌─────▼─────┐              ┌──────▼──────┐
+              │   WARP    │              │  WARP YAW   │
+              │ roll diff │              │ yaw diff    │
+              └───────────┘              └─────────────┘
+```
+
+### The Three Primaries
+
+| Channel | Feeds From | Modulates | Scale | Effect |
+|---------|-----------|-----------|-------|--------|
+| **Cadence** | P only | k₀ (ODE spring) | `cadence_gain × 0.00005` | "Push harder now" — shifts thrust timing within stroke |
+| **Ferocity** | PD blend | Dwell ratio d | `ferocity_p_gain × 0.00015` + `ferocity_d_gain × 0.0003` | "How abruptly" — wave sharpness via PD blend |
+| **Balance** | I only | Up/down bias | `balance_gain × 0.0001` | "Trim the list" — persistent thrust asymmetry |
+
+### Ferocity PD Blend
+
+Ferocity controls how much inertia transfers from wing to airframe. A sharper wave (high ferocity) delivers more impulse per stroke; a smoother wave (low ferocity) lets the wing glide through.
+
+The PD blend lets the pilot decide the character:
+
+```
+ferocity_modulation = constrain(ferocity_P + ferocity_D, −0.5, +0.5)
+
+ferocity_P = P · ferocity_p_gain · FEROCITY_P_SCALE   // "I'm off by X → push X harder"
+ferocity_D = D · ferocity_d_gain · FEROCITY_D_SCALE   // "I'm accelerating → dampen"
+```
+
+- Set `ferocity_p_gain = 0` for pure D→ferocity (original behavior)
+- Set `ferocity_d_gain = 0` for pure P→ferocity
+- Use both for blended response
 
 ### Layer 1: Ferocity — Trapezoidal Wave Shaping
 
@@ -31,17 +73,19 @@ where:
 
 Derivative is piecewise: 0 in dwell zones, `∓k·sin(k·(t−dh))·dt/dθ` in ramp zone where `k = π/(1−d)`.
 
-### Layer 2: Three-Channel Breathing-Pause Modulation
+### Layer 2: WARP — Roll/Yaw Ferocity Differential
 
-The old ONDAS gate (`−|shapedWave|+0.5`) has been replaced. PID terms now directly modulate wing trajectory parameters:
+Ferocity is the ornithopter's control surface. Differential wave sharpness between left and right wings creates roll torque — sharper right wing = more right-side thrust = roll left. No ailerons needed.
 
-| Channel | PID Term | Target | Scale | Effect |
-|---------|----------|--------|-------|--------|
-| 1 | P | Phase advance (k₀) | `ondas_gain × 0.00005` | "Push harder now" — compresses/stretches current ramp |
-| 2 | D | Breathing pause depth | `ondas_gain2 × 0.0003` | "Delay next stroke" — deepens/shallows dwell |
-| 3 | I | Up/down asymmetry | `ondas_gain3 × 0.0001` | "Shift center" — biases down vs up ferocity |
+```
+Left wing:  base_ferocity + roll_differential − yaw_differential
+Right wing: base_ferocity − roll_differential + yaw_differential
 
-The ferocity waveform's dwell zones naturally gate aerodynamic authority — during dwell the wing is at ±1 with zero derivative, functionally identical to the old ONDAS "gate closed" state. The cos ramp provides smooth transition to the power phase.
+roll_differential = roll_P · warp_gain · WARP_SCALE
+yaw_differential  = yaw_P  · warp_yaw_gain · WARP_SCALE
+```
+
+The same theta feeds both wings; only the dwell ratio differs. The shared limiar (computed from raw config ferocities) keeps stroke reversal synchronized.
 
 ### Layer 3: SSFF — Stroke-Synchronous Feed-Forward
 
@@ -58,15 +102,6 @@ Upstroke completed, mean pitch error < 0 (nose drifting down)
   → Increase downstroke ferocity → stronger nose-up thrust next downstroke
 ```
 
-This eliminates the **phase lag** inherent in PID-only control at the flap frequency. The PID only handles residuals — not the repetitive 12 Hz battle.
-
-### Asymmetric Ferocity for Pitch Authority
-
-- **Higher downstroke ferocity** → longer dwell on downstroke → stronger pitch-up impulse
-- **Higher upstroke ferocity** → longer dwell on upstroke → stronger pitch-down impulse
-
-SSFF modulates this asymmetry stroke-by-stroke based on measured pitch error.
-
 ### CLI Parameters
 
 | Parameter | Range | Default | Description |
@@ -74,13 +109,25 @@ SSFF modulates this asymmetry stroke-by-stroke based on measured pitch error.
 | `ornithopter_ferocity_downstroke` | 1–100 | 12 | Base ferocity on downstroke (maps to f∈[0,8]) |
 | `ornithopter_ferocity_upstroke` | 1–100 | 12 | Base ferocity on upstroke (maps to f∈[0,8]) |
 | `ssff_gain` | 0–100 | 0 | SSFF gain (0=off, start with 20-40) |
-| `ondas_gain` | -100–100 | 20 | P→phase advance gain |
-| `ondas_gain2` | -100–100 | 20 | D→breathing pause depth gain |
-| `ondas_gain3` | -100–100 | 10 | I→asymmetry bias gain |
+| `cadence_gain` | −100–100 | 20 | P→phase advance (k₀ scaling) |
+| `ferocity_p_gain` | 0–100 | 10 | P→ferocity — proportional push |
+| `ferocity_d_gain` | −100–100 | 20 | D→ferocity — damping |
+| `balance_gain` | −100–100 | 10 | I→thrust symmetry (up/down bias) |
+| `warp_gain` | −100–100 | 0 | Roll P→L/R ferocity differential |
+| `warp_yaw_gain` | −100–100 | 0 | Yaw P→fore/aft ferocity differential |
+
+### New Frontiers (Roadmap)
+
+| Concept | What It Does | Status |
+|---------|-------------|--------|
+| **Warp** | Roll/yaw ferocity differential | ✅ Implemented |
+| **Anchor** | Variable k₂ damping — tighter/looser frequency lock | Planned |
+| **Resonance** | Phase-locked error filter — only in-phase corrections pass | Planned |
+| **Prescience** | Stroke-ahead prediction — pre-compute modulation for next reversal | Planned |
+| **Espelho** | Wing-self-noise cancellation — subtract wing-coupled gyro signal | Planned |
+| **Saudade** | Per-stroke online learning — optimal cadence/ferocity/balance per condition | Planned |
 
 ### Simulation
 
 `ruby sim_ferocity.rb prize [F_down] [F_up]` — velocity-based physics demo
 `ruby sim_ferocity.rb compare [F_down] [F_up]` — fixed vs SSFF comparison
-
-**Note:** sim_ferocity.rb currently models the old tanh algorithm — needs update to trapezoidal model.

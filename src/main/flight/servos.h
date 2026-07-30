@@ -141,9 +141,12 @@ typedef struct servoConfig_s {
     uint8_t flap_base_frequency;
     int8_t flap_base_amplitude;
     int8_t ornithopter_glide_deg;
-    int8_t ondas_gain;                       // P-term → phase advance modulation (k0 scaling)
-    int8_t ondas_gain2;                      // D-term → ferocity modulation (breathing pause depth)
-    int8_t ondas_gain3;                      // I-term → up/down ferocity asymmetry bias
+    int8_t cadence_gain;                     // P-term → phase advance (k0 scaling): "push harder now"
+    int8_t ferocity_d_gain;                  // D-term → ferocity (wave sharpness): "dampen the motion"
+    int8_t ferocity_p_gain;                  // P-term → ferocity (wave sharpness): "push proportionally"
+    int8_t balance_gain;                     // I-term → thrust symmetry (up/down bias): "trim the list"
+    int8_t warp_gain;                        // Roll P-term → L/R ferocity differential: "bank the wings"
+    int8_t warp_yaw_gain;                    // Yaw P-term → fore/aft ferocity differential: "turn the head"
     int8_t aeroelastic_glide_coefficient;
     int8_t aeroelastic_flap_coefficient;
     int8_t ornithopter_ferocity_downstroke;  // 1-100 maps to 1.0-8.0 ferocity on downstroke

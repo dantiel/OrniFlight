@@ -1421,7 +1421,7 @@ static bool mspProcessOutCommand(uint8_t cmdMSP, sbuf_t *dst)
         sbufWriteU16(dst, 0);
         sbufWriteU16(dst, 0);
 #endif
-        sbufWriteU8(dst, servoConfigMutable()->ondas_gain);
+        sbufWriteU8(dst, (uint8_t)(servoConfigMutable()->cadence_gain + 128));
         break;
     case MSP_PID_ADVANCED:
         sbufWriteU16(dst, 0);
@@ -2095,7 +2095,7 @@ static mspResult_e mspProcessInCommand(uint8_t cmdMSP, sbuf_t *src)
             sbufReadU16(src);
 #endif
             
-            servoConfigMutable()->ondas_gain = sbufReadU8(src);           
+            servoConfigMutable()->cadence_gain = (int8_t)(sbufReadU8(src) - 128);
         }
 
         // reinitialize the gyro filters with the new values

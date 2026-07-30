@@ -68,9 +68,12 @@ void pgResetFn_servoConfig(servoConfig_t *servoConfig) {
     servoConfig->flap_base_frequency = 12;
     servoConfig->flap_base_amplitude = 60;
     servoConfig->ornithopter_glide_deg = -30;
-    servoConfig->ondas_gain = 20;   // P→phase advance: "push harder now"
-    servoConfig->ondas_gain2 = 20;  // D→ferocity: "delay next opposite stroke"
-    servoConfig->ondas_gain3 = 10;  // I→asymmetry: "shift center of flapping"
+    servoConfig->cadence_gain = 20;         // P→phase advance: "push harder now"
+    servoConfig->ferocity_d_gain = 20;       // D→ferocity: "dampen the motion"
+    servoConfig->ferocity_p_gain = 10;       // P→ferocity: "push proportionally"
+    servoConfig->balance_gain = 10;          // I→thrust symmetry: "trim the list"
+    servoConfig->warp_gain = 0;              // Roll→L/R ferocity diff: off by default
+    servoConfig->warp_yaw_gain = 0;          // Yaw→fore/aft ferocity diff: off by default
     servoConfig->aeroelastic_glide_coefficient = 40;
     servoConfig->aeroelastic_flap_coefficient = 40;
     servoConfig->ornithopter_ferocity_downstroke = 12;  // ~1.78 — mild shaping, near-sine
@@ -362,14 +365,18 @@ void servoConfigureOutput(void)
 
 // void calculateFlapping()
 
-// Function to apply flapping logic to servos based on motor output
+// Function to apply flapping logic to servos based on motor output.
+// Channels 0,1 = left wing, channels 2,3 = right wing (WARP convention).
+// Uses dual shaped sinusoids so roll/yaw can drive ferocity differential.
 void applyFlappingToServos(int16_t *input) {
   // enable glide mode when throttle is below threshold
   if (rcData[THROTTLE] > GLIDE_MODE_THRESHOLD) {
-    input[INPUT_STABILIZED_FLAPPING_0] = (ornithopterFlapping / 100) * (motor[0] - 1000);
-    input[INPUT_STABILIZED_FLAPPING_1] = (ornithopterFlapping / 100) * (motor[1] - 1000);
-    input[INPUT_STABILIZED_FLAPPING_2] = (ornithopterFlapping / 100) * (motor[2] - 1000);
-    input[INPUT_STABILIZED_FLAPPING_3] = (ornithopterFlapping / 100) * (motor[3] - 1000);
+    float flappingLeft  = shapedFlappingSinusoidLeft  * flappingAmplitude;
+    float flappingRight = shapedFlappingSinusoidRight * flappingAmplitude;
+    input[INPUT_STABILIZED_FLAPPING_0] = (flappingLeft  / 100) * (motor[0] - 1000);
+    input[INPUT_STABILIZED_FLAPPING_1] = (flappingLeft  / 100) * (motor[1] - 1000);
+    input[INPUT_STABILIZED_FLAPPING_2] = (flappingRight / 100) * (motor[2] - 1000);
+    input[INPUT_STABILIZED_FLAPPING_3] = (flappingRight / 100) * (motor[3] - 1000);
   } else {
     input[INPUT_STABILIZED_FLAPPING_0] = servoConfig()->ornithopter_glide_deg * 5;
     input[INPUT_STABILIZED_FLAPPING_1] = servoConfig()->ornithopter_glide_deg * 5;
