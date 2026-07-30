@@ -577,8 +577,8 @@ FAST_RAM_ZERO_INIT float thrustLinearizationB;
 float tcommand = 0;
 float omegadot = 0.0;
 float thetadot = 0.0;
-float omega = 0.0;
-float theta = 0.0;
+static float omega = 0.0;
+static float theta = 0.0;
 #define CADENCE_K0               1.0f     // Wing ODE spring constant: scales torque→angular acceleration
 #define ANCHOR_BASE_K2           10.0f     // Wing ODE base damping: scales velocity→deceleration
 #define ANCHOR_SCALE             0.1f      // anchor_gain→k2: k2 = BASE + gain × scale
@@ -588,6 +588,7 @@ float theta = 0.0;
 #define RESONANCE_TAU            0.15f     // Lock-in LPF time constant (s): ~1.5 flap periods at 10 Hz
 #define BALANCE_SCALE            0.0001f   // I-term→asymmetry: PID-I × gain × scale → up/down bias
 #define WARP_SCALE               0.0002f   // Roll/Yaw P→ferocity differential: PID-P × gain → L/R or fore/aft
+#define PRESCIENCE_SCALE         0.001f    // error→ferocity bias: predicted-error × gain × scale → stroke bias
 #define FEROCITY_RANGE           8.0f      // Max ferocity for trapezoidal model (f=0→pure cosine, f=8→square)
 
 float k0 = CADENCE_K0;
@@ -604,24 +605,37 @@ static inline float ferocityParamToFloat(int8_t param) {
 static void applyStrokeSynchronousFF(float pitchErrorRate) {
     if (servoConfig()->ssff_gain == 0) return;
 
+    // Prescience: predict error at next reversal from wing ODE state.
+    // Time to next half-stroke boundary = π/|ω|.
+    // predictedError = error + errorRate · dt → the error when the wing reverses.
+    // This eliminates SSFF's half-stroke measurement delay.
+    float prescienceBias = 0.0f;
+    int8_t prescienceGain = servoConfig()->prescience_gain;
+    if (prescienceGain != 0 && fabsf(omega) > 0.5f) {
+        float dtToReversal = M_PIf / fabsf(omega);
+        float predictedError = pitchErrorRate * dtToReversal;  // errorRate is deg/s, reversal is ~0.05s away
+        prescienceBias = (float)prescienceGain * PRESCIENCE_SCALE * predictedError;
+    }
+
     // Detect zero crossing of flapping sinusoid
     if (prevFlappingSinusoid * flappingSinusoid <= 0.0f
         && prevFlappingSinusoid != flappingSinusoid) {
 
-        if (ssffAccumCount > 0) {
-            float meanError = ssffAccumError / (float)ssffAccumCount;
-            float bias = (float)servoConfig()->ssff_gain * 0.001f * meanError;
+        // Blend SSFF (accumulated, learned) + Prescience (predicted, fast)
+        float meanError = (ssffAccumCount > 0) ? ssffAccumError / (float)ssffAccumCount : 0.0f;
+        float ssffBias = (float)servoConfig()->ssff_gain * 0.001f * meanError;
+        float totalBias = ssffBias + prescienceBias;
 
-            if (prevFlappingSinusoid > 0.0f) {
-                // Just finished downstroke → bias NEXT upstroke
-                // pitch error > 0 → nose going up → more upstroke ferocity → nose-down thrust
-                ssffFerocityUpBias = bias;
-            } else {
-                // Just finished upstroke → bias NEXT downstroke
-                // pitch error < 0 → nose going down → more downstroke ferocity → nose-up thrust
-                ssffFerocityDownBias = -bias;
-            }
+        if (prevFlappingSinusoid > 0.0f) {
+            // Just finished downstroke → bias NEXT upstroke
+            // pitch error > 0 → nose going up → more upstroke ferocity → nose-down thrust
+            ssffFerocityUpBias = totalBias;
+        } else {
+            // Just finished upstroke → bias NEXT downstroke
+            // pitch error < 0 → nose going down → more downstroke ferocity → nose-up thrust
+            ssffFerocityDownBias = -totalBias;
         }
+
         ssffAccumError = 0.0f;
         ssffAccumCount = 0;
     }

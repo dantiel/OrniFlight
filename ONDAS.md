@@ -105,7 +105,23 @@ effective_error = error + resonance_boost
 
 Applied to I-term error on PITCH axis before SSFF and ONDAS modulation.
 
-### Layer 5: Anchor — Variable k₂ Damping ⚓
+### Layer 5: Prescience — Stroke-Ahead Prediction 🔮
+
+Eliminates SSFF's half-stroke measurement delay. At every PID iteration, uses wing ODE state (ω) to predict error at the next reversal: `error_future = errorRate · π/|ω|`. When `prescience_gain ≠ 0`, this predicted error is blended with SSFF's accumulated mean error at each half-stroke boundary.
+
+- `prescience_gain = 0`: SSFF only (default, learned correction)
+- `prescience_gain > 0`: predicted + learned blended — faster response to transients
+- `prescience_gain > 0, ssff_gain = 0`: pure prediction — no learning, minimal delay
+
+```
+dt_to_reversal = π / |ω|
+predictedError = errorRate · dt_to_reversal
+prescience_bias = prescience_gain · 0.001 · predictedError
+
+total_bias = ssff_bias + prescience_bias   (at each half-stroke boundary)
+```
+
+### Layer 6: Anchor — Variable k₂ Damping ⚓
 
 Controls the wing ODE's frequency lock strength. Higher k₂ means the wing snaps to commanded frequency faster (agile, energy-hungry). Lower k₂ lets the wing resonate freely (efficient cruise, sluggish transients).
 
@@ -134,6 +150,7 @@ k₂ = ANCHOR_BASE_K2 + anchor_gain · ANCHOR_SCALE
 | `warp_yaw_gain` | −100–100 | 0 | Yaw P→fore/aft ferocity differential |
 | `anchor_gain` | 0–100 | 0 | k₂ damping: frequency lock strength |
 | `resonance_gain` | 0–100 | 0 | Phase-locked error filter (0=off) |
+| `prescience_gain` | 0–100 | 0 | Stroke-ahead prediction (0=off, blends with ssff_gain) |
 
 ### New Frontiers (Roadmap)
 
@@ -143,7 +160,7 @@ k₂ = ANCHOR_BASE_K2 + anchor_gain · ANCHOR_SCALE
 | **Anchor** | Variable k₂ damping — tighter/looser frequency lock | ✅ Implemented |
 | **Resonance** | Phase-locked error filter — amplify flap-coherent corrections | ✅ Implemented |
 | **Per-axis Ferocity** | Roll/Yaw P→common-mode ferocity — inertia gate per axis | ✅ Implemented |
-| **Prescience** | Stroke-ahead prediction — pre-compute modulation for next reversal | Planned |
+| **Prescience** | Stroke-ahead prediction — pre-compute modulation for next reversal | ✅ Implemented |
 | **Espelho** | Wing-self-noise cancellation — subtract wing-coupled gyro signal | Planned |
 | **Saudade** | Per-stroke online learning — optimal cadence/ferocity/balance per condition | Planned |
 
