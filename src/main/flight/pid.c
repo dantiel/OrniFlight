@@ -107,7 +107,12 @@ static FAST_RAM_ZERO_INIT float flappingAsymmetryBias;
 // then amplifies it: the wing "resonates" with errors at its own frequency.
 static FAST_RAM_ZERO_INIT float resonanceLockInState;
 
-// SSFF: Stroke-Synchronous Feed-Forward — measures pitch error per half-stroke
+// Espelho: wing-self-noise cancellation — lock-in amplifier in reverse.
+// Learns the flapping-coherent gyro component and subtracts it,
+// leaving only external disturbances and actual attitude response.
+static FAST_RAM_ZERO_INIT float espelhoState[XYZ_AXIS_COUNT];
+
+// SSFF: Stroke-Synchronous Feed-Forward
 // and biases the next stroke's ferocity to cancel repetitive flap-frequency error
 static FAST_RAM_ZERO_INIT float prevFlappingSinusoid;
 static FAST_RAM_ZERO_INIT float ssffAccumError;
@@ -586,6 +591,7 @@ static float theta = 0.0;
 #define FEROCITY_D_SCALE         0.0003f   // D-term→ferocity modulation: PID-D × gain × scale → wave sharpness
 #define FEROCITY_P_SCALE         0.00015f  // P-term→ferocity modulation: PID-P × gain × scale → wave sharpness
 #define RESONANCE_TAU            0.15f     // Lock-in LPF time constant (s): ~1.5 flap periods at 10 Hz
+#define ESPELHO_TAU              0.4f      // Self-noise LPF time constant (s): ~4 flap periods, slow learning
 #define BALANCE_SCALE            0.0001f   // I-term→asymmetry: PID-I × gain × scale → up/down bias
 #define WARP_SCALE               0.0002f   // Roll/Yaw P→ferocity differential: PID-P × gain → L/R or fore/aft
 #define PRESCIENCE_SCALE         0.001f    // error→ferocity bias: predicted-error × gain × scale → stroke bias
@@ -643,6 +649,25 @@ static void applyStrokeSynchronousFF(float pitchErrorRate) {
     ssffAccumError += pitchErrorRate;
     ssffAccumCount++;
     prevFlappingSinusoid = flappingSinusoid;
+}
+
+// Espelho: wing-self-noise cancellation via reverse lock-in amplifier.
+// Learns the gyro component phase-coherent with flapping and subtracts it.
+// This is Resonance's inverse: instead of amplifying the coherent signal,
+// we cancel it — removing the wing's self-image from the gyro reading.
+static float applyEspelho(int axis, float gyroRate, float sinTheta) {
+    int8_t gain = servoConfig()->espelho_gain;
+    if (gain == 0) return 0.0f;
+
+    float g = (float)gain * 0.01f;  // [0 → 1]
+
+    // Leaky integrator: extract in-phase amplitude at flapping frequency
+    // modulated = gyro × sin(θ) → DC = 0.5 × (in-phase amplitude)
+    espelhoState[axis] += (gyroRate * sinTheta - espelhoState[axis])
+                        * targetPidLooptime * 1e-6f / ESPELHO_TAU;
+
+    // Reconstruct and scale: the self-signal in phase with the wing
+    return g * espelhoState[axis] * sinTheta;
 }
 
 // Resonance: phase-locked error filter (lock-in amplifier for attitude).
@@ -1632,7 +1657,9 @@ void FAST_CODE pidController(const pidProfile_t *pidProfile, timeUs_t currentTim
 #endif // USE_YAW_SPIN_RECOVERY
 
         // -----calculate error rate
-        const float gyroRate = gyro.gyroADCf[axis]; // Process variable from gyro output in deg/sec
+        // Espelho: cancel wing self-noise from gyro before PID sees it
+        float gyroRate = gyro.gyroADCf[axis]; // Process variable from gyro output in deg/sec
+        gyroRate -= applyEspelho(axis, gyroRate, flappingSinusoid);
         float errorRate = currentPidSetpoint - gyroRate; // r - y
 #if defined(USE_ACC)
         handleCrashRecovery(

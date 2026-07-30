@@ -121,7 +121,20 @@ prescience_bias = prescience_gain · 0.001 · predictedError
 total_bias = ssff_bias + prescience_bias   (at each half-stroke boundary)
 ```
 
-### Layer 6: Anchor — Variable k₂ Damping ⚓
+### Layer 6: Espelho — Wing-Self-Noise Cancellation 🪞
+
+Resonance's inverse sibling. A reverse lock-in amplifier that learns the gyro component phase-coherent with flapping and *subtracts* it. The wing's mechanical motion couples into the gyro — Espelho removes this "self-image," leaving only external disturbances and actual attitude response. Where Resonance amplifies the coherent signal, Espelho cancels it.
+
+```
+modulated = gyro · sin(θ)
+espelhoState[axis] += (modulated − espelhoState) · dT / τ    (τ = 0.4s)
+gyro_self = gain · espelhoState · sin(θ)
+gyro_clean = gyro_raw − gyro_self
+```
+
+Applied to all three axes before error computation. `espelho_gain = 0` (default) disables it.
+
+### Layer 7: Anchor — Variable k₂ Damping ⚓
 
 Controls the wing ODE's frequency lock strength. Higher k₂ means the wing snaps to commanded frequency faster (agile, energy-hungry). Lower k₂ lets the wing resonate freely (efficient cruise, sluggish transients).
 
@@ -151,6 +164,7 @@ k₂ = ANCHOR_BASE_K2 + anchor_gain · ANCHOR_SCALE
 | `anchor_gain` | 0–100 | 0 | k₂ damping: frequency lock strength |
 | `resonance_gain` | 0–100 | 0 | Phase-locked error filter (0=off) |
 | `prescience_gain` | 0–100 | 0 | Stroke-ahead prediction (0=off, blends with ssff_gain) |
+| `espelho_gain` | 0–100 | 0 | Wing-self-noise cancellation (0=off) |
 
 ### New Frontiers (Roadmap)
 
@@ -161,8 +175,8 @@ k₂ = ANCHOR_BASE_K2 + anchor_gain · ANCHOR_SCALE
 | **Resonance** | Phase-locked error filter — amplify flap-coherent corrections | ✅ Implemented |
 | **Per-axis Ferocity** | Roll/Yaw P→common-mode ferocity — inertia gate per axis | ✅ Implemented |
 | **Prescience** | Stroke-ahead prediction — pre-compute modulation for next reversal | ✅ Implemented |
-| **Espelho** | Wing-self-noise cancellation — subtract wing-coupled gyro signal | Planned |
-| **Saudade** | Per-stroke online learning — optimal cadence/ferocity/balance per condition | Planned |
+| **Espelho** | Wing-self-noise cancellation — subtract wing-coupled gyro signal | ✅ Implemented |
+| **Saudade** | Per-stroke online learning — optimal cadence/ferocity/balance per condition | 🔜 Next |
 
 ### Simulation
 

@@ -1437,6 +1437,7 @@ const clivalue_t valueTable[] = {
     { "anchor_gain",           VAR_INT8 | MASTER_VALUE, .config.minmax = { 0, 100 }, PG_SERVO_CONFIG, offsetof(servoConfig_t, anchor_gain) },             // k₂ damping: frequency lock strength
     { "resonance_gain",        VAR_INT8 | MASTER_VALUE, .config.minmax = { 0, 100 }, PG_SERVO_CONFIG, offsetof(servoConfig_t, resonance_gain) },          // phase-locked error filter: amplify flap-coherent error
     { "prescience_gain",       VAR_INT8 | MASTER_VALUE, .config.minmax = { 0, 100 }, PG_SERVO_CONFIG, offsetof(servoConfig_t, prescience_gain) },         // stroke-ahead prediction: eliminate SSFF delay
+    { "espelho_gain",          VAR_INT8 | MASTER_VALUE, .config.minmax = { 0, 100 }, PG_SERVO_CONFIG, offsetof(servoConfig_t, espelho_gain) },            // wing-self-noise cancellation: subtract flap-coherent gyro signal
     { "aeroelastic_glide_coefficient", VAR_INT8 | MASTER_VALUE, .config.minmax = { INT8_MIN, INT8_MAX }, PG_SERVO_CONFIG, offsetof(servoConfig_t, aeroelastic_glide_coefficient) },
     { "aeroelastic_flap_coefficient", VAR_INT8 | MASTER_VALUE, .config.minmax = { INT8_MIN, INT8_MAX }, PG_SERVO_CONFIG, offsetof(servoConfig_t, aeroelastic_flap_coefficient) },
     { "ornithopter_ferocity_downstroke", VAR_INT8 | MASTER_VALUE, .config.minmax = { 1, 100 }, PG_SERVO_CONFIG, offsetof(servoConfig_t, ornithopter_ferocity_downstroke) },
