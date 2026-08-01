@@ -23,16 +23,16 @@
 | Location | Field | Current Value | Expected |
 |----------|-------|---------------|----------|
 | <file>msp_protocol.h:73</file> | `API_VERSION_MAJOR` | `1` | `1` ✅ |
-| <file>msp_protocol.h:74</file> | `API_VERSION_MINOR` | **`43`** | **`≥ 43`** ✅ |
-| FC Identifier | `ORNIFLIGHT_IDENTIFIER` | `"ORNI"` | `"ORNI"` ✅ |
+| &lt;file&gt;msp_protocol.h:74&lt;/file&gt; | `API_VERSION_MINOR` | **`45`** | **`45`** ??? |
+| FC Identifier | `ORNIFLIGHT_IDENTIFIER` | `&quot;ORNI&quot;` | `&quot;ORNI&quot;` ??? |
 
-**GralhaAzul port**: apiVersion now reports `1.44.0`. `MSP_PID_ADVANCED` at **79 bytes**.
+**Independent mode**: apiVersion reports `1.45.0`. `MSP_PID_ADVANCED` at **83 bytes**.
 
 ---
 
 ## 3. MSP_PID_ADVANCED (94/95) — Byte-Level Reference
 
-**Current payload**: **79 bytes** (GralhaAzul port complete).
+**Current payload**: **83 bytes** (Independent mode complete).
 
 ### 3.1 Send (Firmware → Configurator)
 
@@ -97,8 +97,12 @@
 | **73** | **`servo_max_amplitude`** (u8, direct) | `servoConfig()->servo_max_amplitude` | ✅ **PHASE 3 (GralhaAzul)** |
 | **74** | **`flap_magnitude`** (u8, direct) | `servoConfig()->flap_magnitude` | ✅ **PHASE 3 (GralhaAzul)** |
 | **75–78** | **`wing_origin_offset[0..3]`** (u8, val+128) | `servoConfig()->wing_origin_offset` | ✅ **PHASE 3 (GralhaAzul)** |
+| **79** | **`ornithopter_mode`** (u8, 0=COUPLED 1=INDEPENDENT) | `servoConfig()->ornithopter_mode` | ✅ **PHASE 4 (Independent)** |
+| **80** | **`independent_freq_channel`** (u8, AUX index) | `servoConfig()->independent_freq_channel` | ✅ **PHASE 4 (Independent)** |
+| **81** | **`independent_freq_min`** (u8, Hz) | `servoConfig()->independent_freq_min` | ✅ **PHASE 4 (Independent)** |
+| **82** | **`independent_freq_max`** (u8, Hz) | `servoConfig()->independent_freq_max` | ✅ **PHASE 4 (Independent)** |
 
-**Send payload**: **79 bytes** ✅.
+**Send payload**: **83 bytes** ✅.
 
 ### 3.2 Receive (Configurator → Firmware)
 
@@ -121,6 +125,10 @@ Backward-compatible — a 48-, 59-, or 71-byte sender still works.
 | 74 | `flap_magnitude` | u8 direct | 4 | 1–20 centi-°/µs |
 | 75–78 | `wing_origin_offset[0..3]` | u8 = val+128 | 0 | –30..+30° per pair |
 | 70 | `ssff_gain` | u8 direct | 0–100 |
+| 79 | `ornithopter_mode` | u8 direct | 0 | 0=COUPLED, 1=INDEPENDENT |
+| 80 | `independent_freq_channel` | u8 direct | 1 | AUX index (0=AUX1) |
+| 81 | `independent_freq_min` | u8 direct | 1 | Hz at RC=1000 |
+| 82 | `independent_freq_max` | u8 direct | 25 | Hz at RC=2000 |
 
 ---
 
@@ -193,22 +201,26 @@ Handler in <file>msp.c:2631</file> is a no-op. Command exists in protocol but un
 | 7 | 🔵 | Mixer type 27 not in configurator `mixerList` | 🔲 Cosmetic |
 | 8 | 🔵 | ONDAS params in `servoConfig_t`, not `pidProfile_t` — architectural note | ℹ️ |
 
-**GralhaAzul port complete**: `MSP_PID_ADVANCED` now sends/receives **79 bytes**. Phase 3 adds 8 bytes: physical servo params (`servo_speed_deg_s`, `servo_max_amplitude`, `flap_magnitude`) + per-pair wing trim (`wing_origin_offset[4]`). apiVersion ≥ 1.44.
+**Independent mode complete**: `MSP_PID_ADVANCED` now sends/receives **83 bytes**. Phase 4 adds 4 bytes: `ornithopter_mode` (0=COUPLED/1=INDEPENDENT), `independent_freq_channel` (AUX index), `independent_freq_min`, `independent_freq_max`. apiVersion ≥ 1.45.
 
 ---
 
 ## 9. Configurator TODO
 
-- [ ] Gate on `apiVersion >= \"1.44.0\"` to unlock GralhaAzul port UI
-- [x] `servo_mount_angle[4]`: 4 sliders per pair (–30..+30°), labeled \"Wing Pair 1–4 Incidence\" ✅
-- [x] `flapping_phase_shift[4]`: 4 sliders per pair (–180..+180°), labeled \"Wing Pair 1–4 Phase Offset\" ✅
+- [ ] Gate on `apiVersion >= \\\"1.45.0\\\"` to unlock Independent mode UI
+- [x] `servo_mount_angle[4]`: 4 sliders per pair (–30..+30°), labeled \\\"Wing Pair 1–4 Incidence\\\" ✅
+- [x] `flapping_phase_shift[4]`: 4 sliders per pair (–180..+180°), labeled \\\"Wing Pair 1–4 Phase Offset\\\" ✅
 - [x] `prescience_gain`, `espelho_gain`, `saudade_gain`, `ssff_gain`: sliders 0–100 in ONDAS advanced tab ✅
-- [ ] `servo_speed_deg_s`: slider 100–2000 °/s, label \"Servo Speed\" — controls glide transition rate + max frequency
-- [ ] `servo_max_amplitude`: slider 20–90°, label \"Max Amplitude\" — hard mechanical clamp
-- [ ] `flap_magnitude`: slider 1–20, label \"Throttle→Amplitude Gain\" — centi-deg per µs above 1040
-- [ ] `wing_origin_offset[4]`: 4 sliders (–30..+30°), label \"Wing Trim Pair 1–4\" — mechanical asymmetry
-- [ ] Write `MSP_SET_PID_ADVANCED` at 79 bytes when apiVersion ≥ 1.44; 71 bytes at 1.43; 59 at 1.42; 48 legacy
+- [x] `servo_speed_deg_s`: slider 100–2000 °/s, label \\\"Servo Speed\\\" — controls glide transition rate + max frequency ✅
+- [x] `servo_max_amplitude`: slider 20–90°, label \\\"Max Amplitude\\\" — hard mechanical clamp ✅
+- [x] `flap_magnitude`: slider 1–20, label \\\"Throttle→Amplitude Gain\\\" — centi-deg per µs above 1040 ✅
+- [x] `wing_origin_offset[4]`: 4 sliders (–30..+30°), label \\\"Wing Trim Pair 1–4\\\" — mechanical asymmetry ✅
+- [ ] Write `MSP_SET_PID_ADVANCED` at 83 bytes when apiVersion ≥ 1.45; 79 bytes at 1.44; 71 at 1.43; 59 at 1.42; 48 legacy
 - [ ] Signed fields: decode `wire_byte - 128` for angles, phase shifts, wing offsets; direct for unsigned 0–100 params
+- [ ] `ornithopter_mode`: dropdown (COUPLED / INDEPENDENT), label \\\"Flight Mode\\\"
+- [ ] `independent_freq_channel`: dropdown AUX1–AUX14, label \\\"Frequency Channel\\\" (active only in INDEPENDENT mode)
+- [ ] `independent_freq_min`: slider 1–50 Hz, label \\\"Frequency at RC Min\\\"
+- [ ] `independent_freq_max`: slider 1–50 Hz, label \\\"Frequency at RC Max\\\"
 
 ---
 

@@ -251,7 +251,7 @@ static const adjustmentConfig_t defaultAdjustmentConfigs[ADJUSTMENT_FUNCTION_COU
     }, {
         .adjustmentFunction = ADJUSTMENT_FLAP_SPEED,
         .mode = ADJUSTMENT_MODE_STEP,
-        .data = { .step = 1 }
+        .data = { .step = 10 }
     }
 };
 

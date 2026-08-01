@@ -62,9 +62,7 @@
 #define MSP_PROTOCOL_VERSION                0
 
 #define API_VERSION_MAJOR                   1  // increment when major changes are made
-#define API_VERSION_MINOR                   44 // GralhaAzul ports: servo_speed_deg_s, servo_max_amplitude, flap_magnitude, wing_origin_offset per pair
-
-#define API_VERSION_LENGTH                  2
+#define API_VERSION_MINOR                   45 // Independent flight mode: ornithopter_mode, freq_channel, freq_min, freq_max
 
 #define MULTIWII_IDENTIFIER "MWII";
 #define BASEFLIGHT_IDENTIFIER "BAFL";

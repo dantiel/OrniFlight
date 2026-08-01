@@ -858,74 +858,17 @@ static void applyFerocityWaveShaping(float theta, float dMod, float iBias,
 }
 
 void calculateFlappingFromThrottle(float rc_throttle) {
-    tcommand = (rc_throttle - 480.0)
-        * ((1.0 / (0.1 * (float)servoConfig()->flap_base_frequency))
-            + ((float)(currentControlRateProfile->flap_speed_modificator - 1500)
-                * 0.000725));
-
-    // P-term phase modulation (CADENCE): scales k0 drive term
-    // When P demands correction: wing moves faster through current stroke
-    // flappingPhaseModulation pinned to [0.5, 2.0] for safety
-    float modulatedK0 = k0 * flappingPhaseModulation;
-    omegadot = modulatedK0 * tcommand - k2 * omega;
-    thetadot = omega;
-
-    theta = theta + omega * dT;
-    omega = omega + omegadot * dT;
+    const servoConfig_t *sc = servoConfig();
 
     // ── Throttle hysteresis (GralhaAzul: jaCruzouLimiarDeVoo + limiarElevado) ──
-    // On first flap crossing: hysteresis disabled (hasCrossedFlightThreshold=false).
-    // After first flap→glide transition: hysteresisElevated=true, threshold shifts by ±50.
-    // Re-arm resets both flags in pidResetFlappingState().
+    bool wasFlapping = (flappingAmplitude > 0.0f);
     int activeThreshold = GLIDE_MODE_THRESHOLD;
-    if (hysteresisElevated) {
-        // Currently flapping? Use lower threshold to avoid premature glide.
-        // Currently gliding? Use higher threshold to avoid false flap re-entry.
-        // state from last iteration determines direction:
-        //   If we were flapping (rc_throttle was > GLIDE_MODE_THRESHOLD on last frame),
-        //   use GLIDE_MODE_THRESHOLD (lower) to drop out.
-        //   If we were gliding, use GLIDE_MODE_THRESHOLD + 50 to re-enter.
-        // Simplification: if currently in flap mode, keep threshold low; if in glide, raise it.
-        // We use hasCrossedFlightThreshold to know we've been in flap at least once.
-    }
-    bool wasFlapping = (flappingAmplitude > 0.0f);  // state from previous frame
     if (hysteresisElevated && !wasFlapping) {
         activeThreshold = GLIDE_MODE_THRESHOLD + GLIDE_HYSTERESIS;
     }
 
-    if (rc_throttle > activeThreshold) {
-        if (!hasCrossedFlightThreshold) {
-            hasCrossedFlightThreshold = true;  // first flap crossing since arm
-        }
-        flappingSinusoid = sinf(theta);
-
-        // Per-pair wave shaping: each wing pair at its own phase offset.
-        // Phase-shift a dragonfly's hindwings ahead of forewings, etc.
-        // Within each pair, left/right ferocity differentials handle roll/yaw.
-        //   Left  wing: base ferocity + rollDiff - yawDiff
-        //   Right wing: base ferocity - rollDiff + yawDiff
-        float leftMod  = flappingFerocityModulation
-                       + flappingFerocityDifferentialRoll
-                       - flappingFerocityDifferentialYaw;
-        float rightMod = flappingFerocityModulation
-                       - flappingFerocityDifferentialRoll
-                       + flappingFerocityDifferentialYaw;
-
-        float legacySum = 0.0f;
-        for (int p = 0; p < MAX_ORNITHOPTER_PAIRS; p++) {
-            float thetaP = theta + (float)servoConfig()->flapping_phase_shift[p] * RAD;
-            applyFerocityWaveShaping(thetaP, leftMod,  flappingAsymmetryBias,
-                                     &shapedFlappingSinusoidLeft[p], &flappingDerivativeLeft[p]);
-            applyFerocityWaveShaping(thetaP, rightMod, flappingAsymmetryBias,
-                                     &shapedFlappingSinusoidRight[p], &flappingDerivativeRight[p]);
-            legacySum += shapedFlappingSinusoidLeft[p] + shapedFlappingSinusoidRight[p];
-        }
-
-        // Legacy: average over all pairs for backward compat
-        ornithopterFlapping = legacySum * (0.5f / (float)MAX_ORNITHOPTER_PAIRS) * flappingAmplitude;
-    }
-    else {
-        // Transition flap→glide: engage hysteresis for next re-entry
+    if (rc_throttle <= activeThreshold) {
+        // ── Glide — zero flapping ──
         if (wasFlapping && hasCrossedFlightThreshold) {
             hysteresisElevated = true;
         }
@@ -935,7 +878,101 @@ void calculateFlappingFromThrottle(float rc_throttle) {
             flappingDerivativeLeft[p] = 0.0f;
             flappingDerivativeRight[p] = 0.0f;
         }
+        omega = 0.0f;
+        omegadot = 0.0f;
+        thetadot = 0.0f;
         ornithopterFlapping = 0.0f;
+        return;
+    }
+
+    if (!hasCrossedFlightThreshold) {
+        hasCrossedFlightThreshold = true;
+    }
+
+    if (sc->ornithopter_mode == 1) {
+        // ── INDEPENDENT MODE (GralhaAzul: MODO_DE_VOO_ALTERNATIVO) ──
+        // Throttle stick → amplitude (raw % of servo_max_amplitude)
+        // AUX channel → frequency (direct, no ODE)
+        // Amplitude physical limit: A ≤ servo_speed/(2·f) — can't exceed servo capability
+
+        // Read frequency from configured AUX channel
+        float freqVal;
+        {
+            uint8_t chanIdx = (uint8_t)sc->independent_freq_channel + 4;  // +4 for AUX offset
+            if (chanIdx >= MAX_SUPPORTED_RC_CHANNEL_COUNT) chanIdx = 5;   // fallback AUX2
+            float rcNorm = (float)(rcData[chanIdx] - 1000) * (1.0f / 1000.0f); // 0..1
+            if (rcNorm < 0.0f) rcNorm = 0.0f;
+            if (rcNorm > 1.0f) rcNorm = 1.0f;
+            float fMin = (float)sc->independent_freq_min;
+            float fMax = (float)sc->independent_freq_max;
+            freqVal = fMin + rcNorm * (fMax - fMin);
+        }
+
+        // Direct frequency → phase integration (no ODE): θ += 2π·f·dT
+        float omegaCmd = 2.0f * M_PIf * freqVal;
+        // Phase modulation still applies: CADENCE P-term advances/retards phase
+        omegaCmd *= flappingPhaseModulation;
+        theta = theta + omegaCmd * dT;
+        omega = omegaCmd;
+        omegadot = 0.0f;
+        thetadot = omega;
+
+        flappingSinusoid = sinf(theta);
+
+        // ── Wave shaping (identical to coupled mode) ──
+        float leftMod  = flappingFerocityModulation
+                       + flappingFerocityDifferentialRoll
+                       - flappingFerocityDifferentialYaw;
+        float rightMod = flappingFerocityModulation
+                       - flappingFerocityDifferentialRoll
+                       + flappingFerocityDifferentialYaw;
+
+        float legacySum = 0.0f;
+        for (int p = 0; p < MAX_ORNITHOPTER_PAIRS; p++) {
+            float thetaP = theta + (float)sc->flapping_phase_shift[p] * RAD;
+            applyFerocityWaveShaping(thetaP, leftMod,  flappingAsymmetryBias,
+                                     &shapedFlappingSinusoidLeft[p], &flappingDerivativeLeft[p]);
+            applyFerocityWaveShaping(thetaP, rightMod, flappingAsymmetryBias,
+                                     &shapedFlappingSinusoidRight[p], &flappingDerivativeRight[p]);
+            legacySum += shapedFlappingSinusoidLeft[p] + shapedFlappingSinusoidRight[p];
+        }
+
+        // Amplitude already computed by getFlappingAmplitude() — use it directly
+        ornithopterFlapping = legacySum * (0.5f / (float)MAX_ORNITHOPTER_PAIRS) * flappingAmplitude;
+    } else {
+        // ── COUPLED MODE (PI-ODE: throttle→torque, wing ODE finds amplitude & frequency) ──
+        tcommand = (rc_throttle - 480.0)
+            * ((1.0 / (0.1 * (float)sc->flap_base_frequency))
+                + ((float)(currentControlRateProfile->flap_speed_modificator - 1500)
+                    * 0.000725));
+
+        float modulatedK0 = k0 * flappingPhaseModulation;
+        omegadot = modulatedK0 * tcommand - k2 * omega;
+        thetadot = omega;
+
+        theta = theta + omega * dT;
+        omega = omega + omegadot * dT;
+
+        flappingSinusoid = sinf(theta);
+
+        float leftMod  = flappingFerocityModulation
+                       + flappingFerocityDifferentialRoll
+                       - flappingFerocityDifferentialYaw;
+        float rightMod = flappingFerocityModulation
+                       - flappingFerocityDifferentialRoll
+                       + flappingFerocityDifferentialYaw;
+
+        float legacySum = 0.0f;
+        for (int p = 0; p < MAX_ORNITHOPTER_PAIRS; p++) {
+            float thetaP = theta + (float)sc->flapping_phase_shift[p] * RAD;
+            applyFerocityWaveShaping(thetaP, leftMod,  flappingAsymmetryBias,
+                                     &shapedFlappingSinusoidLeft[p], &flappingDerivativeLeft[p]);
+            applyFerocityWaveShaping(thetaP, rightMod, flappingAsymmetryBias,
+                                     &shapedFlappingSinusoidRight[p], &flappingDerivativeRight[p]);
+            legacySum += shapedFlappingSinusoidLeft[p] + shapedFlappingSinusoidRight[p];
+        }
+
+        ornithopterFlapping = legacySum * (0.5f / (float)MAX_ORNITHOPTER_PAIRS) * flappingAmplitude;
     }
 }
 
@@ -963,7 +1000,17 @@ void adjustAerolasticPIDGains(float errorRate, float* Kp, float* Ki, float* Kd) 
 
 float getFlappingAmplitude(float rc_throttle) {
     if (rc_throttle > GLIDE_MODE_THRESHOLD) {
-        // flap_magnitude = 4 → 0.04 °/µs (same as original hardcoded value)
+        if (servoConfig()->ornithopter_mode == 1) {
+            // Independent mode: throttle → raw amplitude % of servo_max_amplitude
+            float amp = ((rc_throttle - 1000.0f) * (1.0f / 1000.0f))
+                      * (float)servoConfig()->servo_max_amplitude;
+            // Physical feasibility: A ≤ servo_speed / (2π·f_max)
+            float speedLimit = (float)servoConfig()->servo_speed_deg_s
+                             / (2.0f * M_PIf * (float)servoConfig()->independent_freq_max + 0.01f);
+            if (amp > speedLimit) amp = speedLimit;
+            return amp;
+        }
+        // Coupled mode: flap_magnitude = 4 → 0.04 °/µs (same as original hardcoded value)
         float amp = ((rc_throttle - GLIDE_MODE_THRESHOLD) * (float)servoConfig()->flap_magnitude * 0.01f)
             * (float)servoConfig()->flap_base_amplitude * 0.1f
                 * (1.0f - (currentControlRateProfile->flap_speed_modificator - 1500) * 0.003f);

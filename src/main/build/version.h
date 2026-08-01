@@ -23,8 +23,8 @@
 #include "common/utils.h"
 
 #define FC_FIRMWARE_NAME            "Orniflight"
-#define FC_VERSION_MAJOR       0  // OrniFlight 0.3 — GralhaAzul port: servo_speed/amplitude/magnitude, EMA filter, glide transition, throttle hysteresis
-#define FC_VERSION_MINOR       3
+#define FC_VERSION_MAJOR       0  // OrniFlight 0.4 — Independent flight mode: COUPLED (ODE) and INDEPENDENT (direct amp+freq)
+#define FC_VERSION_MINOR       4
 #define FC_VERSION_PATCH_LEVEL 0
 
 #define FC_VERSION_STRING STR(FC_VERSION_MAJOR) "." STR(FC_VERSION_MINOR) "." STR(FC_VERSION_PATCH_LEVEL)
