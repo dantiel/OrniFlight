@@ -90,7 +90,6 @@ void pgResetFn_servoConfig(servoConfig_t *servoConfig) {
     servoConfig->servo_speed_deg_s = 857;       // 60° / 70ms — typical micro servo
     servoConfig->servo_max_amplitude = 55;       // °, ±55° max mechanical throw
     servoConfig->flap_magnitude = 4;             // 4° per 960µs throttle above 1040
-    servoConfig->ornithopter_independent_mode = 0; // COUPLED (PI-ODE) by default
     servoConfig->independent_freq_channel = 1;   // AUX2 / CH6
     servoConfig->independent_freq_min = 1;       // 1 Hz at RC minimum
     servoConfig->independent_freq_max = 25;      // 25 Hz at RC maximum

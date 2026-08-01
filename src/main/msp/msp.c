@@ -1536,10 +1536,10 @@ static bool mspProcessOutCommand(uint8_t cmdMSP, sbuf_t *dst)
         }
 
         // ── Independent flight mode (API 1.45) ──
-        sbufWriteU8(dst, servoConfigMutable()->ornithopter_independent_mode); // offset 79: 0=COUPLED, 1=INDEPENDENT
-        sbufWriteU8(dst, servoConfigMutable()->independent_freq_channel);    // offset 80: AUX channel index
-        sbufWriteU8(dst, servoConfigMutable()->independent_freq_min);        // offset 81: Hz at RC min
-        sbufWriteU8(dst, servoConfigMutable()->independent_freq_max);        // offset 82: Hz at RC max
+        // Mode activated via BOXORNITHOPTERINDEPENDENT (RC modes tab), not a parameter byte
+        sbufWriteU8(dst, servoConfigMutable()->independent_freq_channel);    // offset 79: AUX channel index
+        sbufWriteU8(dst, servoConfigMutable()->independent_freq_min);        // offset 80: Hz at RC min
+        sbufWriteU8(dst, servoConfigMutable()->independent_freq_max);        // offset 81: Hz at RC max
 
         break;
     case MSP_SENSOR_CONFIG:
@@ -2290,9 +2290,9 @@ static mspResult_e mspProcessInCommand(uint8_t cmdMSP, sbuf_t *src)
                 servoConfigMutable()->wing_origin_offset[p] = (int8_t)(sbufReadU8(src) - 128);
             }
         }
-        if (sbufBytesRemaining(src) >= 4) {
+        if (sbufBytesRemaining(src) >= 3) {
             // Added in MSP API 1.45 — Independent flight mode
-            servoConfigMutable()->ornithopter_independent_mode = sbufReadU8(src);
+            // ornithopter_independent_mode is now a BOX — not a parameter byte
             servoConfigMutable()->independent_freq_channel = sbufReadU8(src);
             servoConfigMutable()->independent_freq_min    = sbufReadU8(src);
             servoConfigMutable()->independent_freq_max    = sbufReadU8(src);

@@ -181,8 +181,7 @@ typedef struct servoConfig_s {
     int8_t ornithopter_ferocity_upstroke;    // 1-100 maps to 1.0-8.0 ferocity on upstroke
     int8_t ssff_gain;                        // stroke-synchronous feed-forward gain (0=off)
 
-    // ── Ornithopter flight mode: COUPLED (ODE-driven) vs INDEPENDENT (throttle→amp, AUX→freq) ──
-    uint8_t ornithopter_independent_mode;    // 0=COUPLED (PI-ODE, default), 1=INDEPENDENT (direct amplitude+frequency)
+    // ── Independent flight mode (activated via BOXORNITHOPTERINDEPENDENT) ──
     uint8_t independent_freq_channel;        // AUX channel index (0=AUX1/CH5, 1=AUX2/CH6…) for frequency in independent mode
     uint8_t independent_freq_min;            // frequency mapped to RC=1000 in independent mode (Hz, default 1)
     uint8_t independent_freq_max;            // frequency mapped to RC=2000 in independent mode (Hz, default 25)

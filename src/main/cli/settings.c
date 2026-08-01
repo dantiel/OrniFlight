@@ -1449,7 +1449,6 @@ const clivalue_t valueTable[] = {
     { "servo_speed_deg_s",      VAR_UINT16 | MASTER_VALUE, .config.minmaxUnsigned = { 100, 2000 }, PG_SERVO_CONFIG, offsetof(servoConfig_t, servo_speed_deg_s) },
     { "servo_max_amplitude",    VAR_UINT8  | MASTER_VALUE, .config.minmaxUnsigned = { 20, 90 }, PG_SERVO_CONFIG, offsetof(servoConfig_t, servo_max_amplitude) },
     { "flap_magnitude",         VAR_UINT8  | MASTER_VALUE, .config.minmaxUnsigned = { 1, 20 }, PG_SERVO_CONFIG, offsetof(servoConfig_t, flap_magnitude) },
-    { "ornithopter_independent_mode", VAR_UINT8  | MASTER_VALUE, .config.minmaxUnsigned = { 0, 1 }, PG_SERVO_CONFIG, offsetof(servoConfig_t, ornithopter_independent_mode) },
     { "independent_freq_channel", VAR_UINT8  | MASTER_VALUE, .config.minmaxUnsigned = { 0, 13 }, PG_SERVO_CONFIG, offsetof(servoConfig_t, independent_freq_channel) },
     { "independent_freq_min",   VAR_UINT8  | MASTER_VALUE, .config.minmaxUnsigned = { 1, 50 }, PG_SERVO_CONFIG, offsetof(servoConfig_t, independent_freq_min) },
     { "independent_freq_max",   VAR_UINT8  | MASTER_VALUE, .config.minmaxUnsigned = { 1, 50 }, PG_SERVO_CONFIG, offsetof(servoConfig_t, independent_freq_max) },
