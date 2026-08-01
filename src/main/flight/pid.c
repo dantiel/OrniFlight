@@ -889,7 +889,7 @@ void calculateFlappingFromThrottle(float rc_throttle) {
         hasCrossedFlightThreshold = true;
     }
 
-    if (sc->ornithopter_mode == 1) {
+    if (sc->ornithopter_independent_mode == 1) {
         // ── INDEPENDENT MODE (GralhaAzul: MODO_DE_VOO_ALTERNATIVO) ──
         // Throttle stick → amplitude (raw % of servo_max_amplitude)
         // AUX channel → frequency (direct, no ODE)
@@ -1000,7 +1000,7 @@ void adjustAerolasticPIDGains(float errorRate, float* Kp, float* Ki, float* Kd) 
 
 float getFlappingAmplitude(float rc_throttle) {
     if (rc_throttle > GLIDE_MODE_THRESHOLD) {
-        if (servoConfig()->ornithopter_mode == 1) {
+        if (servoConfig()->ornithopter_independent_mode == 1) {
             // Independent mode: throttle → raw amplitude % of servo_max_amplitude
             float amp = ((rc_throttle - 1000.0f) * (1.0f / 1000.0f))
                       * (float)servoConfig()->servo_max_amplitude;

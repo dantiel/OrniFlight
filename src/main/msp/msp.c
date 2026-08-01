@@ -1536,7 +1536,7 @@ static bool mspProcessOutCommand(uint8_t cmdMSP, sbuf_t *dst)
         }
 
         // ── Independent flight mode (API 1.45) ──
-        sbufWriteU8(dst, servoConfigMutable()->ornithopter_mode);            // offset 79: 0=COUPLED, 1=INDEPENDENT
+        sbufWriteU8(dst, servoConfigMutable()->ornithopter_independent_mode); // offset 79: 0=COUPLED, 1=INDEPENDENT
         sbufWriteU8(dst, servoConfigMutable()->independent_freq_channel);    // offset 80: AUX channel index
         sbufWriteU8(dst, servoConfigMutable()->independent_freq_min);        // offset 81: Hz at RC min
         sbufWriteU8(dst, servoConfigMutable()->independent_freq_max);        // offset 82: Hz at RC max
@@ -2292,7 +2292,7 @@ static mspResult_e mspProcessInCommand(uint8_t cmdMSP, sbuf_t *src)
         }
         if (sbufBytesRemaining(src) >= 4) {
             // Added in MSP API 1.45 — Independent flight mode
-            servoConfigMutable()->ornithopter_mode        = sbufReadU8(src);
+            servoConfigMutable()->ornithopter_independent_mode = sbufReadU8(src);
             servoConfigMutable()->independent_freq_channel = sbufReadU8(src);
             servoConfigMutable()->independent_freq_min    = sbufReadU8(src);
             servoConfigMutable()->independent_freq_max    = sbufReadU8(src);
