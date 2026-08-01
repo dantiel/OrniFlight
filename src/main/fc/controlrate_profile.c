@@ -47,7 +47,6 @@ void pgResetFn_controlRateProfiles(controlRateConfig_t *controlRateConfig)
             .thrExpo8 = 0,
             .dynThrPID = 50,
             .tpa_breakpoint = 1500,
-            .flap_speed_modificator = 1500,
             .phase_shift_scale = 50,
             .rates_type = RATES_TYPE_BETAFLIGHT,
             .rcRates[FD_ROLL] = 100,

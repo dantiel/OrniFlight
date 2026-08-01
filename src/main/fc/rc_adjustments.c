@@ -248,10 +248,6 @@ static const adjustmentConfig_t defaultAdjustmentConfigs[ADJUSTMENT_FUNCTION_COU
         .adjustmentFunction = ADJUSTMENT_LED_PROFILE,
         .mode = ADJUSTMENT_MODE_SELECT,
         .data = { .switchPositions = 3 }
-    }, {
-        .adjustmentFunction = ADJUSTMENT_FLAP_SPEED,
-        .mode = ADJUSTMENT_MODE_STEP,
-        .data = { .step = 10 }
     }
 };
 
@@ -470,15 +466,7 @@ static int applyStepAdjustment(controlRateConfig_t *controlRateConfig, uint8_t a
         currentPidProfile->feedForwardTransition = newValue;
         blackboxLogInflightAdjustmentEvent(ADJUSTMENT_FEEDFORWARD_TRANSITION, newValue);
         break;
-    case ADJUSTMENT_FLAP_SPEED:
-        newValue = constrain(controlRateConfig->flap_speed_modificator + delta, 10, 2000); // FIXME magic numbers repeated in cli.c
-        controlRateConfig->flap_speed_modificator = newValue;
-        blackboxLogInflightAdjustmentEvent(ADJUSTMENT_FLAP_SPEED, newValue);
-        break;
-    default:
-        newValue = -1;
-        break;
-    };
+    }
 
     return newValue;
 }
@@ -639,12 +627,6 @@ static int applyAbsoluteAdjustment(controlRateConfig_t *controlRateConfig, adjus
         newValue = constrain(value, 1, 100); // FIXME magic numbers repeated in cli.c
         currentPidProfile->feedForwardTransition = newValue;
         blackboxLogInflightAdjustmentEvent(ADJUSTMENT_FEEDFORWARD_TRANSITION, newValue);
-        break;
-    case ADJUSTMENT_FLAP_SPEED:
-        newValue = constrain(value, 0, 2000);
-        controlRateConfig->flap_speed_modificator = newValue;
-        initRcProcessing();
-        blackboxLogInflightAdjustmentEvent(ADJUSTMENT_FLAP_SPEED, newValue);
         break;
     default:
         newValue = -1;

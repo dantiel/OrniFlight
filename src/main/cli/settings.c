@@ -841,7 +841,6 @@ const clivalue_t valueTable[] = {
     { "tpa_mode",                   VAR_UINT8  | PROFILE_RATE_VALUE | MODE_LOOKUP, .config.lookup = { TABLE_TPA_MODE }, PG_CONTROL_RATE_PROFILES, offsetof(controlRateConfig_t, tpaMode) },
 #endif
     { "phase_shift_scale",          VAR_INT8   | PROFILE_RATE_VALUE, .config.minmaxUnsigned = { INT8_MIN, INT8_MAX }, PG_CONTROL_RATE_PROFILES, offsetof(controlRateConfig_t, phase_shift_scale) },
-    { "flap_speed_modificator",     VAR_UINT16 | PROFILE_RATE_VALUE, .config.minmaxUnsigned = { PWM_PULSE_MIN, PWM_PULSE_MAX }, PG_CONTROL_RATE_PROFILES, offsetof(controlRateConfig_t, flap_speed_modificator) },
     { "throttle_limit_type",        VAR_UINT8  | PROFILE_RATE_VALUE | MODE_LOOKUP, .config.lookup = { TABLE_THROTTLE_LIMIT_TYPE }, PG_CONTROL_RATE_PROFILES, offsetof(controlRateConfig_t, throttle_limit_type) },
     { "throttle_limit_percent",     VAR_UINT8  | PROFILE_RATE_VALUE, .config.minmaxUnsigned = { 25, 100 }, PG_CONTROL_RATE_PROFILES, offsetof(controlRateConfig_t, throttle_limit_percent) },
     { "roll_rate_limit",            VAR_UINT16 | PROFILE_RATE_VALUE, .config.minmaxUnsigned = { CONTROL_RATE_CONFIG_RATE_LIMIT_MIN, CONTROL_RATE_CONFIG_RATE_LIMIT_MAX }, PG_CONTROL_RATE_PROFILES, offsetof(controlRateConfig_t, rate_limit[FD_ROLL]) },
@@ -1425,34 +1424,38 @@ const clivalue_t valueTable[] = {
     
     { "servo_mount_angle",      VAR_INT8 | MASTER_VALUE | MODE_ARRAY, .config.array.length = MAX_ORNITHOPTER_PAIRS, PG_SERVO_CONFIG, offsetof(servoConfig_t, servo_mount_angle) },
     { "flapping_phase_shift",  VAR_INT8 | MASTER_VALUE | MODE_ARRAY, .config.array.length = MAX_ORNITHOPTER_PAIRS, PG_SERVO_CONFIG, offsetof(servoConfig_t, flapping_phase_shift) },
-    { "flap_base_frequency",   VAR_UINT8 | MASTER_VALUE, .config.minmaxUnsigned = { 0, 255 }, PG_SERVO_CONFIG, offsetof(servoConfig_t, flap_base_frequency) },
     { "flap_base_amplitude",   VAR_INT8 | MASTER_VALUE, .config.minmax = { -128, 127 }, PG_SERVO_CONFIG, offsetof(servoConfig_t, flap_base_amplitude) },
-    { "ornithopter_glide_deg", VAR_INT8 | MASTER_VALUE, .config.minmax = { -128, 127 }, PG_SERVO_CONFIG, offsetof(servoConfig_t, ornithopter_glide_deg) },
-    { "cadence_gain",          VAR_INT8 | MASTER_VALUE, .config.minmax = { -100, 100 }, PG_SERVO_CONFIG, offsetof(servoConfig_t, cadence_gain) },        // P→phase advance (k0 scaling)
-    { "ferocity_d_gain",       VAR_INT8 | MASTER_VALUE, .config.minmax = { -100, 100 }, PG_SERVO_CONFIG, offsetof(servoConfig_t, ferocity_d_gain) },     // D→ferocity (wave sharpness)
-    { "ferocity_p_gain",       VAR_INT8 | MASTER_VALUE, .config.minmax = { 0, 100 }, PG_SERVO_CONFIG, offsetof(servoConfig_t, ferocity_p_gain) },         // P→ferocity (wave sharpness)
-    { "balance_gain",          VAR_INT8 | MASTER_VALUE, .config.minmax = { -100, 100 }, PG_SERVO_CONFIG, offsetof(servoConfig_t, balance_gain) },         // I→thrust symmetry (up/down bias)
-    { "warp_gain",             VAR_INT8 | MASTER_VALUE, .config.minmax = { -100, 100 }, PG_SERVO_CONFIG, offsetof(servoConfig_t, warp_gain) },            // Roll P→L/R ferocity differential
-    { "warp_yaw_gain",         VAR_INT8 | MASTER_VALUE, .config.minmax = { -100, 100 }, PG_SERVO_CONFIG, offsetof(servoConfig_t, warp_yaw_gain) },        // Yaw P→fore/aft ferocity differential
-    { "ferocity_roll_gain",    VAR_INT8 | MASTER_VALUE, .config.minmax = { 0, 100 }, PG_SERVO_CONFIG, offsetof(servoConfig_t, ferocity_roll_gain) },      // Roll P→common-mode ferocity: "inertia gate for roll"
-    { "ferocity_yaw_gain",     VAR_INT8 | MASTER_VALUE, .config.minmax = { 0, 100 }, PG_SERVO_CONFIG, offsetof(servoConfig_t, ferocity_yaw_gain) },       // Yaw P→common-mode ferocity: "inertia gate for yaw"
-    { "anchor_gain",           VAR_INT8 | MASTER_VALUE, .config.minmax = { 0, 100 }, PG_SERVO_CONFIG, offsetof(servoConfig_t, anchor_gain) },             // k₂ damping: frequency lock strength
-    { "resonance_gain",        VAR_INT8 | MASTER_VALUE, .config.minmax = { 0, 100 }, PG_SERVO_CONFIG, offsetof(servoConfig_t, resonance_gain) },          // phase-locked error filter: amplify flap-coherent error
-    { "prescience_gain",       VAR_INT8 | MASTER_VALUE, .config.minmax = { 0, 100 }, PG_SERVO_CONFIG, offsetof(servoConfig_t, prescience_gain) },         // stroke-ahead prediction: eliminate SSFF delay
-    { "espelho_gain",          VAR_INT8 | MASTER_VALUE, .config.minmax = { 0, 100 }, PG_SERVO_CONFIG, offsetof(servoConfig_t, espelho_gain) },            // wing-self-noise cancellation: subtract flap-coherent gyro signal
-    { "saudade_gain",          VAR_INT8 | MASTER_VALUE, .config.minmax = { 0, 100 }, PG_SERVO_CONFIG, offsetof(servoConfig_t, saudade_gain) },            // per-stroke learning: absorb persistent SSFF bias into trim
-    { "aeroelastic_glide_coefficient", VAR_INT8 | MASTER_VALUE, .config.minmax = { INT8_MIN, INT8_MAX }, PG_SERVO_CONFIG, offsetof(servoConfig_t, aeroelastic_glide_coefficient) },
-    { "aeroelastic_flap_coefficient", VAR_INT8 | MASTER_VALUE, .config.minmax = { INT8_MIN, INT8_MAX }, PG_SERVO_CONFIG, offsetof(servoConfig_t, aeroelastic_flap_coefficient) },
-    { "ornithopter_ferocity_downstroke", VAR_INT8 | MASTER_VALUE, .config.minmax = { 1, 100 }, PG_SERVO_CONFIG, offsetof(servoConfig_t, ornithopter_ferocity_downstroke) },
-    { "ornithopter_ferocity_upstroke",   VAR_INT8 | MASTER_VALUE, .config.minmax = { 1, 100 }, PG_SERVO_CONFIG, offsetof(servoConfig_t, ornithopter_ferocity_upstroke) },
-    { "ssff_gain",                       VAR_INT8 | MASTER_VALUE, .config.minmax = { 0, 100 }, PG_SERVO_CONFIG, offsetof(servoConfig_t, ssff_gain) },
     { "servo_speed_deg_s",      VAR_UINT16 | MASTER_VALUE, .config.minmaxUnsigned = { 100, 2000 }, PG_SERVO_CONFIG, offsetof(servoConfig_t, servo_speed_deg_s) },
     { "servo_max_amplitude",    VAR_UINT8  | MASTER_VALUE, .config.minmaxUnsigned = { 20, 90 }, PG_SERVO_CONFIG, offsetof(servoConfig_t, servo_max_amplitude) },
     { "flap_magnitude",         VAR_UINT8  | MASTER_VALUE, .config.minmaxUnsigned = { 1, 20 }, PG_SERVO_CONFIG, offsetof(servoConfig_t, flap_magnitude) },
-    { "independent_freq_channel", VAR_UINT8  | MASTER_VALUE, .config.minmaxUnsigned = { 0, 13 }, PG_SERVO_CONFIG, offsetof(servoConfig_t, independent_freq_channel) },
-    { "independent_freq_min",   VAR_UINT8  | MASTER_VALUE, .config.minmaxUnsigned = { 1, 50 }, PG_SERVO_CONFIG, offsetof(servoConfig_t, independent_freq_min) },
-    { "independent_freq_max",   VAR_UINT8  | MASTER_VALUE, .config.minmaxUnsigned = { 1, 50 }, PG_SERVO_CONFIG, offsetof(servoConfig_t, independent_freq_max) },
     { "wing_origin_offset",    VAR_INT8 | MASTER_VALUE | MODE_ARRAY, .config.array.length = MAX_ORNITHOPTER_PAIRS, PG_SERVO_CONFIG, offsetof(servoConfig_t, wing_origin_offset) },
+    // ── Frequency control (unified: same AUX channel in both modes) ──
+    { "ornithopter_freq_channel", VAR_UINT8  | MASTER_VALUE, .config.minmaxUnsigned = { 0, 13 }, PG_SERVO_CONFIG, offsetof(servoConfig_t, ornithopter_freq_channel) },
+    { "ornithopter_freq_min",   VAR_UINT8  | MASTER_VALUE, .config.minmaxUnsigned = { 1, 50 }, PG_SERVO_CONFIG, offsetof(servoConfig_t, ornithopter_freq_min) },
+    { "ornithopter_freq_max",   VAR_UINT8  | MASTER_VALUE, .config.minmaxUnsigned = { 1, 50 }, PG_SERVO_CONFIG, offsetof(servoConfig_t, ornithopter_freq_max) },
+    // ── Flight profile selection ──
+    { "ornithopter_profile_channel", VAR_UINT8  | MASTER_VALUE, .config.minmaxUnsigned = { 0, 13 }, PG_SERVO_CONFIG, offsetof(servoConfig_t, ornithopter_profile_channel) },
+    { "ornithopter_profile_index",   VAR_UINT8  | MASTER_VALUE, .config.minmaxUnsigned = { 0, 3 }, PG_SERVO_CONFIG, offsetof(servoConfig_t, ornithopter_profile_index) },
+    // ── Flight profile gains (per-profile, MASTER_VALUE with PG-aware offset) ──
+    { "ferocity_downstroke", VAR_INT8 | MASTER_VALUE, .config.minmax = { 1, 100 }, PG_ORNITHOPTER_PROFILES, offsetof(ornithopterProfile_t, ferocity_downstroke) },
+    { "ferocity_upstroke",   VAR_INT8 | MASTER_VALUE, .config.minmax = { 1, 100 }, PG_ORNITHOPTER_PROFILES, offsetof(ornithopterProfile_t, ferocity_upstroke) },
+    { "glide_angle",         VAR_INT8 | MASTER_VALUE, .config.minmax = { -90, 90 }, PG_ORNITHOPTER_PROFILES, offsetof(ornithopterProfile_t, glide_angle) },
+    { "cadence_gain",        VAR_INT8 | MASTER_VALUE, .config.minmax = { -100, 100 }, PG_ORNITHOPTER_PROFILES, offsetof(ornithopterProfile_t, cadence_gain) },
+    { "ferocity_d_gain",     VAR_INT8 | MASTER_VALUE, .config.minmax = { -100, 100 }, PG_ORNITHOPTER_PROFILES, offsetof(ornithopterProfile_t, ferocity_d_gain) },
+    { "ferocity_p_gain",     VAR_INT8 | MASTER_VALUE, .config.minmax = { 0, 100 }, PG_ORNITHOPTER_PROFILES, offsetof(ornithopterProfile_t, ferocity_p_gain) },
+    { "balance_gain",        VAR_INT8 | MASTER_VALUE, .config.minmax = { -100, 100 }, PG_ORNITHOPTER_PROFILES, offsetof(ornithopterProfile_t, balance_gain) },
+    { "warp_gain",           VAR_INT8 | MASTER_VALUE, .config.minmax = { -100, 100 }, PG_ORNITHOPTER_PROFILES, offsetof(ornithopterProfile_t, warp_gain) },
+    { "warp_yaw_gain",       VAR_INT8 | MASTER_VALUE, .config.minmax = { -100, 100 }, PG_ORNITHOPTER_PROFILES, offsetof(ornithopterProfile_t, warp_yaw_gain) },
+    { "ferocity_roll_gain",  VAR_INT8 | MASTER_VALUE, .config.minmax = { 0, 100 }, PG_ORNITHOPTER_PROFILES, offsetof(ornithopterProfile_t, ferocity_roll_gain) },
+    { "ferocity_yaw_gain",   VAR_INT8 | MASTER_VALUE, .config.minmax = { 0, 100 }, PG_ORNITHOPTER_PROFILES, offsetof(ornithopterProfile_t, ferocity_yaw_gain) },
+    { "anchor_gain",         VAR_INT8 | MASTER_VALUE, .config.minmax = { 0, 100 }, PG_ORNITHOPTER_PROFILES, offsetof(ornithopterProfile_t, anchor_gain) },
+    { "resonance_gain",      VAR_INT8 | MASTER_VALUE, .config.minmax = { 0, 100 }, PG_ORNITHOPTER_PROFILES, offsetof(ornithopterProfile_t, resonance_gain) },
+    { "prescience_gain",     VAR_INT8 | MASTER_VALUE, .config.minmax = { 0, 100 }, PG_ORNITHOPTER_PROFILES, offsetof(ornithopterProfile_t, prescience_gain) },
+    { "espelho_gain",        VAR_INT8 | MASTER_VALUE, .config.minmax = { 0, 100 }, PG_ORNITHOPTER_PROFILES, offsetof(ornithopterProfile_t, espelho_gain) },
+    { "saudade_gain",        VAR_INT8 | MASTER_VALUE, .config.minmax = { 0, 100 }, PG_ORNITHOPTER_PROFILES, offsetof(ornithopterProfile_t, saudade_gain) },
+    { "ssff_gain",           VAR_INT8 | MASTER_VALUE, .config.minmax = { 0, 100 }, PG_ORNITHOPTER_PROFILES, offsetof(ornithopterProfile_t, ssff_gain) },
+    { "aeroelastic_glide_coefficient", VAR_INT8 | MASTER_VALUE, .config.minmax = { INT8_MIN, INT8_MAX }, PG_ORNITHOPTER_PROFILES, offsetof(ornithopterProfile_t, aeroelastic_glide_coefficient) },
+    { "aeroelastic_flap_coefficient", VAR_INT8 | MASTER_VALUE, .config.minmax = { INT8_MIN, INT8_MAX }, PG_ORNITHOPTER_PROFILES, offsetof(ornithopterProfile_t, aeroelastic_flap_coefficient) },
 };
 
 const uint16_t valueTableEntryCount = ARRAYLEN(valueTable);

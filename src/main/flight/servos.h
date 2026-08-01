@@ -23,6 +23,7 @@
 #include "pg/pg.h"
 #include "drivers/io_types.h"
 #include "drivers/pwm_output.h"
+#include "flight/ornithopter_profile.h"
 
 // These must be consecutive, see 'reversedSources'
 enum {
@@ -156,35 +157,19 @@ typedef struct servoConfig_s {
     int8_t servo_mount_angle[MAX_ORNITHOPTER_PAIRS]; // per-pair incidence °: 0=parallel, +=inward, -=outward, max ±30
     int8_t flapping_phase_shift[MAX_ORNITHOPTER_PAIRS]; // per-pair phase offset °: -180..+180, 0=all wings in phase
     int8_t wing_origin_offset[MAX_ORNITHOPTER_PAIRS];  // per-pair mechanical asymmetry trim ° (-30..+30)
-    uint8_t flap_base_frequency;
     int8_t flap_base_amplitude;
-    int8_t ornithopter_glide_deg;
     uint16_t servo_speed_deg_s;      // max servo angular velocity °/s (default 857 = 60°/70ms). Drives glide transition rate, max frequency.
     uint8_t servo_max_amplitude;     // hard amplitude clamp ° (default 55). Everything above is mechanically impossible.
     uint8_t flap_magnitude;          // throttle→amplitude scaling: centi-deg per µs above threshold (default 4 → 0.04 °/µs)
-    int8_t cadence_gain;                     // P-term → phase advance (k0 scaling): "push harder now"
-    int8_t ferocity_d_gain;                  // D-term → ferocity (wave sharpness): "dampen the motion"
-    int8_t ferocity_p_gain;                  // P-term → ferocity (wave sharpness): "push proportionally"
-    int8_t balance_gain;                     // I-term → thrust symmetry (up/down bias): "trim the list"
-    int8_t warp_gain;                        // Roll P-term → L/R ferocity differential: "bank the wings"
-    int8_t warp_yaw_gain;                    // Yaw P-term → fore/aft ferocity differential: "turn the head"
-    int8_t ferocity_roll_gain;               // Roll P→common-mode ferocity: "inertia gate for roll"
-    int8_t ferocity_yaw_gain;                // Yaw P→common-mode ferocity: "inertia gate for yaw"
-    int8_t anchor_gain;                      // k₂ damping coefficient: "lock the rhythm" (0=loose, 100=tight)
-    int8_t resonance_gain;                   // phase-locked error filter: amplify flap-coherent error (0=off)
-    int8_t prescience_gain;                  // stroke-ahead prediction: eliminate SSFF delay (0=off, blends with ssff_gain)
-    int8_t espelho_gain;                     // wing-self-noise cancellation: subtract flap-coherent gyro signal (0=off)
-    int8_t saudade_gain;                     // per-stroke learning: absorb persistent SSFF bias into trim (0=off)
-    int8_t aeroelastic_glide_coefficient;
-    int8_t aeroelastic_flap_coefficient;
-    int8_t ornithopter_ferocity_downstroke;  // 1-100 maps to 1.0-8.0 ferocity on downstroke
-    int8_t ornithopter_ferocity_upstroke;    // 1-100 maps to 1.0-8.0 ferocity on upstroke
-    int8_t ssff_gain;                        // stroke-synchronous feed-forward gain (0=off)
 
-    // ── Independent flight mode (activated via BOXORNITHOPTERINDEPENDENT) ──
-    uint8_t independent_freq_channel;        // AUX channel index (0=AUX1/CH5, 1=AUX2/CH6…) for frequency in independent mode
-    uint8_t independent_freq_min;            // frequency mapped to RC=1000 in independent mode (Hz, default 1)
-    uint8_t independent_freq_max;            // frequency mapped to RC=2000 in independent mode (Hz, default 25)
+    // ── Frequency control (shared AUX channel, same knob in both modes) ──
+    uint8_t ornithopter_freq_channel;        // AUX channel index (0=AUX1/CH5, 1=AUX2/CH6…) for frequency
+    uint8_t ornithopter_freq_min;            // frequency mapped to RC=1000 (Hz, default 1)
+    uint8_t ornithopter_freq_max;            // frequency mapped to RC=2000 (Hz, default 25)
+
+    // ── Flight profile switching ──
+    uint8_t ornithopter_profile_channel;     // AUX channel for profile selection via BOXORNITHOPTERPROFILE
+    uint8_t ornithopter_profile_index;       // active profile index (0-3), overridden by BOX at runtime
 } servoConfig_t;
 
 PG_DECLARE(servoConfig_t, servoConfig);

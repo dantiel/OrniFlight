@@ -62,7 +62,7 @@
 #define MSP_PROTOCOL_VERSION                0
 
 #define API_VERSION_MAJOR                   1  // increment when major changes are made
-#define API_VERSION_MINOR                   45 // Independent flight mode: ornithopter_independent_mode, freq_channel, freq_min, freq_max
+#define API_VERSION_MINOR                   46 // Unified frequency + flight profiles: 4× profile slots, BOXORNITHOPTERPROFILE
 
 #define MULTIWII_IDENTIFIER "MWII";
 #define BASEFLIGHT_IDENTIFIER "BAFL";

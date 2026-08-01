@@ -50,7 +50,6 @@ typedef struct controlRateConfig_s {
     uint8_t rcExpo[3];
     uint8_t rates[3];
     uint8_t dynThrPID;
-    uint16_t flap_speed_modificator;
     int8_t phase_shift_scale;
     uint16_t tpa_breakpoint;                // Breakpoint where TPA is activated
     uint8_t throttle_limit_type;            // Sets the throttle limiting type - off, scale or clip

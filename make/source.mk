@@ -85,6 +85,7 @@ COMMON_SRC = \
             flight/imu.c \
             flight/mixer.c \
             flight/mixer_tricopter.c \
+            flight/ornithopter_profile.c \
             flight/pid.c \
             flight/servos.c \
             flight/servos_tricopter.c \

@@ -666,14 +666,14 @@ float k2 = ANCHOR_BASE_K2;
 // Called from PID loop on PITCH axis with the raw pitch errorRate (deg/s).
 // Accumulating errorRate over a half-stroke gives total angle error accumulated.
 static void applyStrokeSynchronousFF(float pitchErrorRate) {
-    if (servoConfig()->ssff_gain == 0) return;
+    if (currentOrnithopterProfile()->ssff_gain == 0) return;
 
     // Prescience: predict error at next reversal from wing ODE state.
     // Time to next half-stroke boundary = π/|ω|.
     // predictedError = error + errorRate · dt → the error when the wing reverses.
     // This eliminates SSFF's half-stroke measurement delay.
     float prescienceBias = 0.0f;
-    int8_t prescienceGain = servoConfig()->prescience_gain;
+    int8_t prescienceGain = currentOrnithopterProfile()->prescience_gain;
     if (prescienceGain != 0 && fabsf(omega) > 0.5f) {
         float dtToReversal = M_PIf / fabsf(omega);
         float predictedError = pitchErrorRate * dtToReversal;  // errorRate is deg/s, reversal is ~0.05s away
@@ -686,13 +686,13 @@ static void applyStrokeSynchronousFF(float pitchErrorRate) {
 
         // Blend SSFF (accumulated, learned) + Prescience (predicted, fast)
         float meanError = (ssffAccumCount > 0) ? ssffAccumError / (float)ssffAccumCount : 0.0f;
-        float ssffBias = (float)servoConfig()->ssff_gain * 0.001f * meanError;
+        float ssffBias = (float)currentOrnithopterProfile()->ssff_gain * 0.001f * meanError;
         float totalBias = ssffBias + prescienceBias;
 
         // Saudade: slowly absorb persistent SSFF bias into learned trim.
         // If SSFF keeps pushing upstroke ferocity positive, Saudade shifts
         // the baseline so SSFF only fights transients — the wing remembers.
-        int8_t saudadeGain = servoConfig()->saudade_gain;
+        int8_t saudadeGain = currentOrnithopterProfile()->saudade_gain;
         if (saudadeGain != 0) {
             float learnRate = (float)saudadeGain * 0.0001f;  // very slow: ~0.1%/stroke at gain=10
             if (prevFlappingSinusoid > 0.0f) {
@@ -728,7 +728,7 @@ static void applyStrokeSynchronousFF(float pitchErrorRate) {
 // This is Resonance's inverse: instead of amplifying the coherent signal,
 // we cancel it — removing the wing's self-image from the gyro reading.
 static float applyEspelho(int axis, float gyroRate, float sinTheta) {
-    int8_t gain = servoConfig()->espelho_gain;
+    int8_t gain = currentOrnithopterProfile()->espelho_gain;
     if (gain == 0) return 0.0f;
 
     float g = (float)gain * 0.01f;  // [0 → 1]
@@ -749,7 +749,7 @@ static float applyEspelho(int axis, float gyroRate, float sinTheta) {
 // "resonates" with them. Errors at other frequencies pass through normally.
 // This is the inverse of a noise filter: it enhances signal, not rejects noise.
 static float applyResonanceFilter(float errorRate, float sinTheta) {
-    int8_t gain = servoConfig()->resonance_gain;
+    int8_t gain = currentOrnithopterProfile()->resonance_gain;
     if (gain == 0) return errorRate;
 
     float g = (float)gain * 0.01f;  // [0 → 1]
@@ -790,8 +790,8 @@ static void applyFerocityWaveShaping(float theta, float dMod, float iBias,
     if (tNorm < 0.0f) tNorm += twoPi;
 
     // Base ferocities from config (raw, before modulation)
-    float fDRaw = ferocityParamToFloat(servoConfig()->ornithopter_ferocity_downstroke);
-    float fURaw = ferocityParamToFloat(servoConfig()->ornithopter_ferocity_upstroke);
+    float fDRaw = ferocityParamToFloat(currentOrnithopterProfile()->ferocity_downstroke);
+    float fURaw = ferocityParamToFloat(currentOrnithopterProfile()->ferocity_upstroke);
 
     // Per-stroke ferocities with SSFF bias and I-term asymmetry
     float fD = fDRaw + ssffFerocityDownBias - iBias;
@@ -893,28 +893,22 @@ void calculateFlappingFromThrottle(float rc_throttle) {
         hasCrossedFlightThreshold = true;
     }
 
+    // ── Unified frequency from AUX channel (same knob in both modes) ──
+    float freqFromAux;
+    {
+        uint8_t chanIdx = (uint8_t)sc->ornithopter_freq_channel + 4;  // +4 for AUX offset
+        if (chanIdx >= MAX_SUPPORTED_RC_CHANNEL_COUNT) chanIdx = 5;   // fallback AUX2
+        float rcNorm = (float)(rcData[chanIdx] - 1000) * (1.0f / 1000.0f); // 0..1
+        if (rcNorm < 0.0f) rcNorm = 0.0f;
+        if (rcNorm > 1.0f) rcNorm = 1.0f;
+        freqFromAux = (float)sc->ornithopter_freq_min
+                    + rcNorm * (float)(sc->ornithopter_freq_max - sc->ornithopter_freq_min);
+    }
+
     if (IS_RC_MODE_ACTIVE(BOXORNITHOPTERINDEPENDENT)) {
-        // ── INDEPENDENT MODE (GralhaAzul: MODO_DE_VOO_ALTERNATIVO) ──
-        // Throttle stick → amplitude (raw % of servo_max_amplitude)
-        // AUX channel → frequency (direct, no ODE)
-        // Amplitude physical limit: A ≤ servo_speed/(2·f) — can't exceed servo capability
-
-        // Read frequency from configured AUX channel
-        float freqVal;
-        {
-            uint8_t chanIdx = (uint8_t)sc->independent_freq_channel + 4;  // +4 for AUX offset
-            if (chanIdx >= MAX_SUPPORTED_RC_CHANNEL_COUNT) chanIdx = 5;   // fallback AUX2
-            float rcNorm = (float)(rcData[chanIdx] - 1000) * (1.0f / 1000.0f); // 0..1
-            if (rcNorm < 0.0f) rcNorm = 0.0f;
-            if (rcNorm > 1.0f) rcNorm = 1.0f;
-            float fMin = (float)sc->independent_freq_min;
-            float fMax = (float)sc->independent_freq_max;
-            freqVal = fMin + rcNorm * (fMax - fMin);
-        }
-
-        // Direct frequency → phase integration (no ODE): θ += 2π·f·dT
-        float omegaCmd = 2.0f * M_PIf * freqVal;
-        // Phase modulation still applies: CADENCE P-term advances/retards phase
+        // ── INDEPENDENT MODE ──
+        // Throttle stick → amplitude, AUX channel → frequency (direct)
+        float omegaCmd = 2.0f * M_PIf * freqFromAux;
         omegaCmd *= flappingPhaseModulation;
         theta = theta + omegaCmd * dT;
         omega = omegaCmd;
@@ -923,7 +917,7 @@ void calculateFlappingFromThrottle(float rc_throttle) {
 
         flappingSinusoid = sinf(theta);
 
-        // ── Wave shaping (identical to coupled mode) ──
+        // ── Wave shaping ──
         float leftMod  = flappingFerocityModulation
                        + flappingFerocityDifferentialRoll
                        - flappingFerocityDifferentialYaw;
@@ -941,14 +935,11 @@ void calculateFlappingFromThrottle(float rc_throttle) {
             legacySum += shapedFlappingSinusoidLeft[p] + shapedFlappingSinusoidRight[p];
         }
 
-        // Amplitude already computed by getFlappingAmplitude() — use it directly
         ornithopterFlapping = legacySum * (0.5f / (float)MAX_ORNITHOPTER_PAIRS) * flappingAmplitude;
     } else {
         // ── COUPLED MODE (PI-ODE: throttle→torque, wing ODE finds amplitude & frequency) ──
-        tcommand = (rc_throttle - 480.0)
-            * ((1.0 / (0.1 * (float)sc->flap_base_frequency))
-                + ((float)(currentControlRateProfile->flap_speed_modificator - 1500)
-                    * 0.000725));
+        // Higher AUX frequency → smaller torque → ODE converges to that frequency
+        tcommand = (rc_throttle - 480.0) * (1.0f / (0.1f * freqFromAux));
 
         float modulatedK0 = k0 * flappingPhaseModulation;
         omegadot = modulatedK0 * tcommand - k2 * omega;
@@ -987,8 +978,8 @@ float aerolastic_Kd_scaling = -0.005;
 
 
 void adjustAerolasticPIDGains(float errorRate, float* Kp, float* Ki, float* Kd) {
-    float glide_aeroelasticity = servoConfig()->aeroelastic_glide_coefficient;
-    float flap_aeroelasticity = servoConfig()->aeroelastic_flap_coefficient;
+    float glide_aeroelasticity = currentOrnithopterProfile()->aeroelastic_glide_coefficient;
+    float flap_aeroelasticity = currentOrnithopterProfile()->aeroelastic_flap_coefficient;
     float aeroelastic_glide = (errorRate < 0 ? -1 : 1) * glide_aeroelasticity;
     float derivSum = 0.0f;
     for (int p = 0; p < MAX_ORNITHOPTER_PAIRS; p++) {
@@ -1003,6 +994,7 @@ void adjustAerolasticPIDGains(float errorRate, float* Kp, float* Ki, float* Kd) 
 
 
 float getFlappingAmplitude(float rc_throttle) {
+    const servoConfig_t *sc = servoConfig();
     // BOX GLIDE overrides throttle — force zero amplitude
     if (IS_RC_MODE_ACTIVE(BOXORNITHOPTERGLIDE)) {
         return 0.0f;
@@ -1011,19 +1003,18 @@ float getFlappingAmplitude(float rc_throttle) {
         if (IS_RC_MODE_ACTIVE(BOXORNITHOPTERINDEPENDENT)) {
             // Independent mode: throttle → raw amplitude % of servo_max_amplitude
             float amp = ((rc_throttle - 1000.0f) * (1.0f / 1000.0f))
-                      * (float)servoConfig()->servo_max_amplitude;
+                      * (float)sc->servo_max_amplitude;
             // Physical feasibility: A ≤ servo_speed / (2π·f_max)
-            float speedLimit = (float)servoConfig()->servo_speed_deg_s
-                             / (2.0f * M_PIf * (float)servoConfig()->independent_freq_max + 0.01f);
+            float speedLimit = (float)sc->servo_speed_deg_s
+                             / (2.0f * M_PIf * (float)sc->ornithopter_freq_max + 0.01f);
             if (amp > speedLimit) amp = speedLimit;
             return amp;
         }
-        // Coupled mode: flap_magnitude = 4 → 0.04 °/µs (same as original hardcoded value)
-        float amp = ((rc_throttle - GLIDE_MODE_THRESHOLD) * (float)servoConfig()->flap_magnitude * 0.01f)
-            * (float)servoConfig()->flap_base_amplitude * 0.1f
-                * (1.0f - (currentControlRateProfile->flap_speed_modificator - 1500) * 0.003f);
+        // Coupled mode: flap_magnitude = 4 → 0.04 °/µs
+        float amp = ((rc_throttle - GLIDE_MODE_THRESHOLD) * (float)sc->flap_magnitude * 0.01f)
+                  * (float)sc->flap_base_amplitude * 0.1f;
         // Hard clamp to servo mechanical limit
-        float maxAmp = (float)servoConfig()->servo_max_amplitude;
+        float maxAmp = (float)sc->servo_max_amplitude;
         if (amp > maxAmp) amp = maxAmp;
         else if (amp < -maxAmp) amp = -maxAmp;
         return amp;
@@ -1777,7 +1768,7 @@ void FAST_CODE pidController(const pidProfile_t *pidProfile, timeUs_t currentTim
     // Anchor: variable k₂ damping — controls frequency lock strength.
     // Higher = wing snaps to commanded frequency faster (agile, energy-hungry).
     // Lower = wing resonates freely (efficient cruise, sluggish transients).
-    k2 = ANCHOR_BASE_K2 + (float)servoConfig()->anchor_gain * ANCHOR_SCALE;
+    k2 = ANCHOR_BASE_K2 + (float)currentOrnithopterProfile()->anchor_gain * ANCHOR_SCALE;
 
     calculateFlappingFromThrottle(throttle_ * 1000 + 1000);
     
@@ -1878,9 +1869,9 @@ void FAST_CODE pidController(const pidProfile_t *pidProfile, timeUs_t currentTim
             // Values stored for next calculateFlappingFromThrottle call.
 
             // --- CADENCE: P → phase advance (k0 scaling) ---
-            if (servoConfig()->cadence_gain != 0) {
+            if (currentOrnithopterProfile()->cadence_gain != 0) {
                 flappingPhaseModulation = constrainf(
-                    1.0f + pidData[axis].P * (float)servoConfig()->cadence_gain * CADENCE_SCALE,
+                    1.0f + pidData[axis].P * (float)currentOrnithopterProfile()->cadence_gain * CADENCE_SCALE,
                     0.5f, 2.0f);
             }
 
@@ -1889,11 +1880,11 @@ void FAST_CODE pidController(const pidProfile_t *pidProfile, timeUs_t currentTim
                 float ferocityP = 0.0f;
                 float ferocityD = 0.0f;
 
-                if (servoConfig()->ferocity_p_gain != 0) {
-                    ferocityP = pidData[axis].P * (float)servoConfig()->ferocity_p_gain * FEROCITY_P_SCALE;
+                if (currentOrnithopterProfile()->ferocity_p_gain != 0) {
+                    ferocityP = pidData[axis].P * (float)currentOrnithopterProfile()->ferocity_p_gain * FEROCITY_P_SCALE;
                 }
-                if (servoConfig()->ferocity_d_gain != 0) {
-                    ferocityD = pidData[axis].D * (float)servoConfig()->ferocity_d_gain * FEROCITY_D_SCALE;
+                if (currentOrnithopterProfile()->ferocity_d_gain != 0) {
+                    ferocityD = pidData[axis].D * (float)currentOrnithopterProfile()->ferocity_d_gain * FEROCITY_D_SCALE;
                 }
 
                 flappingFerocityModulation += constrainf(
@@ -1902,9 +1893,9 @@ void FAST_CODE pidController(const pidProfile_t *pidProfile, timeUs_t currentTim
             }
 
             // --- BALANCE: I → up/down thrust symmetry ---
-            if (servoConfig()->balance_gain != 0) {
+            if (currentOrnithopterProfile()->balance_gain != 0) {
                 flappingAsymmetryBias = constrainf(
-                    pidData[axis].I * (float)servoConfig()->balance_gain * BALANCE_SCALE,
+                    pidData[axis].I * (float)currentOrnithopterProfile()->balance_gain * BALANCE_SCALE,
                     -3.0f, 3.0f);
             }
 
@@ -1919,27 +1910,27 @@ void FAST_CODE pidController(const pidProfile_t *pidProfile, timeUs_t currentTim
         // Common-mode uses dedicated gains (ferocity_roll_gain, ferocity_yaw_gain)
         // and blends with pitch's PD ferocity for a unified wave-sharpness command.
         if (axis == FD_ROLL) {
-            if (servoConfig()->warp_gain != 0) {
+            if (currentOrnithopterProfile()->warp_gain != 0) {
                 flappingFerocityDifferentialRoll = constrainf(
-                    pidData[axis].P * (float)servoConfig()->warp_gain * WARP_SCALE,
+                    pidData[axis].P * (float)currentOrnithopterProfile()->warp_gain * WARP_SCALE,
                     -0.5f, 0.5f);
             }
-            if (servoConfig()->ferocity_roll_gain != 0) {
+            if (currentOrnithopterProfile()->ferocity_roll_gain != 0) {
                 flappingFerocityModulation += constrainf(
-                    pidData[axis].P * (float)servoConfig()->ferocity_roll_gain * FEROCITY_P_SCALE,
+                    pidData[axis].P * (float)currentOrnithopterProfile()->ferocity_roll_gain * FEROCITY_P_SCALE,
                     -0.15f, 0.15f);
             }
         }
 
         if (axis == FD_YAW) {
-            if (servoConfig()->warp_yaw_gain != 0) {
+            if (currentOrnithopterProfile()->warp_yaw_gain != 0) {
                 flappingFerocityDifferentialYaw = constrainf(
-                    pidData[axis].P * (float)servoConfig()->warp_yaw_gain * WARP_SCALE,
+                    pidData[axis].P * (float)currentOrnithopterProfile()->warp_yaw_gain * WARP_SCALE,
                     -0.5f, 0.5f);
             }
-            if (servoConfig()->ferocity_yaw_gain != 0) {
+            if (currentOrnithopterProfile()->ferocity_yaw_gain != 0) {
                 flappingFerocityModulation += constrainf(
-                    pidData[axis].P * (float)servoConfig()->ferocity_yaw_gain * FEROCITY_P_SCALE,
+                    pidData[axis].P * (float)currentOrnithopterProfile()->ferocity_yaw_gain * FEROCITY_P_SCALE,
                     -0.15f, 0.15f);
             }
         }

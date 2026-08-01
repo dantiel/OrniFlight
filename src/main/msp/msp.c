@@ -920,10 +920,10 @@ static bool mspProcessOutCommand(uint8_t cmdMSP, sbuf_t *dst)
             sbufWriteU32(dst, servoParams(i)->reversedSources);
         }
         
-        sbufWriteU8(dst, servoConfigMutable()->ornithopter_glide_deg + 128);
-        sbufWriteU8(dst, (uint8_t)(servoConfigMutable()->cadence_gain + 128));    // ONDAS v1 triplet (API 1.33)
-        sbufWriteU8(dst, (uint8_t)(servoConfigMutable()->ferocity_d_gain + 128));
-        sbufWriteU8(dst, (uint8_t)(servoConfigMutable()->balance_gain + 128));
+        sbufWriteU8(dst, currentOrnithopterProfile()->glide_angle + 128);
+        sbufWriteU8(dst, (uint8_t)(currentOrnithopterProfile()->cadence_gain + 128));    // ONDAS v1 triplet (API 1.33)
+        sbufWriteU8(dst, (uint8_t)(currentOrnithopterProfile()->ferocity_d_gain + 128));
+        sbufWriteU8(dst, (uint8_t)(currentOrnithopterProfile()->balance_gain + 128));
         break;
 
     case MSP_SERVO_MIX_RULES:
@@ -1424,7 +1424,7 @@ static bool mspProcessOutCommand(uint8_t cmdMSP, sbuf_t *dst)
         sbufWriteU16(dst, 0);
         sbufWriteU16(dst, 0);
 #endif
-        sbufWriteU8(dst, (uint8_t)(servoConfigMutable()->cadence_gain + 128));
+        sbufWriteU8(dst, (uint8_t)(currentOrnithopterProfile()->cadence_gain + 128));
         break;
     case MSP_PID_ADVANCED:
         sbufWriteU16(dst, 0);
@@ -1498,22 +1498,22 @@ static bool mspProcessOutCommand(uint8_t cmdMSP, sbuf_t *dst)
         sbufWriteU8(dst, 0);
 #endif
         
-        sbufWriteU8(dst, servoConfigMutable()->flap_base_frequency);
+        sbufWriteU8(dst, 0 /* flap_base_frequency removed */);
         sbufWriteU8(dst, servoConfigMutable()->flap_base_amplitude + 128);
 
         // ── ONDAS v2 fields (API 1.42) ──────────────────────────────────────
         sbufWriteU8(dst, currentPidProfile->iterm_relax_cutoff);                // offset 48
 
-        sbufWriteU8(dst, (uint8_t)(servoConfigMutable()->cadence_gain + 128));   // offset 49: signed, wire=val+128
-        sbufWriteU8(dst, (uint8_t)(servoConfigMutable()->ferocity_d_gain + 128));// offset 50: signed
-        sbufWriteU8(dst, (uint8_t)(servoConfigMutable()->balance_gain + 128));   // offset 51: signed
-        sbufWriteU8(dst, (uint8_t)(servoConfigMutable()->ferocity_p_gain));      // offset 52: unsigned 0–100
-        sbufWriteU8(dst, (uint8_t)(servoConfigMutable()->ferocity_roll_gain));   // offset 53: unsigned 0–100
-        sbufWriteU8(dst, (uint8_t)(servoConfigMutable()->ferocity_yaw_gain));    // offset 54: unsigned 0–100
-        sbufWriteU8(dst, (uint8_t)(servoConfigMutable()->warp_gain + 128));      // offset 55: signed
-        sbufWriteU8(dst, (uint8_t)(servoConfigMutable()->warp_yaw_gain + 128));  // offset 56: signed
-        sbufWriteU8(dst, (uint8_t)(servoConfigMutable()->anchor_gain));          // offset 57: unsigned 0–100
-        sbufWriteU8(dst, (uint8_t)(servoConfigMutable()->resonance_gain));       // offset 58: unsigned 0–100
+        sbufWriteU8(dst, (uint8_t)(currentOrnithopterProfile()->cadence_gain + 128));   // offset 49: signed, wire=val+128
+        sbufWriteU8(dst, (uint8_t)(currentOrnithopterProfile()->ferocity_d_gain + 128));// offset 50: signed
+        sbufWriteU8(dst, (uint8_t)(currentOrnithopterProfile()->balance_gain + 128));   // offset 51: signed
+        sbufWriteU8(dst, (uint8_t)(currentOrnithopterProfile()->ferocity_p_gain));      // offset 52: unsigned 0–100
+        sbufWriteU8(dst, (uint8_t)(currentOrnithopterProfile()->ferocity_roll_gain));   // offset 53: unsigned 0–100
+        sbufWriteU8(dst, (uint8_t)(currentOrnithopterProfile()->ferocity_yaw_gain));    // offset 54: unsigned 0–100
+        sbufWriteU8(dst, (uint8_t)(currentOrnithopterProfile()->warp_gain + 128));      // offset 55: signed
+        sbufWriteU8(dst, (uint8_t)(currentOrnithopterProfile()->warp_yaw_gain + 128));  // offset 56: signed
+        sbufWriteU8(dst, (uint8_t)(currentOrnithopterProfile()->anchor_gain));          // offset 57: unsigned 0–100
+        sbufWriteU8(dst, (uint8_t)(currentOrnithopterProfile()->resonance_gain));       // offset 58: unsigned 0–100
 
         // ── ONDAS Phase 2: per-pair geometry + advanced params (API 1.43) ──
         for (int p = 0; p < MAX_ORNITHOPTER_PAIRS; p++) {
@@ -1522,10 +1522,10 @@ static bool mspProcessOutCommand(uint8_t cmdMSP, sbuf_t *dst)
         for (int p = 0; p < MAX_ORNITHOPTER_PAIRS; p++) {
             sbufWriteU8(dst, (uint8_t)(servoConfigMutable()->flapping_phase_shift[p] + 128));// offsets 63-66: signed ±180°
         }
-        sbufWriteU8(dst, (uint8_t)(servoConfigMutable()->prescience_gain));    // offset 67: unsigned 0–100
-        sbufWriteU8(dst, (uint8_t)(servoConfigMutable()->espelho_gain));       // offset 68: unsigned 0–100
-        sbufWriteU8(dst, (uint8_t)(servoConfigMutable()->saudade_gain));       // offset 69: unsigned 0–100
-        sbufWriteU8(dst, (uint8_t)(servoConfigMutable()->ssff_gain));          // offset 70: unsigned 0–100
+        sbufWriteU8(dst, (uint8_t)(currentOrnithopterProfile()->prescience_gain));    // offset 67: unsigned 0–100
+        sbufWriteU8(dst, (uint8_t)(currentOrnithopterProfile()->espelho_gain));       // offset 68: unsigned 0–100
+        sbufWriteU8(dst, (uint8_t)(currentOrnithopterProfile()->saudade_gain));       // offset 69: unsigned 0–100
+        sbufWriteU8(dst, (uint8_t)(currentOrnithopterProfile()->ssff_gain));          // offset 70: unsigned 0–100
 
         // ── GralhaAzul port: physical servo params + wing trim (API 1.44) ──
         sbufWriteU16(dst, servoConfigMutable()->servo_speed_deg_s);             // offsets 71-72: °/s
@@ -1537,9 +1537,9 @@ static bool mspProcessOutCommand(uint8_t cmdMSP, sbuf_t *dst)
 
         // ── Independent flight mode (API 1.45) ──
         // Mode activated via BOXORNITHOPTERINDEPENDENT (RC modes tab), not a parameter byte
-        sbufWriteU8(dst, servoConfigMutable()->independent_freq_channel);    // offset 79: AUX channel index
-        sbufWriteU8(dst, servoConfigMutable()->independent_freq_min);        // offset 80: Hz at RC min
-        sbufWriteU8(dst, servoConfigMutable()->independent_freq_max);        // offset 81: Hz at RC max
+        sbufWriteU8(dst, servoConfigMutable()->ornithopter_freq_channel);    // offset 79: AUX channel index
+        sbufWriteU8(dst, servoConfigMutable()->ornithopter_freq_min);        // offset 80: Hz at RC min
+        sbufWriteU8(dst, servoConfigMutable()->ornithopter_freq_max);        // offset 81: Hz at RC max
 
         break;
     case MSP_SENSOR_CONFIG:
@@ -1975,11 +1975,11 @@ static mspResult_e mspProcessInCommand(uint8_t cmdMSP, sbuf_t *src)
 #ifdef USE_SERVOS
         if (dataSize <= 4) {
             // glide-only or glide + ONDAS v1 triplet write
-            servoConfigMutable()->ornithopter_glide_deg = sbufReadU8(src) - 128;
+            currentOrnithopterProfileMutable()->glide_angle = sbufReadU8(src) - 128;
             if (sbufBytesRemaining(src) >= 3) {
-                servoConfigMutable()->cadence_gain    = (int8_t)(sbufReadU8(src) - 128);
-                servoConfigMutable()->ferocity_d_gain = (int8_t)(sbufReadU8(src) - 128);
-                servoConfigMutable()->balance_gain    = (int8_t)(sbufReadU8(src) - 128);
+                currentOrnithopterProfileMutable()->cadence_gain    = (int8_t)(sbufReadU8(src) - 128);
+                currentOrnithopterProfileMutable()->ferocity_d_gain = (int8_t)(sbufReadU8(src) - 128);
+                currentOrnithopterProfileMutable()->balance_gain    = (int8_t)(sbufReadU8(src) - 128);
             }
         } else {
             if (dataSize < 1 + 12) {
@@ -1998,16 +1998,16 @@ static mspResult_e mspProcessInCommand(uint8_t cmdMSP, sbuf_t *src)
             }
             // trailing glide + ONDAS v1 triplet (sent once after last servo)
             if (sbufBytesRemaining(src) >= 4) {
-                servoConfigMutable()->ornithopter_glide_deg = sbufReadU8(src) - 128;
-                servoConfigMutable()->cadence_gain    = (int8_t)(sbufReadU8(src) - 128);
-                servoConfigMutable()->ferocity_d_gain = (int8_t)(sbufReadU8(src) - 128);
-                servoConfigMutable()->balance_gain    = (int8_t)(sbufReadU8(src) - 128);
+                currentOrnithopterProfileMutable()->glide_angle = sbufReadU8(src) - 128;
+                currentOrnithopterProfileMutable()->cadence_gain    = (int8_t)(sbufReadU8(src) - 128);
+                currentOrnithopterProfileMutable()->ferocity_d_gain = (int8_t)(sbufReadU8(src) - 128);
+                currentOrnithopterProfileMutable()->balance_gain    = (int8_t)(sbufReadU8(src) - 128);
             } else if (sbufBytesRemaining(src) >= 1) {
-                servoConfigMutable()->ornithopter_glide_deg = sbufReadU8(src) - 128;
+                currentOrnithopterProfileMutable()->glide_angle = sbufReadU8(src) - 128;
                 if (sbufBytesRemaining(src) >= 3) {
-                    servoConfigMutable()->cadence_gain    = (int8_t)(sbufReadU8(src) - 128);
-                    servoConfigMutable()->ferocity_d_gain = (int8_t)(sbufReadU8(src) - 128);
-                    servoConfigMutable()->balance_gain    = (int8_t)(sbufReadU8(src) - 128);
+                    currentOrnithopterProfileMutable()->cadence_gain    = (int8_t)(sbufReadU8(src) - 128);
+                    currentOrnithopterProfileMutable()->ferocity_d_gain = (int8_t)(sbufReadU8(src) - 128);
+                    currentOrnithopterProfileMutable()->balance_gain    = (int8_t)(sbufReadU8(src) - 128);
                 }
             }
         }
@@ -2158,7 +2158,7 @@ static mspResult_e mspProcessInCommand(uint8_t cmdMSP, sbuf_t *src)
             sbufReadU16(src);
 #endif
             
-            servoConfigMutable()->cadence_gain = (int8_t)(sbufReadU8(src) - 128);
+            currentOrnithopterProfileMutable()->cadence_gain = (int8_t)(sbufReadU8(src) - 128);
         }
 
         // reinitialize the gyro filters with the new values
@@ -2251,22 +2251,22 @@ static mspResult_e mspProcessInCommand(uint8_t cmdMSP, sbuf_t *src)
             sbufReadU8(src);
             sbufReadU8(src);
 #endif
-            servoConfigMutable()->flap_base_frequency = sbufReadU8(src);
+            sbufReadU8(src); // skip flap_base_frequency (removed)
             servoConfigMutable()->flap_base_amplitude = sbufReadU8(src) - 128;
         }
         if (sbufBytesRemaining(src) >= 11) {
             // Added in MSP API 1.42 — ONDAS v2
             currentPidProfile->iterm_relax_cutoff = sbufReadU8(src);
-            servoConfigMutable()->cadence_gain     = (int8_t)(sbufReadU8(src) - 128);
-            servoConfigMutable()->ferocity_d_gain  = (int8_t)(sbufReadU8(src) - 128);
-            servoConfigMutable()->balance_gain     = (int8_t)(sbufReadU8(src) - 128);
-            servoConfigMutable()->ferocity_p_gain  = (int8_t)sbufReadU8(src);
-            servoConfigMutable()->ferocity_roll_gain = (int8_t)sbufReadU8(src);
-            servoConfigMutable()->ferocity_yaw_gain  = (int8_t)sbufReadU8(src);
-            servoConfigMutable()->warp_gain        = (int8_t)(sbufReadU8(src) - 128);
-            servoConfigMutable()->warp_yaw_gain    = (int8_t)(sbufReadU8(src) - 128);
-            servoConfigMutable()->anchor_gain      = (int8_t)sbufReadU8(src);
-            servoConfigMutable()->resonance_gain   = (int8_t)sbufReadU8(src);
+            currentOrnithopterProfileMutable()->cadence_gain     = (int8_t)(sbufReadU8(src) - 128);
+            currentOrnithopterProfileMutable()->ferocity_d_gain  = (int8_t)(sbufReadU8(src) - 128);
+            currentOrnithopterProfileMutable()->balance_gain     = (int8_t)(sbufReadU8(src) - 128);
+            currentOrnithopterProfileMutable()->ferocity_p_gain  = (int8_t)sbufReadU8(src);
+            currentOrnithopterProfileMutable()->ferocity_roll_gain = (int8_t)sbufReadU8(src);
+            currentOrnithopterProfileMutable()->ferocity_yaw_gain  = (int8_t)sbufReadU8(src);
+            currentOrnithopterProfileMutable()->warp_gain        = (int8_t)(sbufReadU8(src) - 128);
+            currentOrnithopterProfileMutable()->warp_yaw_gain    = (int8_t)(sbufReadU8(src) - 128);
+            currentOrnithopterProfileMutable()->anchor_gain      = (int8_t)sbufReadU8(src);
+            currentOrnithopterProfileMutable()->resonance_gain   = (int8_t)sbufReadU8(src);
         }
         if (sbufBytesRemaining(src) >= 12) {
             // Added in MSP API 1.43 — ONDAS Phase 2: per-pair geometry + advanced
@@ -2276,10 +2276,10 @@ static mspResult_e mspProcessInCommand(uint8_t cmdMSP, sbuf_t *src)
             for (int p = 0; p < MAX_ORNITHOPTER_PAIRS; p++) {
                 servoConfigMutable()->flapping_phase_shift[p] = (int8_t)(sbufReadU8(src) - 128);
             }
-            servoConfigMutable()->prescience_gain  = (int8_t)sbufReadU8(src);
-            servoConfigMutable()->espelho_gain     = (int8_t)sbufReadU8(src);
-            servoConfigMutable()->saudade_gain     = (int8_t)sbufReadU8(src);
-            servoConfigMutable()->ssff_gain        = (int8_t)sbufReadU8(src);
+            currentOrnithopterProfileMutable()->prescience_gain  = (int8_t)sbufReadU8(src);
+            currentOrnithopterProfileMutable()->espelho_gain     = (int8_t)sbufReadU8(src);
+            currentOrnithopterProfileMutable()->saudade_gain     = (int8_t)sbufReadU8(src);
+            currentOrnithopterProfileMutable()->ssff_gain        = (int8_t)sbufReadU8(src);
         }
         if (sbufBytesRemaining(src) >= 8) {
             // Added in MSP API 1.44 — GralhaAzul port: physical servo params + wing trim
@@ -2293,9 +2293,9 @@ static mspResult_e mspProcessInCommand(uint8_t cmdMSP, sbuf_t *src)
         if (sbufBytesRemaining(src) >= 3) {
             // Added in MSP API 1.45 — Independent flight mode
             // ornithopter_independent_mode is now a BOX — not a parameter byte
-            servoConfigMutable()->independent_freq_channel = sbufReadU8(src);
-            servoConfigMutable()->independent_freq_min    = sbufReadU8(src);
-            servoConfigMutable()->independent_freq_max    = sbufReadU8(src);
+            servoConfigMutable()->ornithopter_freq_channel = sbufReadU8(src);
+            servoConfigMutable()->ornithopter_freq_min    = sbufReadU8(src);
+            servoConfigMutable()->ornithopter_freq_max    = sbufReadU8(src);
         }
         pidInitConfig(currentPidProfile);
 

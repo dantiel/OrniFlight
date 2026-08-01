@@ -69,30 +69,15 @@ void pgResetFn_servoConfig(servoConfig_t *servoConfig) {
     servoConfig->servo_mount_angle[0] = 20; // pair 0: mild inward — drag‑rudder yaw
     // pairs 1‑3 default to 0° (parallel — passive tail yaw)
     // flapping_phase_shift defaults to 0° for all pairs (all wings flap in phase)
-    servoConfig->flap_base_frequency = 12;
     servoConfig->flap_base_amplitude = 60;
-    servoConfig->ornithopter_glide_deg = -30;
-    servoConfig->cadence_gain = 20;         // P→phase advance: "push harder now"
-    servoConfig->ferocity_d_gain = 20;       // D→ferocity: "dampen the motion"
-    servoConfig->ferocity_p_gain = 10;       // P→ferocity: "push proportionally"
-    servoConfig->balance_gain = 10;          // I→thrust symmetry: "trim the list"
-    servoConfig->warp_gain = 0;              // Roll→L/R ferocity diff: off by default
-    servoConfig->warp_yaw_gain = 0;          // Yaw→fore/aft ferocity diff: off by default
-    servoConfig->ferocity_roll_gain = 0;     // Roll→common-mode ferocity: off by default
-    servoConfig->ferocity_yaw_gain = 0;      // Yaw→common-mode ferocity: off by default
-    servoConfig->anchor_gain = 0;            // k₂ = 10.0 base (anchor_gain=0=default tightness)
-    servoConfig->resonance_gain = 0;         // resonance: phase-locked error filter off by default
-    servoConfig->aeroelastic_glide_coefficient = 40;
-    servoConfig->aeroelastic_flap_coefficient = 40;
-    servoConfig->ornithopter_ferocity_downstroke = 12;  // ~1.78 — mild shaping, near-sine
-    servoConfig->ornithopter_ferocity_upstroke = 12;
-    servoConfig->ssff_gain = 0;  // off by default — enable with nonzero value
     servoConfig->servo_speed_deg_s = 857;       // 60° / 70ms — typical micro servo
     servoConfig->servo_max_amplitude = 55;       // °, ±55° max mechanical throw
     servoConfig->flap_magnitude = 4;             // 4° per 960µs throttle above 1040
-    servoConfig->independent_freq_channel = 1;   // AUX2 / CH6
-    servoConfig->independent_freq_min = 1;       // 1 Hz at RC minimum
-    servoConfig->independent_freq_max = 25;      // 25 Hz at RC maximum
+    servoConfig->ornithopter_freq_channel = 1;   // AUX2 / CH6
+    servoConfig->ornithopter_freq_min = 1;       // 1 Hz at RC minimum
+    servoConfig->ornithopter_freq_max = 25;      // 25 Hz at RC maximum
+    servoConfig->ornithopter_profile_channel = 2; // AUX3 / CH7
+    servoConfig->ornithopter_profile_index = 0;
 
     for (unsigned servoIndex = 0; servoIndex < MAX_SUPPORTED_SERVOS; servoIndex++) {
         servoConfig->dev.ioTags[servoIndex] = timerioTagGetByUsage(TIM_USE_SERVO, servoIndex);
@@ -414,8 +399,8 @@ void applyFlappingToServos(int16_t *input) {
     alphaEma = 0.30f;
   } else {
     // Estimate ferocity from the raw config values (before PID modulation)
-    float fDown = ferocityParamToFloat(servoConfig()->ornithopter_ferocity_downstroke);
-    float fUp   = ferocityParamToFloat(servoConfig()->ornithopter_ferocity_upstroke);
+    float fDown = ferocityParamToFloat(currentOrnithopterProfile()->ferocity_downstroke);
+    float fUp   = ferocityParamToFloat(currentOrnithopterProfile()->ferocity_upstroke);
     float avgF  = (fDown + fUp) * 0.5f;  // 0..8
     if (avgF >= 7.0f)      alphaEma = 1.00f;
     else if (avgF >= 5.0f) alphaEma = 0.92f;
@@ -447,7 +432,7 @@ void applyFlappingToServos(int16_t *input) {
 
   } else {
     // ── Glide mode: rate-limited transition from current angle to target ──
-    int16_t glideTarget = servoConfig()->ornithopter_glide_deg * 5;
+    int16_t glideTarget = currentOrnithopterProfile()->glide_angle * 5;
     float vServo = servoDegPerUs();  // °/µs
 
     // On first entry or re-entry after flapping, capture current position

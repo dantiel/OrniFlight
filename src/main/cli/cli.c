@@ -601,6 +601,9 @@ static uint16_t getValueOffset(const clivalue_t *value)
     switch (value->type & VALUE_SECTION_MASK) {
     case MASTER_VALUE:
     case HARDWARE_VALUE:
+        if (value->pgn == PG_ORNITHOPTER_PROFILES) {
+            return value->offset + sizeof(ornithopterProfile_t) * getOrnithopterProfileIndex();
+        }
         return value->offset;
     case PROFILE_VALUE:
         return value->offset + sizeof(pidProfile_t) * getPidProfileIndexToUse();
