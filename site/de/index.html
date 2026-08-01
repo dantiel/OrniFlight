@@ -11,11 +11,10 @@
 </head>
 <body>
 <div class='hero-bg'></div>
-<div class='hero-ornithopter'></div>
 <div class='hero-overlay'></div>
 <nav>
-<a class='home-link' href='#' onclick='majesticScroll(); return false;' title='Scroll to top ◇ OrniFlight'>
-<img alt='OrniFlight' src='../assets/images/light-wide-2.svg' style='height:28px'>
+<a class='home-link' href='#' onclick='majesticScroll(); return false;' title='OrniFlight'>
+<img alt='OrniFlight' src='../assets/images/of_icon_128.png'>
 </a>
 <a href='#essence'>Essenz</a>
 <a href='#ondas'>ONDAS</a>
@@ -29,13 +28,12 @@
 <div id='header'>
 <div class='hero-content'>
 <div class='hero-logo'>
-<img alt='OrniFlight' src='../assets/images/light-wide-2.svg' style='height:72px'>
+<picture>
+<source media='(prefers-color-scheme: light)' srcset='../assets/images/cf_logo_black.svg'>
+<img alt='OrniFlight' src='../assets/images/cf_logo_white.svg'>
+</picture>
 </div>
 <div class='headline'>
-<h1>
-<span class='orni'>ORNI</span>
-<span class='flight'>FLIGHT</span>
-</h1>
 <p class='subhead'>Flieg natürlich. Steuere präzise.</p>
 <p class='greeting'>Schlagflug, neu definiert.</p>
 <p class='version'>STM32F4 ◇ OrniFlight v0.4.6 ◇ apiVersion 1.46</p>
@@ -44,10 +42,7 @@
 </div>
 <main>
 <section id='essence'>
-<h2>
-<span class='section-num'>01</span>
-Essenz
-</h2>
+<h2>Essenz</h2>
 <p class='lead'>OrniFlight ist eine <strong>Open-Source-Flugcontroller-Firmware für servo-gesteuerte Schlagflügler</strong>, abgeleitet von Betaflight 4.0.6.</p>
 <p>Keine Propeller — keine Quad-Dynamik. Bewegung entsteht durch <strong>oszillierende Flügelservos</strong>, die von phasenbewussten Wellenformen angesteuert werden. Eine eigene Stabilisierungspipeline — ONDAS — versteht, dass jedes Gramm Schub phasenabhängig innerhalb des Schlagzyklus wirkt.</p>
 <div class='highlight'>
@@ -55,10 +50,7 @@ Essenz
 </div>
 </section>
 <section id='ondas'>
-<h2>
-<span class='section-num'>02</span>
-ONDAS
-</h2>
+<h2>ONDAS</h2>
 <p class='lead'><strong>Oscillating Normalized Dynamic Adaptive Stabilization</strong> — die erste Regelungstheorie, die spezifisch für Schlagflügel-Aerodynamik entwickelt wurde.</p>
 <p>Quad-PIDs gehen von kontinuierlichem Schub aus. Ornithopter-Schub ist <strong>phasisch</strong> — derselbe Impuls erzeugt unterschiedliche Momente, je nachdem <em>wann</em> im Schlag er appliziert wird. ONDAS nutzt Cadence, Ferocity, Asymmetry, Warp, Anchor, Resonance, Prescience, Espelho, Saudade und SSFF — ein Orchester phasenbewusster Modulatoren — um jedes korrigierende Gramm genau dorthin zu platzieren, wo die Aerodynamik es nutzen kann.</p>
 <div class='highlight'>
@@ -69,10 +61,7 @@ ONDAS
 </p>
 </section>
 <section id='features'>
-<h2>
-<span class='section-num'>03</span>
-Features
-</h2>
+<h2>Features</h2>
 <dl class='grid'>
 <dt>Flugprofile</dt>
 <dd>4 unabhängige Profile (0–3), im Flug per BOX-Mode umschaltbar. Jedes enthält vollständiges ONDAS-Tuning, Wellenform und aeroelastische Koeffizienten.</dd>
@@ -89,10 +78,7 @@ Features
 </dl>
 </section>
 <section id='hardware'>
-<h2>
-<span class='section-num'>04</span>
-Hardware
-</h2>
+<h2>Hardware</h2>
 <p class='lead'>Läuft auf jedem Betaflight-4.0-kompatiblen STM32F4/F7-Flugcontroller mit servo-fähigen Timer-Pins.</p>
 <table class='specs'>
 <tr>
@@ -121,10 +107,7 @@ Hardware
 </p>
 </section>
 <section class='build'>
-<h2>
-<span class='section-num'>05</span>
-Build &amp; Flash
-</h2>
+<h2>Build &amp; Flash</h2>
 <pre><code>make TARGET=OMNIBUSF4
 dfu-util -a 0 -D obj/orniflight_VERSION_OMNIBUSF4.hex</code></pre>
 <p class='compatible'>GPL v3 ◇ Basiert auf Betaflight 4.0.6 ◇ Sauberer Build: null Warnungen</p>
@@ -138,7 +121,6 @@ dfu-util -a 0 -D obj/orniflight_VERSION_OMNIBUSF4.hex</code></pre>
 <button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
 <script>
   const hero = document.querySelector('.hero-content');
-  const creature = document.querySelector('.hero-ornithopter');
   const overlay = document.querySelector('.hero-overlay');
   const nav = document.querySelector('nav');
   const scrollBtn = document.querySelector('.scroll-top');
@@ -165,13 +147,10 @@ dfu-util -a 0 -D obj/orniflight_VERSION_OMNIBUSF4.hex</code></pre>
     const t = Math.min(scroll / vh, 1);
   
     hero.style.setProperty('--scroll', t.toFixed(3));
-    hero.style.opacity = 1 - t * 0.6;
+    hero.style.opacity = 1 - t * 0.7;
+    hero.style.transform = `translateY(${t * 40}px)`;
   
-    const py = t * 90;
-    creature.style.transform = `translateY(${py}%)`;
-    creature.style.opacity = Math.max(0, 1 - t * 1.2);
-  
-    overlay.style.opacity = Math.min(t * 0.85, 0.85);
+    overlay.style.opacity = Math.min(t * 0.9, 0.9);
   
     nav.classList.toggle('scrolled', scroll > 40);
     scrollBtn.classList.toggle('visible', scroll > vh * 0.6);

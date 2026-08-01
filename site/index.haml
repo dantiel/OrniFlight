@@ -11,12 +11,11 @@
 
   %body
     .hero-bg
-    .hero-ornithopter
     .hero-overlay
 
     %nav
-      %a.home-link{href: "#", onclick: "majesticScroll(); return false;", title: "Scroll to top ◇ OrniFlight"}
-        %img{src: "#{asset_prefix}/assets/images/light-wide-2.svg", alt: "OrniFlight", style: "height:28px"}
+      %a.home-link{href: "#", onclick: "majesticScroll(); return false;", title: "OrniFlight"}
+        %img{src: "#{asset_prefix}/assets/images/of_icon_128.png", alt: "OrniFlight"}
       %a{href: "#essence"}= nav_essence
       %a{href: "#ondas"}= nav_ondas
       %a{href: "#features"}= nav_features
@@ -28,29 +27,24 @@
     #header
       .hero-content
         .hero-logo
-          %img{src: "#{asset_prefix}/assets/images/light-wide-2.svg", alt: "OrniFlight", style: "height:72px"}
+          %picture
+            %source{srcset: "#{asset_prefix}/assets/images/cf_logo_black.svg", media: "(prefers-color-scheme: light)"}
+            %img{src: "#{asset_prefix}/assets/images/cf_logo_white.svg", alt: "OrniFlight"}
         .headline
-          %h1
-            %span.orni ORNI
-            %span.flight FLIGHT
           %p.subhead= hero_subhead
           %p.greeting= hero_greeting
           %p.version= hero_version
 
     %main
       %section#essence
-        %h2
-          %span.section-num= essence_num
-          = essence_title
+        %h2= essence_title
         %p.lead!= essence_lead
         %p!= essence_body
         .highlight
           %code= essence_highlight
 
       %section#ondas
-        %h2
-          %span.section-num= ondas_num
-          = ondas_title
+        %h2= ondas_title
         %p.lead!= ondas_lead
         %p!= ondas_body
         .highlight
@@ -59,9 +53,7 @@
           %a{href: "#{asset_prefix}/wiki/ondas.html"}= ondas_wiki_link
 
       %section#features
-        %h2
-          %span.section-num= features_num
-          = features_title
+        %h2= features_title
         %dl.grid
           %dt= feat_profiles_title
           %dd= feat_profiles_desc
@@ -77,9 +69,7 @@
           %dd= feat_glide_desc
 
       %section#hardware
-        %h2
-          %span.section-num= hw_num
-          = hw_title
+        %h2= hw_title
         %p.lead= hw_lead
         %table.specs
           %tr
@@ -101,9 +91,7 @@
           %a{href: "#{asset_prefix}/tutorials/"}= hw_start_link
 
       %section.build
-        %h2
-          %span.section-num= build_num
-          = build_title
+        %h2= build_title
         %pre
           %code= build_line
         %p.compatible= build_compatible
@@ -117,7 +105,6 @@
 
     :javascript
       const hero = document.querySelector('.hero-content');
-      const creature = document.querySelector('.hero-ornithopter');
       const overlay = document.querySelector('.hero-overlay');
       const nav = document.querySelector('nav');
       const scrollBtn = document.querySelector('.scroll-top');
@@ -144,13 +131,10 @@
         const t = Math.min(scroll / vh, 1);
 
         hero.style.setProperty('--scroll', t.toFixed(3));
-        hero.style.opacity = 1 - t * 0.6;
+        hero.style.opacity = 1 - t * 0.7;
+        hero.style.transform = `translateY(${t * 40}px)`;
 
-        const py = t * 90;
-        creature.style.transform = `translateY(${py}%)`;
-        creature.style.opacity = Math.max(0, 1 - t * 1.2);
-
-        overlay.style.opacity = Math.min(t * 0.85, 0.85);
+        overlay.style.opacity = Math.min(t * 0.9, 0.9);
 
         nav.classList.toggle('scrolled', scroll > 40);
         scrollBtn.classList.toggle('visible', scroll > vh * 0.6);

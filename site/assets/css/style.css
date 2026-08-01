@@ -12,14 +12,12 @@ html {
   --dim: #4d4d4d;
   --nav-text: #fff;
   --overlay-start: rgba(32, 32, 32, 0);
-  --overlay-end: rgba(32, 32, 32, 0.92);
-  --headline-shield: rgba(32, 32, 32, 0.75);
-  --shadow-a: rgba(0, 0, 0, 0.6);
-  --shadow-b: rgba(0, 0, 0, 0.35);
-  --shadow-c: rgba(0, 0, 0, 0.18);
-  --logo-filter: none;
+  --overlay-end: rgba(32, 32, 32, 0.94);
+  --shadow-a: rgba(0, 0, 0, 0.5);
+  --shadow-b: rgba(0, 0, 0, 0.3);
   --link-color: #bfc6fb;
   --paper: url(../../assets/images/paper-dark.jpg);
+  --hero-glow: rgba(137, 152, 254, 0.12);
 }
 
 @media (prefers-color-scheme: light) {
@@ -28,7 +26,7 @@ html {
     --body-bg: #f0f0f0;
     --text: #303030;
     --accent: #3a4192;
-    --accent-alt: #8998fe;
+    --accent-alt: #5a61b0;
     --header: #3a4192;
     --box: #ffffff;
     --box-alt: #f9f9f9;
@@ -37,14 +35,12 @@ html {
     --dim: #e9e9e9;
     --nav-text: #fff;
     --overlay-start: rgba(240, 240, 240, 0);
-    --overlay-end: rgba(240, 240, 240, 0.92);
-    --headline-shield: rgba(240, 240, 240, 0.7);
-    --shadow-a: rgba(0, 0, 0, 0.08);
-    --shadow-b: rgba(0, 0, 0, 0.04);
-    --shadow-c: rgba(0, 0, 0, 0.02);
-    --logo-filter: brightness(0) saturate(100%);
+    --overlay-end: rgba(240, 240, 240, 0.94);
+    --shadow-a: rgba(0, 0, 0, 0.06);
+    --shadow-b: rgba(0, 0, 0, 0.03);
     --link-color: #3a4192;
     --paper: url(../../assets/images/paper.jpg);
+    --hero-glow: rgba(58, 65, 146, 0.08);
   }
 }
 * {
@@ -56,7 +52,7 @@ html {
 html {
   scroll-behavior: smooth;
   background: var(--body-bg);
-  scroll-padding-top: 6rem;
+  scroll-padding-top: 5rem;
 }
 
 body {
@@ -87,38 +83,35 @@ nav {
   justify-content: center;
   align-items: center;
   gap: 2rem;
-  padding: 1.2rem 2rem;
+  padding: 1rem 2rem;
   z-index: 100;
   background: linear-gradient(to bottom, var(--header) 0%, var(--header) 90%, transparent 100%);
   transition: background 0.3s, box-shadow 0.3s;
 }
 nav.scrolled {
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.35);
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.4);
 }
 nav a.home-link {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
   opacity: 0.9;
   transition: opacity 0.3s;
 }
 nav a.home-link img {
-  height: 28px;
+  height: 26px;
   width: auto;
-  filter: brightness(0) invert(1);
 }
 nav a.home-link:hover {
   opacity: 1;
 }
 nav a {
   color: var(--nav-text);
-  font-size: 0.7rem;
+  font-size: 0.68rem;
   font-weight: 600;
   letter-spacing: 0.25em;
   text-transform: uppercase;
-  opacity: 0.75;
+  opacity: 0.7;
   transition: opacity 0.25s;
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
 }
 nav a:hover {
   opacity: 1;
@@ -131,9 +124,9 @@ nav a:hover {
   margin-left: 0.5rem;
 }
 .lang-switch a {
-  font-size: 0.6rem;
+  font-size: 0.58rem;
   letter-spacing: 0.2em;
-  opacity: 0.5;
+  opacity: 0.45;
   padding: 0.1rem 0.2rem;
 }
 .lang-switch a:hover {
@@ -152,19 +145,7 @@ nav a:hover {
   width: 100%;
   height: 100vh;
   z-index: 0;
-  background: radial-gradient(ellipse 60% 70% at 50% 30%, rgba(137, 152, 254, 0.08) 0%, transparent 70%), radial-gradient(ellipse 80% 50% at 50% 55%, rgba(58, 65, 146, 0.06) 0%, transparent 60%), var(--body-bg);
-  will-change: transform;
-}
-
-.hero-ornithopter {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100vh;
-  z-index: 1;
-  pointer-events: none;
-  will-change: transform;
+  background: radial-gradient(ellipse 50% 60% at 50% 40%, var(--hero-glow) 0%, transparent 70%), var(--body-bg);
 }
 
 .hero-overlay {
@@ -176,90 +157,62 @@ nav a:hover {
   z-index: 2;
   pointer-events: none;
   opacity: 0;
-  background: linear-gradient(to bottom, var(--overlay-start) 0%, var(--overlay-start) 10%, var(--overlay-end) 100%);
+  background: linear-gradient(to bottom, var(--overlay-start) 0%, var(--overlay-start) 25%, var(--overlay-end) 100%);
 }
 
 .hero-content {
-  padding-top: 22em;
-  padding-bottom: 5rem;
-  padding-left: 3rem;
-  padding-right: 3rem;
-  transition: opacity 0.1s linear;
-  will-change: opacity;
+  padding-top: 16rem;
+  padding-bottom: 4rem;
+  padding-left: 2rem;
+  padding-right: 2rem;
+  text-align: center;
+  transition: opacity 0.1s linear, transform 0.1s linear;
+  will-change: opacity, transform;
 }
 
 .hero-logo {
-  text-align: center;
   margin-bottom: 1.5rem;
 }
 .hero-logo img {
-  height: 72px;
-  width: auto;
-  filter: var(--logo-filter);
-}
-@media (max-width: 480px) {
-  .hero-logo img {
-    height: 48px;
-  }
+  width: min(85vw, 520px);
+  height: auto;
+  filter: drop-shadow(0 4px 20px rgba(137, 152, 254, 0.25));
 }
 
 .headline {
   text-align: center;
-  border-radius: 0.5rem;
-  padding: 1em 2em;
-}
-
-.headline h1 {
-  font-family: "Open Sans", "Segoe UI", Tahoma, sans-serif;
-  font-weight: 800;
-  font-size: clamp(2rem, 5.5vw, 4rem);
-  letter-spacing: 0.35em;
-  text-transform: uppercase;
-  line-height: 1.1;
-  margin-bottom: 1rem;
-  user-select: none;
-  text-shadow: 0 1px 0 var(--shadow-a), 0 2px 0 var(--shadow-a), 0 3px 2px var(--shadow-b), 0 6px 8px var(--shadow-b), 0 10px 20px var(--shadow-c);
-}
-.headline h1 .orni {
-  color: var(--text);
-}
-.headline h1 .flight {
-  color: var(--accent);
-  font-weight: 300;
 }
 
 .subhead {
   font-family: "Open Sans", "Segoe UI", Tahoma, sans-serif;
   font-weight: 300;
-  font-size: clamp(0.85rem, 2vw, 1.15rem);
-  letter-spacing: 0.35em;
+  font-size: clamp(0.8rem, 2vw, 1.1rem);
+  letter-spacing: 0.3em;
   text-transform: uppercase;
   color: var(--mut);
-  margin-bottom: 2.5rem;
-  text-shadow: 0 1px 4px var(--shadow-a);
+  margin-bottom: 2rem;
 }
 
 .greeting {
   font-family: "Open Sans", "Segoe UI", Tahoma, sans-serif;
   font-weight: 300;
   font-style: italic;
-  font-size: clamp(0.75rem, 1.6vw, 0.95rem);
-  letter-spacing: 0.15em;
+  font-size: clamp(0.7rem, 1.5vw, 0.9rem);
+  letter-spacing: 0.12em;
   color: var(--accent-alt);
-  margin-bottom: 0.4rem;
-  opacity: 0.75;
-  text-shadow: 0 1px 3px var(--shadow-a);
+  margin-bottom: 0.3rem;
+  opacity: 0.7;
 }
 
 .version {
   font-family: "Open Sans", "Segoe UI", Tahoma, sans-serif;
   font-weight: 400;
-  font-size: 0.7rem;
-  letter-spacing: 0.35em;
+  font-size: 0.65rem;
+  letter-spacing: 0.3em;
   text-transform: uppercase;
-  opacity: 0.4;
+  opacity: 0.35;
   color: var(--mut);
-  margin-top: 1.5rem;
+  margin-top: 1.2rem;
 }
 
 main {
@@ -277,31 +230,19 @@ section {
 }
 
 h2 {
-  font-size: 1.4rem;
+  font-size: 1.3rem;
   font-weight: 700;
-  letter-spacing: 0.25em;
+  letter-spacing: 0.2em;
   text-transform: uppercase;
   margin-bottom: 2rem;
-  color: var(--text);
-  display: flex;
-  align-items: baseline;
-  gap: 0.75rem;
-  border-bottom: 1px solid var(--dim);
-  padding-bottom: 0.75rem;
-}
-
-.section-num {
-  font-weight: 300;
-  font-size: 2rem;
-  letter-spacing: 0;
-  opacity: 0.2;
-  line-height: 1;
   color: var(--accent);
+  border-bottom: 1px solid var(--dim);
+  padding-bottom: 0.6rem;
 }
 
 .lead {
   font-weight: 400;
-  font-size: 1.15rem;
+  font-size: 1.1rem;
   letter-spacing: 0.03em;
   line-height: 1.8;
   margin-bottom: 1.5rem;
@@ -342,8 +283,8 @@ code {
   margin: 2rem 0;
 }
 .highlight code {
-  font-size: 0.82rem;
-  letter-spacing: 0.06em;
+  font-size: 0.8rem;
+  letter-spacing: 0.05em;
   background: none;
   padding: 0;
 }
@@ -364,14 +305,14 @@ code {
 dl.grid {
   display: grid;
   grid-template-columns: auto 1fr;
-  gap: 0.75rem 2rem;
+  gap: 0.5rem 2rem;
 }
 
 dt {
   font-weight: 700;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   color: var(--mut);
   padding-top: 0.5rem;
 }
@@ -400,15 +341,15 @@ td:first-child {
   width: 140px;
   color: var(--mut);
   font-weight: 700;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
-  font-size: 0.7rem;
+  font-size: 0.68rem;
 }
 
 .value {
   font-weight: 300;
   font-size: 1.1rem;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.05em;
   color: var(--accent);
 }
 
@@ -421,15 +362,15 @@ td:first-child {
   overflow-x: auto;
 }
 .build pre code {
-  font-size: 0.82rem;
-  letter-spacing: 0.05em;
+  font-size: 0.8rem;
+  letter-spacing: 0.04em;
   background: none;
 }
 
 .compatible {
   font-weight: 400;
-  font-size: 0.8rem;
-  letter-spacing: 0.2em;
+  font-size: 0.75rem;
+  letter-spacing: 0.15em;
   text-transform: uppercase;
   color: var(--mut);
 }
@@ -440,9 +381,9 @@ footer {
   text-align: center;
   padding: 4rem 1.5rem;
   border-top: 1px solid var(--dim);
-  font-size: 0.7rem;
+  font-size: 0.68rem;
   font-weight: 600;
-  letter-spacing: 0.15em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   line-height: 2;
   background: var(--bg);
@@ -450,7 +391,7 @@ footer {
 footer p {
   margin-bottom: 0.5rem;
   opacity: 0.5;
-  font-size: 0.7rem;
+  font-size: 0.68rem;
 }
 footer a {
   color: var(--accent);
@@ -461,10 +402,10 @@ footer a:hover {
 
 .credit {
   margin-top: 1.5rem;
-  font-size: 0.6rem;
+  font-size: 0.58rem;
   font-weight: 300;
-  letter-spacing: 0.25em;
-  opacity: 0.35;
+  letter-spacing: 0.2em;
+  opacity: 0.3;
 }
 
 body.subpage nav {
@@ -479,7 +420,7 @@ body.subpage .content-page {
 body.subpage .content-page article h1 {
   font-size: 1.8rem;
   font-weight: 700;
-  letter-spacing: 0.2em;
+  letter-spacing: 0.15em;
   text-transform: uppercase;
   margin-bottom: 2rem;
   color: var(--accent);
@@ -487,18 +428,19 @@ body.subpage .content-page article h1 {
   padding-bottom: 0.75rem;
 }
 body.subpage .content-page article h2 {
-  font-size: 1.2rem;
+  font-size: 1.15rem;
   margin-top: 3rem;
   margin-bottom: 1rem;
-  letter-spacing: 0.15em;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   border-bottom: 1px solid var(--dim);
+  color: var(--text);
 }
 body.subpage .content-page article h3 {
-  font-size: 1.05rem;
+  font-size: 1rem;
   margin-top: 2rem;
   margin-bottom: 0.75rem;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.08em;
   font-weight: 600;
   color: var(--accent);
 }
@@ -537,7 +479,7 @@ body.subpage .content-page article pre {
 body.subpage .content-page article pre code {
   background: none;
   padding: 0;
-  font-size: 0.82rem;
+  font-size: 0.8rem;
 }
 body.subpage .content-page article table {
   width: 100%;
@@ -549,7 +491,7 @@ body.subpage .content-page article table th {
   font-weight: 700;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  font-size: 0.7rem;
+  font-size: 0.68rem;
   padding: 0.5rem 0.75rem;
   border-bottom: 2px solid var(--accent);
 }
@@ -602,11 +544,11 @@ body.subpage .content-page article img {
   transition: opacity 0.4s, border-color 0.3s;
 }
 .scroll-top.visible {
-  opacity: 0.5;
+  opacity: 0.45;
   pointer-events: auto;
 }
 .scroll-top.visible:hover {
-  opacity: 0.85;
+  opacity: 0.8;
   border-color: var(--accent);
 }
 .scroll-top::after {
@@ -621,43 +563,36 @@ body.subpage .content-page article img {
 
 @media (max-width: 480px) {
   nav {
-    gap: 0.5rem;
-    padding: 0.8rem 0.5rem;
+    gap: 0.4rem;
+    padding: 0.7rem 0.4rem;
   }
   nav a {
-    font-size: 0.55rem;
-    letter-spacing: 0.15em;
+    font-size: 0.5rem;
+    letter-spacing: 0.12em;
+  }
+  nav a.home-link img {
+    height: 20px;
   }
   .lang-switch {
     margin-left: 0;
   }
   .lang-switch a {
-    font-size: 0.5rem;
-  }
-  .hero-logo img {
-    height: 40px;
-  }
-  .headline {
-    background: linear-gradient(to bottom, var(--headline-shield) 0%, var(--headline-shield) 55%, transparent 100%);
-  }
-  .headline h1 {
-    letter-spacing: 0.2em;
-    font-size: clamp(1.3rem, 8vw, 2.2rem);
+    font-size: 0.45rem;
   }
   .hero-content {
-    padding-top: 13em;
+    padding-top: 10rem;
     padding-left: 1rem;
     padding-right: 1rem;
   }
-  .subhead {
-    letter-spacing: 0.15em;
-    font-size: 0.65rem;
+  .hero-logo img {
+    width: 90vw;
   }
-  .greeting {
+  .subhead {
+    letter-spacing: 0.12em;
     font-size: 0.6rem;
   }
-  .section-num {
-    font-size: 1.2rem;
+  .greeting {
+    font-size: 0.55rem;
   }
   dl.grid {
     grid-template-columns: 1fr;
