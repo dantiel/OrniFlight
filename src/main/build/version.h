@@ -25,7 +25,7 @@
 #define FC_FIRMWARE_NAME            "Orniflight"
 #define FC_VERSION_MAJOR       0  // OrniFlight 0.4 — Independent flight mode: COUPLED (ODE) and INDEPENDENT (direct amp+freq)
 #define FC_VERSION_MINOR       4
-#define FC_VERSION_PATCH_LEVEL  5
+#define FC_VERSION_PATCH_LEVEL  6
 
 #define FC_VERSION_STRING STR(FC_VERSION_MAJOR) "." STR(FC_VERSION_MINOR) "." STR(FC_VERSION_PATCH_LEVEL)
 
