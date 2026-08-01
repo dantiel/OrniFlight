@@ -97,6 +97,7 @@ static const box_t boxes[CHECKBOX_ITEM_COUNT] = {
     { BOXVTXCONTROLDISABLE, "DISABLE VTX CONTROL", 48},
     { BOXLAUNCHCONTROL, "LAUNCH CONTROL", 49 },
     { BOXORNITHOPTERINDEPENDENT, "ORNITHOPTER INDEPENDENT", 50 },
+    { BOXORNITHOPTERGLIDE, "ORNITHOPTER GLIDE", 51 },
 };
 
 // mask of enabled IDs, calculated on startup based on enabled features. boxId_e is used as bit index

@@ -861,6 +861,9 @@ static void applyFerocityWaveShaping(float theta, float dMod, float iBias,
 void calculateFlappingFromThrottle(float rc_throttle) {
     const servoConfig_t *sc = servoConfig();
 
+    // ── BOX GLIDE overrides throttle entirely ──
+    bool glideBoxActive = IS_RC_MODE_ACTIVE(BOXORNITHOPTERGLIDE);
+
     // ── Throttle hysteresis (GralhaAzul: jaCruzouLimiarDeVoo + limiarElevado) ──
     bool wasFlapping = (flappingAmplitude > 0.0f);
     int activeThreshold = GLIDE_MODE_THRESHOLD;
@@ -868,7 +871,7 @@ void calculateFlappingFromThrottle(float rc_throttle) {
         activeThreshold = GLIDE_MODE_THRESHOLD + GLIDE_HYSTERESIS;
     }
 
-    if (rc_throttle <= activeThreshold) {
+    if (glideBoxActive || rc_throttle <= activeThreshold) {
         // ── Glide — zero flapping ──
         if (wasFlapping && hasCrossedFlightThreshold) {
             hysteresisElevated = true;
@@ -1000,6 +1003,10 @@ void adjustAerolasticPIDGains(float errorRate, float* Kp, float* Ki, float* Kd) 
 
 
 float getFlappingAmplitude(float rc_throttle) {
+    // BOX GLIDE overrides throttle — force zero amplitude
+    if (IS_RC_MODE_ACTIVE(BOXORNITHOPTERGLIDE)) {
+        return 0.0f;
+    }
     if (rc_throttle > GLIDE_MODE_THRESHOLD) {
         if (IS_RC_MODE_ACTIVE(BOXORNITHOPTERINDEPENDENT)) {
             // Independent mode: throttle → raw amplitude % of servo_max_amplitude
