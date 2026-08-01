@@ -204,8 +204,8 @@ extern pt1Filter_t throttleLpf;
 
 extern float ornithopterFlapping;
 extern float flappingAmplitude;
-extern float shapedFlappingSinusoidLeft;
-extern float shapedFlappingSinusoidRight;
+extern float shapedFlappingSinusoidLeft[];
+extern float shapedFlappingSinusoidRight[];
 extern float throttle_;
 
 void pidResetIterm(void);
@@ -248,3 +248,4 @@ float calcHorizonLevelStrength(void);
 void dynLpfDTermUpdate(float throttle);
 void pidSetItermReset(bool enabled);
 float pidGetPreviousSetpoint(int axis);
+void applyOrnithopterPidDefaults(pidProfile_t *pidProfile, int8_t servoMountAngle);

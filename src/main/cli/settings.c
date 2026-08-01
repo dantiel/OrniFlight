@@ -1423,6 +1423,8 @@ const clivalue_t valueTable[] = {
     { "flysky_spi_rf_channels", VAR_UINT8 | MASTER_VALUE | MODE_ARRAY, .config.array.length = 16, PG_FLYSKY_CONFIG, offsetof(flySkyConfig_t, rfChannelMap) },
 #endif
     
+    { "servo_mount_angle",      VAR_INT8 | MASTER_VALUE | MODE_ARRAY, .config.array.length = MAX_ORNITHOPTER_PAIRS, PG_SERVO_CONFIG, offsetof(servoConfig_t, servo_mount_angle) },
+    { "flapping_phase_shift",  VAR_INT8 | MASTER_VALUE | MODE_ARRAY, .config.array.length = MAX_ORNITHOPTER_PAIRS, PG_SERVO_CONFIG, offsetof(servoConfig_t, flapping_phase_shift) },
     { "flap_base_frequency",   VAR_UINT8 | MASTER_VALUE, .config.minmaxUnsigned = { 0, 255 }, PG_SERVO_CONFIG, offsetof(servoConfig_t, flap_base_frequency) },
     { "flap_base_amplitude",   VAR_INT8 | MASTER_VALUE, .config.minmax = { -128, 127 }, PG_SERVO_CONFIG, offsetof(servoConfig_t, flap_base_amplitude) },
     { "ornithopter_glide_deg", VAR_INT8 | MASTER_VALUE, .config.minmax = { -128, 127 }, PG_SERVO_CONFIG, offsetof(servoConfig_t, ornithopter_glide_deg) },

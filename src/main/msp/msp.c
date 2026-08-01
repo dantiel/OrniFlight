@@ -921,6 +921,9 @@ static bool mspProcessOutCommand(uint8_t cmdMSP, sbuf_t *dst)
         }
         
         sbufWriteU8(dst, servoConfigMutable()->ornithopter_glide_deg + 128);
+        sbufWriteU8(dst, (uint8_t)(servoConfigMutable()->cadence_gain + 128));    // ONDAS v1 triplet (API 1.33)
+        sbufWriteU8(dst, (uint8_t)(servoConfigMutable()->ferocity_d_gain + 128));
+        sbufWriteU8(dst, (uint8_t)(servoConfigMutable()->balance_gain + 128));
         break;
 
     case MSP_SERVO_MIX_RULES:
@@ -1497,7 +1500,33 @@ static bool mspProcessOutCommand(uint8_t cmdMSP, sbuf_t *dst)
         
         sbufWriteU8(dst, servoConfigMutable()->flap_base_frequency);
         sbufWriteU8(dst, servoConfigMutable()->flap_base_amplitude + 128);
-        
+
+        // ── ONDAS v2 fields (API 1.42) ──────────────────────────────────────
+        sbufWriteU8(dst, currentPidProfile->iterm_relax_cutoff);                // offset 48
+
+        sbufWriteU8(dst, (uint8_t)(servoConfigMutable()->cadence_gain + 128));   // offset 49: signed, wire=val+128
+        sbufWriteU8(dst, (uint8_t)(servoConfigMutable()->ferocity_d_gain + 128));// offset 50: signed
+        sbufWriteU8(dst, (uint8_t)(servoConfigMutable()->balance_gain + 128));   // offset 51: signed
+        sbufWriteU8(dst, (uint8_t)(servoConfigMutable()->ferocity_p_gain));      // offset 52: unsigned 0–100
+        sbufWriteU8(dst, (uint8_t)(servoConfigMutable()->ferocity_roll_gain));   // offset 53: unsigned 0–100
+        sbufWriteU8(dst, (uint8_t)(servoConfigMutable()->ferocity_yaw_gain));    // offset 54: unsigned 0–100
+        sbufWriteU8(dst, (uint8_t)(servoConfigMutable()->warp_gain + 128));      // offset 55: signed
+        sbufWriteU8(dst, (uint8_t)(servoConfigMutable()->warp_yaw_gain + 128));  // offset 56: signed
+        sbufWriteU8(dst, (uint8_t)(servoConfigMutable()->anchor_gain));          // offset 57: unsigned 0–100
+        sbufWriteU8(dst, (uint8_t)(servoConfigMutable()->resonance_gain));       // offset 58: unsigned 0–100
+
+        // ── ONDAS Phase 2: per-pair geometry + advanced params (API 1.43) ──
+        for (int p = 0; p < MAX_ORNITHOPTER_PAIRS; p++) {
+            sbufWriteU8(dst, (uint8_t)(servoConfigMutable()->servo_mount_angle[p] + 128));   // offsets 59-62: signed ±30°
+        }
+        for (int p = 0; p < MAX_ORNITHOPTER_PAIRS; p++) {
+            sbufWriteU8(dst, (uint8_t)(servoConfigMutable()->flapping_phase_shift[p] + 128));// offsets 63-66: signed ±180°
+        }
+        sbufWriteU8(dst, (uint8_t)(servoConfigMutable()->prescience_gain));    // offset 67: unsigned 0–100
+        sbufWriteU8(dst, (uint8_t)(servoConfigMutable()->espelho_gain));       // offset 68: unsigned 0–100
+        sbufWriteU8(dst, (uint8_t)(servoConfigMutable()->saudade_gain));       // offset 69: unsigned 0–100
+        sbufWriteU8(dst, (uint8_t)(servoConfigMutable()->ssff_gain));          // offset 70: unsigned 0–100
+
         break;
     case MSP_SENSOR_CONFIG:
 #if defined(USE_ACC)
@@ -1930,10 +1959,16 @@ static mspResult_e mspProcessInCommand(uint8_t cmdMSP, sbuf_t *src)
 
     case MSP_SET_SERVO_CONFIGURATION:
 #ifdef USE_SERVOS
-        if (dataSize <= 2) {
+        if (dataSize <= 4) {
+            // glide-only or glide + ONDAS v1 triplet write
             servoConfigMutable()->ornithopter_glide_deg = sbufReadU8(src) - 128;
+            if (sbufBytesRemaining(src) >= 3) {
+                servoConfigMutable()->cadence_gain    = (int8_t)(sbufReadU8(src) - 128);
+                servoConfigMutable()->ferocity_d_gain = (int8_t)(sbufReadU8(src) - 128);
+                servoConfigMutable()->balance_gain    = (int8_t)(sbufReadU8(src) - 128);
+            }
         } else {
-            if (dataSize != 1 + 12) {
+            if (dataSize < 1 + 12) {
                 return MSP_RESULT_ERROR;
             }
             i = sbufReadU8(src);
@@ -1946,6 +1981,20 @@ static mspResult_e mspProcessInCommand(uint8_t cmdMSP, sbuf_t *src)
                 servoParamsMutable(i)->rate = sbufReadU8(src);
                 servoParamsMutable(i)->forwardFromChannel = sbufReadU8(src);
                 servoParamsMutable(i)->reversedSources = sbufReadU32(src);
+            }
+            // trailing glide + ONDAS v1 triplet (sent once after last servo)
+            if (sbufBytesRemaining(src) >= 4) {
+                servoConfigMutable()->ornithopter_glide_deg = sbufReadU8(src) - 128;
+                servoConfigMutable()->cadence_gain    = (int8_t)(sbufReadU8(src) - 128);
+                servoConfigMutable()->ferocity_d_gain = (int8_t)(sbufReadU8(src) - 128);
+                servoConfigMutable()->balance_gain    = (int8_t)(sbufReadU8(src) - 128);
+            } else if (sbufBytesRemaining(src) >= 1) {
+                servoConfigMutable()->ornithopter_glide_deg = sbufReadU8(src) - 128;
+                if (sbufBytesRemaining(src) >= 3) {
+                    servoConfigMutable()->cadence_gain    = (int8_t)(sbufReadU8(src) - 128);
+                    servoConfigMutable()->ferocity_d_gain = (int8_t)(sbufReadU8(src) - 128);
+                    servoConfigMutable()->balance_gain    = (int8_t)(sbufReadU8(src) - 128);
+                }
             }
         }
 #endif
@@ -2189,7 +2238,34 @@ static mspResult_e mspProcessInCommand(uint8_t cmdMSP, sbuf_t *src)
             sbufReadU8(src);
 #endif
             servoConfigMutable()->flap_base_frequency = sbufReadU8(src);
-            servoConfigMutable()->flap_base_amplitude = sbufReadU8(src) - 128; 
+            servoConfigMutable()->flap_base_amplitude = sbufReadU8(src) - 128;
+        }
+        if (sbufBytesRemaining(src) >= 11) {
+            // Added in MSP API 1.42 — ONDAS v2
+            currentPidProfile->iterm_relax_cutoff = sbufReadU8(src);
+            servoConfigMutable()->cadence_gain     = (int8_t)(sbufReadU8(src) - 128);
+            servoConfigMutable()->ferocity_d_gain  = (int8_t)(sbufReadU8(src) - 128);
+            servoConfigMutable()->balance_gain     = (int8_t)(sbufReadU8(src) - 128);
+            servoConfigMutable()->ferocity_p_gain  = (int8_t)sbufReadU8(src);
+            servoConfigMutable()->ferocity_roll_gain = (int8_t)sbufReadU8(src);
+            servoConfigMutable()->ferocity_yaw_gain  = (int8_t)sbufReadU8(src);
+            servoConfigMutable()->warp_gain        = (int8_t)(sbufReadU8(src) - 128);
+            servoConfigMutable()->warp_yaw_gain    = (int8_t)(sbufReadU8(src) - 128);
+            servoConfigMutable()->anchor_gain      = (int8_t)sbufReadU8(src);
+            servoConfigMutable()->resonance_gain   = (int8_t)sbufReadU8(src);
+        }
+        if (sbufBytesRemaining(src) >= 12) {
+            // Added in MSP API 1.43 — ONDAS Phase 2: per-pair geometry + advanced
+            for (int p = 0; p < MAX_ORNITHOPTER_PAIRS; p++) {
+                servoConfigMutable()->servo_mount_angle[p] = (int8_t)(sbufReadU8(src) - 128);
+            }
+            for (int p = 0; p < MAX_ORNITHOPTER_PAIRS; p++) {
+                servoConfigMutable()->flapping_phase_shift[p] = (int8_t)(sbufReadU8(src) - 128);
+            }
+            servoConfigMutable()->prescience_gain  = (int8_t)sbufReadU8(src);
+            servoConfigMutable()->espelho_gain     = (int8_t)sbufReadU8(src);
+            servoConfigMutable()->saudade_gain     = (int8_t)sbufReadU8(src);
+            servoConfigMutable()->ssff_gain        = (int8_t)sbufReadU8(src);
         }
         pidInitConfig(currentPidProfile);
 

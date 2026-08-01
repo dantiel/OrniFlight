@@ -11,14 +11,14 @@ Eight layers + Anchor, all modulating parameters of the wing oscillator synchron
 ### Architecture Overview
 
 ```
-                        ┌──────────────────────────────────────┐
-                        │           WING ODE                   │
+                        ┌─────────────────────────────────────┐
+                        │           WING ODE                  │
                         │   θ̈ = k₀·T_cmd − k₂·ω               │
-                        │   θ → sin(θ) → trapezoidal shaper    │
-                        └──────────┬───────────────────────────┘
-                                   │
-        ┌──────────────────────────┼──────────────────────────┐
-        │                          │                          │
+                        │   θ → sin(θ) → trapezoidal shaper   │
+                        └─────────┬───────────────────────────┘
+                                  │
+        ┌─────────────────────────┼──────────────────────────┐
+        │                         │                          │
    ┌────▼─────┐            ┌──────▼──────┐           ┌───────▼──────┐
    │ CADENCE  │            │  FEROCITY   │           │   BALANCE    │
    │ P→k₀     │            │ PD→dwell    │           │   I→bias     │
@@ -27,10 +27,10 @@ Eight layers + Anchor, all modulating parameters of the wing oscillator synchron
                                   │
                     ┌─────────────┼─────────────┐
                     │             │             │
-              ┌─────▼─────┐ ┌────▼────┐  ┌──────▼──────┐
-              │   WARP    │ │ ROLL P │  │   YAW P     │
-              │ roll diff │ │common  │  │  common     │
-              └───────────┘ └────────┘  └─────────────┘
+              ┌─────▼─────┐ ┌─────▼─────┐ ┌─────▼─────┐
+              │   WARP    │ │  ROLL P   │ │   YAW P   │
+              │ roll diff │ │  common   │ │  common   │
+              └───────────┘ └───────────┘ └───────────┘
 ```
 
 ### The Three Primaries

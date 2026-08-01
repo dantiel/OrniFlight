@@ -86,10 +86,10 @@ FAST_RAM_ZERO_INIT float throttle_;
 static FAST_RAM_ZERO_INIT float flappingSinusoid;
 FAST_RAM_ZERO_INIT float flappingAmplitude;
 FAST_RAM_ZERO_INIT float ornithopterFlapping;
-FAST_RAM_ZERO_INIT float shapedFlappingSinusoidLeft;
-FAST_RAM_ZERO_INIT float shapedFlappingSinusoidRight;
-static FAST_RAM_ZERO_INIT float flappingDerivativeLeft;
-static FAST_RAM_ZERO_INIT float flappingDerivativeRight;
+FAST_RAM_ZERO_INIT float shapedFlappingSinusoidLeft[MAX_ORNITHOPTER_PAIRS];
+FAST_RAM_ZERO_INIT float shapedFlappingSinusoidRight[MAX_ORNITHOPTER_PAIRS];
+static FAST_RAM_ZERO_INIT float flappingDerivativeLeft[MAX_ORNITHOPTER_PAIRS];
+static FAST_RAM_ZERO_INIT float flappingDerivativeRight[MAX_ORNITHOPTER_PAIRS];
 
 // Three-channel breathing-pause modulation — computed from PID terms each cycle,
 // consumed by calculateFlappingFromThrottle on the next iteration (one-frame lag).
@@ -259,6 +259,49 @@ void pgResetFn_pidProfiles(pidProfile_t *pidProfiles)
 {
     for (int i = 0; i < PID_PROFILE_COUNT; i++) {
         resetPidProfile(&pidProfiles[i]);
+    }
+}
+
+// ── Ornithopter PID Presets ─────────────────────────────────────────────────
+// Recommended PID values based on servo_mount_angle.
+// servo_mount_angle == 0  → parallel servos, passive‑tail yaw, low YAW gains
+// servo_mount_angle != 0  → drag‑rudder yaw, strong YAW P / low I
+void applyOrnithopterPidDefaults(pidProfile_t *pidProfile, int8_t servoMountAngle)
+{
+    resetPidProfile(pidProfile);
+
+    if (servoMountAngle == 0) {
+        // Parallel servos — yaw is passive from fixed tail.
+        // YAW PID still runs but its output won't reach the wings (sin(0)=0),
+        // so keep gains low — the loop exists only for status/logging.
+        pidProfile->pid[PID_ROLL].P  = 44;
+        pidProfile->pid[PID_ROLL].I  = 60;
+        pidProfile->pid[PID_ROLL].D  = 32;
+        pidProfile->pid[PID_ROLL].F  = 70;
+        pidProfile->pid[PID_PITCH].P = 46;
+        pidProfile->pid[PID_PITCH].I = 70;
+        pidProfile->pid[PID_PITCH].D = 38;
+        pidProfile->pid[PID_PITCH].F = 75;
+        pidProfile->pid[PID_YAW].P   = 30;
+        pidProfile->pid[PID_YAW].I   = 45;
+        pidProfile->pid[PID_YAW].D   = 0;
+        pidProfile->pid[PID_YAW].F   = 0;
+    } else {
+        // Inward‑/outward‑angled — drag‑rudder yaw.
+        // Yaw: strong P (drag‑rudder responds fast), low I (avoid
+        //       wrong‑direction thrust accumulation acting as brake).
+        pidProfile->pid[PID_ROLL].P  = 40;
+        pidProfile->pid[PID_ROLL].I  = 55;
+        pidProfile->pid[PID_ROLL].D  = 30;
+        pidProfile->pid[PID_ROLL].F  = 65;
+        pidProfile->pid[PID_PITCH].P = 44;
+        pidProfile->pid[PID_PITCH].I = 65;
+        pidProfile->pid[PID_PITCH].D = 34;
+        pidProfile->pid[PID_PITCH].F = 70;
+        pidProfile->pid[PID_YAW].P   = 65;
+        pidProfile->pid[PID_YAW].I   = 35;
+        pidProfile->pid[PID_YAW].D   = 5;
+        pidProfile->pid[PID_YAW].F   = 0;
     }
 }
 
@@ -825,11 +868,11 @@ void calculateFlappingFromThrottle(float rc_throttle) {
     if (rc_throttle > GLIDE_MODE_THRESHOLD) {
         flappingSinusoid = sinf(theta);
 
-        // Dual wave shaping: left and right wings with independent ferocity.
-        // Roll/yaw differentials shift the breathing pause depth per side.
+        // Per-pair wave shaping: each wing pair at its own phase offset.
+        // Phase-shift a dragonfly's hindwings ahead of forewings, etc.
+        // Within each pair, left/right ferocity differentials handle roll/yaw.
         //   Left  wing: base ferocity + rollDiff - yawDiff
         //   Right wing: base ferocity - rollDiff + yawDiff
-        // Positive roll error → right wing sharper → roll-right thrust impulse.
         float leftMod  = flappingFerocityModulation
                        + flappingFerocityDifferentialRoll
                        - flappingFerocityDifferentialYaw;
@@ -837,20 +880,26 @@ void calculateFlappingFromThrottle(float rc_throttle) {
                        - flappingFerocityDifferentialRoll
                        + flappingFerocityDifferentialYaw;
 
-        applyFerocityWaveShaping(theta, leftMod,  flappingAsymmetryBias,
-                                 &shapedFlappingSinusoidLeft, &flappingDerivativeLeft);
-        applyFerocityWaveShaping(theta, rightMod, flappingAsymmetryBias,
-                                 &shapedFlappingSinusoidRight, &flappingDerivativeRight);
+        float legacySum = 0.0f;
+        for (int p = 0; p < MAX_ORNITHOPTER_PAIRS; p++) {
+            float thetaP = theta + (float)servoConfig()->flapping_phase_shift[p] * RAD;
+            applyFerocityWaveShaping(thetaP, leftMod,  flappingAsymmetryBias,
+                                     &shapedFlappingSinusoidLeft[p], &flappingDerivativeLeft[p]);
+            applyFerocityWaveShaping(thetaP, rightMod, flappingAsymmetryBias,
+                                     &shapedFlappingSinusoidRight[p], &flappingDerivativeRight[p]);
+            legacySum += shapedFlappingSinusoidLeft[p] + shapedFlappingSinusoidRight[p];
+        }
 
-        // Legacy: average for backward compat
-        ornithopterFlapping = (shapedFlappingSinusoidLeft + shapedFlappingSinusoidRight)
-                            * 0.5f * flappingAmplitude;
+        // Legacy: average over all pairs for backward compat
+        ornithopterFlapping = legacySum * (0.5f / (float)MAX_ORNITHOPTER_PAIRS) * flappingAmplitude;
     }
     else {
-        shapedFlappingSinusoidLeft = 0.0f;
-        shapedFlappingSinusoidRight = 0.0f;
-        flappingDerivativeLeft = 0.0f;
-        flappingDerivativeRight = 0.0f;
+        for (int p = 0; p < MAX_ORNITHOPTER_PAIRS; p++) {
+            shapedFlappingSinusoidLeft[p] = 0.0f;
+            shapedFlappingSinusoidRight[p] = 0.0f;
+            flappingDerivativeLeft[p] = 0.0f;
+            flappingDerivativeRight[p] = 0.0f;
+        }
         ornithopterFlapping = 0.0f;
     }
 }
@@ -865,7 +914,11 @@ void adjustAerolasticPIDGains(float errorRate, float* Kp, float* Ki, float* Kd) 
     float glide_aeroelasticity = servoConfig()->aeroelastic_glide_coefficient;
     float flap_aeroelasticity = servoConfig()->aeroelastic_flap_coefficient;
     float aeroelastic_glide = (errorRate < 0 ? -1 : 1) * glide_aeroelasticity;
-    float aeroelastic_flap = (flappingDerivativeLeft + flappingDerivativeRight) * 0.5f * flap_aeroelasticity * 0.001f;
+    float derivSum = 0.0f;
+    for (int p = 0; p < MAX_ORNITHOPTER_PAIRS; p++) {
+        derivSum += flappingDerivativeLeft[p] + flappingDerivativeRight[p];
+    }
+    float aeroelastic_flap = derivSum * (0.5f / (float)MAX_ORNITHOPTER_PAIRS) * flap_aeroelasticity * 0.001f;
     
     *Kp *= 1 + (aeroelastic_glide * aerolastic_Kp_scaling - aeroelastic_flap * aerolastic_Kp_scaling);
     *Ki *= 1 + (aeroelastic_glide * aerolastic_Ki_scaling - aeroelastic_flap * aerolastic_Ki_scaling);

@@ -3879,6 +3879,27 @@ static void cliDefaults(char *cmdline)
     }
 }
 
+#ifdef USE_SERVOS
+static void cliOrnithopterDefaults(char *cmdline)
+{
+    UNUSED(cmdline);
+    int8_t mountAngle = servoConfig()->servo_mount_angle[0];
+    pidProfile_t *profile = pidProfilesMutable(getCurrentPidProfileIndex());
+    applyOrnithopterPidDefaults(profile, mountAngle);
+    cliPrintHashLine("ornithopter PID defaults applied");
+    cliPrintf("servo_mount_angle = %d deg (%s)\r\n", mountAngle,
+        mountAngle == 0 ? "parallel — passive tail yaw" :
+        mountAngle > 0  ? "inward-angled — drag-rudder yaw" :
+                          "outward-angled — reversed drag-rudder");
+    cliPrintf("ROLL  P:%d I:%d D:%d F:%d\r\n",
+        profile->pid[PID_ROLL].P, profile->pid[PID_ROLL].I, profile->pid[PID_ROLL].D, profile->pid[PID_ROLL].F);
+    cliPrintf("PITCH P:%d I:%d D:%d F:%d\r\n",
+        profile->pid[PID_PITCH].P, profile->pid[PID_PITCH].I, profile->pid[PID_PITCH].D, profile->pid[PID_PITCH].F);
+    cliPrintf("YAW   P:%d I:%d D:%d F:%d\r\n",
+        profile->pid[PID_YAW].P, profile->pid[PID_YAW].I, profile->pid[PID_YAW].D, profile->pid[PID_YAW].F);
+}
+#endif
+
 void cliPrintVarDefault(const clivalue_t *value)
 {
     const pgRegistry_t *pg = pgFind(value->pgn);
@@ -5675,6 +5696,9 @@ const clicmd_t cmdTable[] = {
         CLI_COMMAND_DEF("color", "configure colors", NULL, cliColor),
 #endif
     CLI_COMMAND_DEF("defaults", "reset to defaults and reboot", "[nosave]", cliDefaults),
+#ifdef USE_SERVOS
+    CLI_COMMAND_DEF("ornithopter_defaults", "apply ornithopter PID presets for current type", NULL, cliOrnithopterDefaults),
+#endif
     CLI_COMMAND_DEF("diff", "list configuration changes from default", "[master|profile|rates|hardware|all] {defaults|bare}", cliDiff),
 #ifdef USE_OSD
     CLI_COMMAND_DEF("display_name", "display name of craft", NULL, cliDisplayName),

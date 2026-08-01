@@ -42,12 +42,20 @@ enum {
     INPUT_GIMBAL_ROLL,
     INPUT_STABILIZED_FLAPPING_0, // 14
     INPUT_STABILIZED_FLAPPING_1,
-    INPUT_STABILIZED_FLAPPING_2, 
+    INPUT_STABILIZED_FLAPPING_2,
     INPUT_STABILIZED_FLAPPING_3,
+    INPUT_STABILIZED_FLAPPING_4,
+    INPUT_STABILIZED_FLAPPING_5,
+    INPUT_STABILIZED_FLAPPING_6,
+    INPUT_STABILIZED_FLAPPING_7,
     INPUT_SOURCE_COUNT
 };
 
-// target servo channels
+// ── Servo index definitions ─────────────────────────────────────────────────
+// Per-mixer-mode servo channel indices.  Values may overlap across mixer
+// modes (only one mode is active at a time).
+#define MAX_SERVO_RULES 16
+#define COUNT_SERVO_RULES(x) (sizeof(x) / sizeof(x[0]))
 typedef enum {
     SERVO_GIMBAL_PITCH = 0,
     SERVO_GIMBAL_ROLL = 1,
@@ -78,8 +86,14 @@ typedef enum {
     SERVO_ORNITHOPTER_2 = 1,
     SERVO_ORNITHOPTER_3 = 2,
     SERVO_ORNITHOPTER_4 = 3,
+    SERVO_ORNITHOPTER_5 = 4,
+    SERVO_ORNITHOPTER_6 = 5,
+    SERVO_ORNITHOPTER_7 = 6,
+    SERVO_ORNITHOPTER_8 = 7,
 
 } servoIndex_e; // FIXME rename to servoChannel_e
+
+#define MAX_ORNITHOPTER_PAIRS 4
 
 #define SERVO_PLANE_INDEX_MIN SERVO_FLAPS
 #define SERVO_PLANE_INDEX_MAX SERVO_THROTTLE
@@ -91,7 +105,7 @@ typedef enum {
 #define SERVO_SINGLECOPTER_INDEX_MAX SERVO_SINGLECOPTER_4
 
 #define SERVO_ORNITHOPTER_INDEX_MIN SERVO_ORNITHOPTER_1
-#define SERVO_ORNITHOPTER_INDEX_MAX SERVO_ORNITHOPTER_4
+#define SERVO_ORNITHOPTER_INDEX_MAX SERVO_ORNITHOPTER_8
 
 #define SERVO_FLAPPERONS_MIN SERVO_FLAPPERON_1
 #define SERVO_FLAPPERONS_MAX SERVO_FLAPPERON_2
@@ -138,6 +152,8 @@ typedef struct servoConfig_s {
     uint8_t tri_unarmed_servo;              // send tail servo correction pulses even when unarmed
     uint8_t channel_forwarding_start_channel;
 
+    int8_t servo_mount_angle[MAX_ORNITHOPTER_PAIRS]; // per-pair incidence °: 0=parallel, +=inward, -=outward, max ±30
+    int8_t flapping_phase_shift[MAX_ORNITHOPTER_PAIRS]; // per-pair phase offset °: -180..+180, 0=all wings in phase
     uint8_t flap_base_frequency;
     int8_t flap_base_amplitude;
     int8_t ornithopter_glide_deg;

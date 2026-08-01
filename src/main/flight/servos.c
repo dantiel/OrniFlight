@@ -65,6 +65,9 @@ void pgResetFn_servoConfig(servoConfig_t *servoConfig) {
     servoConfig->servo_lowpass_freq = 0;
     servoConfig->channel_forwarding_start_channel = AUX1;
     
+    servoConfig->servo_mount_angle[0] = 20; // pair 0: mild inward — drag‑rudder yaw
+    // pairs 1‑3 default to 0° (parallel — passive tail yaw)
+    // flapping_phase_shift defaults to 0° for all pairs (all wings flap in phase)
     servoConfig->flap_base_frequency = 12;
     servoConfig->flap_base_amplitude = 60;
     servoConfig->ornithopter_glide_deg = -30;
@@ -128,13 +131,57 @@ static const servoMixer_t servoMixerGimbal[] = {
 };
 
 
-static const servoMixer_t servoMixerOrni[] = {
-    { SERVO_ORNITHOPTER_1, INPUT_STABILIZED_ROLL,       100, 0, 0, 100, 0 },
-    { SERVO_ORNITHOPTER_1, INPUT_STABILIZED_PITCH,      100, 0, 0, 100, 0 },
-    { SERVO_ORNITHOPTER_1, INPUT_STABILIZED_FLAPPING_0, 100, 0, 0, 100, 0 },
-    { SERVO_ORNITHOPTER_2, INPUT_STABILIZED_YAW,        100, 0, 0, 100, 0 },
-    { SERVO_ORNITHOPTER_2, INPUT_STABILIZED_PITCH,      100, 0, 0, 100, 0 },
-    { SERVO_ORNITHOPTER_2, INPUT_STABILIZED_FLAPPING_1, 100, 0, 0, 100, 0 },
+// ── Ornithopter mixer table ──────────────────────────────────────────────────
+// Multi‑pair table (up to 4 pairs = 8 servos).  YAW and PITCH rates are scaled
+// at runtime by sin/cos(servo_mount_angle[pair]), so the same table serves any
+// incidence geometry.  Each pair gets its own FLAPPING input (0–7) for per‑pair
+// phase shifting:
+//   Pair 0 (servos 1,2): FLAPPING_0, FLAPPING_1 → left/right front wings
+//   Pair 1 (servos 3,4): FLAPPING_2, FLAPPING_3 → left/right hind wings
+//   Pair 2 (servos 5,6): FLAPPING_4, FLAPPING_5 → future
+//   Pair 3 (servos 7,8): FLAPPING_6, FLAPPING_7 → future
+// Convention: odd-indexed servos = LEFT wing, even-indexed = RIGHT wing.
+static const servoMixer_t servoMixerOrnithopter[] = {
+    // Pair 0: left wing servo
+    { SERVO_ORNITHOPTER_1, INPUT_STABILIZED_ROLL,        100, 0, 0, 100, 0 },
+    { SERVO_ORNITHOPTER_1, INPUT_STABILIZED_PITCH,      -100, 0, 0, 100, 0 },
+    { SERVO_ORNITHOPTER_1, INPUT_STABILIZED_YAW,        -100, 0, 0, 100, 0 },
+    { SERVO_ORNITHOPTER_1, INPUT_STABILIZED_FLAPPING_0,  100, 0, 0, 100, 0 },
+    // Pair 0: right wing servo
+    { SERVO_ORNITHOPTER_2, INPUT_STABILIZED_ROLL,       -100, 0, 0, 100, 0 },
+    { SERVO_ORNITHOPTER_2, INPUT_STABILIZED_PITCH,      -100, 0, 0, 100, 0 },
+    { SERVO_ORNITHOPTER_2, INPUT_STABILIZED_YAW,         100, 0, 0, 100, 0 },
+    { SERVO_ORNITHOPTER_2, INPUT_STABILIZED_FLAPPING_1,  100, 0, 0, 100, 0 },
+    // Pair 1: left wing servo
+    { SERVO_ORNITHOPTER_3, INPUT_STABILIZED_ROLL,        100, 0, 0, 100, 0 },
+    { SERVO_ORNITHOPTER_3, INPUT_STABILIZED_PITCH,      -100, 0, 0, 100, 0 },
+    { SERVO_ORNITHOPTER_3, INPUT_STABILIZED_YAW,        -100, 0, 0, 100, 0 },
+    { SERVO_ORNITHOPTER_3, INPUT_STABILIZED_FLAPPING_2,  100, 0, 0, 100, 0 },
+    // Pair 1: right wing servo
+    { SERVO_ORNITHOPTER_4, INPUT_STABILIZED_ROLL,       -100, 0, 0, 100, 0 },
+    { SERVO_ORNITHOPTER_4, INPUT_STABILIZED_PITCH,      -100, 0, 0, 100, 0 },
+    { SERVO_ORNITHOPTER_4, INPUT_STABILIZED_YAW,         100, 0, 0, 100, 0 },
+    { SERVO_ORNITHOPTER_4, INPUT_STABILIZED_FLAPPING_3,  100, 0, 0, 100, 0 },
+    // Pair 2: left wing servo
+    { SERVO_ORNITHOPTER_5, INPUT_STABILIZED_ROLL,        100, 0, 0, 100, 0 },
+    { SERVO_ORNITHOPTER_5, INPUT_STABILIZED_PITCH,      -100, 0, 0, 100, 0 },
+    { SERVO_ORNITHOPTER_5, INPUT_STABILIZED_YAW,        -100, 0, 0, 100, 0 },
+    { SERVO_ORNITHOPTER_5, INPUT_STABILIZED_FLAPPING_4,  100, 0, 0, 100, 0 },
+    // Pair 2: right wing servo
+    { SERVO_ORNITHOPTER_6, INPUT_STABILIZED_ROLL,       -100, 0, 0, 100, 0 },
+    { SERVO_ORNITHOPTER_6, INPUT_STABILIZED_PITCH,      -100, 0, 0, 100, 0 },
+    { SERVO_ORNITHOPTER_6, INPUT_STABILIZED_YAW,         100, 0, 0, 100, 0 },
+    { SERVO_ORNITHOPTER_6, INPUT_STABILIZED_FLAPPING_5,  100, 0, 0, 100, 0 },
+    // Pair 3: left wing servo
+    { SERVO_ORNITHOPTER_7, INPUT_STABILIZED_ROLL,        100, 0, 0, 100, 0 },
+    { SERVO_ORNITHOPTER_7, INPUT_STABILIZED_PITCH,      -100, 0, 0, 100, 0 },
+    { SERVO_ORNITHOPTER_7, INPUT_STABILIZED_YAW,        -100, 0, 0, 100, 0 },
+    { SERVO_ORNITHOPTER_7, INPUT_STABILIZED_FLAPPING_6,  100, 0, 0, 100, 0 },
+    // Pair 3: right wing servo
+    { SERVO_ORNITHOPTER_8, INPUT_STABILIZED_ROLL,       -100, 0, 0, 100, 0 },
+    { SERVO_ORNITHOPTER_8, INPUT_STABILIZED_PITCH,      -100, 0, 0, 100, 0 },
+    { SERVO_ORNITHOPTER_8, INPUT_STABILIZED_YAW,         100, 0, 0, 100, 0 },
+    { SERVO_ORNITHOPTER_8, INPUT_STABILIZED_FLAPPING_7,  100, 0, 0, 100, 0 },
 };
 
 /*
@@ -205,7 +252,7 @@ const mixerRules_t servoMixers[] = {
     { 0, NULL },                // MULTITYPE_CUSTOM_PLANE
     { 0, NULL },                // MULTITYPE_CUSTOM_TRI
     { 0, NULL },
-    { COUNT_SERVO_RULES(servoMixerOrni), servoMixerOrni } // MIXER_SERVO_ORNITHOPTER
+    { COUNT_SERVO_RULES(servoMixerOrnithopter), servoMixerOrnithopter } // MIXER_SERVO_ORNITHOPTER
 };
 
 int16_t determineServoMiddleOrForwardFromChannel(servoIndex_e servoIndex)
@@ -268,10 +315,19 @@ void loadCustomServoMixer(void)
 void servoConfigureOutput(void)
 {
     if (useServo) {
-        servoRuleCount = servoMixers[currentMixerMode].servoRuleCount;
-        if (servoMixers[currentMixerMode].rule) {
+        const servoMixer_t *rules;
+        uint8_t ruleCount;
+        if (currentMixerMode == MIXER_SERVO_ORNITHOPTER) {
+            rules     = servoMixerOrnithopter;
+            ruleCount = COUNT_SERVO_RULES(servoMixerOrnithopter);
+        } else {
+            rules     = servoMixers[currentMixerMode].rule;
+            ruleCount = servoMixers[currentMixerMode].servoRuleCount;
+        }
+        servoRuleCount = ruleCount;
+        if (rules) {
             for (int i = 0; i < servoRuleCount; i++)
-                currentServoMixer[i] = servoMixers[currentMixerMode].rule[i];
+                currentServoMixer[i] = rules[i];
         }
     }
 
@@ -282,7 +338,7 @@ void servoConfigureOutput(void)
         currentMixerMode == MIXER_SERVO_ORNITHOPTER
     ) {
         ENABLE_STATE(FIXED_WING);
-        if (currentMixerMode == MIXER_CUSTOM_AIRPLANE ||  
+        if (currentMixerMode == MIXER_CUSTOM_AIRPLANE ||
           currentMixerMode == MIXER_SERVO_ORNITHOPTER) {
             loadCustomServoMixer();
         }
@@ -290,6 +346,28 @@ void servoConfigureOutput(void)
         DISABLE_STATE(FIXED_WING);
         if (currentMixerMode == MIXER_CUSTOM_TRI) {
             loadCustomServoMixer();
+        }
+    }
+
+    // ── Per‑pair servo‑mount‑angle coupling (applied LAST) ──
+    // Each servo pair (left+right) may have a different incidence angle.
+    // Scale YAW by sin(angle) and PITCH by cos(angle) for each rule's pair.
+    // 0°=parallel (YAW→0), ±30°=full drag‑rudder.
+    if (useServo && currentMixerMode == MIXER_SERVO_ORNITHOPTER) {
+        for (int i = 0; i < servoRuleCount; i++) {
+            uint8_t ch = currentServoMixer[i].targetChannel;
+            // only scale ornithopter servo channels
+            if (ch > SERVO_ORNITHOPTER_8)
+                continue;
+            int pair = (ch - SERVO_ORNITHOPTER_1) / 2;
+            if (pair >= MAX_ORNITHOPTER_PAIRS)
+                continue;
+            float a = servoConfig()->servo_mount_angle[pair] * RAD;
+            if (currentServoMixer[i].inputSource == INPUT_STABILIZED_YAW) {
+                currentServoMixer[i].rate = (int16_t)lrintf(currentServoMixer[i].rate * sin_approx(a));
+            } else if (currentServoMixer[i].inputSource == INPUT_STABILIZED_PITCH) {
+                currentServoMixer[i].rate = (int16_t)lrintf(currentServoMixer[i].rate * cos_approx(a));
+            }
         }
     }
 }
@@ -303,17 +381,17 @@ void servoConfigureOutput(void)
 void applyFlappingToServos(int16_t *input) {
   // enable glide mode when throttle is below threshold
   if (rcData[THROTTLE] > GLIDE_MODE_THRESHOLD) {
-    float flappingLeft  = shapedFlappingSinusoidLeft  * flappingAmplitude;
-    float flappingRight = shapedFlappingSinusoidRight * flappingAmplitude;
-    input[INPUT_STABILIZED_FLAPPING_0] = (flappingLeft  / 100) * (motor[0] - 1000);
-    input[INPUT_STABILIZED_FLAPPING_1] = (flappingLeft  / 100) * (motor[1] - 1000);
-    input[INPUT_STABILIZED_FLAPPING_2] = (flappingRight / 100) * (motor[2] - 1000);
-    input[INPUT_STABILIZED_FLAPPING_3] = (flappingRight / 100) * (motor[3] - 1000);
+    for (int p = 0; p < MAX_ORNITHOPTER_PAIRS; p++) {
+      float flappingL = shapedFlappingSinusoidLeft[p]  * flappingAmplitude;
+      float flappingR = shapedFlappingSinusoidRight[p] * flappingAmplitude;
+      input[INPUT_STABILIZED_FLAPPING_0 + p*2]     = (flappingL / 100) * (motor[p*2]     - 1000);
+      input[INPUT_STABILIZED_FLAPPING_0 + p*2 + 1] = (flappingR / 100) * (motor[p*2 + 1] - 1000);
+    }
   } else {
-    input[INPUT_STABILIZED_FLAPPING_0] = servoConfig()->ornithopter_glide_deg * 5;
-    input[INPUT_STABILIZED_FLAPPING_1] = servoConfig()->ornithopter_glide_deg * 5;
-    input[INPUT_STABILIZED_FLAPPING_2] = servoConfig()->ornithopter_glide_deg * 5;
-    input[INPUT_STABILIZED_FLAPPING_3] = servoConfig()->ornithopter_glide_deg * 5;
+    for (int p = 0; p < MAX_ORNITHOPTER_PAIRS; p++) {
+      input[INPUT_STABILIZED_FLAPPING_0 + p*2]     = servoConfig()->ornithopter_glide_deg * 5;
+      input[INPUT_STABILIZED_FLAPPING_0 + p*2 + 1] = servoConfig()->ornithopter_glide_deg * 5;
+    }
   }
 }
 
@@ -325,8 +403,12 @@ void servoMixerLoadMix(int index)
     for (int i = 0; i < MAX_SERVO_RULES; i++) {
         customServoMixersMutable(i)->targetChannel = customServoMixersMutable(i)->inputSource = customServoMixersMutable(i)->rate = customServoMixersMutable(i)->box = 0;
     }
-    for (int i = 0; i < servoMixers[index].servoRuleCount; i++) {
-        *customServoMixersMutable(i) = servoMixers[index].rule[i];
+
+    const servoMixer_t *rules     = servoMixers[index].rule;
+    uint8_t              ruleCount = servoMixers[index].servoRuleCount;
+
+    for (int i = 0; i < ruleCount; i++) {
+        *customServoMixersMutable(i) = rules[i];
     }
 }
 
