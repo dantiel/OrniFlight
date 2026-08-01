@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='en'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>First Flash — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,600;0,700;0,800;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<nav>
+<a class='home-link' href='../' title='OrniFlight'>◇</a>
+<a href='../#essence'>Essence</a>
+<a href='../wiki/'>Wiki</a>
+<a href='../docs/'>Docs</a>
+<a href='../tutorials/'>Tutorials</a>
+<div class='lang-switch'>
+<a class='active' href='.'>EN</a>
+<a class='' href='../de/'>DE</a>
+</div>
+</nav>
+<main class='content-page'>
+<article>
+<h1 id="first-flash">First Flash</h1>
+
+<blockquote>
+  <p><em>Getting OrniFlight onto your flight controller — step by step.</em></p>
+</blockquote>
+
+<h2 id="what-you-need">What You Need</h2>
+
+<ul>
+  <li>STM32F4-based flight controller (OMNIBUSF4, TINYFISH, MATEKF405, etc.)</li>
+  <li>USB cable</li>
+  <li><a href="http://dfu-util.sourceforge.net/">dfu-util</a> or STM32CubeProgrammer</li>
+  <li>OrniFlight <code>.hex</code> file from the <a href="https://github.com/dantiel/OrniFlight/releases">releases page</a></li>
+</ul>
+
+<h2 id="step-1-enter-dfu-mode">Step 1: Enter DFU Mode</h2>
+
+<ol>
+  <li><strong>Hold the BOOT button</strong> on your flight controller</li>
+  <li><strong>Plug in USB</strong> while holding the button</li>
+  <li><strong>Release</strong> after 2 seconds</li>
+</ol>
+
+<p>Verify on macOS/Linux:</p>
+
+<p><code>
+dfu-util -l
+</code></p>
+
+<p>Should show <code>Found DFU: [0483:df11]</code></p>
+
+<h2 id="step-2-flash">Step 2: Flash</h2>
+
+<p><code>
+dfu-util -a 0 -D obj/orniflight_0.4.6_OMNIBUSF4.hex
+</code></p>
+
+<h2 id="step-3-first-boot">Step 3: First Boot</h2>
+
+<ol>
+  <li>Unplug USB</li>
+  <li>Plug USB back in (don’t hold BOOT)</li>
+  <li>Connect via OrniFlight Configurator</li>
+</ol>
+
+<h2 id="step-4-basic-configuration">Step 4: Basic Configuration</h2>
+
+<p>In the Configurator:</p>
+
+<ol>
+  <li><strong>Ports tab</strong>: Configure UART for your receiver (Serial RX)</li>
+  <li><strong>Configuration tab</strong>: Select receiver protocol (CRSF recommended)</li>
+  <li><strong>Modes tab</strong>: Set up ARM, GLIDE/INDEPENDENT, and PROFILE switches</li>
+  <li><strong>Advanced → ONDAS tab</strong>: Review defaults, tune Cadence first</li>
+</ol>
+
+<h2 id="troubleshooting">Troubleshooting</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Problem</th>
+      <th>Fix</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>DFU device not found</td>
+      <td>Try different USB cable, check BOOT button</td>
+    </tr>
+    <tr>
+      <td>Flash fails</td>
+      <td>Check dfu-util installation, USB permissions</td>
+    </tr>
+    <tr>
+      <td>No boot after flash</td>
+      <td>Re-flash, verify hex matches your target</td>
+    </tr>
+    <tr>
+      <td>Configurator won’t connect</td>
+      <td>Check COM port and baud rate</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<p><em>Next: <a href="basic_setup.html">Basic Setup</a> →</em></p>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../wiki/'>Wiki</a>
+◇
+<a href='../tutorials/'>Tutorials</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Fly Natural. Control Precise.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

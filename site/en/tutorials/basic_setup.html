@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='en'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>Basic Setup — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,600;0,700;0,800;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<nav>
+<a class='home-link' href='../' title='OrniFlight'>◇</a>
+<a href='../#essence'>Essence</a>
+<a href='../wiki/'>Wiki</a>
+<a href='../docs/'>Docs</a>
+<a href='../tutorials/'>Tutorials</a>
+<div class='lang-switch'>
+<a class='active' href='.'>EN</a>
+<a class='' href='../de/'>DE</a>
+</div>
+</nav>
+<main class='content-page'>
+<article>
+<h1 id="basic-setup">Basic Setup</h1>
+
+<blockquote>
+  <p><em>Configure your ornithopter for first flight.</em></p>
+</blockquote>
+
+<h2 id="pre-flight-checklist">Pre-Flight Checklist</h2>
+
+<p>Before anything else:</p>
+
+<ul>
+  <li>[ ] Flight controller flashed with OrniFlight</li>
+  <li>[ ] Receiver bound to transmitter</li>
+  <li>[ ] Servos connected to correct PWM outputs</li>
+  <li>[ ] Battery connected (wings secured!)</li>
+</ul>
+
+<h2 id="receiver-setup">Receiver Setup</h2>
+
+<h3 id="crsf-recommended">CRSF (Recommended)</h3>
+
+<ol>
+  <li><strong>Ports tab</strong>: Set UART (e.g. UART1) to “Serial RX”</li>
+  <li><strong>Configuration tab</strong>: Receiver Mode = “Serial-based receiver”, Provider = “CRSF”</li>
+  <li>Power cycle, verify channel inputs move in Receiver tab</li>
+</ol>
+
+<h3 id="sbus--other">SBUS / Other</h3>
+
+<p>Same process — select appropriate protocol in Configuration tab.</p>
+
+<h2 id="servo-mapping">Servo Mapping</h2>
+
+<p>In the <strong>Servos tab</strong>:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Servo</th>
+      <th>Function</th>
+      <th>Default Rate</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Servo 0</td>
+      <td>Left Wing</td>
+      <td>250 Hz</td>
+    </tr>
+    <tr>
+      <td>Servo 1</td>
+      <td>Right Wing</td>
+      <td>250 Hz</td>
+    </tr>
+    <tr>
+      <td>Servo 2</td>
+      <td>Crest/Rudder</td>
+      <td>50 Hz</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>Adjust min/max/middle to match your servo’s range. Test with “Override” to verify direction.</p>
+
+<h2 id="flight-mode-selection">Flight Mode Selection</h2>
+
+<p>In the <strong>Modes tab</strong>:</p>
+
+<ol>
+  <li><strong>ARM</strong>: Assign to a switch (safety!)</li>
+  <li><strong>ORNITHOPTER INDEPENDENT</strong> or <strong>ORNITHOPTER GLIDE</strong>: Choose your primary flight mode</li>
+  <li><strong>ORNITHOPTER PROFILE</strong>: Optional — assign for in-flight profile switching</li>
+</ol>
+
+<h2 id="ondas-first-tuning">ONDAS First Tuning</h2>
+
+<p>Go to <strong>Advanced → ONDAS sub-tab</strong>:</p>
+
+<ol>
+  <li><strong>Cadence Gain</strong>: Start at 50 (mid). This is the most important parameter.</li>
+  <li><strong>Ferocity D Gain</strong>: Start at 30. This is your primary stabilization.</li>
+  <li><strong>Ferocity P Gain</strong>: Start at 20 for roll/pitch, 0 for yaw.</li>
+  <li><strong>Balance Gain</strong>: 0 (centered).</li>
+</ol>
+
+<p>Hook up a battery, <strong>secure the ornithopter firmly</strong>, and ARM. Observe servo movement — it should be smooth, sinusoidal flapping.</p>
+
+<h2 id="first-flight">First Flight</h2>
+
+<ol>
+  <li>Start with a gentle toss into wind</li>
+  <li>Use GLIDE mode for natural soaring feel</li>
+  <li>Use INDEPENDENT mode when you want direct frequency control</li>
+  <li>Land, adjust ONDAS, repeat</li>
+</ol>
+
+<hr />
+
+<p><em>Next: <a href="ondas_tuning.html">ONDAS Tuning Guide</a> →</em></p>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../wiki/'>Wiki</a>
+◇
+<a href='../tutorials/'>Tutorials</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Fly Natural. Control Precise.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

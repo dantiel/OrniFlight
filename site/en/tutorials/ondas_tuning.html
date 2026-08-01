@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='en'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>ONDAS Tuning Guide — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,600;0,700;0,800;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<nav>
+<a class='home-link' href='../' title='OrniFlight'>◇</a>
+<a href='../#essence'>Essence</a>
+<a href='../wiki/'>Wiki</a>
+<a href='../docs/'>Docs</a>
+<a href='../tutorials/'>Tutorials</a>
+<div class='lang-switch'>
+<a class='active' href='.'>EN</a>
+<a class='' href='../de/'>DE</a>
+</div>
+</nav>
+<main class='content-page'>
+<article>
+<h1 id="ondas-tuning-guide">ONDAS Tuning Guide</h1>
+
+<blockquote>
+  <p><em>The practical companion to ONDAS Theory — how to tune each parameter by feel.</em></p>
+</blockquote>
+
+<h2 id="tuning-order">Tuning Order</h2>
+
+<p>ONDAS parameters are interdependent. Tune them in this sequence:</p>
+
+<p><code>
+1. Cadence    →  timing
+2. Ferocity D →  primary stabilization
+3. Ferocity P →  response crispness
+4. Balance    →  upstroke/downstroke bias
+5. Warp       →  modulation width
+6. Anchor     →  dry/wet mix
+7. Resonance  →  cycle-to-cycle memory
+8. Phase 2    →  advanced (prescience, espelho, saudade, SSFF)
+</code></p>
+
+<h2 id="step-by-step">Step by Step</h2>
+
+<h3 id="cadence--find-your-phase-window">1. Cadence — Find Your Phase Window</h3>
+
+<p><strong>Goal</strong>: Place modulation where your wing has the most bite.</p>
+
+<p><strong>Method</strong>: 
+- Start at 50
+- Increase to 70 — does roll response get weaker?
+- Decrease to 30 — does roll response get stronger?
+- The “strongest” point is where your wing’s power stroke peaks</p>
+
+<p><strong>Signs of too high</strong>: Mushy response, craft feels “delayed”
+<strong>Signs of too low</strong>: Jerky response, overshoot on roll</p>
+
+<h3 id="ferocity-d--steady-the-craft">2. Ferocity D — Steady the Craft</h3>
+
+<p><strong>Goal</strong>: Primary stabilization without oscillation.</p>
+
+<p><strong>Method</strong>:
+- Start at 20
+- Hover or steady forward flight
+- Increase until you feel the craft “stiffen”
+- Back off 5 points from where you first notice oscillation</p>
+
+<p><strong>Signs of too high</strong>: Fine vibration, motor-like buzz in servos
+<strong>Signs of too low</strong>: Craft drifts, feels loose</p>
+
+<h3 id="ferocity-p--crispness">3. Ferocity P — Crispness</h3>
+
+<p><strong>Goal</strong>: Responsive but not twitchy.</p>
+
+<p><strong>Method</strong>:
+- Start at 15
+- Bump the roll stick — does the craft immediately bite?
+- Increase until stick response is crisp
+- Back off if you see overshoot</p>
+
+<p><strong>Signs of too high</strong>: Ringing after stick input, bounce-back
+<strong>Signs of too low</strong>: Mushy, delayed response</p>
+
+<h3 id="balance--asymmetry-tuning">4. Balance — Asymmetry Tuning</h3>
+
+<p><strong>Goal</strong>: Equal authority in both directions.</p>
+
+<p><strong>Method</strong>:
+- Fly straight and level
+- Roll left, note response speed
+- Roll right, note response speed
+- Adjust balance to equalize them</p>
+
+<h3 id="warp-anchor-resonance">5–7. Warp, Anchor, Resonance</h3>
+
+<p>Fine-tuning parameters. Only adjust after 1-4 are solid.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Param</th>
+      <th>Start</th>
+      <th>Adjust When</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Warp</td>
+      <td>50</td>
+      <td>Modulation feels too spread out or too peaky</td>
+    </tr>
+    <tr>
+      <td>Anchor</td>
+      <td>70</td>
+      <td>Want more/less raw PID mixed in</td>
+    </tr>
+    <tr>
+      <td>Resonance</td>
+      <td>30</td>
+      <td>Hovering unstable, or forward flight feels ringy</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="phase-2--advanced">8. Phase 2 — Advanced</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>Param</th>
+      <th>Effect</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Prescience</td>
+      <td>Timing advance — higher = modulation leads phase more</td>
+    </tr>
+    <tr>
+      <td>Espelho</td>
+      <td>Differential coupling — tighter roll, may reduce efficiency</td>
+    </tr>
+    <tr>
+      <td>Saudade</td>
+      <td>Stroke memory — smoother but less responsive</td>
+    </tr>
+    <tr>
+      <td>SSFF</td>
+      <td>Direct gyro→wave injection — start at 10</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<p><em>The goal is a craft that flies like it wants to be in the air. If you’re fighting it, back off and retune from Cadence up.</em></p>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../wiki/'>Wiki</a>
+◇
+<a href='../tutorials/'>Tutorials</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Fly Natural. Control Precise.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

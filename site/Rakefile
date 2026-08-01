@@ -1,0 +1,229 @@
+# encoding: utf-8
+require "rake/clean"
+require "json"
+require "haml"
+require "kramdown"
+
+LANGS = %w[en de]
+SUBFOLDERS = LANGS.flat_map { |l| ["#{l}", "#{l}/wiki", "#{l}/docs", "#{l}/tutorials"] }
+
+CLOBBER.include(
+  "index.html",
+  *LANGS.map { |d| "#{d}/index.html" },
+  *LANGS.flat_map { |l| ["#{l}/wiki/index.html", "#{l}/docs/index.html", "#{l}/tutorials/index.html"] },
+  "assets/css/style.css"
+)
+
+# ── Landing Page: HAML + JSON i18n ────────────────────────────
+
+def build_landing(lang)
+  vars = JSON.parse(File.read("_lang/#{lang}.json", encoding: "UTF-8"))
+  template = File.read("index.haml", encoding: "UTF-8")
+  engine = Haml::Template.new { template }
+  output = engine.render(Object.new, vars)
+
+  out_path = lang == "en" ? "index.html" : "#{lang}/index.html"
+  File.write(out_path, output, encoding: "UTF-8")
+  puts "  Built #{out_path} (#{lang.upcase})"
+end
+
+desc "Build landing pages (#{LANGS.map(&:upcase).join(' + ')})"
+task :haml do
+  LANGS.each { |lang| build_landing(lang) }
+end
+
+# ── Sass ──────────────────────────────────────────────────────
+
+desc "Build Sass to CSS"
+task :sass do
+  sh "bundle exec sass assets/css/style.sass assets/css/style.css"
+end
+
+# ── Markdown Pages (Wiki, Docs, Tutorials) ────────────────────
+
+HAML_LAYOUT = <<~'LAYOUT'
+!!!
+%html{lang: lang, dir: dir}
+  %head
+    %meta{charset: "utf-8"}
+    %meta{name: "viewport", content: "width=device-width, initial-scale=1"}
+    %title= "#{page_title} — OrniFlight"
+    %link{rel: "preconnect", href: "https://fonts.googleapis.com"}
+    %link{rel: "preconnect", href: "https://fonts.gstatic.com", crossorigin: true}
+    %link{rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,600;0,700;0,800;1,300;1,400&display=swap"}
+    %link{rel: "stylesheet", href: "#{asset_prefix}/assets/css/style.css"}
+  %body.subpage
+    %nav
+      %a.home-link{href: "#{asset_prefix}/", title: "OrniFlight"} ◇
+      %a{href: "#{asset_prefix}/#essence"} Essence
+      %a{href: "#{asset_prefix}/wiki/"} Wiki
+      %a{href: "#{asset_prefix}/docs/"} Docs
+      %a{href: "#{asset_prefix}/tutorials/"} Tutorials
+      .lang-switch
+        - langs.each do |l|
+          %a{href: l == lang ? "." : lang_href.call(l), class: l == lang ? "active" : ""}= l.upcase
+    %main.content-page
+      %article
+        != content_html
+    %footer
+      %p
+        %a{href: "https://github.com/dantiel/OrniFlight"} GitHub
+        ◇
+        %a{href: "#{asset_prefix}/wiki/"} Wiki
+        ◇
+        %a{href: "#{asset_prefix}/tutorials/"} Tutorials
+      %p Hermetic Firmware ◇ STM32F4 ◇ GPL v3
+      %p.credit OrniFlight — Fly Natural. Control Precise.
+    %button.scroll-top{onclick: "window.scrollTo({top:0,behavior:'smooth'})", "aria-label" => "Scroll to top"}
+    :javascript
+      const btn = document.querySelector('.scroll-top');
+      addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+LAYOUT
+
+def lang_href(target_lang)
+  target_lang == "en" ? "../" : "../#{target_lang}/"
+end
+
+def build_markdown_page(md_path, out_path, lang, page_title)
+  md_content = File.read(md_path, encoding: "UTF-8")
+  content_html = Kramdown::Document.new(md_content).to_html
+
+  asset_prefix = lang == "en" ? ".." : "../.."
+  dir = "ltr"
+
+  engine = Haml::Template.new { HAML_LAYOUT }
+  output = engine.render(Object.new, {
+    lang: lang,
+    dir: dir,
+    page_title: page_title,
+    asset_prefix: asset_prefix,
+    content_html: content_html,
+    langs: LANGS,
+    lang_href: method(:lang_href)
+  })
+
+  File.write(out_path, output, encoding: "UTF-8")
+  puts "  Built #{out_path} (#{lang.upcase} #{page_title})"
+end
+
+def build_section_index(lang, section, title_key)
+  asset_prefix = lang == "en" ? ".." : "../.."
+  vars = JSON.parse(File.read("_lang/#{lang}.json", encoding: "UTF-8"))
+  page_title = vars[title_key] || section.capitalize
+
+  md_dir = "#{lang}/#{section}"
+  entries = Dir["#{md_dir}/*.md"].map do |f|
+    name = File.basename(f, ".md")
+    first_line = File.readlines(f, encoding: "UTF-8").first.to_s.strip.sub(/^#\s*/, "")
+    { file: name, title: first_line.empty? ? name.tr("_", " ").capitalize : first_line }
+  end.sort_by { |e| e[:title].downcase }
+
+  links_html = entries.map { |e|
+    %(<li><a href="./#{e[:file]}.html">#{e[:title]}</a></li>)
+  }.join("\n")
+
+  index_html = "<h1>#{page_title}</h1>\n<ul class=\"page-index\">\n#{links_html}\n</ul>"
+
+  engine = Haml::Template.new { HAML_LAYOUT }
+  output = engine.render(Object.new, {
+    lang: lang,
+    dir: "ltr",
+    page_title: page_title,
+    asset_prefix: asset_prefix,
+    content_html: index_html,
+    langs: LANGS,
+    lang_href: method(:lang_href)
+  })
+
+  out_path = "#{lang}/#{section}/index.html"
+  File.write(out_path, output, encoding: "UTF-8")
+  puts "  Built #{out_path} (#{lang.upcase} #{section} index)"
+end
+
+desc "Build all Markdown content pages"
+task :pages do
+  LANGS.each do |lang|
+    %w[wiki docs tutorials].each do |section|
+      md_dir = "#{lang}/#{section}"
+      next unless Dir.exist?(md_dir)
+      Dir["#{md_dir}/*.md"].each do |md_path|
+        name = File.basename(md_path, ".md")
+        out_path = "#{md_dir}/#{name}.html"
+        title = File.readlines(md_path, encoding: "UTF-8").first.to_s.strip.sub(/^#\s*/, "")
+        title = name.tr("_", " ").capitalize if title.empty?
+        build_markdown_page(md_path, out_path, lang, title)
+      end
+      build_section_index(lang, section, "nav_#{section}")
+    end
+  end
+end
+
+# ── Aggregate ─────────────────────────────────────────────────
+
+desc "Build all"
+task build: [:haml, :sass, :pages]
+
+desc "Clean and build"
+task rebuild: [:clobber, :build]
+
+# ── Watch ─────────────────────────────────────────────────────
+
+desc "Watch for changes and rebuild automatically"
+task :watch do
+  puts "◇  Watching site/ for changes... (Ctrl+C to stop)"
+  puts "   Monitoring: *.haml, *.sass, _lang/*.json, **/*.md"
+  puts
+
+  Rake::Task[:build].invoke
+
+  watched = Dir["index.haml", "assets/css/style.sass", "_lang/*.json"] +
+            Dir["en/**/*.md", "de/**/*.md"]
+  mtimes = watched.to_h { |f| [f, File.mtime(f)] }
+
+  loop do
+    sleep 0.5
+    changed = watched.select { |f| File.exist?(f) && File.mtime(f) != mtimes[f] }
+    next if changed.empty?
+
+    changed.each { |f| mtimes[f] = File.mtime(f) }
+    puts "\n◇ Changed: #{changed.map { |f| f.sub(%r{^\./}, "") }.join(', ')}"
+
+    begin
+      run_sass = changed.any? { |f| f.end_with?(".sass") }
+      run_haml = changed.any? { |f| f.end_with?(".haml", ".json") }
+      run_pages = changed.any? { |f| f.end_with?(".md") }
+
+      Rake::Task[:sass].reenable; Rake::Task[:sass].invoke if run_sass
+      Rake::Task[:haml].reenable; Rake::Task[:haml].invoke if run_haml
+      Rake::Task[:pages].reenable; Rake::Task[:pages].invoke if run_pages
+      puts "◇ Rebuilt at #{Time.now.strftime('%H:%M:%S')}"
+    rescue => e
+      puts "◇ Error: #{e.message}"
+    end
+  end
+end
+
+desc "Start a local HTTP server (http://localhost:8000)"
+task :server do
+  require "webrick"
+
+  root = File.expand_path(__dir__)
+  server = WEBrick::HTTPServer.new(
+    Port: 8000,
+    DocumentRoot: root,
+    BindAddress: "0.0.0.0"
+  )
+
+  trap("INT") { server.shutdown }
+  trap("TERM") { server.shutdown }
+
+  puts "◇  OrniFlight site server"
+  puts "   ◆ http://localhost:8000/"
+  puts "   ◆ http://localhost:8000/en/"
+  puts "   Ctrl+C to stop"
+  puts
+
+  server.start
+end
+
+task default: :build

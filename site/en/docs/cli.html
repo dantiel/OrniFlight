@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='en'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>CLI Reference — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,600;0,700;0,800;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<nav>
+<a class='home-link' href='../' title='OrniFlight'>◇</a>
+<a href='../#essence'>Essence</a>
+<a href='../wiki/'>Wiki</a>
+<a href='../docs/'>Docs</a>
+<a href='../tutorials/'>Tutorials</a>
+<div class='lang-switch'>
+<a class='active' href='.'>EN</a>
+<a class='' href='../de/'>DE</a>
+</div>
+</nav>
+<main class='content-page'>
+<article>
+<h1 id="cli-reference">CLI Reference</h1>
+
+<blockquote>
+  <p><em>OrniFlight-specific CLI commands beyond standard Betaflight.</em></p>
+</blockquote>
+
+<h2 id="ondas-parameters">ONDAS Parameters</h2>
+
+<p><code>
+set cadence_gain = 50              # 0-100, timing modulation window
+set ferocity_d_gain = 30           # 0-100, D-term stabilization
+set ferocity_p_gain = 20           # 0-100, P-term response
+set ferocity_roll_gain = 20        # 0-100, roll axis specific
+set ferocity_yaw_gain = 0          # 0-100, yaw axis specific
+set balance_gain = 0               # -100 to +100, stroke asymmetry
+set warp_gain = 50                 # 0-100, modulation window width
+set warp_yaw_gain = 0              # -100 to +100, yaw warp
+set anchor_gain = 70               # 0-100, raw PID mix
+set resonance_gain = 30            # 0-100, cycle memory
+</code></p>
+
+<h2 id="phase-2-parameters">Phase 2 Parameters</h2>
+
+<p><code>
+set prescience_gain = 10           # 0-100, timing advance
+set espelho_gain = 20              # 0-100, differential coupling
+set saudade_gain = 15              # 0-100, hysteresis memory
+set ssff_gain = 0                  # 0-100, stroke-sync feed-forward
+</code></p>
+
+<h2 id="wing-dynamics">Wing Dynamics</h2>
+
+<p><code>
+set glide_angle = 30               # degrees, glide lock angle
+set servo_speed = 100              # 0-100, servo speed limit
+set max_amplitude = 80             # 0-100, max flap amplitude
+set flap_magnitude = 100           # 0-100, flap force scaling
+set wing_origin_offset = 50        # 0-100, wing root offset
+</code></p>
+
+<h2 id="frequency">Frequency</h2>
+
+<p><code>
+set freq_channel = 6               # 0-18, RC channel for frequency control
+set freq_min_hz = 2                # Hz at minimum channel value
+set freq_max_hz = 8                # Hz at maximum channel value
+</code></p>
+
+<h2 id="aeroelastic">Aeroelastic</h2>
+
+<p><code>
+set aeroelastic_glide_coefficient = 0    # -100 to +100
+set aeroelastic_flap_coefficient = 0     # -100 to +100
+</code></p>
+
+<h2 id="profile--mode">Profile &amp; Mode</h2>
+
+<p><code>
+set ornithopter_profile_index = 0        # 0-3, profile slot
+set ornithopter_flight_mode = 0          # 0=GLIDE, 1=INDEPENDENT
+</code></p>
+
+<h2 id="useful-commands">Useful Commands</h2>
+
+<p><code>
+status                    # Show system status including ONDAS state
+diff all                  # Show all non-default settings
+dump ornithopter          # Dump all ornithopter-related settings
+</code></p>
+
+<hr />
+
+<p><em>Also available via MSP in the Configurator under Advanced → ONDAS.</em></p>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../wiki/'>Wiki</a>
+◇
+<a href='../tutorials/'>Tutorials</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Fly Natural. Control Precise.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

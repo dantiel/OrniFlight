@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='en'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>Flight Profiles — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,600;0,700;0,800;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<nav>
+<a class='home-link' href='../' title='OrniFlight'>◇</a>
+<a href='../#essence'>Essence</a>
+<a href='../wiki/'>Wiki</a>
+<a href='../docs/'>Docs</a>
+<a href='../tutorials/'>Tutorials</a>
+<div class='lang-switch'>
+<a class='active' href='.'>EN</a>
+<a class='' href='../de/'>DE</a>
+</div>
+</nav>
+<main class='content-page'>
+<article>
+<h1 id="flight-profiles">Flight Profiles</h1>
+
+<blockquote>
+  <p><em>4 independent tuning slots, switchable in-flight.</em></p>
+</blockquote>
+
+<h2 id="concept">Concept</h2>
+
+<p>OrniFlight stores 4 complete <code>ornithopterProfile_t</code> structs — each containing all 19 ONDAS and wing-dynamics parameters. A BOX mode (<code>BOXORNITHOPTERPROFILE</code>, permanentId 52) selects the active profile via a 2-position RC switch mapped to 4 slots (0–3).</p>
+
+<h2 id="why-profiles">Why Profiles?</h2>
+
+<p>Different flight regimes demand different tuning:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Profile</th>
+      <th>Use Case</th>
+      <th>Cadence</th>
+      <th>Ferocity</th>
+      <th>Notes</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>0</td>
+      <td><strong>Cruise</strong></td>
+      <td>Mid (50)</td>
+      <td>Low (30)</td>
+      <td>Efficient forward flight</td>
+    </tr>
+    <tr>
+      <td>1</td>
+      <td><strong>Aerobatic</strong></td>
+      <td>Low (20)</td>
+      <td>High (80)</td>
+      <td>Maximum authority</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td><strong>Hover/Loiter</strong></td>
+      <td>High (70)</td>
+      <td>Mid (50)</td>
+      <td>Stability over speed</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td><strong>Glide</strong></td>
+      <td>Mid (50)</td>
+      <td>Low (10)</td>
+      <td>Minimal intervention</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="whats-in-a-profile">What’s In a Profile</h2>
+
+<p>All 19 fields of <code>ornithopterProfile_t</code>:</p>
+
+<ul>
+  <li><strong>Glide geometry</strong>: glide_angle</li>
+  <li><strong>ONDAS v2 (10)</strong>: cadence, ferocity_d/p/roll/yaw, balance, warp, warp_yaw, anchor, resonance</li>
+  <li><strong>Phase 2 (4)</strong>: prescience, espelho, saudade, ssff</li>
+  <li><strong>Wave shape (2)</strong>: ferocity_downstroke, ferocity_upstroke</li>
+  <li><strong>Aeroelastic (2)</strong>: aeroelastic_glide_coefficient, aeroelastic_flap_coefficient</li>
+</ul>
+
+<h2 id="whats-global-not-per-profile">What’s Global (Not Per-Profile)</h2>
+
+<ul>
+  <li>Frequency channel (one RC channel, works in both INDEPENDENT and GLIDE)</li>
+  <li>Servo mount angles</li>
+  <li>Flapping phase shifts</li>
+  <li>GralhaAzul geometry (servo_speed, max_amplitude, flap_magnitude, wing_origin)</li>
+</ul>
+
+<p>These are physical constants of the airframe — they don’t change with flight regime.</p>
+
+<h2 id="switching-in-flight">Switching In Flight</h2>
+
+<ol>
+  <li>Assign a 2-position or 3-position switch to a spare channel</li>
+  <li>In the Configurator Modes tab, map that range to <code>ORNITHOPTER PROFILE</code></li>
+  <li>Each switch position selects one of the 4 slots</li>
+  <li>The Configurator’s profile dropdown edits the <em>currently selected</em> slot via MSP</li>
+</ol>
+
+<hr />
+
+<p><em>See <code>src/main/flight/ornithopter_profile.h</code> for the struct definition.</em></p>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../wiki/'>Wiki</a>
+◇
+<a href='../tutorials/'>Tutorials</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Fly Natural. Control Precise.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

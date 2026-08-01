@@ -1,0 +1,161 @@
+!!!
+%html{lang: lang, dir: dir}
+  %head
+    %meta{charset: "utf-8"}
+    %meta{name: "viewport", content: "width=device-width, initial-scale=1"}
+    %title= title
+    %link{rel: "preconnect", href: "https://fonts.googleapis.com"}
+    %link{rel: "preconnect", href: "https://fonts.gstatic.com", crossorigin: true}
+    %link{rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,600;0,700;0,800;1,300;1,400&display=swap"}
+    %link{rel: "stylesheet", href: "#{asset_prefix}/assets/css/style.css"}
+
+  %body
+    .hero-bg
+    .hero-ornithopter
+    .hero-overlay
+
+    %nav
+      %a.home-link{href: "#", onclick: "majesticScroll(); return false;", title: "Scroll to top ◇ OrniFlight"}
+        %img{src: "#{asset_prefix}/assets/images/light-wide-2.svg", alt: "OrniFlight", style: "height:28px"}
+      %a{href: "#essence"}= nav_essence
+      %a{href: "#ondas"}= nav_ondas
+      %a{href: "#features"}= nav_features
+      %a{href: "#hardware"}= nav_hardware
+      .lang-switch
+        %a{href: lang_href_en, class: lang_class_en} EN
+        %a{href: lang_href_de, class: lang_class_de} DE
+
+    #header
+      .hero-content
+        .hero-logo
+          %img{src: "#{asset_prefix}/assets/images/light-wide-2.svg", alt: "OrniFlight", style: "height:72px"}
+        .headline
+          %h1
+            %span.orni ORNI
+            %span.flight FLIGHT
+          %p.subhead= hero_subhead
+          %p.greeting= hero_greeting
+          %p.version= hero_version
+
+    %main
+      %section#essence
+        %h2
+          %span.section-num= essence_num
+          = essence_title
+        %p.lead!= essence_lead
+        %p!= essence_body
+        .highlight
+          %code= essence_highlight
+
+      %section#ondas
+        %h2
+          %span.section-num= ondas_num
+          = ondas_title
+        %p.lead!= ondas_lead
+        %p!= ondas_body
+        .highlight
+          %code= ondas_highlight
+        %p.doc-link
+          %a{href: "#{asset_prefix}/wiki/ondas.html"}= ondas_wiki_link
+
+      %section#features
+        %h2
+          %span.section-num= features_num
+          = features_title
+        %dl.grid
+          %dt= feat_profiles_title
+          %dd= feat_profiles_desc
+          %dt= feat_frequency_title
+          %dd= feat_frequency_desc
+          %dt= feat_gralhaazul_title
+          %dd= feat_gralhaazul_desc
+          %dt= feat_ondas_title
+          %dd= feat_ondas_desc
+          %dt= feat_msp_title
+          %dd= feat_msp_desc
+          %dt= feat_glide_title
+          %dd= feat_glide_desc
+
+      %section#hardware
+        %h2
+          %span.section-num= hw_num
+          = hw_title
+        %p.lead= hw_lead
+        %table.specs
+          %tr
+            %td= hw_targets_label
+            %td= hw_targets_val
+          %tr
+            %td= hw_servos_label
+            %td= hw_servos_val
+          %tr
+            %td= hw_rx_label
+            %td= hw_rx_val
+          %tr
+            %td= hw_flash_label
+            %td.value= hw_flash_val
+          %tr
+            %td= hw_ram_label
+            %td.value= hw_ram_val
+        %p.doc-link
+          %a{href: "#{asset_prefix}/tutorials/"}= hw_start_link
+
+      %section.build
+        %h2
+          %span.section-num= build_num
+          = build_title
+        %pre
+          %code= build_line
+        %p.compatible= build_compatible
+
+    %footer
+      %p!= footer_resources
+      %p= footer_hermetic
+      %p.credit= footer_credit
+
+    %button.scroll-top{onclick: "window.scrollTo({top:0,behavior:'smooth'})", "aria-label" => "Scroll to top"}
+
+    :javascript
+      const hero = document.querySelector('.hero-content');
+      const creature = document.querySelector('.hero-ornithopter');
+      const overlay = document.querySelector('.hero-overlay');
+      const nav = document.querySelector('nav');
+      const scrollBtn = document.querySelector('.scroll-top');
+
+      function majesticScroll() {
+        const start = window.scrollY;
+        const duration = 1500;
+        const startTime = performance.now();
+
+        function step(now) {
+          const elapsed = now - startTime;
+          const t = Math.min(elapsed / duration, 1);
+          const eased = 1 - Math.pow(1 - t, 4);
+          window.scrollTo(0, start * (1 - eased));
+          if (t < 1) requestAnimationFrame(step);
+        }
+
+        requestAnimationFrame(step);
+      }
+
+      function tick() {
+        const scroll = window.scrollY;
+        const vh = window.innerHeight;
+        const t = Math.min(scroll / vh, 1);
+
+        hero.style.setProperty('--scroll', t.toFixed(3));
+        hero.style.opacity = 1 - t * 0.6;
+
+        const py = t * 90;
+        creature.style.transform = `translateY(${py}%)`;
+        creature.style.opacity = Math.max(0, 1 - t * 1.2);
+
+        overlay.style.opacity = Math.min(t * 0.85, 0.85);
+
+        nav.classList.toggle('scrolled', scroll > 40);
+        scrollBtn.classList.toggle('visible', scroll > vh * 0.6);
+
+        requestAnimationFrame(tick);
+      }
+
+      requestAnimationFrame(tick);

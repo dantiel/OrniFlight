@@ -1,0 +1,7 @@
+source "https://rubygems.org"
+
+gem "haml", "~> 6.2"
+gem "sass-embedded", "~> 1.85"
+gem "rake", "~> 13.4"
+gem "webrick", "~> 1.8"
+gem "kramdown", "~> 2.4"

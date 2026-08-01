@@ -1,0 +1,34 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    bigdecimal (3.1.1)
+    google-protobuf (4.35.1-x86_64-darwin)
+      bigdecimal
+      rake (~> 13.3)
+    haml (6.4.0)
+      temple (>= 0.8.2)
+      thor
+      tilt
+    kramdown (2.5.2)
+      rexml (>= 3.4.4)
+    rake (13.4.2)
+    rexml (3.4.4)
+    sass-embedded (1.102.0-x86_64-darwin)
+      google-protobuf (~> 4.31)
+    temple (0.10.4)
+    thor (1.5.0)
+    tilt (2.6.1)
+    webrick (1.9.2)
+
+PLATFORMS
+  x86_64-darwin-24
+
+DEPENDENCIES
+  haml (~> 6.2)
+  kramdown (~> 2.4)
+  rake (~> 13.4)
+  sass-embedded (~> 1.85)
+  webrick (~> 1.8)
+
+BUNDLED WITH
+   2.3.27

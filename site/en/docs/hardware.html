@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='en'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>Supported Hardware — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,600;0,700;0,800;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<nav>
+<a class='home-link' href='../' title='OrniFlight'>◇</a>
+<a href='../#essence'>Essence</a>
+<a href='../wiki/'>Wiki</a>
+<a href='../docs/'>Docs</a>
+<a href='../tutorials/'>Tutorials</a>
+<div class='lang-switch'>
+<a class='active' href='.'>EN</a>
+<a class='' href='../de/'>DE</a>
+</div>
+</nav>
+<main class='content-page'>
+<article>
+<h1 id="supported-hardware">Supported Hardware</h1>
+
+<blockquote>
+  <p><em>Flight controllers tested with OrniFlight.</em></p>
+</blockquote>
+
+<h2 id="primary-targets">Primary Targets</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Target</th>
+      <th>MCU</th>
+      <th>Flash</th>
+      <th>Servo Pins</th>
+      <th>Status</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>OMNIBUSF4</strong></td>
+      <td>STM32F405</td>
+      <td>1MB</td>
+      <td>Motors 1-4, LED strip</td>
+      <td>Primary</td>
+    </tr>
+    <tr>
+      <td><strong>TINYFISH</strong></td>
+      <td>STM32F411</td>
+      <td>512KB</td>
+      <td>Motors 1-4, LED strip</td>
+      <td>Limited flash</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="servo-output-pins">Servo Output Pins</h2>
+
+<p>OrniFlight repurposes motor output pins for servo PWM:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Logical Servo</th>
+      <th>F4 Timer Pin</th>
+      <th>Common Use</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Servo 0</td>
+      <td>Motor 1 (PA3)</td>
+      <td>Left wing</td>
+    </tr>
+    <tr>
+      <td>Servo 1</td>
+      <td>Motor 2 (PA2)</td>
+      <td>Right wing</td>
+    </tr>
+    <tr>
+      <td>Servo 2</td>
+      <td>Motor 3 (PB0)</td>
+      <td>Crest rudder</td>
+    </tr>
+    <tr>
+      <td>Servo 3</td>
+      <td>Motor 4 (PB1)</td>
+      <td>Aux / spare</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="receiver-compatibility">Receiver Compatibility</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Protocol</th>
+      <th>Status</th>
+      <th>Notes</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>CRSF</strong> (ELRS/Crossfire)</td>
+      <td>Primary</td>
+      <td>Telemetry, binding phrase</td>
+    </tr>
+    <tr>
+      <td><strong>SBUS</strong></td>
+      <td>Working</td>
+      <td>Standard FrSky/Futaba</td>
+    </tr>
+    <tr>
+      <td><strong>Spektrum 1024/2048</strong></td>
+      <td>Working</td>
+      <td>Bind via CLI</td>
+    </tr>
+    <tr>
+      <td><strong>SUMD</strong></td>
+      <td>Working</td>
+      <td>Graupner HoTT</td>
+    </tr>
+    <tr>
+      <td><strong>IBUS</strong></td>
+      <td>Working</td>
+      <td>FlySky</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="wiring">Wiring</h2>
+
+<p>```
+FC                          Receiver (CRSF)
+——                          ————————————————
+UART1 TX  ──────────────→  RX
+UART1 RX  ──────────────→  TX
+GND       ──────────────→  GND
+5V        ──────────────→  VCC</p>
+
+<p>FC                          Servos
+——                          ——————
+Motor 1 (PA3)  ──────────→  Left Wing (signal)
+Motor 2 (PA2)  ──────────→  Right Wing (signal)
+Motor 3 (PB0)  ──────────→  Rudder (signal)
+GND            ──────────→  Servo GND
+5V (BEC)       ──────────→  Servo VCC
+```</p>
+
+<hr />
+
+<p><em>See <code>docs/Boards.md</code> in the firmware repository for board-specific details.</em></p>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../wiki/'>Wiki</a>
+◇
+<a href='../tutorials/'>Tutorials</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Fly Natural. Control Precise.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

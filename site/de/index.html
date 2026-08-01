@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='de'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,600;0,700;0,800;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../assets/css/style.css' rel='stylesheet'>
+</head>
+<body>
+<div class='hero-bg'></div>
+<div class='hero-ornithopter'></div>
+<div class='hero-overlay'></div>
+<nav>
+<a class='home-link' href='#' onclick='majesticScroll(); return false;' title='Scroll to top ◇ OrniFlight'>
+<img alt='OrniFlight' src='../assets/images/light-wide-2.svg' style='height:28px'>
+</a>
+<a href='#essence'>Essenz</a>
+<a href='#ondas'>ONDAS</a>
+<a href='#features'>Features</a>
+<a href='#hardware'>Hardware</a>
+<div class='lang-switch'>
+<a class='' href='../'>EN</a>
+<a class='active' href='.'>DE</a>
+</div>
+</nav>
+<div id='header'>
+<div class='hero-content'>
+<div class='hero-logo'>
+<img alt='OrniFlight' src='../assets/images/light-wide-2.svg' style='height:72px'>
+</div>
+<div class='headline'>
+<h1>
+<span class='orni'>ORNI</span>
+<span class='flight'>FLIGHT</span>
+</h1>
+<p class='subhead'>Flieg natürlich. Steuere präzise.</p>
+<p class='greeting'>Schlagflug, neu definiert.</p>
+<p class='version'>STM32F4 ◇ OrniFlight v0.4.6 ◇ apiVersion 1.46</p>
+</div>
+</div>
+</div>
+<main>
+<section id='essence'>
+<h2>
+<span class='section-num'>01</span>
+Essenz
+</h2>
+<p class='lead'>OrniFlight ist eine <strong>Open-Source-Flugcontroller-Firmware für servo-gesteuerte Schlagflügler</strong>, abgeleitet von Betaflight 4.0.6.</p>
+<p>Keine Propeller — keine Quad-Dynamik. Bewegung entsteht durch <strong>oszillierende Flügelservos</strong>, die von phasenbewussten Wellenformen angesteuert werden. Eine eigene Stabilisierungspipeline — ONDAS — versteht, dass jedes Gramm Schub phasenabhängig innerhalb des Schlagzyklus wirkt.</p>
+<div class='highlight'>
+<code>CRSF → rx → OrniFlight → ONDAS → Wellenform → PWM Servos</code>
+</div>
+</section>
+<section id='ondas'>
+<h2>
+<span class='section-num'>02</span>
+ONDAS
+</h2>
+<p class='lead'><strong>Oscillating Normalized Dynamic Adaptive Stabilization</strong> — die erste Regelungstheorie, die spezifisch für Schlagflügel-Aerodynamik entwickelt wurde.</p>
+<p>Quad-PIDs gehen von kontinuierlichem Schub aus. Ornithopter-Schub ist <strong>phasisch</strong> — derselbe Impuls erzeugt unterschiedliche Momente, je nachdem <em>wann</em> im Schlag er appliziert wird. ONDAS nutzt Cadence, Ferocity, Asymmetry, Warp, Anchor, Resonance, Prescience, Espelho, Saudade und SSFF — ein Orchester phasenbewusster Modulatoren — um jedes korrigierende Gramm genau dorthin zu platzieren, wo die Aerodynamik es nutzen kann.</p>
+<div class='highlight'>
+<code>cadence · ferocity · asymmetry · warp · anchor · resonance · prescience · espelho · saudade · SSFF</code>
+</div>
+<p class='doc-link'>
+<a href='../wiki/ondas.html'>Vollständige ONDAS-Theorie →</a>
+</p>
+</section>
+<section id='features'>
+<h2>
+<span class='section-num'>03</span>
+Features
+</h2>
+<dl class='grid'>
+<dt>Flugprofile</dt>
+<dd>4 unabhängige Profile (0–3), im Flug per BOX-Mode umschaltbar. Jedes enthält vollständiges ONDAS-Tuning, Wellenform und aeroelastische Koeffizienten.</dd>
+<dt>Unified Frequency Channel</dt>
+<dd>Ein einziger RC-Kanal mit Min/Max-Hz-Abbildung. Funktioniert identisch in INDEPENDENT und GLIDE — ein Poti, beide Flugzustände.</dd>
+<dt>GralhaAzul Flügeldynamik</dt>
+<dd>Trapezförmige Wellenform mit Servo-Speed-Limit, Amplituden-Mapping, Flap-Magnitude und Flügel-Geometrie — der Flügel-ODE-Kern.</dd>
+<dt>10-Kanal ONDAS-Modulation</dt>
+<dd>Cadence-Timing, Ferocity P/D auf 3 Achsen, Balance, Warp, Anchor, Resonance — pro Profil, in Echtzeit per MSP einstellbar.</dd>
+<dt>MSP Configurator (apiVersion 1.46)</dt>
+<dd>Vollständige ONDAS-Tuning-GUI — alle 19 Profilfelder, Frequenzkanal, GralhaAzul, Phase-2-Gains. Profil-Switcher für Slot-bezogene Bearbeitung.</dd>
+<dt>GLIDE + INDEPENDENT Modi</dt>
+<dd>Zwei Flugregime: GLIDE (gaszentriert, natürliches Gleiten) und INDEPENDENT (direkte Schlagfrequenz per RC-Kanal). Per BOX schaltbar.</dd>
+</dl>
+</section>
+<section id='hardware'>
+<h2>
+<span class='section-num'>04</span>
+Hardware
+</h2>
+<p class='lead'>Läuft auf jedem Betaflight-4.0-kompatiblen STM32F4/F7-Flugcontroller mit servo-fähigen Timer-Pins.</p>
+<table class='specs'>
+<tr>
+<td>Targets</td>
+<td>OMNIBUSF4, TINYFISH (F4), MATEKF405, KAKUTEF7 …</td>
+</tr>
+<tr>
+<td>Servo-Ausgang</td>
+<td>Bis zu 4 programmierbare Servokanäle, 50–400 Hz PWM</td>
+</tr>
+<tr>
+<td>Empfänger</td>
+<td>CRSF (Crossfire / ExpressLRS), SBUS, Spektrum, SUMD</td>
+</tr>
+<tr>
+<td>Flash (OMNIBUSF4)</td>
+<td class='value'>31% belegt</td>
+</tr>
+<tr>
+<td>RAM (OMNIBUSF4)</td>
+<td class='value'>~40% belegt</td>
+</tr>
+</table>
+<p class='doc-link'>
+<a href='../tutorials/'>Erste Schritte →</a>
+</p>
+</section>
+<section class='build'>
+<h2>
+<span class='section-num'>05</span>
+Build &amp; Flash
+</h2>
+<pre><code>make TARGET=OMNIBUSF4
+dfu-util -a 0 -D obj/orniflight_VERSION_OMNIBUSF4.hex</code></pre>
+<p class='compatible'>GPL v3 ◇ Basiert auf Betaflight 4.0.6 ◇ Sauberer Build: null Warnungen</p>
+</section>
+</main>
+<footer>
+<p><a href="https://github.com/dantiel/OrniFlight" target="_blank">GitHub</a> ◇ <a href="../wiki/">Wiki</a> ◇ <a href="../tutorials/">Tutorials</a> ◇ <a href="https://github.com/dantiel/orniflight-configurator" target="_blank">Configurator</a></p>
+<p>Hermetische Firmware ◇ STM32F4 ◇ GPL v3 ◇ Keine Cloud-Abhängigkeiten</p>
+<p class='credit'>OrniFlight — Flieg natürlich. Steuere präzise.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const hero = document.querySelector('.hero-content');
+  const creature = document.querySelector('.hero-ornithopter');
+  const overlay = document.querySelector('.hero-overlay');
+  const nav = document.querySelector('nav');
+  const scrollBtn = document.querySelector('.scroll-top');
+  
+  function majesticScroll() {
+    const start = window.scrollY;
+    const duration = 1500;
+    const startTime = performance.now();
+  
+    function step(now) {
+      const elapsed = now - startTime;
+      const t = Math.min(elapsed / duration, 1);
+      const eased = 1 - Math.pow(1 - t, 4);
+      window.scrollTo(0, start * (1 - eased));
+      if (t < 1) requestAnimationFrame(step);
+    }
+  
+    requestAnimationFrame(step);
+  }
+  
+  function tick() {
+    const scroll = window.scrollY;
+    const vh = window.innerHeight;
+    const t = Math.min(scroll / vh, 1);
+  
+    hero.style.setProperty('--scroll', t.toFixed(3));
+    hero.style.opacity = 1 - t * 0.6;
+  
+    const py = t * 90;
+    creature.style.transform = `translateY(${py}%)`;
+    creature.style.opacity = Math.max(0, 1 - t * 1.2);
+  
+    overlay.style.opacity = Math.min(t * 0.85, 0.85);
+  
+    nav.classList.toggle('scrolled', scroll > 40);
+    scrollBtn.classList.toggle('visible', scroll > vh * 0.6);
+  
+    requestAnimationFrame(tick);
+  }
+  
+  requestAnimationFrame(tick);
+</script>
+</body>
+</html>
