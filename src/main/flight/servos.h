@@ -110,6 +110,7 @@ typedef enum {
 #define SERVO_FLAPPERONS_MIN SERVO_FLAPPERON_1
 #define SERVO_FLAPPERONS_MAX SERVO_FLAPPERON_2
 
+#undef MAX_SERVO_RULES
 #define MAX_SERVO_RULES (2 * MAX_SUPPORTED_SERVOS)
 
 typedef struct servoMixer_s {
@@ -154,9 +155,13 @@ typedef struct servoConfig_s {
 
     int8_t servo_mount_angle[MAX_ORNITHOPTER_PAIRS]; // per-pair incidence °: 0=parallel, +=inward, -=outward, max ±30
     int8_t flapping_phase_shift[MAX_ORNITHOPTER_PAIRS]; // per-pair phase offset °: -180..+180, 0=all wings in phase
+    int8_t wing_origin_offset[MAX_ORNITHOPTER_PAIRS];  // per-pair mechanical asymmetry trim ° (-30..+30)
     uint8_t flap_base_frequency;
     int8_t flap_base_amplitude;
     int8_t ornithopter_glide_deg;
+    uint16_t servo_speed_deg_s;      // max servo angular velocity °/s (default 857 = 60°/70ms). Drives glide transition rate, max frequency.
+    uint8_t servo_max_amplitude;     // hard amplitude clamp ° (default 55). Everything above is mechanically impossible.
+    uint8_t flap_magnitude;          // throttle→amplitude scaling: centi-deg per µs above threshold (default 4 → 0.04 °/µs)
     int8_t cadence_gain;                     // P-term → phase advance (k0 scaling): "push harder now"
     int8_t ferocity_d_gain;                  // D-term → ferocity (wave sharpness): "dampen the motion"
     int8_t ferocity_p_gain;                  // P-term → ferocity (wave sharpness): "push proportionally"

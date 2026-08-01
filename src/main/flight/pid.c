@@ -601,6 +601,13 @@ static FAST_RAM_ZERO_INIT bool useIntegratedYaw;
 static FAST_RAM_ZERO_INIT uint8_t integratedYawRelax;
 #endif
 
+// ── Flapping ODE state + hysteresis (must precede pidResetIterm which resets them) ──
+static float omega = 0.0;
+static float theta = 0.0;
+static bool hasCrossedFlightThreshold = false;
+static bool hysteresisElevated = false;
+#define GLIDE_HYSTERESIS 50
+
 void pidResetIterm(void)
 {
     for (int axis = 0; axis < 3; axis++) {
@@ -609,6 +616,11 @@ void pidResetIterm(void)
         axisError[axis] = 0.0f;
 #endif
     }
+    // ── Reset flapping state on arm (GralhaAzul: aoDespertarParaOCantoDoEter) ──
+    theta = M_PIf * 0.5f;  // π/2: neutral mid-stroke — avoids extreme on first frame
+    omega = 0.0f;
+    hasCrossedFlightThreshold = false;
+    hysteresisElevated = false;
 }
 
 #ifdef USE_ACRO_TRAINER
@@ -630,9 +642,8 @@ FAST_RAM_ZERO_INIT float thrustLinearizationB;
 float tcommand = 0;
 float omegadot = 0.0;
 float thetadot = 0.0;
-static float omega = 0.0;
-static float theta = 0.0;
-#define CADENCE_K0               1.0f     // Wing ODE spring constant: scales torque→angular acceleration
+
+#define CADENCE_K0               1.0f
 #define ANCHOR_BASE_K2           10.0f     // Wing ODE base damping: scales velocity→deceleration
 #define ANCHOR_SCALE             0.1f      // anchor_gain→k2: k2 = BASE + gain × scale
 #define CADENCE_SCALE            0.00005f  // P-term→k0 modulation: PID-P × gain × scale → phase advance
@@ -648,9 +659,6 @@ static float theta = 0.0;
 float k0 = CADENCE_K0;
 float k2 = ANCHOR_BASE_K2;
 
-static inline float ferocityParamToFloat(int8_t param) {
-    return ((float)(param - 1) * FEROCITY_RANGE / 99.0f);  // [1, 100] → [0, 8]
-}
 
 // Stroke-Synchronous Feed-Forward: measures pitch error over each half-stroke
 // and biases the next stroke's ferocity to cancel repetitive flap-frequency error.
@@ -865,7 +873,30 @@ void calculateFlappingFromThrottle(float rc_throttle) {
     theta = theta + omega * dT;
     omega = omega + omegadot * dT;
 
-    if (rc_throttle > GLIDE_MODE_THRESHOLD) {
+    // ── Throttle hysteresis (GralhaAzul: jaCruzouLimiarDeVoo + limiarElevado) ──
+    // On first flap crossing: hysteresis disabled (hasCrossedFlightThreshold=false).
+    // After first flap→glide transition: hysteresisElevated=true, threshold shifts by ±50.
+    // Re-arm resets both flags in pidResetFlappingState().
+    int activeThreshold = GLIDE_MODE_THRESHOLD;
+    if (hysteresisElevated) {
+        // Currently flapping? Use lower threshold to avoid premature glide.
+        // Currently gliding? Use higher threshold to avoid false flap re-entry.
+        // state from last iteration determines direction:
+        //   If we were flapping (rc_throttle was > GLIDE_MODE_THRESHOLD on last frame),
+        //   use GLIDE_MODE_THRESHOLD (lower) to drop out.
+        //   If we were gliding, use GLIDE_MODE_THRESHOLD + 50 to re-enter.
+        // Simplification: if currently in flap mode, keep threshold low; if in glide, raise it.
+        // We use hasCrossedFlightThreshold to know we've been in flap at least once.
+    }
+    bool wasFlapping = (flappingAmplitude > 0.0f);  // state from previous frame
+    if (hysteresisElevated && !wasFlapping) {
+        activeThreshold = GLIDE_MODE_THRESHOLD + GLIDE_HYSTERESIS;
+    }
+
+    if (rc_throttle > activeThreshold) {
+        if (!hasCrossedFlightThreshold) {
+            hasCrossedFlightThreshold = true;  // first flap crossing since arm
+        }
         flappingSinusoid = sinf(theta);
 
         // Per-pair wave shaping: each wing pair at its own phase offset.
@@ -894,6 +925,10 @@ void calculateFlappingFromThrottle(float rc_throttle) {
         ornithopterFlapping = legacySum * (0.5f / (float)MAX_ORNITHOPTER_PAIRS) * flappingAmplitude;
     }
     else {
+        // Transition flap→glide: engage hysteresis for next re-entry
+        if (wasFlapping && hasCrossedFlightThreshold) {
+            hysteresisElevated = true;
+        }
         for (int p = 0; p < MAX_ORNITHOPTER_PAIRS; p++) {
             shapedFlappingSinusoidLeft[p] = 0.0f;
             shapedFlappingSinusoidRight[p] = 0.0f;
@@ -928,9 +963,15 @@ void adjustAerolasticPIDGains(float errorRate, float* Kp, float* Ki, float* Kd) 
 
 float getFlappingAmplitude(float rc_throttle) {
     if (rc_throttle > GLIDE_MODE_THRESHOLD) {
-        return ((rc_throttle - GLIDE_MODE_THRESHOLD) * 0.04) 
-            * (float)servoConfig()->flap_base_amplitude * 0.1 
-                * (1 - (currentControlRateProfile->flap_speed_modificator - 1500) * 0.003);
+        // flap_magnitude = 4 → 0.04 °/µs (same as original hardcoded value)
+        float amp = ((rc_throttle - GLIDE_MODE_THRESHOLD) * (float)servoConfig()->flap_magnitude * 0.01f)
+            * (float)servoConfig()->flap_base_amplitude * 0.1f
+                * (1.0f - (currentControlRateProfile->flap_speed_modificator - 1500) * 0.003f);
+        // Hard clamp to servo mechanical limit
+        float maxAmp = (float)servoConfig()->servo_max_amplitude;
+        if (amp > maxAmp) amp = maxAmp;
+        else if (amp < -maxAmp) amp = -maxAmp;
+        return amp;
     } else return 0.0;
 }
 

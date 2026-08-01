@@ -249,3 +249,8 @@ void dynLpfDTermUpdate(float throttle);
 void pidSetItermReset(bool enabled);
 float pidGetPreviousSetpoint(int axis);
 void applyOrnithopterPidDefaults(pidProfile_t *pidProfile, int8_t servoMountAngle);
+
+// Mapping from CLI ferocity parameter [1,100] to float [0,8]
+static inline float ferocityParamToFloat(int8_t param) {
+    return ((float)(param - 1) * 8.0f / 99.0f);
+}

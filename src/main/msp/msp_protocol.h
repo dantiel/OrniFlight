@@ -62,7 +62,7 @@
 #define MSP_PROTOCOL_VERSION                0
 
 #define API_VERSION_MAJOR                   1  // increment when major changes are made
-#define API_VERSION_MINOR                   43 // ONDAS Phase 2: MSP_PID_ADVANCED extended to 71 bytes (per-pair geometry + 4 advanced params)
+#define API_VERSION_MINOR                   44 // GralhaAzul ports: servo_speed_deg_s, servo_max_amplitude, flap_magnitude, wing_origin_offset per pair
 
 #define API_VERSION_LENGTH                  2
 

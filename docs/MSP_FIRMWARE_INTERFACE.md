@@ -26,13 +26,13 @@
 | <file>msp_protocol.h:74</file> | `API_VERSION_MINOR` | **`43`** | **`≥ 43`** ✅ |
 | FC Identifier | `ORNIFLIGHT_IDENTIFIER` | `"ORNI"` | `"ORNI"` ✅ |
 
-**Phase 2 complete**: apiVersion now reports `1.43.0`. `MSP_PID_ADVANCED` at 71 bytes.
+**GralhaAzul port**: apiVersion now reports `1.44.0`. `MSP_PID_ADVANCED` at **79 bytes**.
 
 ---
 
 ## 3. MSP_PID_ADVANCED (94/95) — Byte-Level Reference
 
-**Current payload**: **71 bytes** (Phase 2 complete).
+**Current payload**: **79 bytes** (GralhaAzul port complete).
 
 ### 3.1 Send (Firmware → Configurator)
 
@@ -87,28 +87,39 @@
 | **57** | **`anchor_gain`** (u8, direct 0–100) | `servoConfig()->anchor_gain` | ✅ **PHASE 1** |
 | **58** | **`resonance_gain`** (u8, direct 0–100) | `servoConfig()->resonance_gain` | ✅ **PHASE 1** |
 
-**Send payload**: **71 bytes** ✅.
+| **59–62** | **`servo_mount_angle[0..3]`** (u8, val+128) | `servoConfig()->servo_mount_angle` | ✅ **PHASE 2** |
+| **63–66** | **`flapping_phase_shift[0..3]`** (u8, val+128) | `servoConfig()->flapping_phase_shift` | ✅ **PHASE 2** |
+| **67** | **`prescience_gain`** (u8, direct 0–100) | `servoConfig()->prescience_gain` | ✅ **PHASE 2** |
+| **68** | **`espelho_gain`** (u8, direct 0–100) | `servoConfig()->espelho_gain` | ✅ **PHASE 2** |
+| **69** | **`saudade_gain`** (u8, direct 0–100) | `servoConfig()->saudade_gain` | ✅ **PHASE 2** |
+| **70** | **`ssff_gain`** (u8, direct 0–100) | `servoConfig()->ssff_gain` | ✅ **PHASE 2** |
+| **71–72** | **`servo_speed_deg_s`** (u16) | `servoConfig()->servo_speed_deg_s` | ✅ **PHASE 3 (GralhaAzul)** |
+| **73** | **`servo_max_amplitude`** (u8, direct) | `servoConfig()->servo_max_amplitude` | ✅ **PHASE 3 (GralhaAzul)** |
+| **74** | **`flap_magnitude`** (u8, direct) | `servoConfig()->flap_magnitude` | ✅ **PHASE 3 (GralhaAzul)** |
+| **75–78** | **`wing_origin_offset[0..3]`** (u8, val+128) | `servoConfig()->wing_origin_offset` | ✅ **PHASE 3 (GralhaAzul)** |
+
+**Send payload**: **79 bytes** ✅.
 
 ### 3.2 Receive (Configurator → Firmware)
 
-Firmware reads up to 71 bytes in three gated tiers:
+Firmware reads up to 79 bytes in four gated tiers:
 - Base: 48 bytes (Betaflight 4.0 baseline) — always read.
 - Phase 1: if `sbufBytesRemaining(src) >= 11`, reads itermRelaxCutoff + 10 ONDAS v2 (apiVersion ≥ 1.42).
 - Phase 2: if `sbufBytesRemaining(src) >= 12`, reads per-pair geometry + 4 advanced params (apiVersion ≥ 1.43).
+- Phase 3 (GralhaAzul): if `sbufBytesRemaining(src) >= 8`, reads physical servo params + wing trim (apiVersion ≥ 1.44).
 
-Backward-compatible — a 48-byte or 59-byte sender still works.
+Backward-compatible — a 48-, 59-, or 71-byte sender still works.
 
-**Receive payload handled**: **71 bytes** (gated on available bytes). ✅
+**Receive payload handled**: **79 bytes** (gated on available bytes). ✅
 
-### 3.3 Phase 2 — Now On Wire ✅
+### 3.3 Phase 3 — GralhaAzul Port (New) ✅
 
-| Offset | Field | Wire | Range |
-|--------|-------|------|-------|
-| 59–62 | `servo_mount_angle[0..3]` | u8 = val+128 | –30..+30° per pair |
-| 63–66 | `flapping_phase_shift[0..3]` | u8 = val+128 | –180..+180° per pair |
-| 67 | `prescience_gain` | u8 direct | 0–100 |
-| 68 | `espelho_gain` | u8 direct | 0–100 |
-| 69 | `saudade_gain` | u8 direct | 0–100 |
+| Offset | Field | Wire | Default | Range |
+|--------|-------|------|---------|-------|
+| 71–72 | `servo_speed_deg_s` | u16 LE | 857 | 100–2000 °/s |
+| 73 | `servo_max_amplitude` | u8 direct | 55 | 20–90 ° |
+| 74 | `flap_magnitude` | u8 direct | 4 | 1–20 centi-°/µs |
+| 75–78 | `wing_origin_offset[0..3]` | u8 = val+128 | 0 | –30..+30° per pair |
 | 70 | `ssff_gain` | u8 direct | 0–100 |
 
 ---
@@ -182,18 +193,22 @@ Handler in <file>msp.c:2631</file> is a no-op. Command exists in protocol but un
 | 7 | 🔵 | Mixer type 27 not in configurator `mixerList` | 🔲 Cosmetic |
 | 8 | 🔵 | ONDAS params in `servoConfig_t`, not `pidProfile_t` — architectural note | ℹ️ |
 
-**Phase 2 complete**: `MSP_PID_ADVANCED` now sends/receives 71 bytes. All 12 new fields (per-pair angles + phase shifts + 4 advanced gains) are on the wire at apiVersion ≥ 1.43.
+**GralhaAzul port complete**: `MSP_PID_ADVANCED` now sends/receives **79 bytes**. Phase 3 adds 8 bytes: physical servo params (`servo_speed_deg_s`, `servo_max_amplitude`, `flap_magnitude`) + per-pair wing trim (`wing_origin_offset[4]`). apiVersion ≥ 1.44.
 
 ---
 
 ## 9. Configurator TODO
 
-- [ ] Gate on `apiVersion >= \"1.43.0\"` to unlock Phase 2 UI
-- [ ] `servo_mount_angle[4]`: 4 sliders per pair (–30..+30°), labeled \"Wing Pair 1–4 Incidence\"
-- [ ] `flapping_phase_shift[4]`: 4 sliders per pair (–180..+180°), labeled \"Wing Pair 1–4 Phase Offset\"
-- [ ] `prescience_gain`, `espelho_gain`, `saudade_gain`, `ssff_gain`: sliders 0–100 in ONDAS advanced tab
-- [ ] Write `MSP_SET_PID_ADVANCED` at 71 bytes when apiVersion ≥ 1.43; 59 bytes at 1.42; 48 bytes legacy
-- [ ] Signed fields: decode `wire_byte - 128` for angles, phase shifts; direct for unsigned 0–100 params
+- [ ] Gate on `apiVersion >= \"1.44.0\"` to unlock GralhaAzul port UI
+- [x] `servo_mount_angle[4]`: 4 sliders per pair (–30..+30°), labeled \"Wing Pair 1–4 Incidence\" ✅
+- [x] `flapping_phase_shift[4]`: 4 sliders per pair (–180..+180°), labeled \"Wing Pair 1–4 Phase Offset\" ✅
+- [x] `prescience_gain`, `espelho_gain`, `saudade_gain`, `ssff_gain`: sliders 0–100 in ONDAS advanced tab ✅
+- [ ] `servo_speed_deg_s`: slider 100–2000 °/s, label \"Servo Speed\" — controls glide transition rate + max frequency
+- [ ] `servo_max_amplitude`: slider 20–90°, label \"Max Amplitude\" — hard mechanical clamp
+- [ ] `flap_magnitude`: slider 1–20, label \"Throttle→Amplitude Gain\" — centi-deg per µs above 1040
+- [ ] `wing_origin_offset[4]`: 4 sliders (–30..+30°), label \"Wing Trim Pair 1–4\" — mechanical asymmetry
+- [ ] Write `MSP_SET_PID_ADVANCED` at 79 bytes when apiVersion ≥ 1.44; 71 bytes at 1.43; 59 at 1.42; 48 legacy
+- [ ] Signed fields: decode `wire_byte - 128` for angles, phase shifts, wing offsets; direct for unsigned 0–100 params
 
 ---
 

@@ -1527,6 +1527,14 @@ static bool mspProcessOutCommand(uint8_t cmdMSP, sbuf_t *dst)
         sbufWriteU8(dst, (uint8_t)(servoConfigMutable()->saudade_gain));       // offset 69: unsigned 0–100
         sbufWriteU8(dst, (uint8_t)(servoConfigMutable()->ssff_gain));          // offset 70: unsigned 0–100
 
+        // ── GralhaAzul port: physical servo params + wing trim (API 1.44) ──
+        sbufWriteU16(dst, servoConfigMutable()->servo_speed_deg_s);             // offsets 71-72: °/s
+        sbufWriteU8(dst, servoConfigMutable()->servo_max_amplitude);            // offset 73: °
+        sbufWriteU8(dst, servoConfigMutable()->flap_magnitude);                 // offset 74: centi-deg/µs
+        for (int p = 0; p < MAX_ORNITHOPTER_PAIRS; p++) {
+            sbufWriteU8(dst, (uint8_t)(servoConfigMutable()->wing_origin_offset[p] + 128)); // offsets 75-78: signed ±30°
+        }
+
         break;
     case MSP_SENSOR_CONFIG:
 #if defined(USE_ACC)
@@ -2266,6 +2274,15 @@ static mspResult_e mspProcessInCommand(uint8_t cmdMSP, sbuf_t *src)
             servoConfigMutable()->espelho_gain     = (int8_t)sbufReadU8(src);
             servoConfigMutable()->saudade_gain     = (int8_t)sbufReadU8(src);
             servoConfigMutable()->ssff_gain        = (int8_t)sbufReadU8(src);
+        }
+        if (sbufBytesRemaining(src) >= 8) {
+            // Added in MSP API 1.44 — GralhaAzul port: physical servo params + wing trim
+            servoConfigMutable()->servo_speed_deg_s   = sbufReadU16(src);
+            servoConfigMutable()->servo_max_amplitude = sbufReadU8(src);
+            servoConfigMutable()->flap_magnitude      = sbufReadU8(src);
+            for (int p = 0; p < MAX_ORNITHOPTER_PAIRS; p++) {
+                servoConfigMutable()->wing_origin_offset[p] = (int8_t)(sbufReadU8(src) - 128);
+            }
         }
         pidInitConfig(currentPidProfile);
 

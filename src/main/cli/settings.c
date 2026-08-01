@@ -1446,6 +1446,10 @@ const clivalue_t valueTable[] = {
     { "ornithopter_ferocity_downstroke", VAR_INT8 | MASTER_VALUE, .config.minmax = { 1, 100 }, PG_SERVO_CONFIG, offsetof(servoConfig_t, ornithopter_ferocity_downstroke) },
     { "ornithopter_ferocity_upstroke",   VAR_INT8 | MASTER_VALUE, .config.minmax = { 1, 100 }, PG_SERVO_CONFIG, offsetof(servoConfig_t, ornithopter_ferocity_upstroke) },
     { "ssff_gain",                       VAR_INT8 | MASTER_VALUE, .config.minmax = { 0, 100 }, PG_SERVO_CONFIG, offsetof(servoConfig_t, ssff_gain) },
+    { "servo_speed_deg_s",      VAR_UINT16 | MASTER_VALUE, .config.minmaxUnsigned = { 100, 2000 }, PG_SERVO_CONFIG, offsetof(servoConfig_t, servo_speed_deg_s) },
+    { "servo_max_amplitude",    VAR_UINT8  | MASTER_VALUE, .config.minmaxUnsigned = { 20, 90 }, PG_SERVO_CONFIG, offsetof(servoConfig_t, servo_max_amplitude) },
+    { "flap_magnitude",         VAR_UINT8  | MASTER_VALUE, .config.minmaxUnsigned = { 1, 20 }, PG_SERVO_CONFIG, offsetof(servoConfig_t, flap_magnitude) },
+    { "wing_origin_offset",    VAR_INT8 | MASTER_VALUE | MODE_ARRAY, .config.array.length = MAX_ORNITHOPTER_PAIRS, PG_SERVO_CONFIG, offsetof(servoConfig_t, wing_origin_offset) },
 };
 
 const uint16_t valueTableEntryCount = ARRAYLEN(valueTable);

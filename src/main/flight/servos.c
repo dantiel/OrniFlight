@@ -39,6 +39,7 @@
 #include "pg/rx.h"
 
 #include "drivers/pwm_output.h"
+#include "drivers/time.h"
 
 #include "fc/config.h"
 #include "fc/rc_controls.h"
@@ -86,6 +87,9 @@ void pgResetFn_servoConfig(servoConfig_t *servoConfig) {
     servoConfig->ornithopter_ferocity_downstroke = 12;  // ~1.78 — mild shaping, near-sine
     servoConfig->ornithopter_ferocity_upstroke = 12;
     servoConfig->ssff_gain = 0;  // off by default — enable with nonzero value
+    servoConfig->servo_speed_deg_s = 857;       // 60° / 70ms — typical micro servo
+    servoConfig->servo_max_amplitude = 55;       // °, ±55° max mechanical throw
+    servoConfig->flap_magnitude = 4;             // 4° per 960µs throttle above 1040
 
     for (unsigned servoIndex = 0; servoIndex < MAX_SUPPORTED_SERVOS; servoIndex++) {
         servoConfig->dev.ioTags[servoIndex] = timerioTagGetByUsage(TIM_USE_SERVO, servoIndex);
@@ -375,23 +379,116 @@ void servoConfigureOutput(void)
 
 // void calculateFlapping()
 
+// ── Adaptive EMA filter + Glide transition state (GralhaAzul: emaServo + tecerTransicaoGlide) ──
+static float emaFlappingLeft[MAX_ORNITHOPTER_PAIRS];
+static float emaFlappingRight[MAX_ORNITHOPTER_PAIRS];
+static bool  emaInitialised = false;
+
+static float glideCurrentLeft[MAX_ORNITHOPTER_PAIRS];
+static float glideCurrentRight[MAX_ORNITHOPTER_PAIRS];
+static bool  glideTransitionActive = false;
+static uint32_t glideLastMicros = 0;
+
+// Servo speed in °/µs: 857°/s → 0.000857 °/µs
+static inline float servoDegPerUs(void) {
+    return (float)servoConfig()->servo_speed_deg_s / 1e6f;
+}
+
 // Function to apply flapping logic to servos based on motor output.
 // Channels 0,1 = left wing, channels 2,3 = right wing (WARP convention).
 // Uses dual shaped sinusoids so roll/yaw can drive ferocity differential.
 void applyFlappingToServos(int16_t *input) {
-  // enable glide mode when throttle is below threshold
-  if (rcData[THROTTLE] > GLIDE_MODE_THRESHOLD) {
+  uint32_t nowUs = micros();
+  bool isFlapping = (rcData[THROTTLE] > GLIDE_MODE_THRESHOLD);
+
+  // ── Determine EMA alpha from wave shape (GralhaAzul: adaptive α) ──
+  // Glide: α=0.30 (fc≈3.4Hz, gentle stick response)
+  // Sinusoidal flap (f<5): α=0.85 (fc≈45Hz, tracks wave up to ~15Hz)
+  // Mixed (5≤f<7): α=0.92 (fast transition)
+  // Square (f≥7): α=1.00 (raw — servo inertia provides physical damping)
+  float alphaEma;
+  if (!isFlapping) {
+    alphaEma = 0.30f;
+  } else {
+    // Estimate ferocity from the raw config values (before PID modulation)
+    float fDown = ferocityParamToFloat(servoConfig()->ornithopter_ferocity_downstroke);
+    float fUp   = ferocityParamToFloat(servoConfig()->ornithopter_ferocity_upstroke);
+    float avgF  = (fDown + fUp) * 0.5f;  // 0..8
+    if (avgF >= 7.0f)      alphaEma = 1.00f;
+    else if (avgF >= 5.0f) alphaEma = 0.92f;
+    else                    alphaEma = 0.85f;
+  }
+
+  if (isFlapping) {
+    // ── Flapping mode: exit glide transition, apply EMA ──
+    glideTransitionActive = false;
+
     for (int p = 0; p < MAX_ORNITHOPTER_PAIRS; p++) {
       float flappingL = shapedFlappingSinusoidLeft[p]  * flappingAmplitude;
       float flappingR = shapedFlappingSinusoidRight[p] * flappingAmplitude;
-      input[INPUT_STABILIZED_FLAPPING_0 + p*2]     = (flappingL / 100) * (motor[p*2]     - 1000);
-      input[INPUT_STABILIZED_FLAPPING_0 + p*2 + 1] = (flappingR / 100) * (motor[p*2 + 1] - 1000);
+      float rawL = (flappingL / 100.0f) * (motor[p*2]     - 1000);
+      float rawR = (flappingR / 100.0f) * (motor[p*2 + 1] - 1000);
+
+      // Adaptive EMA
+      if (!emaInitialised) {
+        emaFlappingLeft[p]  = rawL;
+        emaFlappingRight[p] = rawR;
+      } else {
+        emaFlappingLeft[p]  = alphaEma * rawL + (1.0f - alphaEma) * emaFlappingLeft[p];
+        emaFlappingRight[p] = alphaEma * rawR + (1.0f - alphaEma) * emaFlappingRight[p];
+      }
+      input[INPUT_STABILIZED_FLAPPING_0 + p*2]     = (int16_t)lrintf(emaFlappingLeft[p]);
+      input[INPUT_STABILIZED_FLAPPING_0 + p*2 + 1] = (int16_t)lrintf(emaFlappingRight[p]);
     }
+    emaInitialised = true;
+
   } else {
-    for (int p = 0; p < MAX_ORNITHOPTER_PAIRS; p++) {
-      input[INPUT_STABILIZED_FLAPPING_0 + p*2]     = servoConfig()->ornithopter_glide_deg * 5;
-      input[INPUT_STABILIZED_FLAPPING_0 + p*2 + 1] = servoConfig()->ornithopter_glide_deg * 5;
+    // ── Glide mode: rate-limited transition from current angle to target ──
+    int16_t glideTarget = servoConfig()->ornithopter_glide_deg * 5;
+    float vServo = servoDegPerUs();  // °/µs
+
+    // On first entry or re-entry after flapping, capture current position
+    if (!glideTransitionActive) {
+      glideTransitionActive = true;
+      glideLastMicros = nowUs;
+      for (int p = 0; p < MAX_ORNITHOPTER_PAIRS; p++) {
+        glideCurrentLeft[p]  = emaInitialised ? emaFlappingLeft[p]  : (float)glideTarget;
+        glideCurrentRight[p] = emaInitialised ? emaFlappingRight[p] : (float)glideTarget;
+      }
     }
+
+    uint32_t deltaUs = nowUs - glideLastMicros;
+    if (deltaUs > 100000) deltaUs = 100000;  // safety clamp: max 100ms
+    glideLastMicros = nowUs;
+
+    // Step = ferocity × v_servo × Δt. Use minimum ferocity=1 to guarantee movement.
+    float stepMax = 1.0f * vServo * (float)deltaUs;  // ° per frame at ferocity=1
+    // At 857°/s, stepMax ≈ 17° at 50Hz, 3.4° at 250Hz loop
+
+    for (int p = 0; p < MAX_ORNITHOPTER_PAIRS; p++) {
+      // Ramp left and right independently toward target
+      float errL = (float)glideTarget - glideCurrentLeft[p];
+      float errR = (float)glideTarget - glideCurrentRight[p];
+
+      if (fabsf(errL) <= stepMax) glideCurrentLeft[p]  = (float)glideTarget;
+      else glideCurrentLeft[p]  += (errL > 0.0f) ? stepMax : -stepMax;
+
+      if (fabsf(errR) <= stepMax) glideCurrentRight[p] = (float)glideTarget;
+      else glideCurrentRight[p] += (errR > 0.0f) ? stepMax : -stepMax;
+
+      // Apply EMA in glide too (gentle, α=0.30)
+      if (!emaInitialised) {
+        emaFlappingLeft[p]  = glideCurrentLeft[p];
+        emaFlappingRight[p] = glideCurrentRight[p];
+      } else {
+        emaFlappingLeft[p]  = alphaEma * glideCurrentLeft[p]  + (1.0f - alphaEma) * emaFlappingLeft[p];
+        emaFlappingRight[p] = alphaEma * glideCurrentRight[p] + (1.0f - alphaEma) * emaFlappingRight[p];
+      }
+
+      input[INPUT_STABILIZED_FLAPPING_0 + p*2]     = (int16_t)lrintf(emaFlappingLeft[p]);
+      input[INPUT_STABILIZED_FLAPPING_0 + p*2 + 1] = (int16_t)lrintf(emaFlappingRight[p]);
+    }
+    emaInitialised = true;
   }
 }
 
