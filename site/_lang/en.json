@@ -12,7 +12,6 @@
   "nav_features": "Features",
   "nav_hardware": "Hardware",
   "hero_greeting": "Flapping-wing flight, redefined.",
-  "hero_subhead": "Fly Natural. Control Precise.",
   "hero_version": "STM32F4 ◇ OrniFlight v0.4.6 ◇ apiVersion 1.46",
   "essence_title": "Essence",
   "essence_lead": "OrniFlight is an <strong>open-source flight controller firmware for servo-flapping ornithopters</strong>, forked from Betaflight 4.0.6.",
@@ -53,6 +52,6 @@
   "build_line": "make TARGET=OMNIBUSF4\ndfu-util -a 0 -D obj/orniflight_VERSION_OMNIBUSF4.hex",
   "build_compatible": "GPL v3 ◇ Forked from Betaflight 4.0.6 ◇ Clean build: zero warnings",
   "footer_hermetic": "Hermetic Firmware ◇ STM32F4 ◇ GPL v3 ◇ No Cloud Dependencies",
-  "footer_credit": "OrniFlight — Fly Natural. Control Precise.",
+  "footer_credit": "OrniFlight — Flapping-wing flight, redefined.",
   "footer_resources": "<a href=\"https://github.com/dantiel/OrniFlight\" target=\"_blank\">GitHub</a> ◇ <a href=\"wiki/\">Wiki</a> ◇ <a href=\"tutorials/\">Tutorials</a> ◇ <a href=\"https://github.com/dantiel/orniflight-configurator\" target=\"_blank\">Configurator</a>"
 }

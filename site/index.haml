@@ -28,10 +28,9 @@
       .hero-content
         .hero-logo
           %picture
-            %source{srcset: "#{asset_prefix}/assets/images/cf_logo_black.svg", media: "(prefers-color-scheme: light)"}
-            %img{src: "#{asset_prefix}/assets/images/cf_logo_white.svg", alt: "OrniFlight"}
+            %source{srcset: "#{asset_prefix}/assets/images/cf_logo_white.svg", media: "(prefers-color-scheme: light)"}
+            %img{src: "#{asset_prefix}/assets/images/cf_logo_black.svg", alt: "OrniFlight"}
         .headline
-          %p.subhead= hero_subhead
           %p.greeting= hero_greeting
           %p.version= hero_version
 

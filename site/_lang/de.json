@@ -12,7 +12,6 @@
   "nav_features": "Features",
   "nav_hardware": "Hardware",
   "hero_greeting": "Schlagflug, neu definiert.",
-  "hero_subhead": "Flieg natürlich. Steuere präzise.",
   "hero_version": "STM32F4 ◇ OrniFlight v0.4.6 ◇ apiVersion 1.46",
   "essence_title": "Essenz",
   "essence_lead": "OrniFlight ist eine <strong>Open-Source-Flugcontroller-Firmware für servo-gesteuerte Schlagflügler</strong>, abgeleitet von Betaflight 4.0.6.",
@@ -53,6 +52,6 @@
   "build_line": "make TARGET=OMNIBUSF4\ndfu-util -a 0 -D obj/orniflight_VERSION_OMNIBUSF4.hex",
   "build_compatible": "GPL v3 ◇ Basiert auf Betaflight 4.0.6 ◇ Sauberer Build: null Warnungen",
   "footer_hermetic": "Hermetische Firmware ◇ STM32F4 ◇ GPL v3 ◇ Keine Cloud-Abhängigkeiten",
-  "footer_credit": "OrniFlight — Flieg natürlich. Steuere präzise.",
+  "footer_credit": "OrniFlight — Schlagflug, neu definiert.",
   "footer_resources": "<a href=\"https://github.com/dantiel/OrniFlight\" target=\"_blank\">GitHub</a> ◇ <a href=\"../wiki/\">Wiki</a> ◇ <a href=\"../tutorials/\">Tutorials</a> ◇ <a href=\"https://github.com/dantiel/orniflight-configurator\" target=\"_blank\">Configurator</a>"
 }

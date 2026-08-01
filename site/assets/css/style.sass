@@ -1,4 +1,5 @@
-// OrniFlight — Bird-first design matching Configurator palette
+// OrniFlight — Magnum Opus
+// Bird-first design, Configurator palette, glassmorphism + fine feathers
 // Font: Open Sans. Accent: #8998fe (periwinkle). Header: #3a4192 (dark indigo)
 // Dark default, light via prefers-color-scheme
 
@@ -16,16 +17,31 @@ $light-alt: #f9f9f9
 $white: #fff
 $black: #000
 
-// — Dark default (matching configurator dark mode) —
+// RGB tuples for rgba() glass blending
+$dark-bg-rgb: 32, 32, 32
+$dark-box-rgb: 58, 58, 58
+$dark-alt-rgb: 78, 78, 78
+$light-bg-rgb: 240, 240, 240
+$light-box-rgb: 255, 255, 255
+$light-alt-rgb: 249, 249, 249
+$header-rgb: 58, 65, 146
+$accent-rgb: 137, 152, 254
+
+// — Dark default —
 html
   --bg: #{$dark-content}
+  --bg-rgb: #{$dark-bg-rgb}
   --body-bg: #{$dark-body}
   --text: #{$white}
   --accent: #{$accent}
   --accent-alt: #{$accent-alt}
+  --accent-rgb: #{$accent-rgb}
   --header: #{$header-bg}
+  --header-rgb: #{$header-rgb}
   --box: #{$dark-box}
+  --box-rgb: #{$dark-box-rgb}
   --box-alt: #{$dark-alt}
+  --box-alt-rgb: #{$dark-alt-rgb}
   --mut: #9c9c9c
   --subtle: #6e6e6e
   --dim: #4d4d4d
@@ -34,21 +50,31 @@ html
   --overlay-end: rgba(32, 32, 32, 0.94)
   --shadow-a: rgba(0, 0, 0, 0.5)
   --shadow-b: rgba(0, 0, 0, 0.3)
+  --glass-edge: rgba(255, 255, 255, 0.05)
+  --glass-edge-hover: rgba(137, 152, 254, 0.18)
   --link-color: #bfc6fb
   --paper: url(../../assets/images/paper-dark.jpg)
   --hero-glow: rgba(137, 152, 254, 0.12)
+  --hero-glow-strong: rgba(137, 152, 254, 0.06)
+  --feathers: url(../../assets/images/feathers_dark.png)
+  --feather-opacity: 0.55
 
 // — Light theme —
 @media (prefers-color-scheme: light)
   html
     --bg: #{$light-body}
+    --bg-rgb: #{$light-bg-rgb}
     --body-bg: #{$light-body}
     --text: #303030
     --accent: #{$header-bg}
     --accent-alt: #5a61b0
+    --accent-rgb: #{$header-rgb}
     --header: #{$header-bg}
+    --header-rgb: #{$header-rgb}
     --box: #{$light-box}
+    --box-rgb: #{$light-box-rgb}
     --box-alt: #{$light-alt}
+    --box-alt-rgb: #{$light-alt-rgb}
     --mut: #828885
     --subtle: #adadad
     --dim: #e9e9e9
@@ -57,9 +83,14 @@ html
     --overlay-end: rgba(240, 240, 240, 0.94)
     --shadow-a: rgba(0, 0, 0, 0.06)
     --shadow-b: rgba(0, 0, 0, 0.03)
+    --glass-edge: rgba(0, 0, 0, 0.06)
+    --glass-edge-hover: rgba(58, 65, 146, 0.15)
     --link-color: #{$header-bg}
     --paper: url(../../assets/images/paper.jpg)
     --hero-glow: rgba(58, 65, 146, 0.08)
+    --hero-glow-strong: rgba(58, 65, 146, 0.04)
+    --feathers: url(../../assets/images/feathers_white.png)
+    --feather-opacity: 0.35
 
 // — Base —
 *
@@ -80,15 +111,17 @@ body
   line-height: 1.7
   overflow-x: hidden
   font-size: 15px
+  min-height: 100vh
 
 a
   text-decoration: none
   color: var(--link-color)
   font-weight: 600
+  transition: opacity 0.25s
   &:hover
-    opacity: 0.8
+    opacity: 0.75
 
-// — Navigation —
+// — Navigation — Glass bar —
 nav
   position: fixed
   top: 0
@@ -98,32 +131,37 @@ nav
   justify-content: center
   align-items: center
   gap: 2rem
-  padding: 1rem 2rem
+  padding: 0.9rem 2rem
   z-index: 100
-  background: linear-gradient(to bottom, var(--header) 0%, var(--header) 90%, transparent 100%)
-  transition: background 0.3s, box-shadow 0.3s
+  background: rgba(var(--header-rgb), 0.78)
+  backdrop-filter: blur(18px) saturate(1.5)
+  -webkit-backdrop-filter: blur(18px) saturate(1.5)
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07)
+  transition: background 0.4s, box-shadow 0.4s, border-color 0.4s
 
   &.scrolled
-    box-shadow: 0 2px 16px rgba(0, 0, 0, 0.4)
+    background: rgba(var(--header-rgb), 0.92)
+    box-shadow: 0 2px 24px rgba(0, 0, 0, 0.35)
+    border-bottom-color: rgba(255, 255, 255, 0.12)
 
   a.home-link
     display: flex
     align-items: center
-    opacity: 0.9
+    opacity: 0.85
     transition: opacity 0.3s
     img
-      height: 26px
+      height: 24px
       width: auto
     &:hover
       opacity: 1
 
   a
     color: var(--nav-text)
-    font-size: 0.68rem
+    font-size: 0.66rem
     font-weight: 600
-    letter-spacing: 0.25em
+    letter-spacing: 0.28em
     text-transform: uppercase
-    opacity: 0.7
+    opacity: 0.65
     transition: opacity 0.25s
 
     &:hover
@@ -135,18 +173,18 @@ nav
   gap: 0.35rem
   margin-left: 0.5rem
   a
-    font-size: 0.58rem
-    letter-spacing: 0.2em
-    opacity: 0.45
+    font-size: 0.56rem
+    letter-spacing: 0.22em
+    opacity: 0.4
     padding: 0.1rem 0.2rem
     &:hover
-      opacity: 0.8
+      opacity: 0.75
     &.active
-      opacity: 0.95
+      opacity: 0.9
       color: $accent
       pointer-events: none
 
-// — Hero Layers —
+// — Hero Background — Fixed, behind everything —
 .hero-bg
   position: fixed
   top: 0
@@ -154,7 +192,8 @@ nav
   width: 100%
   height: 100vh
   z-index: 0
-  background: radial-gradient(ellipse 50% 60% at 50% 40%, var(--hero-glow) 0%, transparent 70%), var(--body-bg)
+  background: radial-gradient(ellipse 60% 55% at 50% 38%, var(--hero-glow) 0%, transparent 65%), var(--feathers), var(--body-bg)
+  background-size: auto, 140px, auto
 
 .hero-overlay
   position: fixed
@@ -165,39 +204,36 @@ nav
   z-index: 2
   pointer-events: none
   opacity: 0
-  background: linear-gradient(to bottom, var(--overlay-start) 0%, var(--overlay-start) 25%, var(--overlay-end) 100%)
+  background: linear-gradient(to bottom, var(--overlay-start) 0%, var(--overlay-start) 28%, var(--overlay-end) 100%)
 
 // — Hero Content —
 .hero-content
-  padding-top: 16rem
-  padding-bottom: 4rem
+  padding-top: 17rem
+  padding-bottom: 5rem
   padding-left: 2rem
   padding-right: 2rem
   text-align: center
   transition: opacity 0.1s linear, transform 0.1s linear
   will-change: opacity, transform
 
-// — Hero Logo (cf_logo = bird + ORNIFLIGHT wordmark in special font) —
+// — Hero Logo —
 .hero-logo
   margin-bottom: 1.5rem
   img
-    width: min(85vw, 520px)
+    width: min(82vw, 500px)
     height: auto
-    filter: drop-shadow(0 4px 20px rgba(137, 152, 254, 0.25))
+    filter: drop-shadow(0 4px 28px rgba(var(--accent-rgb), 0.28))
+    animation: logoBreathe 6s ease-in-out infinite
 
-// — Headline (tagline only, logo carries the title) —
+@keyframes logoBreathe
+  0%, 100%
+    filter: drop-shadow(0 4px 28px rgba(var(--accent-rgb), 0.28))
+  50%
+    filter: drop-shadow(0 4px 40px rgba(var(--accent-rgb), 0.42))
+
+// — Headline —
 .headline
   text-align: center
-
-// — Subhead tagline —
-.subhead
-  font-family: $font
-  font-weight: 300
-  font-size: clamp(0.8rem, 2vw, 1.1rem)
-  letter-spacing: 0.3em
-  text-transform: uppercase
-  color: var(--mut)
-  margin-bottom: 2rem
 
 // — Greeting —
 .greeting
@@ -221,24 +257,40 @@ nav
   color: var(--mut)
   margin-top: 1.2rem
 
-// — Main Content —
+// — Main Content — Glass container —
 main
   position: relative
   z-index: 3
-  max-width: 820px
+  max-width: 840px
   margin: 0 auto
-  padding: 5rem 1.5rem
-  background: var(--bg)
-  box-shadow: 0 -40px 40px -20px var(--bg)
+  padding: 5rem 2rem
+  background: rgba(var(--bg-rgb), 0.8)
+  backdrop-filter: blur(24px) saturate(1.35)
+  -webkit-backdrop-filter: blur(24px) saturate(1.35)
+  border-radius: 14px 14px 0 0
+  border-top: 1px solid rgba(255, 255, 255, 0.06)
+  box-shadow: 0 -8px 40px rgba(0, 0, 0, 0.25), 0 -2px 8px rgba(var(--accent-rgb), 0.06)
 
+// — Section Cards — Glass panels —
 section
-  margin-bottom: 6rem
+  margin-bottom: 5rem
+  padding: 2.2rem 2rem
+  background: rgba(var(--box-rgb), 0.45)
+  backdrop-filter: blur(10px) saturate(1.2)
+  -webkit-backdrop-filter: blur(10px) saturate(1.2)
+  border: 1px solid var(--glass-edge)
+  border-radius: 10px
+  transition: border-color 0.5s ease, box-shadow 0.5s ease
+
+  &:hover
+    border-color: var(--glass-edge-hover)
+    box-shadow: 0 4px 32px rgba(0, 0, 0, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.03)
 
 // — Section Headings —
 h2
-  font-size: 1.3rem
+  font-size: 1.25rem
   font-weight: 700
-  letter-spacing: 0.2em
+  letter-spacing: 0.22em
   text-transform: uppercase
   margin-bottom: 2rem
   color: var(--accent)
@@ -248,9 +300,9 @@ h2
 // — Lead paragraph —
 .lead
   font-weight: 400
-  font-size: 1.1rem
+  font-size: 1.08rem
   letter-spacing: 0.03em
-  line-height: 1.8
+  line-height: 1.85
   margin-bottom: 1.5rem
   color: var(--text)
   opacity: 0.9
@@ -271,16 +323,21 @@ em
 // — Code blocks —
 code
   font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace
-  font-size: 0.85rem
+  font-size: 0.84rem
   letter-spacing: 0.03em
-  background: var(--box-alt)
-  padding: 0.15em 0.4em
-  border-radius: 3px
+  background: rgba(var(--box-alt-rgb), 0.55)
+  backdrop-filter: blur(4px)
+  -webkit-backdrop-filter: blur(4px)
+  padding: 0.15em 0.45em
+  border-radius: 4px
+  border: 1px solid rgba(255, 255, 255, 0.04)
 
 .highlight
-  background: var(--box)
-  border: 1px solid var(--dim)
-  border-radius: 4px
+  background: rgba(var(--box-rgb), 0.55)
+  backdrop-filter: blur(8px)
+  -webkit-backdrop-filter: blur(8px)
+  border: 1px solid var(--glass-edge)
+  border-radius: 6px
   padding: 1.25rem 1.75rem
   margin: 2rem 0
 
@@ -289,6 +346,9 @@ code
     letter-spacing: 0.05em
     background: none
     padding: 0
+    border: none
+    backdrop-filter: none
+    -webkit-backdrop-filter: none
 
 // — Doc link —
 .doc-link
@@ -300,7 +360,7 @@ code
     color: var(--accent)
     transition: opacity 0.2s
     &:hover
-      opacity: 0.7
+      opacity: 0.65
 
 // — Definition list —
 dl.grid
@@ -312,7 +372,7 @@ dt
   font-weight: 700
   letter-spacing: 0.1em
   text-transform: uppercase
-  font-size: 0.75rem
+  font-size: 0.72rem
   color: var(--mut)
   padding-top: 0.5rem
 
@@ -341,7 +401,7 @@ td
     font-weight: 700
     letter-spacing: 0.1em
     text-transform: uppercase
-    font-size: 0.68rem
+    font-size: 0.66rem
 
 .value
   font-weight: 300
@@ -352,9 +412,11 @@ td
 // — Build section —
 .build
   pre
-    background: var(--box)
-    border: 1px solid var(--dim)
-    border-radius: 4px
+    background: rgba(var(--box-rgb), 0.5)
+    backdrop-filter: blur(6px)
+    -webkit-backdrop-filter: blur(6px)
+    border: 1px solid var(--glass-edge)
+    border-radius: 6px
     padding: 1.5rem
     margin: 1rem 0
     overflow-x: auto
@@ -362,32 +424,37 @@ td
       font-size: 0.8rem
       letter-spacing: 0.04em
       background: none
+      border: none
+      backdrop-filter: none
+      -webkit-backdrop-filter: none
 
 .compatible
   font-weight: 400
-  font-size: 0.75rem
-  letter-spacing: 0.15em
+  font-size: 0.72rem
+  letter-spacing: 0.16em
   text-transform: uppercase
   color: var(--mut)
 
-// — Footer —
+// — Footer — Glass —
 footer
   position: relative
   z-index: 3
   text-align: center
   padding: 4rem 1.5rem
-  border-top: 1px solid var(--dim)
-  font-size: 0.68rem
+  border-top: 1px solid rgba(255, 255, 255, 0.05)
+  font-size: 0.66rem
   font-weight: 600
-  letter-spacing: 0.12em
+  letter-spacing: 0.14em
   text-transform: uppercase
   line-height: 2
-  background: var(--bg)
+  background: rgba(var(--bg-rgb), 0.85)
+  backdrop-filter: blur(16px) saturate(1.25)
+  -webkit-backdrop-filter: blur(16px) saturate(1.25)
 
   p
     margin-bottom: 0.5rem
-    opacity: 0.5
-    font-size: 0.68rem
+    opacity: 0.45
+    font-size: 0.66rem
 
   a
     color: var(--accent)
@@ -396,27 +463,37 @@ footer
 
 .credit
   margin-top: 1.5rem
-  font-size: 0.58rem
+  font-size: 0.56rem
   font-weight: 300
-  letter-spacing: 0.2em
-  opacity: 0.3
+  letter-spacing: 0.22em
+  opacity: 0.25
 
-// — Subpages (Wiki, Docs, Tutorials) —
+// — Subpages —
 body.subpage
   nav
     position: sticky
-    background: var(--header)
-    box-shadow: 0 1px 0 var(--dim)
+    background: rgba(var(--header-rgb), 0.85)
+    backdrop-filter: blur(18px) saturate(1.5)
+    -webkit-backdrop-filter: blur(18px) saturate(1.5)
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.06)
 
   .content-page
     padding-top: 3rem
-    max-width: 820px
+    max-width: 840px
+    background: rgba(var(--bg-rgb), 0.8)
+    backdrop-filter: blur(24px) saturate(1.35)
+    -webkit-backdrop-filter: blur(24px) saturate(1.35)
+    border-radius: 14px 14px 0 0
+    border-top: 1px solid rgba(255, 255, 255, 0.06)
+    box-shadow: 0 -8px 40px rgba(0, 0, 0, 0.25)
 
     article
+      padding: 2rem
+
       h1
-        font-size: 1.8rem
+        font-size: 1.7rem
         font-weight: 700
-        letter-spacing: 0.15em
+        letter-spacing: 0.16em
         text-transform: uppercase
         margin-bottom: 2rem
         color: var(--accent)
@@ -424,7 +501,7 @@ body.subpage
         padding-bottom: 0.75rem
 
       h2
-        font-size: 1.15rem
+        font-size: 1.12rem
         margin-top: 3rem
         margin-bottom: 1rem
         letter-spacing: 0.1em
@@ -433,7 +510,7 @@ body.subpage
         color: var(--text)
 
       h3
-        font-size: 1rem
+        font-size: 0.98rem
         margin-top: 2rem
         margin-bottom: 0.75rem
         letter-spacing: 0.08em
@@ -454,19 +531,26 @@ body.subpage
         margin: 1.5rem 0
         opacity: 0.85
         font-style: italic
-        background: var(--box-alt)
-        border-radius: 0 4px 4px 0
+        background: rgba(var(--box-alt-rgb), 0.4)
+        backdrop-filter: blur(6px)
+        -webkit-backdrop-filter: blur(6px)
+        border-radius: 0 6px 6px 0
 
       code
-        background: var(--box-alt)
+        background: rgba(var(--box-alt-rgb), 0.5)
+        backdrop-filter: blur(4px)
+        -webkit-backdrop-filter: blur(4px)
         padding: 0.15em 0.4em
-        font-size: 0.85em
+        font-size: 0.84em
         border-radius: 3px
+        border: 1px solid rgba(255, 255, 255, 0.04)
 
       pre
-        background: var(--box)
-        border: 1px solid var(--dim)
-        border-radius: 4px
+        background: rgba(var(--box-rgb), 0.5)
+        backdrop-filter: blur(8px)
+        -webkit-backdrop-filter: blur(8px)
+        border: 1px solid var(--glass-edge)
+        border-radius: 6px
         padding: 1.25rem 1.5rem
         margin: 1.5rem 0
         overflow-x: auto
@@ -474,6 +558,9 @@ body.subpage
           background: none
           padding: 0
           font-size: 0.8rem
+          border: none
+          backdrop-filter: none
+          -webkit-backdrop-filter: none
 
       table
         width: 100%
@@ -484,7 +571,7 @@ body.subpage
           font-weight: 700
           letter-spacing: 0.1em
           text-transform: uppercase
-          font-size: 0.68rem
+          font-size: 0.66rem
           padding: 0.5rem 0.75rem
           border-bottom: 2px solid var(--accent)
         td
@@ -524,19 +611,21 @@ body.subpage
   display: flex
   align-items: center
   justify-content: center
-  background: var(--box)
-  border: 1px solid var(--dim)
-  border-radius: 3px
+  background: rgba(var(--box-rgb), 0.6)
+  backdrop-filter: blur(8px)
+  -webkit-backdrop-filter: blur(8px)
+  border: 1px solid var(--glass-edge)
+  border-radius: 8px
   cursor: pointer
   opacity: 0
   pointer-events: none
   transition: opacity 0.4s, border-color 0.3s
 
   &.visible
-    opacity: 0.45
+    opacity: 0.5
     pointer-events: auto
     &:hover
-      opacity: 0.8
+      opacity: 0.85
       border-color: var(--accent)
 
   &::after
@@ -551,26 +640,23 @@ body.subpage
 // — Responsive —
 @media (max-width: 480px)
   nav
-    gap: 0.4rem
-    padding: 0.7rem 0.4rem
+    gap: 0.35rem
+    padding: 0.65rem 0.35rem
     a
-      font-size: 0.5rem
-      letter-spacing: 0.12em
+      font-size: 0.48rem
+      letter-spacing: 0.1em
     a.home-link img
-      height: 20px
+      height: 18px
   .lang-switch
     margin-left: 0
     a
-      font-size: 0.45rem
+      font-size: 0.42rem
   .hero-content
     padding-top: 10rem
     padding-left: 1rem
     padding-right: 1rem
   .hero-logo img
-    width: 90vw
-  .subhead
-    letter-spacing: 0.12em
-    font-size: 0.6rem
+    width: 88vw
   .greeting
     font-size: 0.55rem
   dl.grid
@@ -579,6 +665,10 @@ body.subpage
     margin-top: 0.6rem
   main
     padding: 3rem 1rem
+    border-radius: 10px 10px 0 0
+  section
+    padding: 1.5rem 1rem
+    margin-bottom: 3rem
   footer
     padding: 2.5rem 1rem
   .scroll-top
@@ -586,6 +676,10 @@ body.subpage
     right: 1rem
     width: 34px
     height: 34px
+  body.subpage .content-page
+    border-radius: 10px 10px 0 0
+    article
+      padding: 1.25rem
 
 // — RTL —
 [dir="rtl"]

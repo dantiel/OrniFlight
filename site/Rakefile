@@ -53,8 +53,10 @@ HAML_LAYOUT = <<~'LAYOUT'
     %link{rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,600;0,700;0,800;1,300;1,400&display=swap"}
     %link{rel: "stylesheet", href: "#{asset_prefix}/assets/css/style.css"}
   %body.subpage
+    .hero-bg
     %nav
-      %a.home-link{href: "#{asset_prefix}/", title: "OrniFlight"} ◇
+      %a.home-link{href: "#{asset_prefix}/", title: "OrniFlight"}
+        %img{src: "#{asset_prefix}/assets/images/of_icon_128.png", alt: "OrniFlight"}
       %a{href: "#{asset_prefix}/#essence"} Essence
       %a{href: "#{asset_prefix}/wiki/"} Wiki
       %a{href: "#{asset_prefix}/docs/"} Docs
@@ -73,7 +75,7 @@ HAML_LAYOUT = <<~'LAYOUT'
         ◇
         %a{href: "#{asset_prefix}/tutorials/"} Tutorials
       %p Hermetic Firmware ◇ STM32F4 ◇ GPL v3
-      %p.credit OrniFlight — Fly Natural. Control Precise.
+      %p.credit OrniFlight — Flapping-wing flight, redefined.
     %button.scroll-top{onclick: "window.scrollTo({top:0,behavior:'smooth'})", "aria-label" => "Scroll to top"}
     :javascript
       const btn = document.querySelector('.scroll-top');
