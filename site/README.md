@@ -1,24 +1,29 @@
-# OrniFlight Website
+# OrniFlight Website — Magnum Opus
 
 Static site for the OrniFlight servo-flapping flight controller firmware.
+Bird-first glassmorphism design matching the Configurator palette.
 
 ## Quick Start
 
 ```bash
 cd site
-bundle exec rake server     # → http://localhost:8001
+bundle exec rake server     # → http://localhost:8000
 ```
 
-Open **http://localhost:8001** in your browser. The server auto-reloads on changes.
+Open **http://localhost:8000** in your browser.
 
-## Design
+## Design — Glassmorphism
 
-- **Font:** Open Sans (Google Fonts) — matches OrniFlight Configurator UI
-- **Accent:** Periwinkle `#8998fe` — the OrniFlight brand color
-- **Dark Mode:** `#202020` body, `#3a3a3a` cards, indigo `#3a4192` header
-- **Light Mode:** Warm parchment `#f5f0e8`, sky blue `#4a7a9a`
-- **Parallax Hero:** CSS-only, scrolls logo + overlay on landing page
-- **Assets:** Logo SVGs, paper textures, dark/light mode icons — all from Configurator
+- **Font:** Open Sans (Google Fonts) — matches Configurator UI
+- **Accent:** Periwinkle `#8998fe` / Indigo `#3a4192`
+- **Glass Nav:** `backdrop-filter: blur(18px) saturate(1.5)` on semi-transparent indigo
+- **Glass Main:** `blur(24px) saturate(1.35)`, rounded top, accent glow border
+- **Glass Cards:** sections with `blur(10px)`, hover glow transition, subtle edge
+- **Glass Footer:** `blur(16px) saturate(1.25)`
+- **Fine Feathers:** 140px repeat background behind glass layers
+- **Logo Breathe:** 6s glow pulse animation on cf_logo SVGs
+- **Dark/Light:** CSS custom properties with RGB tuples for rgba() glass blending
+- **Assets:** Logo SVGs, paper/feather textures, icons — from Configurator
 
 ## Architecture
 
@@ -26,10 +31,8 @@ Open **http://localhost:8001** in your browser. The server auto-reloads on chang
 site/
 ├── index.haml              # Landing page template (HAML)
 ├── _lang/                  # i18n JSON (en, de)
-│   ├── en.json
-│   └── de.json
 ├── assets/
-│   ├── css/style.sass      # Indented syntax, dark/light themes
+│   ├── css/style.sass      # Indented syntax, glassmorphism, dark/light
 │   └── images/             # Logos, textures, icons (from Configurator)
 ├── en/                     # English subpages (Markdown)
 │   ├── wiki/               # ONDAS theory, MSP, profiles
@@ -38,7 +41,6 @@ site/
 ├── de/                     # German subpages
 ├── Rakefile                # Build: HAML→HTML, SASS→CSS, MD→HTML
 ├── Gemfile                 # Ruby dependencies
-├── watch.sh                # Auto-rebuild on changes
 └── README.md
 ```
 
@@ -46,21 +48,14 @@ site/
 
 ```bash
 bundle exec rake build      # Full: landing + sass + content pages
-bundle exec rake server     # Local server → http://localhost:8001
-bundle exec rake watch      # Auto-rebuild on changes
-```
-
-Or use the shortcut:
-
-```bash
-./watch.sh
+bundle exec rake server     # Local → http://localhost:8000
+./watch.sh                  # Auto-rebuild on changes
 ```
 
 ## Content Pages
 
-Wiki, docs, and tutorials are written in **Markdown** (`.md`). The Rakefile converts them to HTML wrapped in a HAML layout template. Add a `.md` file to `en/wiki/`, `en/docs/`, or `en/tutorials/` — it auto-appears in the section index.
-
-The first line (H1 heading) becomes the page title.
+Add `.md` to `en/wiki/`, `en/docs/`, or `en/tutorials/` — auto-appears in section index.
+First H1 line → page title.
 
 ## Stack
 
