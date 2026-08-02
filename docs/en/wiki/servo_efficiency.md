@@ -5,9 +5,7 @@ A curated selection of servos tested and ranked for ornithopter use.
 Higher is better. Prices in <select class="currency-select inline-currency">
   <option value="EUR">EUR €</option><option value="USD">USD $</option><option value="GBP">GBP £</option>
   <option value="CHF">CHF</option><option value="JPY">JPY ¥</option><option value="BRL">BRL R$</option>
-</select> — follows your region. Flight-tested entries marked with real-world results.
-
-Click column headers to sort. Submit additions via PR to `_data/servos.yml`.
+</select>. Click column headers to sort. Submit additions via PR to `_data/servos.yml`.
 
 
 <table class="servo-table">
@@ -83,8 +81,8 @@ Click column headers to sort. Submit additions via PR to `_data/servos.yml`.
         <td class="num">7.67</td>
         <td class="num" data-price-eur="11.00">€11.00</td>
         <td class="num strong">0.84</td>
-        <td class="flight untested-cell" data-flight-rating="4">Good Flight</td>
-        <td class="notes">Up to 6.2V</td>
+        <td class="flight" data-flight-rating="4">Good Flight <a href="https://youtu.be/PmHgHTTnvVI" class="yt-link" target="_blank">📺</a><a href="https://youtu.be/E20FnTzsE6o" class="yt-link" target="_blank">📺</a></td>
+        <td class="notes">Up to 6.2V. Gralha Azul 28g / Seraphim 31g</td>
       </tr>
       <tr class="untested">
         <td>Blue Arrow D05023MG</td>
@@ -134,7 +132,7 @@ Click column headers to sort. Submit additions via PR to `_data/servos.yml`.
         <td class="flight untested-cell">Untested</td>
         <td class="notes">Ultra-light 3g</td>
       </tr>
-      <tr class="untested">
+      <tr>
         <td>VOTIK PTK 7350 MG-D</td>
         <td class="num">7.4</td>
         <td class="num">5.5</td>
@@ -143,8 +141,8 @@ Click column headers to sort. Submit additions via PR to `_data/servos.yml`.
         <td class="num">4.68</td>
         <td class="num" data-price-eur="5.50">€5.50</td>
         <td class="num strong">1.03</td>
-        <td class="flight untested-cell">Untested</td>
-        <td class="notes">Best efficiency/€ — the budget king</td>
+        <td class="flight" data-flight-rating="5">Excellent <a href="https://youtu.be/iSIwwHDRsHg" class="yt-link" target="_blank">📺</a><a href="https://youtu.be/Ta3ghJrFt-0" class="yt-link" target="_blank">📺</a><a href="https://youtu.be/6kXmIZEmYUA" class="yt-link" target="_blank">📺</a></td>
+        <td class="notes">Best efficiency/€ — the budget king. 32+ flights by Dr. Kazu</td>
       </tr>
       <tr>
         <td>Inservos D0576HT-MG-HV</td>
@@ -155,8 +153,8 @@ Click column headers to sort. Submit additions via PR to `_data/servos.yml`.
         <td class="num">9.49</td>
         <td class="num" data-price-eur="20.00">€20.00</td>
         <td class="num strong">0.77</td>
-        <td class="flight untested-cell" data-flight-rating="5">Strong Flight</td>
-        <td class="notes">Gear broke on first test flight</td>
+        <td class="flight" data-flight-rating="5">Strong Flight <a href="https://youtu.be/JRferxboRa4" class="yt-link" target="_blank">📺</a></td>
+        <td class="notes">White Heron 44g 1175mm. Gear broke on first test flight</td>
       </tr>
       <tr>
         <td>Inservos D0474HT-MG-HV</td>
@@ -167,7 +165,7 @@ Click column headers to sort. Submit additions via PR to `_data/servos.yml`.
         <td class="num">6.16</td>
         <td class="num" data-price-eur="23.00">€23.00</td>
         <td class="num strong">0.41</td>
-        <td class="flight untested-cell" data-flight-rating="3">Okay Flight</td>
+        <td class="flight" data-flight-rating="3">Okay Flight</td>
         <td class="notes"></td>
       </tr>
       <tr class="untested">
@@ -299,7 +297,7 @@ Click column headers to sort. Submit additions via PR to `_data/servos.yml`.
         <td class="num">3.27</td>
         <td class="num" data-price-eur="36.00">€36.00</td>
         <td class="num strong">0.16</td>
-        <td class="flight untested-cell" data-flight-rating="4">Good Flight</td>
+        <td class="flight" data-flight-rating="4">Good Flight</td>
         <td class="notes">Magnet potentiometer</td>
       </tr>
       <tr class="untested">
