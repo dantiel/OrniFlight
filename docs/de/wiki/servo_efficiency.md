@@ -81,8 +81,8 @@ Höher ist besser. Preise in <select class="currency-select inline-currency">
         <td class="num">7.67</td>
         <td class="num" data-price-eur="11.00">€11.00</td>
         <td class="num strong">0.84</td>
-        <td class="flight" data-flight-rating="5">Strong Flight <a href="https://youtu.be/JRferxboRa4" class="yt-link" target="_blank">📺</a><a href="https://youtu.be/PmHgHTTnvVI" class="yt-link" target="_blank">📺</a><a href="https://youtu.be/3Zg00BK7OsA" class="yt-link" target="_blank">📺</a><a href="https://youtu.be/v4sA96qaZxQ" class="yt-link" target="_blank">📺</a><a href="https://youtu.be/D_P8zF7rx3g" class="yt-link" target="_blank">📺</a></td>
-        <td class="notes">Up to 6.2V. Gralha Azul 28g, Seraphim 31g (d4ro) + Falcon30iVV5 165g, Kestrel85 105g (Kazu)</td>
+        <td class="flight" data-flight-rating="5">Strong Flight <a href="https://youtu.be/JRferxboRa4" class="yt-link" target="_blank">📺</a><a href="https://youtu.be/PmHgHTTnvVI" class="yt-link" target="_blank">📺</a><a href="https://youtu.be/3Zg00BK7OsA" class="yt-link" target="_blank">📺</a></td>
+        <td class="notes">Up to 6.2V. Gralha Azul 28g, Seraphim 31g (d4ro)</td>
       </tr>
       <tr class="untested">
         <td>Blue Arrow D05023MG</td>

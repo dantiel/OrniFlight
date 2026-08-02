@@ -63,8 +63,8 @@ servos:
     eff_per_euro_scale: 0.84
     flight_performance:
       rating: 5
-      note: Strong Flight <a href="https://youtu.be/JRferxboRa4" class="yt-link" target="_blank">📺</a><a href="https://youtu.be/PmHgHTTnvVI" class="yt-link" target="_blank">📺</a><a href="https://youtu.be/3Zg00BK7OsA" class="yt-link" target="_blank">📺</a><a href="https://youtu.be/v4sA96qaZxQ" class="yt-link" target="_blank">📺</a><a href="https://youtu.be/D_P8zF7rx3g" class="yt-link" target="_blank">📺</a>
-    notes: Up to 6.2V. Gralha Azul 28g, Seraphim 31g (d4ro) + Falcon30iVV5 165g, Kestrel85 105g (Kazu)
+      note: Strong Flight <a href="https://youtu.be/JRferxboRa4" class="yt-link" target="_blank">📺</a><a href="https://youtu.be/PmHgHTTnvVI" class="yt-link" target="_blank">📺</a><a href="https://youtu.be/3Zg00BK7OsA" class="yt-link" target="_blank">📺</a>
+    notes: Up to 6.2V. Gralha Azul 28g, Seraphim 31g (d4ro)
 
   - brand: Blue Arrow
     model: D05023MG
