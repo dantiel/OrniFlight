@@ -18,7 +18,7 @@ OrniFlight's Command Line Interface (CLI) provides full access to all settings. 
 
 ## Essential Settings
 
-### Board & Features
+### Board &amp;a Features
 
 ```
 # List available features

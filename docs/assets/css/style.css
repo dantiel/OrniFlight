@@ -241,13 +241,13 @@ nav a:hover {
 }
 
 .hero-logo {
-  margin-bottom: 1.8rem;
-  margin-top: 1.2rem;
+  margin-bottom: 1.2rem;
+  margin-top: 2rem;
 }
 .hero-logo img.logo-svg {
-  width: min(84vw, 580px);
+  width: min(88vw, 640px);
   height: auto;
-  filter: drop-shadow(0 4px 32px rgba(var(--accent-rgb), 0.32));
+  filter: drop-shadow(0 6px 40px rgba(var(--accent-rgb), 0.36));
   animation: logoBreathe 6s ease-in-out infinite;
 }
 
@@ -263,15 +263,28 @@ nav a:hover {
   text-align: center;
 }
 
+.hero-transrobotic {
+  font-family: "SF TransRobotics Extended", "SF TransRobotics", sans-serif;
+  font-weight: 700;
+  font-size: clamp(1.6rem, 4.5vw, 2.8rem);
+  letter-spacing: 0.08em;
+  margin-bottom: 0.6rem;
+  line-height: 1.15;
+  background: linear-gradient(135deg, var(--accent) 45%, var(--accent-alt) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
 .greeting {
   font-family: "Outfit", "SF Pro Text", "Segoe UI", sans-serif;
   font-weight: 300;
   font-style: normal;
-  font-size: clamp(1.35rem, 3vw, 1.75rem);
+  font-size: clamp(1.4rem, 3.2vw, 1.85rem);
   color: var(--accent-alt);
   margin-bottom: 0.3rem;
   opacity: 0.72;
-  letter-spacing: 0;
+  letter-spacing: 0.01em;
 }
 
 .version {
@@ -314,14 +327,17 @@ section:hover {
 }
 
 h2 {
-  font-family: "SF TransRobotics Extended", "SF TransRobotics", "Outfit", sans-serif;
-  font-size: 1.4rem;
-  font-weight: 350;
+  font-family: "SF TransRobotics Extended", "SF TransRobotics", sans-serif;
+  font-size: clamp(1.55rem, 4vw, 2.2rem);
+  font-weight: 700;
   margin-bottom: 1.8rem;
-  color: var(--accent);
-  border-bottom: 1px solid var(--dim);
   padding-bottom: 0.5rem;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.06em;
+  border-bottom: 1px solid var(--dim);
+  background: linear-gradient(135deg, var(--accent) 40%, var(--accent-alt) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .lead {
@@ -517,13 +533,15 @@ footer a:hover {
   margin-bottom: 1rem;
 }
 .subpage-hero h1 {
-  font-family: "SF TransRobotics Extended", "SF TransRobotics", "Outfit", sans-serif;
-  font-weight: 400;
-  font-size: clamp(1.4rem, 4vw, 2rem);
-  color: var(--accent);
-  letter-spacing: 0.04em;
+  font-family: "SF TransRobotics Extended", "SF TransRobotics", sans-serif;
+  font-weight: 700;
+  font-size: clamp(1.5rem, 4.5vw, 2.2rem);
+  letter-spacing: 0.07em;
   margin: 0;
-  opacity: 0.85;
+  background: linear-gradient(135deg, var(--accent) 40%, var(--accent-alt) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 body.subpage nav {

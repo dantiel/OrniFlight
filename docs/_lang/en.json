@@ -14,6 +14,7 @@
   "nav_wiki": "Wiki",
   "nav_docs": "Docs",
   "nav_tutorials": "Tutorials",
+  "hero_sub": "ORNIFLIGHT",
   "hero_greeting": "Flapping-wing flight, redefined.",
   "hero_version": "STM32F4 ◇ OrniFlight v0.4.6 ◇ apiVersion 1.46",
   "manifest_title": "Manifest",
