@@ -1,0 +1,368 @@
+# OrniFlight Servo Efficiency Database
+# Curated from: https://docs.google.com/spreadsheets/d/1kbXwi2PySJBidbxUcYD6d7tkyjuGbEnygb2siktYi50
+# 
+# Columns:
+#   efficiency = Torque-Weight-Speed-Ratio = torque / (weight * speed)  [kg·s / cm·g·deg]
+#   eff_per_euro_scale = efficiency_per_euro / ∛torque  [scaled value/€]
+#
+# Voltage groups from the source sheet. More servos will be added over time.
+
+servos:
+  # ── 4.8V ────────────────────────────────────────────────────
+  - brand: KST
+    model: DS 113 MG
+    voltage: 4.8
+    weight: 12.0
+    torque: 1.8
+    speed: 0.14
+    price: 14.30
+    efficiency: 1.07
+    eff_per_euro_scale: 0.09
+
+  - brand: Blue Arrow
+    model: D05023MG
+    voltage: 4.8
+    weight: 5.4
+    torque: 1.5
+    speed: 0.06
+    price: 12.00
+    efficiency: 4.63
+    eff_per_euro_scale: 0.44
+    notes: Slow under load
+
+  # ── 5V ──────────────────────────────────────────────────────
+  - brand: Blue Arrow
+    model: D43S-6.0-MG
+    voltage: 5.0
+    weight: 5.6
+    torque: 1.48
+    speed: 0.048
+    price: 11.00
+    efficiency: 5.51
+    eff_per_euro_scale: 0.57
+
+  - brand: Blue Arrow
+    model: D05023MG
+    voltage: 5.0
+    weight: 5.4
+    torque: 1.23
+    speed: 0.045
+    price: 12.00
+    efficiency: 5.06
+    eff_per_euro_scale: 0.45
+
+  # ── 6V ──────────────────────────────────────────────────────
+  - brand: Blue Arrow
+    model: AF D43S-6.0-MG
+    voltage: 6.0
+    weight: 5.6
+    torque: 1.76
+    speed: 0.041
+    price: 11.00
+    efficiency: 7.67
+    eff_per_euro_scale: 0.84
+    flight_tested: Good Flight
+    notes: Up to 6.2V
+
+  - brand: Blue Arrow
+    model: D05023MG
+    voltage: 6.0
+    weight: 5.4
+    torque: 1.42
+    speed: 0.04
+    price: 12.00
+    efficiency: 6.57
+    eff_per_euro_scale: 0.62
+
+  - brand: KST
+    model: DS 113 MG
+    voltage: 6.0
+    weight: 12.0
+    torque: 2.2
+    speed: 0.11
+    price: 14.30
+    efficiency: 1.67
+    eff_per_euro_scale: 0.15
+
+  - brand: Spektrum
+    model: H2060
+    voltage: 6.0
+    weight: 4.0
+    torque: 0.82
+    speed: 0.07
+    price: 16.00
+    efficiency: 2.93
+    eff_per_euro_scale: 0.17
+    notes: Ultra-light 4g
+
+  - brand: Blue Arrow
+    model: D03013
+    voltage: 6.0
+    weight: 3.0
+    torque: 0.65
+    speed: 0.06
+    price: 13.10
+    efficiency: 3.61
+    eff_per_euro_scale: 0.24
+    notes: Ultra-light 3g
+
+  # ── 7.4V (main ornithopter voltage) ─────────────────────────
+  - brand: VOTIK
+    model: PTK 7350 MG-D
+    voltage: 7.4
+    weight: 5.5
+    torque: 1.8
+    speed: 0.07
+    price: 5.50
+    efficiency: 4.68
+    eff_per_euro_scale: 1.03
+    notes: Best efficiency/€ — the budget king
+
+  - brand: Inservos
+    model: D0576HT-MG-HV
+    voltage: 7.4
+    weight: 7.9
+    torque: 4.2
+    speed: 0.056
+    price: 20.00
+    efficiency: 9.49
+    eff_per_euro_scale: 0.77
+    flight_tested: Strong Flight
+    notes: Gear broke on first test flight
+
+  - brand: Inservos
+    model: D0474HT-MG-HV
+    voltage: 7.4
+    weight: 7.3
+    torque: 3.6
+    speed: 0.08
+    price: 23.00
+    efficiency: 6.16
+    eff_per_euro_scale: 0.41
+    flight_tested: Okay Flight
+
+  - brand: Blue Bird
+    model: BMS-126WV
+    voltage: 7.4
+    weight: 11.3
+    torque: 6.5
+    speed: 0.07
+    price: 20.00
+    efficiency: 8.22
+    eff_per_euro_scale: 0.77
+    notes: New 2024 WV series
+
+  - brand: Blue Bird
+    model: BMS-127WV
+    voltage: 7.4
+    weight: 11.3
+    torque: 4.8
+    speed: 0.05
+    price: 20.00
+    efficiency: 8.50
+    eff_per_euro_scale: 0.72
+    notes: New WV series, slower but precise
+
+  - brand: Blue Bird
+    model: BMS-115WV
+    voltage: 7.4
+    weight: 11.1
+    torque: 7.1
+    speed: 0.09
+    price: 20.00
+    efficiency: 7.11
+    eff_per_euro_scale: 0.68
+
+  - brand: Blue Bird
+    model: BMS-125WV
+    voltage: 7.4
+    weight: 11.3
+    torque: 7.1
+    speed: 0.09
+    price: 20.00
+    efficiency: 6.98
+    eff_per_euro_scale: 0.67
+    notes: Like 115WV, sub-zero rated
+
+  - brand: Blue Bird
+    model: BMS-207WV
+    voltage: 7.4
+    weight: 17.5
+    torque: 7.5
+    speed: 0.05
+    price: 25.00
+    efficiency: 8.57
+    eff_per_euro_scale: 0.67
+
+  - brand: Blue Bird
+    model: BMS-M15S
+    voltage: 7.4
+    weight: 13.8
+    torque: 7.5
+    speed: 0.10
+    price: 16.00
+    efficiency: 5.43
+    eff_per_euro_scale: 0.66
+    notes: Great value mid-weight
+
+  - brand: Blue Bird
+    model: BMS-115HV
+    voltage: 7.4
+    weight: 11.3
+    torque: 5.4
+    speed: 0.10
+    price: 18.00
+    efficiency: 4.78
+    eff_per_euro_scale: 0.47
+
+  - brand: Blue Bird
+    model: BMS-107HV
+    voltage: 7.4
+    weight: 10.5
+    torque: 2.5
+    speed: 0.05
+    price: 13.00
+    efficiency: 4.76
+    eff_per_euro_scale: 0.50
+    notes: Entry-level WV
+
+  - brand: Blue Bird
+    model: A10H WV
+    voltage: 7.4
+    weight: 7.4
+    torque: 3.2
+    speed: 0.07
+    price: 33.00
+    efficiency: 6.18
+    eff_per_euro_scale: 0.28
+
+  - brand: JX
+    model: DHV56MG
+    voltage: 7.4
+    weight: 5.6
+    torque: 1.2
+    speed: 0.10
+    price: 8.15
+    efficiency: 2.14
+    eff_per_euro_scale: 0.28
+    notes: Budget 5.6g option
+
+  - brand: KST
+    model: MR320
+    voltage: 7.4
+    weight: 21.0
+    torque: 5.5
+    speed: 0.08
+    price: 36.00
+    efficiency: 3.27
+    eff_per_euro_scale: 0.16
+    flight_tested: Good Flight
+    notes: Magnet potentiometer
+
+  - brand: KST
+    model: X08 Plus V5
+    voltage: 7.4
+    weight: 9.0
+    torque: 4.85
+    speed: 0.12
+    price: 43.00
+    efficiency: 4.49
+    eff_per_euro_scale: 0.18
+    notes: Premium 9g, excellent build
+
+  - brand: KST
+    model: DS215MG
+    voltage: 7.4
+    weight: 20.0
+    torque: 3.7
+    speed: 0.05
+    price: 33.50
+    efficiency: 3.70
+    eff_per_euro_scale: 0.17
+
+  - brand: SAVÖX
+    model: SV-1232MG
+    voltage: 7.4
+    weight: 23.0
+    torque: 5.0
+    speed: 0.05
+    price: 23.00
+    efficiency: 4.35
+    eff_per_euro_scale: 0.32
+
+  - brand: Blue Arrow
+    model: MI CS 9-6F MG
+    voltage: 7.4
+    weight: 7.64
+    torque: 2.68
+    speed: 0.047
+    price: 19.50
+    efficiency: 7.46
+    eff_per_euro_scale: 0.53
+    notes: Magnet potentiometer
+
+  - brand: Blue Arrow
+    model: MI CS 9-6 MG
+    voltage: 7.4
+    weight: 7.9
+    torque: 3.6
+    speed: 0.073
+    price: 19.50
+    efficiency: 6.24
+    eff_per_euro_scale: 0.49
+    notes: Magnet potentiometer
+
+  - brand: ROBSG
+    model: HS1106S
+    voltage: 7.4
+    weight: 20.3
+    torque: 9.5
+    speed: 0.05
+    price: 28.00
+    efficiency: 9.36
+    eff_per_euro_scale: 0.71
+    notes: Gear failure after few flights
+
+  - brand: DUALSKY
+    model: DS169F
+    voltage: 7.4
+    weight: 9.0
+    torque: 2.8
+    speed: 0.06
+    price: 30.99
+    efficiency: 5.19
+    eff_per_euro_scale: 0.24
+
+  - brand: Petoi
+    model: P1S
+    voltage: 7.4
+    weight: 14.0
+    torque: 3.0
+    speed: 0.07
+    price: 14.00
+    efficiency: 3.06
+    eff_per_euro_scale: 0.32
+
+  # ── 8.4V ────────────────────────────────────────────────────
+  - brand: Blue Arrow
+    model: X-4 HTMG HV
+    voltage: 8.4
+    weight: 7.3
+    torque: 3.4
+    speed: 0.043
+    price: ~
+    efficiency: 10.83
+    eff_per_euro_scale: ~
+    notes: Highest raw efficiency in class; factory price only
+
+  # ── Larger / Reference ──────────────────────────────────────
+  - brand: HDKJ
+    model: D3625MG
+    voltage: 7.4
+    weight: 67.0
+    torque: 26.0
+    speed: 0.07
+    price: 21.00
+    efficiency: 5.54
+    eff_per_euro_scale: 0.78
+    notes: Waterproof; large but excellent value

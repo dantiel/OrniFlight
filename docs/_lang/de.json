@@ -17,6 +17,7 @@
   "ondas_subheadline": "Oscillating Normalized Dynamic Adaptive Stabilization",
   "features_subheadline": "Alles, was der Flügel verdient",
   "hardware_subheadline": "Standard STM32F3/F4/F7 Flightcontroller",
+  "nav_servos": "Servos",
   "nav_tutorials": "Tutorials",
   "hero_greeting": "Flapping-wing flight, redefined.",
   "hero_version": "STM32F3 ◇ OrniFlight v0.4.6 ◇ apiVersion 1.46",
