@@ -183,7 +183,16 @@ def build_servo_page(lang)
   rows = servos.map do |s|
     eff = s["eff_per_euro_scale"]
     eff_str = eff.is_a?(Numeric) ? ("%.2f" % eff) : eff.to_s
-    flight = s["flight_tested"] || ""
+    fp = s["flight_performance"]
+    if fp.is_a?(Hash)
+      rating = fp["rating"].to_i
+      note   = fp["note"].to_s
+    else
+      rating = 0
+      note   = ""
+    end
+    flight_attr = rating > 0 ? %( data-flight-rating="#{rating}") : ""
+    flight_cell = note
     notes = s["notes"] || ""
 
     price_raw = s["price"]
@@ -211,7 +220,7 @@ def build_servo_page(lang)
         <td class="num">#{eff_raw}</td>
         <td class="num"#{price_attr}>#{price_cell}</td>
         <td class="num strong">#{eff_str}</td>
-        <td class="flight">#{flight}</td>
+        <td class="flight"#{flight_attr}>#{flight_cell}</td>
         <td class="notes">#{notes}</td>
       </tr>)
   end.join("\n")
@@ -243,7 +252,7 @@ def build_servo_page(lang)
           <th class="num">Efficiency</th>
           <th class="num">Price</th>
           <th class="num">Eff/€ ★</th>
-          <th>Flight Test</th>
+          <th>Flight Performance</th>
           <th>Notes</th>
         </tr>
       </thead>

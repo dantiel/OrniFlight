@@ -65,7 +65,7 @@
     'number',
     'price',
     'number',
-    'string',
+    'rating',
     'string',
   ]
 
@@ -101,6 +101,9 @@
       if (type === 'price') {
         aVal = parseFloat(aCell.getAttribute('data-price-eur')) || 0
         bVal = parseFloat(bCell.getAttribute('data-price-eur')) || 0
+      } else if (type === 'rating') {
+        aVal = parseInt(aCell.getAttribute('data-flight-rating')) || 0
+        bVal = parseInt(bCell.getAttribute('data-flight-rating')) || 0
       } else if (type === 'number') {
         aVal = parseFloat(aCell.textContent.replace(/[^0-9.\-]/g, ''))
         bVal = parseFloat(bCell.textContent.replace(/[^0-9.\-]/g, ''))
@@ -121,6 +124,12 @@
       tbody.appendChild(row)
     })
   }
+
+  // ── Apply rating classes ──────────────────────────────────
+  tbody.querySelectorAll('td[data-flight-rating]').forEach(function (cell) {
+    var r = parseInt(cell.getAttribute('data-flight-rating'))
+    if (r >= 1 && r <= 5) cell.classList.add('fp-' + r)
+  })
 
   // Initial conversion
   if (currentCurrency !== 'EUR') convertPrices()

@@ -30,7 +30,7 @@ Spaltenköpfe anklicken zum Sortieren. Ergänzungen per PR an `_data/servos.yml`
       <th class="num">Efficiency</th>
       <th class="num">Price</th>
       <th class="num">Eff/€ ★</th>
-      <th>Flight Test</th>
+      <th>Flight Performance</th>
       <th>Notes</th>
     </tr>
   </thead>
@@ -92,7 +92,7 @@ Spaltenköpfe anklicken zum Sortieren. Ergänzungen per PR an `_data/servos.yml`
         <td class="num">7.67</td>
         <td class="num" data-price-eur="11.00">€11.00</td>
         <td class="num strong">0.84</td>
-        <td class="flight">Good Flight</td>
+        <td class="flight" data-flight-rating="4">Good Flight</td>
         <td class="notes">Up to 6.2V</td>
       </tr>
       <tr>
@@ -164,7 +164,7 @@ Spaltenköpfe anklicken zum Sortieren. Ergänzungen per PR an `_data/servos.yml`
         <td class="num">9.49</td>
         <td class="num" data-price-eur="20.00">€20.00</td>
         <td class="num strong">0.77</td>
-        <td class="flight">Strong Flight</td>
+        <td class="flight" data-flight-rating="5">Strong Flight</td>
         <td class="notes">Gear broke on first test flight</td>
       </tr>
       <tr>
@@ -176,7 +176,7 @@ Spaltenköpfe anklicken zum Sortieren. Ergänzungen per PR an `_data/servos.yml`
         <td class="num">6.16</td>
         <td class="num" data-price-eur="23.00">€23.00</td>
         <td class="num strong">0.41</td>
-        <td class="flight">Okay Flight</td>
+        <td class="flight" data-flight-rating="3">Okay Flight</td>
         <td class="notes"></td>
       </tr>
       <tr>
@@ -308,7 +308,7 @@ Spaltenköpfe anklicken zum Sortieren. Ergänzungen per PR an `_data/servos.yml`
         <td class="num">3.27</td>
         <td class="num" data-price-eur="36.00">€36.00</td>
         <td class="num strong">0.16</td>
-        <td class="flight">Good Flight</td>
+        <td class="flight" data-flight-rating="4">Good Flight</td>
         <td class="notes">Magnet potentiometer</td>
       </tr>
       <tr>
