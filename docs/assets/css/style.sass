@@ -1,9 +1,46 @@
-// OrniFlight — Magnum Opus III
-// Transparent glass + feather bleed-through. Fraunces headings, Outfit body.
+// OrniFlight — Magnum Opus IV
+// Transparent glass + feather bleed-through. SF TransRobotics headings, Outfit body.
 // Accent: #8998fe (periwinkle). Header: #3a4192 (dark indigo)
 // Dark default, light via prefers-color-scheme
 
-$font-heading: 'Fraunces', 'Georgia', 'Times New Roman', serif
+// — SF TransRobotics @font-face —
+@font-face
+  font-family: 'SF TransRobotics'
+  src: url('../fonts/SF TransRobotics.ttf') format('truetype')
+  font-weight: 400
+  font-style: normal
+
+@font-face
+  font-family: 'SF TransRobotics'
+  src: url('../fonts/SF TransRobotics Bold.ttf') format('truetype')
+  font-weight: 700
+  font-style: normal
+
+@font-face
+  font-family: 'SF TransRobotics'
+  src: url('../fonts/SF TransRobotics Italic.ttf') format('truetype')
+  font-weight: 400
+  font-style: italic
+
+@font-face
+  font-family: 'SF TransRobotics'
+  src: url('../fonts/SF TransRobotics Bold Italic.ttf') format('truetype')
+  font-weight: 700
+  font-style: italic
+
+@font-face
+  font-family: 'SF TransRobotics Extended'
+  src: url('../fonts/SF TransRobotics Extended.ttf') format('truetype')
+  font-weight: 400
+  font-style: normal
+
+@font-face
+  font-family: 'SF TransRobotics Extended'
+  src: url('../fonts/SF TransRobotics Extended Bold.ttf') format('truetype')
+  font-weight: 700
+  font-style: normal
+
+$font-heading: 'SF TransRobotics Extended', 'SF TransRobotics', 'Outfit', sans-serif
 $font-body: 'Outfit', 'SF Pro Text', 'Segoe UI', sans-serif
 $font-code: 'JetBrains Mono', 'SF Mono', 'Fira Code', monospace
 $accent: #8998fe
@@ -212,9 +249,9 @@ nav
   opacity: 0
   background: linear-gradient(to bottom, var(--overlay-start) 0%, var(--overlay-start) 20%, var(--overlay-end) 100%)
 
-// — Hero Content — Less top padding —
+// — Hero Content —
 .hero-content
-  padding-top: 3.5rem
+  padding-top: 5rem
   padding-bottom: 3rem
   padding-left: 2rem
   padding-right: 2rem
@@ -224,12 +261,14 @@ nav
 
 // — Hero Logo —
 .hero-logo
-  margin-bottom: 1rem
-  img
+  margin-bottom: 1.2rem
+  // Original SVG logo — keep it, slightly pushed down
+  img.logo-svg
     width: min(78vw, 480px)
     height: auto
     filter: drop-shadow(0 4px 32px rgba(var(--accent-rgb), 0.32))
     animation: logoBreathe 6s ease-in-out infinite
+
 
 @keyframes logoBreathe
   0%, 100%
@@ -242,15 +281,14 @@ nav
   text-align: center
 
 // — Greeting —
-.greeting
+dt
   font-family: $font-heading
-  font-weight: 350
+  font-weight: 400
   font-style: italic
   font-size: clamp(1.05rem, 2.2vw, 1.4rem)
-  color: var(--accent-alt)
+  color: var(--text-soft)
   margin-bottom: 0.25rem
-  opacity: 0.65
-  font-variation-settings: 'SOFT' 60
+  opacity: 0.72
 
 // — Version tag —
 .version
@@ -294,24 +332,23 @@ section
 // — Section Headings —
 h2
   font-family: $font-heading
-  font-size: 1.6rem
-  font-weight: 500
+  font-size: 1.4rem
+  font-weight: 400
   margin-bottom: 1.8rem
   color: var(--accent)
   border-bottom: 1px solid var(--dim)
   padding-bottom: 0.5rem
-  font-variation-settings: 'SOFT' 40
+  letter-spacing: 0.04em
 
 // — Lead paragraph —
 .lead
-  font-family: $font-heading
+  font-family: $font-body
   font-weight: 380
   font-size: 1.15rem
   line-height: 1.8
   margin-bottom: 1.2rem
   color: var(--text)
   opacity: 0.92
-  font-variation-settings: 'SOFT' 50
 
 p
   margin-bottom: 0.9rem
@@ -375,11 +412,11 @@ dl.grid
 
 dt
   font-family: $font-heading
-  font-weight: 550
-  font-size: 0.85rem
+  font-weight: 700
+  font-size: 0.8rem
   color: var(--accent)
   padding-top: 0.5rem
-  font-variation-settings: 'SOFT' 30
+  letter-spacing: 0.03em
 
 dd
   color: var(--text-soft)
@@ -461,13 +498,12 @@ footer
 
 .credit
   margin-top: 1.5rem
-  font-family: $font-heading
+  font-family: $font-body
   font-size: 0.72rem
-  font-weight: 350
+  font-weight: 380
   font-style: italic
   opacity: 0.22
   color: var(--text)
-  font-variation-settings: 'SOFT' 60
 
 // — Subpages —
 body.subpage
@@ -493,32 +529,30 @@ body.subpage
 
       h1
         font-family: $font-heading
-        font-size: 2.1rem
-        font-weight: 500
+        font-size: 2rem
+        font-weight: 400
         margin-bottom: 2rem
         color: var(--accent)
         border-bottom: 2px solid var(--accent)
         padding-bottom: 0.6rem
-        font-variation-settings: 'SOFT' 35
+        letter-spacing: 0.04em
 
-      h2
+      a
         font-family: $font-heading
-        font-size: 1.3rem
-        font-weight: 500
-        margin-top: 2.5rem
-        margin-bottom: 0.8rem
+        font-size: 1.1rem
+        font-weight: 400
+        color: var(--accent)
+        letter-spacing: 0.02em
         border-bottom: 1px solid var(--dim)
-        color: var(--text)
-        font-variation-settings: 'SOFT' 40
 
       h3
         font-family: $font-heading
-        font-size: 1.08rem
+        font-size: 1rem
         margin-top: 1.8rem
         margin-bottom: 0.6rem
-        font-weight: 550
+        font-weight: 700
         color: var(--accent)
-        font-variation-settings: 'SOFT' 30
+        letter-spacing: 0.02em
 
       p
         margin-bottom: 0.9rem
@@ -577,11 +611,11 @@ body.subpage
         th
           text-align: left
           font-family: $font-heading
-          font-weight: 550
-          font-size: 0.75rem
+          font-weight: 700
+          font-size: 0.72rem
           padding: 0.5rem 0.75rem
           border-bottom: 2px solid var(--accent)
-          font-variation-settings: 'SOFT' 30
+          letter-spacing: 0.03em
         td
           padding: 0.5rem 0.75rem
           border-bottom: 1px solid var(--dim)

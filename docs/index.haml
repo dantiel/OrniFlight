@@ -6,7 +6,7 @@
     %title= title
     %link{rel: "preconnect", href: "https://fonts.googleapis.com"}
     %link{rel: "preconnect", href: "https://fonts.gstatic.com", crossorigin: true}
-    %link{rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT@0,9..144,300..700,0..100;1,9..144,300..700,0..100&family=Outfit:wght@300..600&family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap"}
+    %link{rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap"}
     %link{rel: "stylesheet", href: "#{asset_prefix}/assets/css/style.css"}
 
   %body
@@ -16,7 +16,7 @@
     %nav
       %a.home-link{href: "#", onclick: "majesticScroll(); return false;", title: "OrniFlight"}
         %img{src: "#{asset_prefix}/assets/images/of_icon_128.png", alt: "OrniFlight"}
-      %a{href: "#mission"}= nav_mission
+      %a{href: "#manifest"} Manifest
       %a{href: "#ondas"}= nav_ondas
       %a{href: "#features"}= nav_features
       %a{href: "#hardware"}= nav_hardware
@@ -29,18 +29,18 @@
         .hero-logo
           %picture
             %source{srcset: "#{asset_prefix}/assets/images/cf_logo_white.svg", media: "(prefers-color-scheme: light)"}
-            %img{src: "#{asset_prefix}/assets/images/cf_logo_black.svg", alt: "OrniFlight"}
+            %img.logo-svg{src: "#{asset_prefix}/assets/images/cf_logo_black.svg", alt: "OrniFlight"}
         .headline
           %p.greeting= hero_greeting
           %p.version= hero_version
 
     %main
-      %section#mission
-        %h2= mission_title
-        %p.lead!= mission_lead
-        %p!= mission_body
+      %section#manifest
+        %h2= manifest_title
+        %p.lead!= manifest_lead
+        %p!= manifest_body
         .highlight
-          %code= mission_highlight
+          %code= manifest_highlight
 
       %section#ondas
         %h2= ondas_title

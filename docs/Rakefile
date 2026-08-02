@@ -50,14 +50,14 @@ HAML_LAYOUT = <<~'LAYOUT'
     %title= "#{page_title} — OrniFlight"
     %link{rel: "preconnect", href: "https://fonts.googleapis.com"}
     %link{rel: "preconnect", href: "https://fonts.gstatic.com", crossorigin: true}
-    %link{rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT@0,9..144,300..700,0..100;1,9..144,300..700,0..100&family=Outfit:wght@300..600&family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap"}
+    %link{rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap"}
     %link{rel: "stylesheet", href: "#{asset_prefix}/assets/css/style.css"}
   %body.subpage
     .hero-bg
     %nav
       %a.home-link{href: "#{asset_prefix}/", title: "OrniFlight"}
         %img{src: "#{asset_prefix}/assets/images/of_icon_128.png", alt: "OrniFlight"}
-      %a{href: "#{asset_prefix}/#mission"} Mission
+      %a{href: "#{asset_prefix}/#manifest"} Manifest
       %a{href: "#{asset_prefix}/wiki/"} Wiki
       %a{href: "#{asset_prefix}/docs/"} Docs
       %a{href: "#{asset_prefix}/tutorials/"} Tutorials
