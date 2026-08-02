@@ -14,7 +14,7 @@
   "nav_wiki": "Wiki",
   "nav_docs": "Docs",
   "manifest_subheadline": "A new species of flight controller",
-  "ondas_subheadline": "Ten dimensions of phase-aware control",
+  "ondas_subheadline": "Oscillating Normalized Dynamic Adaptive Stabilization",
   "features_subheadline": "Everything the wing deserves",
   "hardware_subheadline": "Commodity STM32F3/F4/F7 flight controllers",
   "nav_tutorials": "Tutorials",

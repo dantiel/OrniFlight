@@ -366,18 +366,19 @@ h3
   margin-top: 2rem
   margin-bottom: 0.8rem
 
-  // — Sub-headline: Extended Bold, solid accent-alt, no gradient —
+  // — Sub-headline: Extended Bold, dual-color gradient —
   &.subheadline
     font-family: $font-heading-extended
     font-size: clamp(0.92rem, 2.2vw, 1.2rem)
     font-weight: 700
     letter-spacing: 0.05em
-    background: none
-    -webkit-text-fill-color: var(--accent-alt)
-    color: var(--accent-alt)
+    background: linear-gradient(135deg, var(--accent) 30%, var(--accent-alt) 100%)
+    -webkit-background-clip: text
+    -webkit-text-fill-color: transparent
+    background-clip: text
     margin-top: -0.9rem
     margin-bottom: 1.2rem
-    opacity: 0.82
+    opacity: 1
     border-bottom: none
 
 h4
