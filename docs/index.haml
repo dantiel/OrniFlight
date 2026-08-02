@@ -20,6 +20,9 @@
       %a{href: "#ondas"}= nav_ondas
       %a{href: "#features"}= nav_features
       %a{href: "#hardware"}= nav_hardware
+      %a{href: "en/wiki/"}= nav_wiki
+      %a{href: "en/docs/"}= nav_docs
+      %a{href: "en/tutorials/"}= nav_tutorials
       .lang-switch
         %a{href: lang_href_en, class: lang_class_en} EN
         %a{href: lang_href_de, class: lang_class_de} DE
@@ -49,7 +52,7 @@
         .highlight
           %code= ondas_highlight
         %p.doc-link
-          %a{href: "#{asset_prefix}/wiki/ondas.html"}= ondas_wiki_link
+          %a{href: "#{asset_prefix}/en/wiki/ondas.html"}= ondas_wiki_link
 
       %section#features
         %h2= features_title
@@ -87,7 +90,7 @@
             %td= hw_ram_label
             %td.value= hw_ram_val
         %p.doc-link
-          %a{href: "#{asset_prefix}/tutorials/"}= hw_start_link
+          %a{href: "#{asset_prefix}/en/tutorials/"}= hw_start_link
 
       %section.build
         %h2= build_title

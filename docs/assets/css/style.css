@@ -262,14 +262,15 @@ nav a:hover {
   text-align: center;
 }
 
-dt {
-  font-family: "SF TransRobotics Extended", "SF TransRobotics", "Outfit", sans-serif;
+.greeting {
+  font-family: "SF TransRobotics", "Outfit", "SF Pro Text", "Segoe UI", sans-serif;
   font-weight: 400;
   font-style: italic;
-  font-size: clamp(1.05rem, 2.2vw, 1.4rem);
-  color: var(--text-soft);
+  font-size: clamp(1.15rem, 2.6vw, 1.55rem);
+  color: var(--accent-alt);
   margin-bottom: 0.25rem;
-  opacity: 0.72;
+  opacity: 0.68;
+  letter-spacing: 0.02em;
 }
 
 .version {

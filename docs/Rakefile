@@ -58,9 +58,9 @@ HAML_LAYOUT = <<~'LAYOUT'
       %a.home-link{href: "#{asset_prefix}/", title: "OrniFlight"}
         %img{src: "#{asset_prefix}/assets/images/of_icon_128.png", alt: "OrniFlight"}
       %a{href: "#{asset_prefix}/#manifest"} Manifest
-      %a{href: "#{asset_prefix}/wiki/"} Wiki
-      %a{href: "#{asset_prefix}/docs/"} Docs
-      %a{href: "#{asset_prefix}/tutorials/"} Tutorials
+      %a{href: "#{asset_prefix}/en/wiki/"} Wiki
+      %a{href: "#{asset_prefix}/en/docs/"} Docs
+      %a{href: "#{asset_prefix}/en/tutorials/"} Tutorials
       .lang-switch
         - langs.each do |l|
           %a{href: l == lang ? "." : lang_href.call(l), class: l == lang ? "active" : ""}= l.upcase
@@ -71,9 +71,9 @@ HAML_LAYOUT = <<~'LAYOUT'
       %p
         %a{href: "https://github.com/dantiel/OrniFlight"} GitHub
         ◇
-        %a{href: "#{asset_prefix}/wiki/"} Wiki
+        %a{href: "#{asset_prefix}/en/wiki/"} Wiki
         ◇
-        %a{href: "#{asset_prefix}/tutorials/"} Tutorials
+        %a{href: "#{asset_prefix}/en/tutorials/"} Tutorials
       %p Hermetic Firmware ◇ STM32F4 ◇ GPL v3
       %p.credit OrniFlight — Flapping-wing flight, redefined.
     %button.scroll-top{onclick: "window.scrollTo({top:0,behavior:'smooth'})", "aria-label" => "Scroll to top"}
