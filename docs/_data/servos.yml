@@ -64,7 +64,7 @@ servos:
     flight_performance:
       rating: 5
       note: Strong Flight <a href="https://youtu.be/JRferxboRa4" class="yt-link" target="_blank">📺</a><a href="https://youtu.be/PmHgHTTnvVI" class="yt-link" target="_blank">📺</a><a href="https://youtu.be/3Zg00BK7OsA" class="yt-link" target="_blank">📺</a>
-    notes: Up to 6.2V. Gralha Azul 28g, Seraphim 31g (d4ro)
+    notes: Up to 6.2V. Gralha Azul 28g, Seraphim 31g
 
   - brand: Blue Arrow
     model: D05023MG
@@ -74,10 +74,10 @@ servos:
     speed: 0.04
     price: 12.00
     efficiency: 6.57
-    eff_per_euro_scale: 0.62
-
-  - brand: KST
-    model: DS 113 MG
+    eff_per_e# uro_scale: 0.62
+#
+#   - brand: KST
+#   model: DS 113 MG
     voltage: 6.0
     weight: 12.0
     torque: 2.2
@@ -121,7 +121,7 @@ servos:
     flight_performance:
       rating: 5
       note: Strong Flight <a href="https://youtu.be/iSIwwHDRsHg" class="yt-link" target="_blank">📺</a><a href="https://youtu.be/Ta3ghJrFt-0" class="yt-link" target="_blank">📺</a><a href="https://youtu.be/6kXmIZEmYUA" class="yt-link" target="_blank">📺</a>
-    notes: Best efficiency/€. Kestrel 45g, Albatross 57g, Butterfly 54g (32+ flights by Kazu)
+    notes: Best efficiency/€. Kestrel 45g, Albatross 57g, Butterfly 54g
 
   - brand: VOTIK
     model: PTK 7465 / 7465W MG
