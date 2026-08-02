@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='en'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>Supported Hardware — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,600;0,700;0,800;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../' title='OrniFlight'>
+<img alt='OrniFlight' src='../assets/images/of_icon_128.png'>
+</a>
+<a href='../#essence'>Essence</a>
+<a href='../wiki/'>Wiki</a>
+<a href='../docs/'>Docs</a>
+<a href='../tutorials/'>Tutorials</a>
+<div class='lang-switch'>
+<a class='active' href='.'>EN</a>
+<a class='' href='../de/'>DE</a>
+</div>
+</nav>
+<main class='content-page'>
+<article>
+<h1 id="supported-hardware">Supported Hardware</h1>
+
+<h2 id="flight-controllers">Flight Controllers</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Board</th>
+      <th>MCU</th>
+      <th>IMU</th>
+      <th>Flash</th>
+      <th>OSD</th>
+      <th>Status</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>OMNIBUSF4</strong></td>
+      <td>STM32F405</td>
+      <td>MPU6000 (SPI)</td>
+      <td>16MB</td>
+      <td>AT7456E</td>
+      <td>✅ Primary</td>
+    </tr>
+    <tr>
+      <td><strong>TINYFISH</strong></td>
+      <td>STM32F411</td>
+      <td>MPU6000 (SPI)</td>
+      <td>256KB</td>
+      <td>—</td>
+      <td>✅ Supported</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="omnibusf4">OMNIBUSF4</h3>
+
+<p>The primary development target. Full-featured F4 flight controller with OSD, ample flash for Blackbox logging, and sufficient UARTs for all peripherals.</p>
+
+<ul>
+  <li><strong>MCU</strong>: STM32F405RGT6 @ 168 MHz</li>
+  <li><strong>Gyro</strong>: MPU6000 (SPI, 8 kHz capable)</li>
+  <li><strong>Flash</strong>: 16MB for Blackbox</li>
+  <li><strong>OSD</strong>: AT7456E (compatible with MAX7456)</li>
+  <li><strong>UARTs</strong>: VCP + 5 hardware UARTs</li>
+  <li><strong>Barometer</strong>: BMP280 (some variants)</li>
+  <li><strong>Input</strong>: 2-6S LiPo</li>
+</ul>
+
+<h3 id="tinyfish">TINYFISH</h3>
+
+<p>Compact F4 target for small ornithopters and micro flappers.</p>
+
+<ul>
+  <li><strong>MCU</strong>: STM32F411CEU6 @ 100 MHz</li>
+  <li><strong>Gyro</strong>: MPU6000 (SPI)</li>
+  <li><strong>Flash</strong>: 256KB onboard</li>
+  <li><strong>UARTs</strong>: VCP + 2 hardware UARTs</li>
+  <li><strong>Input</strong>: 2-4S LiPo</li>
+</ul>
+
+<hr />
+
+<h2 id="ornithopter-anatomy">Ornithopter Anatomy</h2>
+
+<h3 id="wing-servos">Wing Servos</h3>
+
+<p>OrniFlight controls flapping through PWM servos. Key specifications:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Parameter</th>
+      <th>Typical Range</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Pulse Width</td>
+      <td>500–2500 µs</td>
+    </tr>
+    <tr>
+      <td>Center</td>
+      <td>1500 µs</td>
+    </tr>
+    <tr>
+      <td>Frequency</td>
+      <td>50–330 Hz</td>
+    </tr>
+    <tr>
+      <td>Stroke Angle</td>
+      <td>±15–45°</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>For high-performance ornithopters, digital servos with 330 Hz update rate are recommended. Analog servos work at 50 Hz but have lower precision.</p>
+
+<h3 id="receiver">Receiver</h3>
+
+<p>Any serial receiver protocol is supported. CRSF (TBS Crossfire / ExpressLRS) is recommended for:
+- Low latency (critical for flapping control)
+- Built-in telemetry
+- RSSI over protocol (no extra wiring)</p>
+
+<h3 id="battery">Battery</h3>
+
+<ul>
+  <li><strong>2S (7.4V)</strong>: Small ornithopters, servo-powered directly</li>
+  <li><strong>3S (11.1V)</strong>: Medium ornithopters, BEC required for servos</li>
+  <li><strong>4S (14.8V)</strong>: Large ornithopters, external BEC recommended</li>
+</ul>
+
+<hr />
+
+<h2 id="supported-peripherals">Supported Peripherals</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Peripheral</th>
+      <th>Via</th>
+      <th>Notes</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>GPS</td>
+      <td>UART</td>
+      <td>UBlox M8N or compatible</td>
+    </tr>
+    <tr>
+      <td>VTX</td>
+      <td>UART TX</td>
+      <td>Tramp, SmartAudio</td>
+    </tr>
+    <tr>
+      <td>Camera</td>
+      <td>—</td>
+      <td>Any analog FPV camera</td>
+    </tr>
+    <tr>
+      <td>Buzzer</td>
+      <td>BUZZ pad</td>
+      <td>Active 5V buzzer</td>
+    </tr>
+    <tr>
+      <td>LED Strip</td>
+      <td>LED pad</td>
+      <td>WS2812 / SK6812</td>
+    </tr>
+    <tr>
+      <td>OpenLog</td>
+      <td>UART TX</td>
+      <td>Blackbox logging</td>
+    </tr>
+    <tr>
+      <td>Bluetooth</td>
+      <td>UART</td>
+      <td>MSP passthrough for mobile tuning</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h2 id="future-targets">Future Targets</h2>
+
+<p>OrniFlight aims to support additional STM32F4/F7 targets where sufficient UART and timer resources are available for flapping servo control. Contributions welcome.</p>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../wiki/'>Wiki</a>
+◇
+<a href='../tutorials/'>Tutorials</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

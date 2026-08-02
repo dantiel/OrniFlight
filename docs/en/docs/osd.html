@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='en'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>On-Screen Display (OSD) — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,600;0,700;0,800;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../' title='OrniFlight'>
+<img alt='OrniFlight' src='../assets/images/of_icon_128.png'>
+</a>
+<a href='../#essence'>Essence</a>
+<a href='../wiki/'>Wiki</a>
+<a href='../docs/'>Docs</a>
+<a href='../tutorials/'>Tutorials</a>
+<div class='lang-switch'>
+<a class='active' href='.'>EN</a>
+<a class='' href='../de/'>DE</a>
+</div>
+</nav>
+<main class='content-page'>
+<article>
+<h1 id="on-screen-display-osd">On-Screen Display (OSD)</h1>
+
+<p>OrniFlight includes a built-in OSD (On-Screen Display) using the MAX7456 or AT7456E chip. The OSD overlays flight data onto your FPV video feed.</p>
+
+<h2 id="supported-elements">Supported Elements</h2>
+
+<p>Configure elements in the <strong>OSD</strong> tab of OrniFlight Configurator. Drag and drop elements to position them on screen.</p>
+
+<h3 id="flight-data">Flight Data</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>Element</th>
+      <th>Displays</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Battery Voltage</td>
+      <td>Main battery voltage (e.g. 14.8V)</td>
+    </tr>
+    <tr>
+      <td>Average Cell Voltage</td>
+      <td>Per-cell voltage (e.g. 3.7V)</td>
+    </tr>
+    <tr>
+      <td>Current Draw</td>
+      <td>Instantaneous amps</td>
+    </tr>
+    <tr>
+      <td>mAh Drawn</td>
+      <td>Cumulative capacity consumed</td>
+    </tr>
+    <tr>
+      <td>RSSI</td>
+      <td>Signal strength from receiver</td>
+    </tr>
+    <tr>
+      <td>Flight Mode</td>
+      <td>Current mode (ACRO, ANGLE, INDEPENDENT, etc.)</td>
+    </tr>
+    <tr>
+      <td>Throttle Position</td>
+      <td>Current throttle percentage</td>
+    </tr>
+    <tr>
+      <td>Timer</td>
+      <td>Flight time / armed time</td>
+    </tr>
+    <tr>
+      <td>Craft Name</td>
+      <td>OrniFlight craft name</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="ornithopter-specific">Ornithopter-Specific</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>Element</th>
+      <th>Displays</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Flapping Frequency</td>
+      <td>Current wing stroke rate in Hz</td>
+    </tr>
+    <tr>
+      <td>ONDAS Profile</td>
+      <td>Active flight profile number (1-3)</td>
+    </tr>
+    <tr>
+      <td>Cadence Phase</td>
+      <td>Current modulation phase offset</td>
+    </tr>
+    <tr>
+      <td>Servo Angle</td>
+      <td>Wing servo position</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="font-management">Font Management</h2>
+
+<p>The OSD uses a character-based display system. The OrniFlight Configurator’s <strong>OSD</strong> tab includes a <strong>Font Manager</strong> for uploading custom fonts and glyphs.</p>
+
+<h2 id="cli-settings">CLI Settings</h2>
+
+<p><code>
+set osd_units = METRIC
+set osd_warn_bitmask = 270335  # Warning flag bitmask
+set osd_tim1 = 2560            # Timer 1 source
+set osd_tim2 = 2561            # Timer 2 source
+</code></p>
+
+<h2 id="hardware">Hardware</h2>
+
+<p>Currently supported OSD chip: <strong>AT7456E</strong> (found on OMNIBUSF4 and compatible boards). MAX7456 is compatible and auto-detected.</p>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../wiki/'>Wiki</a>
+◇
+<a href='../tutorials/'>Tutorials</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

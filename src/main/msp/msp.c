@@ -1541,6 +1541,13 @@ static bool mspProcessOutCommand(uint8_t cmdMSP, sbuf_t *dst)
         sbufWriteU8(dst, servoConfigMutable()->ornithopter_freq_min);        // offset 80: Hz at RC min
         sbufWriteU8(dst, servoConfigMutable()->ornithopter_freq_max);        // offset 81: Hz at RC max
 
+        // Ornithopter Profile Index + per-profile aeroelastic fields (API 1.46)
+        sbufWriteU8(dst, getOrnithopterProfileIndexMSP());                                          // offset 82: profile slot 0-3
+        sbufWriteU8(dst, (uint8_t)ornithopterProfiles(getOrnithopterProfileIndexMSP())->ferocity_downstroke);       // offset 83: u8 1-100
+        sbufWriteU8(dst, (uint8_t)ornithopterProfiles(getOrnithopterProfileIndexMSP())->ferocity_upstroke);         // offset 84: u8 1-100
+        sbufWriteU8(dst, (uint8_t)(ornithopterProfiles(getOrnithopterProfileIndexMSP())->aeroelastic_glide_coefficient + 128));  // offset 85: signed s8+128
+        sbufWriteU8(dst, (uint8_t)(ornithopterProfiles(getOrnithopterProfileIndexMSP())->aeroelastic_flap_coefficient + 128));   // offset 86: signed s8+128
+
         break;
     case MSP_SENSOR_CONFIG:
 #if defined(USE_ACC)
@@ -2297,6 +2304,16 @@ static mspResult_e mspProcessInCommand(uint8_t cmdMSP, sbuf_t *src)
             servoConfigMutable()->ornithopter_freq_min    = sbufReadU8(src);
             servoConfigMutable()->ornithopter_freq_max    = sbufReadU8(src);
         }
+        if (sbufBytesRemaining(src) >= 5) {
+            // Added in MSP API 1.46 — Ornithopter Profile Index + per-profile aeroelastic fields
+            uint8_t profileIndex = sbufReadU8(src);
+            setOrnithopterProfileIndexMSP(profileIndex);
+            ornithopterProfilesMutable(profileIndex)->ferocity_downstroke           = constrain(sbufReadU8(src), 1, 100);
+            ornithopterProfilesMutable(profileIndex)->ferocity_upstroke             = constrain(sbufReadU8(src), 1, 100);
+            ornithopterProfilesMutable(profileIndex)->aeroelastic_glide_coefficient = (int8_t)(sbufReadU8(src) - 128);
+            ornithopterProfilesMutable(profileIndex)->aeroelastic_flap_coefficient  = (int8_t)(sbufReadU8(src) - 128);
+        }
+
         pidInitConfig(currentPidProfile);
 
         break;

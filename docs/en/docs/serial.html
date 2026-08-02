@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='en'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>Serial Ports — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,600;0,700;0,800;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../' title='OrniFlight'>
+<img alt='OrniFlight' src='../assets/images/of_icon_128.png'>
+</a>
+<a href='../#essence'>Essence</a>
+<a href='../wiki/'>Wiki</a>
+<a href='../docs/'>Docs</a>
+<a href='../tutorials/'>Tutorials</a>
+<div class='lang-switch'>
+<a class='active' href='.'>EN</a>
+<a class='' href='../de/'>DE</a>
+</div>
+</nav>
+<main class='content-page'>
+<article>
+<h1 id="serial-ports">Serial Ports</h1>
+
+<p>OrniFlight uses serial ports for communication with peripherals: receivers, GPS, telemetry, VTX control, Blackbox logging, and MSP (Configurator connection).</p>
+
+<h2 id="serial-port-types">Serial Port Types</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Best For</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>VCP</strong></td>
+      <td>USB Virtual COM Port — direct USB connection to processor</td>
+      <td>Configurator (MSP)</td>
+    </tr>
+    <tr>
+      <td><strong>UART</strong></td>
+      <td>Hardware TX/RX pins with hardware signal detection</td>
+      <td>RX, GPS, Telemetry, VTX, Blackbox</td>
+    </tr>
+    <tr>
+      <td><strong>SoftSerial</strong></td>
+      <td>Software-driven serial on any pin pair</td>
+      <td>Low-bandwidth: telemetry only</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>VCP does not consume a physical UART — it’s always available for the Configurator.</p>
+
+<h2 id="port-assignment">Port Assignment</h2>
+
+<p>In OrniFlight Configurator, go to the <strong>Ports</strong> tab to assign functions:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Function</th>
+      <th>Typical UART</th>
+      <th>Notes</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Serial RX</td>
+      <td>UART1 or UART3</td>
+      <td>SBUS, CRSF, IBUS, etc.</td>
+    </tr>
+    <tr>
+      <td>GPS</td>
+      <td>UART3 or UART6</td>
+      <td>57600 or 115200 baud</td>
+    </tr>
+    <tr>
+      <td>Telemetry</td>
+      <td>Any TX pin</td>
+      <td>SmartPort, HoTT, IBUS</td>
+    </tr>
+    <tr>
+      <td>VTX (Tramp/SmartAudio)</td>
+      <td>Any TX pin</td>
+      <td>Single-wire</td>
+    </tr>
+    <tr>
+      <td>Blackbox</td>
+      <td>Any TX pin</td>
+      <td>OpenLog or onboard flash</td>
+    </tr>
+    <tr>
+      <td>MSP</td>
+      <td>VCP (USB)</td>
+      <td>Configurator connection</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="omnibusf4-port-mapping">OMNIBUSF4 Port Mapping</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>UART</th>
+      <th>Pins</th>
+      <th>Typical Use</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>VCP</td>
+      <td>USB</td>
+      <td>MSP (Configurator)</td>
+    </tr>
+    <tr>
+      <td>UART1</td>
+      <td>TX1/RX1</td>
+      <td>Serial RX</td>
+    </tr>
+    <tr>
+      <td>UART3</td>
+      <td>TX3/RX3</td>
+      <td>GPS or Telemetry</td>
+    </tr>
+    <tr>
+      <td>UART6</td>
+      <td>TX6/RX6</td>
+      <td>Free / Blackbox / VTX</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="softserial">SoftSerial</h2>
+
+<p>SoftSerial is available but has limited bandwidth. Suitable only for low-rate telemetry (e.g. 9600 baud SmartPort). Not recommended for Serial RX or GPS.</p>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../wiki/'>Wiki</a>
+◇
+<a href='../tutorials/'>Tutorials</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

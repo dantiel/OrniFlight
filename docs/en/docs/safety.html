@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='en'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>Safety — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,600;0,700;0,800;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../' title='OrniFlight'>
+<img alt='OrniFlight' src='../assets/images/of_icon_128.png'>
+</a>
+<a href='../#essence'>Essence</a>
+<a href='../wiki/'>Wiki</a>
+<a href='../docs/'>Docs</a>
+<a href='../tutorials/'>Tutorials</a>
+<div class='lang-switch'>
+<a class='active' href='.'>EN</a>
+<a class='' href='../de/'>DE</a>
+</div>
+</nav>
+<main class='content-page'>
+<article>
+<h1 id="safety">Safety</h1>
+
+<h2 id="pre-flight-checklist">Pre-Flight Checklist</h2>
+
+<ol>
+  <li><strong>Props/Wings</strong>: Ensure wings are securely mounted and linkage is intact</li>
+  <li><strong>Battery</strong>: Fully charged, properly secured, correct cell count</li>
+  <li><strong>Controls</strong>: Verify stick responses in Configurator receiver tab</li>
+  <li><strong>Failsafe</strong>: Test on bench before flight (see <a href="failsafe.html">Failsafe</a>)</li>
+  <li><strong>Arm Switch</strong>: Configure and test — never rely on stick arming alone</li>
+  <li><strong>Launch Area</strong>: Clear of people, obstacles, and overhead obstructions</li>
+</ol>
+
+<h2 id="arm-safety">Arm Safety</h2>
+
+<p>OrniFlight uses multiple safeties before arming:</p>
+
+<ul>
+  <li><strong>Throttle low</strong>: Throttle must be at minimum</li>
+  <li><strong>Angle</strong>: Craft must be reasonably level (if ANGLE/HORIZON calibrated)</li>
+  <li><strong>RX Signal</strong>: Valid receiver signal required</li>
+  <li><strong>CPU Load</strong>: System must not be overloaded</li>
+  <li><strong>Calibration</strong>: Accelerometer and gyro must be calibrated</li>
+</ul>
+
+<h2 id="in-flight-safety">In-Flight Safety</h2>
+
+<ul>
+  <li><strong>Fly within visual line of sight</strong></li>
+  <li>Maintain safe distance from people and animals</li>
+  <li>Monitor battery voltage — land before warning threshold</li>
+  <li>In FPV: always fly with a spotter</li>
+  <li>Wind: ornithopters are more wind-sensitive than multirotors — know your limits</li>
+</ul>
+
+<h2 id="emergency-procedures">Emergency Procedures</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Situation</th>
+      <th>Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Loss of orientation</td>
+      <td>Switch to ANGLE mode, center sticks</td>
+    </tr>
+    <tr>
+      <td>Signal loss</td>
+      <td>Failsafe will auto-land (if LAND procedure configured)</td>
+    </tr>
+    <tr>
+      <td>Wing damage</td>
+      <td>Disarm immediately — wings stop</td>
+    </tr>
+    <tr>
+      <td>Bird strike</td>
+      <td>Disarm, assess damage before re-arming</td>
+    </tr>
+    <tr>
+      <td>Low battery</td>
+      <td>Land immediately — ornithopters have no autorotation</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="ornithopter-specific-risks">Ornithopter-Specific Risks</h2>
+
+<ul>
+  <li><strong>Pinch hazard</strong>: Flapping wings can cause injury — keep hands clear when armed</li>
+  <li><strong>Linkage failure</strong>: Pre-flight check all pushrods and ball joints</li>
+  <li><strong>Resonance</strong>: Certain flapping frequencies may excite airframe resonances — tune ONDAS sweep to avoid</li>
+  <li><strong>Glide lockout</strong>: If wing servos fail in non-neutral position, controlled landing is impossible — test servo failsafe positions</li>
+</ul>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../wiki/'>Wiki</a>
+◇
+<a href='../tutorials/'>Tutorials</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

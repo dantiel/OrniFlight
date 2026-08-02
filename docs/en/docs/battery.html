@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='en'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>Battery Monitoring — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,600;0,700;0,800;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../' title='OrniFlight'>
+<img alt='OrniFlight' src='../assets/images/of_icon_128.png'>
+</a>
+<a href='../#essence'>Essence</a>
+<a href='../wiki/'>Wiki</a>
+<a href='../docs/'>Docs</a>
+<a href='../tutorials/'>Tutorials</a>
+<div class='lang-switch'>
+<a class='active' href='.'>EN</a>
+<a class='' href='../de/'>DE</a>
+</div>
+</nav>
+<main class='content-page'>
+<article>
+<h1 id="battery-monitoring">Battery Monitoring</h1>
+
+<p>OrniFlight monitors main battery voltage via the ADC (Analog-to-Digital Converter). This enables low-battery warnings through buzzer, status LED, and LED strip patterns.</p>
+
+<h2 id="features">Features</h2>
+
+<ul>
+  <li>Auto-detection of cell count on connect (based on min/max cell voltages)</li>
+  <li>Low battery warning with configurable thresholds</li>
+  <li>Current sensing for mAh consumption (if supported by FC)</li>
+  <li>Voltage displayed in OSD and transmitted via telemetry</li>
+</ul>
+
+<h2 id="supported-targets">Supported Targets</h2>
+
+<p>All supported flight controllers (OMNIBUSF4, TINYFISH) include VBAT monitoring via voltage divider.</p>
+
+<h2 id="connections">Connections</h2>
+
+<p><strong>ALWAYS CHECK POLARITY.</strong> Measure expected voltages before connecting. Incorrect voltage or reversed polarity will destroy your flight controller.</p>
+
+<h3 id="omnibusf4">OMNIBUSF4</h3>
+
+<p>Connect main battery to VBAT pad. The onboard voltage divider handles up to 6S directly.</p>
+
+<h3 id="tinyfish">TINYFISH</h3>
+
+<p>VBAT is routed through the board’s power input — no separate connection needed.</p>
+
+<h2 id="cli-settings">CLI Settings</h2>
+
+<p><code>
+set vbat_min_cell_voltage = 330       # Minimum per-cell voltage (3.3V)
+set vbat_max_cell_voltage = 430       # Maximum per-cell voltage (4.3V)
+set vbat_warning_cell_voltage = 350   # Warning threshold (3.5V)
+set battery_meter_type = ADC
+set current_meter_type = ADC          # If current sensor available
+</code></p>
+
+<h2 id="safety">Safety</h2>
+
+<p>LiPo batteries should never be discharged below 3.5V per cell under load. OrniFlight’s configurable thresholds help ensure safe operation and battery longevity.</p>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../wiki/'>Wiki</a>
+◇
+<a href='../tutorials/'>Tutorials</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

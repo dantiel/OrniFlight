@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='en'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>ONDAS — Oscillating Normalized Dynamic Adaptive Stabilization — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,600;0,700;0,800;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../' title='OrniFlight'>
+<img alt='OrniFlight' src='../assets/images/of_icon_128.png'>
+</a>
+<a href='../#essence'>Essence</a>
+<a href='../wiki/'>Wiki</a>
+<a href='../docs/'>Docs</a>
+<a href='../tutorials/'>Tutorials</a>
+<div class='lang-switch'>
+<a class='active' href='.'>EN</a>
+<a class='' href='../de/'>DE</a>
+</div>
+</nav>
+<main class='content-page'>
+<article>
+<h1 id="ondas--oscillating-normalized-dynamic-adaptive-stabilization">ONDAS — Oscillating Normalized Dynamic Adaptive Stabilization</h1>
+
+<h2 id="the-core-principle">The Core Principle</h2>
+
+<p>A fixed-wing aircraft or quadcopter generates control forces <strong>continuously</strong> — a control surface deflection or motor RPM change produces a steady-state moment. An ornithopter does not. Every gram of thrust, every Newton of torque, is <strong>phase-bound</strong> within the wingbeat cycle. The same force impulse applied at different points in the stroke produces fundamentally different results.</p>
+
+<p>ONDAS acknowledges this reality and modulates stabilization effort synchronously with the flapping cycle.</p>
+
+<hr />
+
+<h2 id="cadence--the-timing-brain">Cadence — The Timing Brain</h2>
+
+<p>Cadence is the most critical ONDAS filter because it determines <strong>when</strong> correction happens within each wingbeat.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Stroke Phase</th>
+      <th>Effect of Force Application</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Downstroke center</td>
+      <td>Maximum lift, roll authority</td>
+    </tr>
+    <tr>
+      <td>Downstroke end (braking)</td>
+      <td>Induced drag → yaw moment</td>
+    </tr>
+    <tr>
+      <td>Upstroke center</td>
+      <td>Thrust rearward, pitch-up</td>
+    </tr>
+    <tr>
+      <td>Upstroke end</td>
+      <td>Wing reversal, minimal effect</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><strong>Cadence shifts the modulation window</strong> to align with the phase where the aerodynamic lever arm is longest. Wrong cadence = fighting wing physics. Correct cadence = every watt becomes control authority.</p>
+
+<h3 id="parameters">Parameters</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>Parameter</th>
+      <th>Value</th>
+      <th>Function</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>ONDAS_K0</code></td>
+      <td>1.0</td>
+      <td>Base phase offset</td>
+    </tr>
+    <tr>
+      <td><code>ONDAS_K2</code></td>
+      <td>10.0</td>
+      <td>Phase spread / sharpness</td>
+    </tr>
+    <tr>
+      <td><code>ONDAS_PHASE_SCALE</code></td>
+      <td>0.00005</td>
+      <td>Small factor, large leverage</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h2 id="ferocity-p--immediate-asymmetric-thrust">Ferocity P — Immediate Asymmetric Thrust</h2>
+
+<p>Ferocity P increases the <strong>waveform squareness</strong> (trapezoidal shaping: dwell at ±1, cosine ramp between) proportionally to the current PID error.</p>
+
+<ul>
+  <li>More thrust on one side → immediate moment</li>
+  <li>The braked wing at stroke-end experiences <strong>induced drag</strong> — this is the counter-moment</li>
+  <li>Effect: direct, proportional, immediate</li>
+</ul>
+
+<hr />
+
+<h2 id="ferocity-d--anticipatory-drag-exploitation">Ferocity D — Anticipatory Drag Exploitation</h2>
+
+<p>Ferocity D completes the picture. Where P provides thrust asymmetry, D leverages the <strong>drag of the contralateral wing</strong> as a brake.</p>
+
+<ul>
+  <li>Reads error rate of change and <strong>anticipates</strong></li>
+  <li>Can deliberately exploit the drag of a slowed wing for yaw/pitch moments</li>
+  <li>P+D together create a <strong>differential moment pair</strong> — thrust on side A, drag on side B — more efficient than thrust-only</li>
+</ul>
+
+<hr />
+
+<h2 id="three-ways-cadenceferocity-d-increases-ferocity">Three Ways Cadence/Ferocity D Increases Ferocity</h2>
+
+<h3 id="direct--d-boosts-p-during-rapid-error-change">1. Direct — D boosts P during rapid error change</h3>
+
+<p>In gusts or aggressive maneuvers, <code>error_rate</code> is large. D multiplies this and adds to base ferocity. The wing becomes <em>sharper</em> (more trapezoidal) because P+D together demand more squareness than P alone. Result: maximum authority precisely when critical.</p>
+
+<h3 id="indirect--cadence-shifts-the-leverage-point">2. Indirect — Cadence shifts the leverage point</h3>
+
+<p>Cadence modulates <em>when</em> in the cycle ferocity acts. Moving the window into a more aerodynamically sensitive phase (e.g., downstroke center vs. upstroke end) means the <strong>same ferocity value</strong> produces more effect — effectively amplification without numerical change.</p>
+
+<h3 id="combinatorial--d--cadence-during-stall-recovery">3. Combinatorial — D × Cadence during stall recovery</h3>
+
+<p>In a stall: high sink rate → D detects the rate → increases ferocity. Simultaneously, cadence shifts modulation into the downstroke phase where the wing has maximum bite. The interplay: D provides the force, cadence the right moment. Without cadence, D-force arrives at the wrong phase and dissipates uselessly.</p>
+
+<hr />
+
+<h2 id="additional-ondas-parameters">Additional ONDAS Parameters</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Parameter</th>
+      <th>Function</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Balance</strong></td>
+      <td>Left/right wing symmetry correction — compensates for manufacturing tolerances and wear</td>
+    </tr>
+    <tr>
+      <td><strong>Warp</strong></td>
+      <td>Stroke waveform warping — non-linear reshaping of the sinusoid for specific aerodynamic profiles</td>
+    </tr>
+    <tr>
+      <td><strong>Anchor</strong></td>
+      <td>Phase anchoring — locks modulation to a specific phase reference, resisting drift</td>
+    </tr>
+    <tr>
+      <td><strong>Resonance</strong></td>
+      <td>Airframe resonance compensation — avoids exciting structural modes of the airframe</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h2 id="analogy">Analogy</h2>
+
+<p><strong>Cadence is the conductor. Ferocity P and D are the instruments.</strong></p>
+
+<p>Without a conductor, they play — but not together. With one, noise becomes music.</p>
+
+<hr />
+
+<h2 id="see-also">See Also</h2>
+
+<ul>
+  <li><a href="../../tutorials/ondas_tuning.html">ONDAS Tuning Guide</a> — practical tuning procedure</li>
+  <li><a href="msp.html">MSP Protocol</a> — wire format for ONDAS parameters</li>
+  <li><a href="profiles.html">Flight Profiles</a> — profile-aware ONDAS configuration</li>
+</ul>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../wiki/'>Wiki</a>
+◇
+<a href='../tutorials/'>Tutorials</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

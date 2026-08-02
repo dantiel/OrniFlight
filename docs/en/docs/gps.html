@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='en'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>GPS — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,600;0,700;0,800;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../' title='OrniFlight'>
+<img alt='OrniFlight' src='../assets/images/of_icon_128.png'>
+</a>
+<a href='../#essence'>Essence</a>
+<a href='../wiki/'>Wiki</a>
+<a href='../docs/'>Docs</a>
+<a href='../tutorials/'>Tutorials</a>
+<div class='lang-switch'>
+<a class='active' href='.'>EN</a>
+<a class='' href='../de/'>DE</a>
+</div>
+</nav>
+<main class='content-page'>
+<article>
+<h1 id="gps">GPS</h1>
+
+<p>GPS enables position hold, return-to-home, and telemetry-based navigation for your ornithopter. GPS features in OrniFlight are functional but considered experimental — always fly within visual line of sight.</p>
+
+<h2 id="supported-protocols">Supported Protocols</h2>
+
+<ul>
+  <li><strong>UBLOX</strong> (recommended) — UBlox binary protocol, efficient and reliable</li>
+  <li><strong>NMEA</strong> — Text-based standard protocol</li>
+</ul>
+
+<h2 id="hardware">Hardware</h2>
+
+<ul>
+  <li>BN-880, BN-220, or similar UBlox M8N GPS+Compass modules</li>
+  <li>Connect: TX/RX to a free UART, plus 5V/GND</li>
+  <li>Mount GPS away from power wires and ESCs to minimize interference</li>
+  <li>Compass/magnetometer must be away from magnetic sources (power wires, motors)</li>
+</ul>
+
+<h2 id="configuration">Configuration</h2>
+
+<p><code>
+feature GPS
+set gps_provider = UBLOX
+set gps_sbas_mode = AUTO
+set gps_auto_baud = ON
+set gps_ublox_use_galileo = ON
+</code></p>
+
+<ol>
+  <li>Assign serial port to GPS in <strong>Ports</strong> tab (default 115200 baud for UBlox)</li>
+  <li>Enable GPS feature</li>
+  <li>Set provider</li>
+  <li>Save and reboot</li>
+</ol>
+
+<h2 id="osd-elements">OSD Elements</h2>
+
+<p>GPS data displayed in OSD includes:
+- Satellite count and fix type
+- GPS coordinates (lat/lon)
+- Ground speed
+- Altitude (GPS)
+- Distance from home
+- Home direction arrow</p>
+
+<h2 id="ornithopter-considerations">Ornithopter Considerations</h2>
+
+<ul>
+  <li>GPS antenna must have clear sky view — mounting location is critical with flapping wings</li>
+  <li>Weight penalty is significant on small ornithopters</li>
+  <li>GPS-assisted RTH (Return to Home) requires careful tuning of navigation PID values for flapping flight dynamics</li>
+</ul>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../wiki/'>Wiki</a>
+◇
+<a href='../tutorials/'>Tutorials</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

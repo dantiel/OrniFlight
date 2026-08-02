@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='en'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>Receiver (RX) — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,600;0,700;0,800;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../' title='OrniFlight'>
+<img alt='OrniFlight' src='../assets/images/of_icon_128.png'>
+</a>
+<a href='../#essence'>Essence</a>
+<a href='../wiki/'>Wiki</a>
+<a href='../docs/'>Docs</a>
+<a href='../tutorials/'>Tutorials</a>
+<div class='lang-switch'>
+<a class='active' href='.'>EN</a>
+<a class='' href='../de/'>DE</a>
+</div>
+</nav>
+<main class='content-page'>
+<article>
+<h1 id="receiver-rx">Receiver (RX)</h1>
+
+<p>OrniFlight supports multiple receiver protocols for radio control of your ornithopter.</p>
+
+<h2 id="supported-protocols">Supported Protocols</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Protocol</th>
+      <th>Type</th>
+      <th>Notes</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>CRSF</strong> (Crossfire)</td>
+      <td>Serial</td>
+      <td>Low latency, telemetry, recommended</td>
+    </tr>
+    <tr>
+      <td><strong>SBUS</strong></td>
+      <td>Serial</td>
+      <td>Inverted, needs inverter on F4</td>
+    </tr>
+    <tr>
+      <td><strong>IBUS</strong> (FlySky)</td>
+      <td>Serial</td>
+      <td>Non-inverted, direct UART</td>
+    </tr>
+    <tr>
+      <td><strong>PPM</strong></td>
+      <td>Single-wire analog</td>
+      <td>8ch, legacy, not recommended</td>
+    </tr>
+    <tr>
+      <td><strong>SPEKTRUM</strong></td>
+      <td>Serial</td>
+      <td>1024/2048, bind via CLI</td>
+    </tr>
+    <tr>
+      <td><strong>FPORT</strong></td>
+      <td>Serial</td>
+      <td>FrSky, combines RX+Telemetry</td>
+    </tr>
+    <tr>
+      <td><strong>GHST</strong> (Ghost)</td>
+      <td>Serial</td>
+      <td>ImmersionRC, low latency</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="serial-rx-configuration">Serial RX Configuration</h2>
+
+<ol>
+  <li>Connect receiver to a free UART RX pin</li>
+  <li>In Configurator → <strong>Ports</strong>: set the UART to <code>Serial RX</code></li>
+  <li>In Configurator → <strong>Configuration</strong>: select protocol</li>
+  <li>For SBUS on F4: enable <code>set sbus_inversion = ON</code></li>
+</ol>
+
+<h2 id="cli-quick-setup">CLI Quick Setup</h2>
+
+<p><code>
+feature RX_SERIAL
+set serialrx_provider = CRSF
+set serialrx_inverted = OFF
+set serialrx_halfduplex = OFF
+save
+</code></p>
+
+<h2 id="failsafe">Failsafe</h2>
+
+<p>Configure receiver failsafe so that the receiver outputs <strong>no pulses</strong> on signal loss. The flight controller will then detect this and activate its own failsafe procedure. See <a href="failsafe.html">Failsafe</a> for FC-level configuration.</p>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../wiki/'>Wiki</a>
+◇
+<a href='../tutorials/'>Tutorials</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

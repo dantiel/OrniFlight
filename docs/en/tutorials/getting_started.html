@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='en'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>Getting Started — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,600;0,700;0,800;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../' title='OrniFlight'>
+<img alt='OrniFlight' src='../assets/images/of_icon_128.png'>
+</a>
+<a href='../#essence'>Essence</a>
+<a href='../wiki/'>Wiki</a>
+<a href='../docs/'>Docs</a>
+<a href='../tutorials/'>Tutorials</a>
+<div class='lang-switch'>
+<a class='active' href='.'>EN</a>
+<a class='' href='../de/'>DE</a>
+</div>
+</nav>
+<main class='content-page'>
+<article>
+<h1 id="getting-started">Getting Started</h1>
+
+<p>Welcome to OrniFlight! This guide walks you through the initial setup of your ornithopter flight controller.</p>
+
+<h2 id="what-you-need">What You Need</h2>
+
+<ul>
+  <li><strong>OrniFlight Configurator</strong> — download from <a href="https://orniflight.org">orniflight.org</a></li>
+  <li><strong>USB cable</strong> — to connect flight controller to computer</li>
+  <li><strong>Ornithopter</strong> with:
+    <ul>
+      <li>Supported flight controller (OMNIBUSF4, TINYFISH)</li>
+      <li>Servos for wing actuation</li>
+      <li>Receiver bound to your transmitter</li>
+      <li>Battery (2S–4S LiPo)</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="quick-start">Quick Start</h2>
+
+<h3 id="flash-firmware">1. Flash Firmware</h3>
+
+<ol>
+  <li>Open <strong>OrniFlight Configurator</strong></li>
+  <li>Go to <strong>Firmware Flasher</strong> tab</li>
+  <li>Select your board target (OMNIBUSF4 or TINYFISH)</li>
+  <li>Choose latest stable version</li>
+  <li>Click <strong>Load Firmware</strong> then <strong>Flash Firmware</strong></li>
+</ol>
+
+<h3 id="initial-configuration">2. Initial Configuration</h3>
+
+<p>After flashing, the Configurator will prompt you to apply custom defaults. <strong>Always accept.</strong></p>
+
+<h3 id="receiver-setup">3. Receiver Setup</h3>
+
+<ol>
+  <li>Go to <strong>Ports</strong> tab → set the correct UART to <code>Serial RX</code></li>
+  <li>Go to <strong>Configuration</strong> tab → select your receiver protocol (CRSF, SBUS, etc.)</li>
+  <li>Go to <strong>Receiver</strong> tab → verify stick movements match expected channels</li>
+  <li>Set channel endpoints: 1000–2000 with 1500 center</li>
+</ol>
+
+<h3 id="servo-setup">4. Servo Setup</h3>
+
+<ol>
+  <li>Go to <strong>Servos</strong> tab</li>
+  <li>Verify servo mapping matches your ornithopter’s wing configuration</li>
+  <li>Test servo direction — reverse if needed</li>
+  <li>Set center position (wings horizontal = 1500)</li>
+</ol>
+
+<h3 id="modes-setup">5. Modes Setup</h3>
+
+<ol>
+  <li>Go to <strong>Modes</strong> tab</li>
+  <li>Assign ARM to an AUX switch</li>
+  <li>Assign flight modes (ANGLE / ACRO / HORIZON) as desired</li>
+  <li>Assign INDEPENDENT and GLIDE to spare switches</li>
+  <li>Configure BEEPER for lost-model locating</li>
+</ol>
+
+<h3 id="first-flight">6. First Flight</h3>
+
+<ol>
+  <li><strong>Remove propellers or disconnect wing linkage for bench testing</strong></li>
+  <li>Arm and verify servo movement direction</li>
+  <li>Check throttle response</li>
+  <li>For first actual flight: use ANGLE mode, low rates</li>
+  <li>Hover at eye level, trim as needed</li>
+</ol>
+
+<h2 id="next-steps">Next Steps</h2>
+
+<ul>
+  <li><a href="basic_setup.html">Basic Setup</a> — detailed configuration walkthrough</li>
+  <li><a href="../../tutorials/ondas_tuning.html">ONDAS Tuning</a> — tune flapping dynamics</li>
+  <li><a href="../../tutorials/tuning.html">PID Tuning</a> — adjust flight characteristics</li>
+</ul>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../wiki/'>Wiki</a>
+◇
+<a href='../tutorials/'>Tutorials</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='en'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>LED Strip — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,600;0,700;0,800;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../' title='OrniFlight'>
+<img alt='OrniFlight' src='../assets/images/of_icon_128.png'>
+</a>
+<a href='../#essence'>Essence</a>
+<a href='../wiki/'>Wiki</a>
+<a href='../docs/'>Docs</a>
+<a href='../tutorials/'>Tutorials</a>
+<div class='lang-switch'>
+<a class='active' href='.'>EN</a>
+<a class='' href='../de/'>DE</a>
+</div>
+</nav>
+<main class='content-page'>
+<article>
+<h1 id="led-strip">LED Strip</h1>
+
+<p>OrniFlight supports addressable WS2812/SK6812 LED strips for status indication and visual feedback.</p>
+
+<h2 id="configuration">Configuration</h2>
+
+<p>LED strips are configured in the <strong>LED Strip</strong> tab of OrniFlight Configurator. Each LED position, color, and function can be set individually.</p>
+
+<h2 id="functions">Functions</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Function</th>
+      <th>Visual Effect</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Battery Indicator</td>
+      <td>Color gradient from green → yellow → red</td>
+    </tr>
+    <tr>
+      <td>RSSI</td>
+      <td>Signal strength display</td>
+    </tr>
+    <tr>
+      <td>Arm State</td>
+      <td>Color change on arm/disarm</td>
+    </tr>
+    <tr>
+      <td>Flight Mode</td>
+      <td>Mode-specific colors</td>
+    </tr>
+    <tr>
+      <td>Warning</td>
+      <td>Blink patterns for low battery, failsafe</td>
+    </tr>
+    <tr>
+      <td>Flapping Indicator</td>
+      <td>Pulse at current flapping frequency</td>
+    </tr>
+    <tr>
+      <td>Thrust Direction</td>
+      <td>Color shift indicating roll/pitch/yaw output</td>
+    </tr>
+    <tr>
+      <td>GPS</td>
+      <td>Satellite lock and home direction</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="hardware">Hardware</h2>
+
+<ul>
+  <li>WS2812 or SK6812 RGB LEDs</li>
+  <li>Connect to the <strong>LED</strong> pad/pin on your flight controller</li>
+  <li>Power LEDs from a BEC (do NOT power from 3.3V — use 5V)</li>
+  <li>For long strips (&gt;8 LEDs), connect 5V power directly to battery pads, not through FC</li>
+</ul>
+
+<h2 id="ornithopter-use">Ornithopter Use</h2>
+
+<p>The <strong>Flapping Indicator</strong> is unique to OrniFlight — LEDs pulse in sync with wing stroke frequency, giving a visual representation of flapping rhythm and helping tune ONDAS cadence parameters.</p>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../wiki/'>Wiki</a>
+◇
+<a href='../tutorials/'>Tutorials</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

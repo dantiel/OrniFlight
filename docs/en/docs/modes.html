@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='en'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>Flight Modes — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,600;0,700;0,800;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../' title='OrniFlight'>
+<img alt='OrniFlight' src='../assets/images/of_icon_128.png'>
+</a>
+<a href='../#essence'>Essence</a>
+<a href='../wiki/'>Wiki</a>
+<a href='../docs/'>Docs</a>
+<a href='../tutorials/'>Tutorials</a>
+<div class='lang-switch'>
+<a class='active' href='.'>EN</a>
+<a class='' href='../de/'>DE</a>
+</div>
+</nav>
+<main class='content-page'>
+<article>
+<h1 id="flight-modes">Flight Modes</h1>
+
+<p>Modes are toggled via AUX switches on your transmitter. Each mode can be assigned to a specific AUX channel range in the <strong>Modes</strong> tab of OrniFlight Configurator.</p>
+
+<h2 id="standard-modes">Standard Modes</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Mode</th>
+      <th>Function</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>ARM</strong></td>
+      <td>Enable flight control (motors/servos active)</td>
+    </tr>
+    <tr>
+      <td><strong>ANGLE</strong></td>
+      <td>Auto-level — craft returns to level when sticks centered</td>
+    </tr>
+    <tr>
+      <td><strong>HORIZON</strong></td>
+      <td>Hybrid — angle mode near center, acro at full stick</td>
+    </tr>
+    <tr>
+      <td><strong>ACRO</strong></td>
+      <td>Default — no auto-level, pure rate control</td>
+    </tr>
+    <tr>
+      <td><strong>AIRMODE</strong></td>
+      <td>Keeps PID loop active at zero throttle for full authority</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="orniflight-specific-modes">OrniFlight-Specific Modes</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Mode</th>
+      <th>Function</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>50</td>
+      <td><strong>INDEPENDENT</strong></td>
+      <td>Independent wing control — each wing responds to its own servo channel</td>
+    </tr>
+    <tr>
+      <td>51</td>
+      <td><strong>GLIDE</strong></td>
+      <td>Glide mode — wings locked in horizontal position for soaring</td>
+    </tr>
+    <tr>
+      <td>52</td>
+      <td><strong>PROFILE</strong></td>
+      <td>Flight profile selection — switch between 3 PID/ONDAS profiles</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="utility-modes">Utility Modes</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Mode</th>
+      <th>Function</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>BEEPER</strong></td>
+      <td>Activate buzzer for locating lost aircraft</td>
+    </tr>
+    <tr>
+      <td><strong>BLACKBOX</strong></td>
+      <td>Start/stop Blackbox logging</td>
+    </tr>
+    <tr>
+      <td><strong>FAILSAFE</strong></td>
+      <td>Manually trigger failsafe stage 2 (panic switch)</td>
+    </tr>
+    <tr>
+      <td><strong>OSD</strong></td>
+      <td>Toggle OSD display</td>
+    </tr>
+    <tr>
+      <td><strong>TELEMETRY</strong></td>
+      <td>Enable/disable telemetry output</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="ornithopter-notes">Ornithopter Notes</h2>
+
+<ul>
+  <li><strong>INDEPENDENT</strong> mode is unique to OrniFlight — it enables per-wing servo mapping for asymmetric thrust and differential wing control</li>
+  <li><strong>GLIDE</strong> mode holds wings at neutral position, useful for thermal soaring and energy-efficient descent</li>
+  <li><strong>PROFILE</strong> switching allows in-flight ONDAS parameter changes for varying flight conditions (e.g., cruise vs. aggressive maneuvering)</li>
+</ul>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../wiki/'>Wiki</a>
+◇
+<a href='../tutorials/'>Tutorials</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='en'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>RSSI — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,600;0,700;0,800;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../' title='OrniFlight'>
+<img alt='OrniFlight' src='../assets/images/of_icon_128.png'>
+</a>
+<a href='../#essence'>Essence</a>
+<a href='../wiki/'>Wiki</a>
+<a href='../docs/'>Docs</a>
+<a href='../tutorials/'>Tutorials</a>
+<div class='lang-switch'>
+<a class='active' href='.'>EN</a>
+<a class='' href='../de/'>DE</a>
+</div>
+</nav>
+<main class='content-page'>
+<article>
+<h1 id="rssi">RSSI</h1>
+
+<p>RSSI (Received Signal Strength Indicator) shows the quality of your radio link. OrniFlight can source RSSI from analog input, serial receiver data, or protocol RSSI.</p>
+
+<h2 id="rssi-sources">RSSI Sources</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Source</th>
+      <th>Connection</th>
+      <th>Configuration</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Serial Protocol</strong></td>
+      <td>None (over serial RX wire)</td>
+      <td>CRSF, GHST — automatic</td>
+    </tr>
+    <tr>
+      <td><strong>AUX Channel</strong></td>
+      <td>None (TX sends RSSI as channel)</td>
+      <td><code>set rssi_channel = 8</code></td>
+    </tr>
+    <tr>
+      <td><strong>Analog ADC</strong></td>
+      <td>RSSI pad on FC → Receiver RSSI out</td>
+      <td><code>set rssi_adc_channel = 1</code></td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="configuration">Configuration</h2>
+
+<h3 id="serial-rssi-crsfghstsbus">Serial RSSI (CRSF/GHST/SBUS)</h3>
+
+<p><code>
+set rssi_src_frame_errors = OFF
+set rssi_scale = 100
+set rssi_offset = 0
+</code></p>
+
+<p>RSSI is transmitted automatically by serial protocols — no extra wiring needed.</p>
+
+<h3 id="analog-rssi">Analog RSSI</h3>
+
+<p>Connect receiver RSSI output → RSSI pad on flight controller:</p>
+
+<p><code>
+set rssi_adc_channel = 1      # Use ADC channel 1
+set rssi_scale = 100          # Scale to 0-100%
+set rssi_offset = 0
+</code></p>
+
+<h3 id="aux-channel-rssi">AUX Channel RSSI</h3>
+
+<p>Configure your transmitter to send RSSI on a specific channel, then:</p>
+
+<p><code>
+set rssi_channel = 12         # Aux channel number
+set rssi_scale = 100
+set rssi_offset = 0
+</code></p>
+
+<h2 id="display">Display</h2>
+
+<p>RSSI is shown in the OSD and can be transmitted via telemetry to your radio. Configure warning thresholds:</p>
+
+<p><code>
+set osd_rssi_alarm = 20        # Warning at 20% RSSI
+</code></p>
+
+<h2 id="ornithopter-range">Ornithopter Range</h2>
+
+<p>For ornithopters, RSSI is critical — flapping wings create dynamic RF interference patterns. Monitor RSSI during initial test flights to verify reliable link performance at all wing positions.</p>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../wiki/'>Wiki</a>
+◇
+<a href='../tutorials/'>Tutorials</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

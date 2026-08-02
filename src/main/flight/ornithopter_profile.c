@@ -10,6 +10,7 @@
 #include "ornithopter_profile.h"
 
 static uint8_t activeProfileIndex;
+static uint8_t mspProfileIndex;
 
 PG_REGISTER_ARRAY_WITH_RESET_FN(ornithopterProfile_t, ORNITHOPTER_PROFILE_COUNT,
                                 ornithopterProfiles, PG_ORNITHOPTER_PROFILES, 0);
@@ -56,6 +57,19 @@ const ornithopterProfile_t *currentOrnithopterProfile(void)
 ornithopterProfile_t *currentOrnithopterProfileMutable(void)
 {
     return ornithopterProfilesMutable(activeProfileIndex);
+}
+
+
+uint8_t getOrnithopterProfileIndexMSP(void)
+{
+    return mspProfileIndex;
+}
+
+void setOrnithopterProfileIndexMSP(uint8_t index)
+{
+    if (index < ORNITHOPTER_PROFILE_COUNT) {
+        mspProfileIndex = index;
+    }
 }
 
 void updateOrnithopterProfileFromBox(void)

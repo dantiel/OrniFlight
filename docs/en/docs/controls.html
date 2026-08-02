@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='en'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>Controls — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,600;0,700;0,800;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../' title='OrniFlight'>
+<img alt='OrniFlight' src='../assets/images/of_icon_128.png'>
+</a>
+<a href='../#essence'>Essence</a>
+<a href='../wiki/'>Wiki</a>
+<a href='../docs/'>Docs</a>
+<a href='../tutorials/'>Tutorials</a>
+<div class='lang-switch'>
+<a class='active' href='.'>EN</a>
+<a class='' href='../de/'>DE</a>
+</div>
+</nav>
+<main class='content-page'>
+<article>
+<h1 id="controls">Controls</h1>
+
+<p>OrniFlight uses standard multirotor stick mapping with ornithopter-specific extensions.</p>
+
+<h2 id="stick-mapping">Stick Mapping</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Stick</th>
+      <th>Axis</th>
+      <th>Primary Effect</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Throttle (Left, vertical)</td>
+      <td>Throttle</td>
+      <td>Flapping amplitude / thrust</td>
+    </tr>
+    <tr>
+      <td>Yaw (Left, horizontal)</td>
+      <td>Yaw</td>
+      <td>Differential wing thrust for turning</td>
+    </tr>
+    <tr>
+      <td>Pitch (Right, vertical)</td>
+      <td>Pitch</td>
+      <td>Forward/backward tilt</td>
+    </tr>
+    <tr>
+      <td>Roll (Right, horizontal)</td>
+      <td>Roll</td>
+      <td>Left/right banking</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="flight-modes">Flight Modes</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Mode</th>
+      <th>Stick Behavior</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>ACRO</strong></td>
+      <td>Sticks control angular rate — no auto level</td>
+    </tr>
+    <tr>
+      <td><strong>ANGLE</strong></td>
+      <td>Sticks control angle — auto-level when released</td>
+    </tr>
+    <tr>
+      <td><strong>HORIZON</strong></td>
+      <td>ANGLE near center, ACRO at full deflection</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>ACRO is recommended for experienced pilots. ANGLE is good for first flights and thermal soaring.</p>
+
+<h2 id="ornithopter-specific-controls">Ornithopter-Specific Controls</h2>
+
+<h3 id="independent-mode">INDEPENDENT Mode</h3>
+
+<p>When INDEPENDENT mode is active, each wing servo responds independently:
+- <strong>Left stick</strong> → left wing servos
+- <strong>Right stick</strong> → right wing servos
+- Enables asymmetric flapping for aggressive maneuvers</p>
+
+<h3 id="glide-mode">GLIDE Mode</h3>
+
+<p>GLIDE mode locks both wings in horizontal position. The ornithopter becomes a glider:
+- <strong>Throttle</strong> has no effect on wing position
+- <strong>Pitch/Roll/Yaw</strong> still influence tail control surfaces (if equipped)</p>
+
+<h3 id="profile-switching">Profile Switching</h3>
+
+<p>In-flight profile switching via AUX channel allows changing PID/ONDAS parameters mid-flight:
+- <strong>Profile 1</strong>: Standard cruise settings
+- <strong>Profile 2</strong>: High-agility settings
+- <strong>Profile 3</strong>: Efficiency/glide settings</p>
+
+<h2 id="rates">Rates</h2>
+
+<p>Configure rates in the <strong>PID Tuning</strong> tab. For ornithopters, start with lower rates than multirotors — flapping dynamics amplify control inputs:
+- RC Rate: 0.80–1.00
+- Super Rate: 0.60–0.70
+- Expo: 0.20–0.40</p>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../wiki/'>Wiki</a>
+◇
+<a href='../tutorials/'>Tutorials</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='en'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>Installation — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,600;0,700;0,800;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../' title='OrniFlight'>
+<img alt='OrniFlight' src='../assets/images/of_icon_128.png'>
+</a>
+<a href='../#essence'>Essence</a>
+<a href='../wiki/'>Wiki</a>
+<a href='../docs/'>Docs</a>
+<a href='../tutorials/'>Tutorials</a>
+<div class='lang-switch'>
+<a class='active' href='.'>EN</a>
+<a class='' href='../de/'>DE</a>
+</div>
+</nav>
+<main class='content-page'>
+<article>
+<h1 id="installation">Installation</h1>
+
+<p>How to install OrniFlight firmware on your flight controller.</p>
+
+<h2 id="prerequisites">Prerequisites</h2>
+
+<ul>
+  <li><strong>OrniFlight Configurator</strong> (latest version)</li>
+  <li>USB data cable (not charge-only)</li>
+  <li>Supported flight controller board</li>
+</ul>
+
+<h2 id="supported-boards">Supported Boards</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Board</th>
+      <th>Target</th>
+      <th>Flash</th>
+      <th>Notes</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>OMNIBUSF4</td>
+      <td><code>OMNIBUSF4</code></td>
+      <td>16MB</td>
+      <td>STM32F405, MPU6000, OSD</td>
+    </tr>
+    <tr>
+      <td>TINYFISH</td>
+      <td><code>TINYFISH</code></td>
+      <td>256KB</td>
+      <td>STM32F411, MPU6000</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="flashing-steps">Flashing Steps</h2>
+
+<h3 id="enter-dfubootloader-mode">1. Enter DFU/Bootloader Mode</h3>
+
+<p><strong>OMNIBUSF4</strong>: Hold BOOT button while connecting USB. Red LED stays solid — you’re in DFU mode.</p>
+
+<p><strong>TINYFISH</strong>: Hold BOOT button while connecting USB.</p>
+
+<h3 id="flash-via-configurator">2. Flash via Configurator</h3>
+
+<ol>
+  <li>Open OrniFlight Configurator</li>
+  <li>Go to <strong>Firmware Flasher</strong> tab</li>
+  <li>Select your target from the dropdown</li>
+  <li>Choose firmware version (latest stable recommended)</li>
+  <li>Click <strong>Load Firmware (Online)</strong> or select a local hex file</li>
+  <li>Click <strong>Flash Firmware</strong></li>
+  <li>Wait for “Programming: SUCCESSFUL”</li>
+</ol>
+
+<h3 id="first-connection">3. First Connection</h3>
+
+<p>After flashing:
+1. Disconnect and reconnect USB (without BOOT button)
+2. Configurator should auto-connect
+3. Accept “Apply Custom Defaults” prompt
+4. Verify board info on Setup tab</p>
+
+<h2 id="troubleshooting">Troubleshooting</h2>
+
+<h3 id="no-dfu-port">No DFU Port</h3>
+
+<p><strong>macOS/Linux</strong>: DFU should appear automatically. If not:
+<code>bash
+# Check for DFU device
+system_profiler SPUSBDataType | grep -A 10 STM
+</code></p>
+
+<p><strong>Windows</strong>: Install <a href="https://zadig.akeo.ie/">Zadig</a> to replace the STM32 DFU driver:
+1. Run Zadig
+2. Options → List All Devices
+3. Select “STM32 BOOTLOADER”
+4. Replace driver with “WinUSB”</p>
+
+<h3 id="flash-fails">Flash Fails</h3>
+
+<ul>
+  <li>Try a different USB cable (data-capable, not charge-only)</li>
+  <li>Try a different USB port (direct, not hub)</li>
+  <li>Hold BOOT button throughout the flash process</li>
+  <li><strong>OMNIBUSF4</strong>: Full chip erase may be needed — check “Full Chip Erase” option</li>
+</ul>
+
+<h3 id="configurator-wont-connect">Configurator Won’t Connect</h3>
+
+<ul>
+  <li>Verify USB cable is data-capable</li>
+  <li>Check board is not in DFU mode (LED flashing = normal mode)</li>
+  <li>Restart Configurator</li>
+  <li>Try different USB port</li>
+</ul>
+
+<h2 id="cli-flash-advanced">CLI Flash (Advanced)</h2>
+
+<p>For advanced users, flash via STM32CubeProgrammer or st-flash:</p>
+
+<p><code>bash
+st-flash write orniflight_0.4.6_OMNIBUSF4.hex 0x08000000
+</code></p>
+
+<p>After flashing, verify with:</p>
+
+<p><code>bash
+st-flash verify orniflight_0.4.6_OMNIBUSF4.hex 0x08000000
+</code></p>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../wiki/'>Wiki</a>
+◇
+<a href='../tutorials/'>Tutorials</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

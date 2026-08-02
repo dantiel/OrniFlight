@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='en'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>Blackbox Logging — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,600;0,700;0,800;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../' title='OrniFlight'>
+<img alt='OrniFlight' src='../assets/images/of_icon_128.png'>
+</a>
+<a href='../#essence'>Essence</a>
+<a href='../wiki/'>Wiki</a>
+<a href='../docs/'>Docs</a>
+<a href='../tutorials/'>Tutorials</a>
+<div class='lang-switch'>
+<a class='active' href='.'>EN</a>
+<a class='' href='../de/'>DE</a>
+</div>
+</nav>
+<main class='content-page'>
+<article>
+<h1 id="blackbox-logging">Blackbox Logging</h1>
+
+<p>Blackbox records flight data for post-flight analysis, tuning, and debugging. OrniFlight supports logging to onboard flash chip or external OpenLog device.</p>
+
+<h2 id="what-gets-logged">What Gets Logged</h2>
+
+<ul>
+  <li><strong>Gyro</strong> — raw and filtered 3-axis angular velocity</li>
+  <li><strong>Accelerometer</strong> — 3-axis acceleration</li>
+  <li><strong>PID Output</strong> — P, I, D, F contributions per axis</li>
+  <li><strong>ONDAS</strong> — Cadence, Ferocity P/D, and other flapping-specific parameters</li>
+  <li><strong>RC Commands</strong> — stick positions after rates/expo</li>
+  <li><strong>Motor/Servo Output</strong> — final output to each servo/ESC channel</li>
+  <li><strong>Battery</strong> — voltage and current per iteration</li>
+  <li><strong>GPS</strong> — position, speed, altitude (when available)</li>
+</ul>
+
+<h2 id="setup">Setup</h2>
+
+<h3 id="onboard-flash-omnibusf4">Onboard Flash (OMNIBUSF4)</h3>
+
+<p>The OMNIBUSF4 includes 16MB onboard flash for Blackbox logging. Enable in Configurator:</p>
+
+<ol>
+  <li><strong>Blackbox</strong> tab → Set <code>Blackbox logging device</code> to <code>Onboard flash</code></li>
+  <li>Set logging rate (recommend: <code>1/N</code> with N=2-4 for F4 targets)</li>
+  <li>Assign a switch to start/stop logging</li>
+</ol>
+
+<h3 id="external-openlog">External OpenLog</h3>
+
+<p>Connect OpenLog to a free UART TX pin:</p>
+
+<ol>
+  <li><strong>Ports</strong> tab → Set the UART to <code>Blackbox logging</code> at 115200 baud</li>
+  <li>Connect OpenLog: FC TX → OpenLog RX, plus 5V/GND</li>
+</ol>
+
+<h2 id="analysis-tools">Analysis Tools</h2>
+
+<ul>
+  <li><a href="https://github.com/betaflight/blackbox-log-viewer">Blackbox Explorer</a> — web-based log viewer</li>
+  <li><code>blackbox_decode</code> — convert to CSV for custom analysis</li>
+</ul>
+
+<h2 id="ondas-specific">ONDAS-Specific</h2>
+
+<p>Blackbox is essential for tuning ONDAS parameters. Logged ONDAS data includes:
+- <code>ondas_cadence_phase</code> — modulation window timing
+- <code>ondas_ferocity_p</code> / <code>ondas_ferocity_d</code> — asymmetric thrust components
+- <code>ondas_balance</code> — left/right wing balance
+- Per-servo output at each iteration</p>
+
+<p>This allows precise analysis of flapping mechanics and wing asymmetry corrections.</p>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../wiki/'>Wiki</a>
+◇
+<a href='../tutorials/'>Tutorials</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

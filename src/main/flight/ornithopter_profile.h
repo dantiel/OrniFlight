@@ -51,3 +51,5 @@ uint8_t getOrnithopterProfileIndex(void);
 const ornithopterProfile_t *currentOrnithopterProfile(void);
 ornithopterProfile_t *currentOrnithopterProfileMutable(void);
 void updateOrnithopterProfileFromBox(void); // called from PID loop to sync with BOX
+uint8_t getOrnithopterProfileIndexMSP(void);
+void setOrnithopterProfileIndexMSP(uint8_t index);
