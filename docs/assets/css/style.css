@@ -638,6 +638,21 @@ td:first-child {
   content: "▼";
   opacity: 1;
 }
+.servo-table .sort-order {
+  position: absolute;
+  right: 2px;
+  top: 2px;
+  font-size: 0.48rem;
+  color: var(--accent);
+  line-height: 1;
+  pointer-events: none;
+}
+.servo-table .sort-hint {
+  font-size: 0.65rem;
+  color: var(--mut);
+  margin-top: -1rem;
+  margin-bottom: 1.5rem;
+}
 
 .inline-currency {
   font-family: "JetBrains Mono", "SF Mono", "Fira Code", monospace;

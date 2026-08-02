@@ -5,7 +5,7 @@ A curated selection of servos tested and ranked for ornithopter use.
 Higher is better. Prices in <select class="currency-select inline-currency">
   <option value="EUR">EUR €</option><option value="USD">USD $</option><option value="GBP">GBP £</option>
   <option value="CHF">CHF</option><option value="JPY">JPY ¥</option><option value="BRL">BRL R$</option>
-</select>. Click column headers to sort. Submit additions via PR to `_data/servos.yml`.
+</select>. Click column headers to sort — <strong>Shift+click</strong> for multi-column sort. Submit additions via PR to `_data/servos.yml`.
 
 
 <table class="servo-table">
@@ -82,22 +82,10 @@ Higher is better. Prices in <select class="currency-select inline-currency">
         <td class="num" data-price-eur="11.00">€11.00</td>
         <td class="num strong">0.84</td>
         <td class="flight" data-flight-rating="5">Strong Flight <a href="https://youtu.be/JRferxboRa4" class="yt-link" target="_blank">📺</a><a href="https://youtu.be/PmHgHTTnvVI" class="yt-link" target="_blank">📺</a><a href="https://youtu.be/3Zg00BK7OsA" class="yt-link" target="_blank">📺</a></td>
-        <td class="notes">Up to 6.2V. Gralha Azul 28g, Seraphim 31g (d4ro)</td>
+        <td class="notes">Up to 6.2V. Gralha Azul 28g, Seraphim 31g</td>
       </tr>
       <tr class="untested">
         <td>Blue Arrow D05023MG</td>
-        <td class="num">6.0</td>
-        <td class="num">5.4</td>
-        <td class="num">1.42</td>
-        <td class="num">0.04</td>
-        <td class="num">6.57</td>
-        <td class="num" data-price-eur="12.00">€12.00</td>
-        <td class="num strong">0.62</td>
-        <td class="flight untested-cell">Untested</td>
-        <td class="notes"></td>
-      </tr>
-      <tr class="untested">
-        <td>KST DS 113 MG</td>
         <td class="num">6.0</td>
         <td class="num">12.0</td>
         <td class="num">2.20</td>
@@ -132,7 +120,7 @@ Higher is better. Prices in <select class="currency-select inline-currency">
         <td class="flight untested-cell">Untested</td>
         <td class="notes">Ultra-light 3g</td>
       </tr>
-      <tr>
+      <tr class="untested">
         <td>VOTIK PTK 7350 MG-D</td>
         <td class="num">7.4</td>
         <td class="num">5.5</td>
@@ -141,10 +129,10 @@ Higher is better. Prices in <select class="currency-select inline-currency">
         <td class="num">4.68</td>
         <td class="num" data-price-eur="5.50">€5.50</td>
         <td class="num strong">1.03</td>
-        <td class="flight" data-flight-rating="5">Strong Flight <a href="https://youtu.be/iSIwwHDRsHg" class="yt-link" target="_blank">📺</a><a href="https://youtu.be/Ta3ghJrFt-0" class="yt-link" target="_blank">📺</a><a href="https://youtu.be/6kXmIZEmYUA" class="yt-link" target="_blank">📺</a></td>
-        <td class="notes">Best efficiency/€. Kestrel 45g, Albatross 57g, Butterfly 54g (32+ flights by Kazu)</td>
+        <td class="flight untested-cell">Untested</td>
+        <td class="notes">Best efficiency/€</td>
       </tr>
-      <tr class="untested">
+      <tr>
         <td>VOTIK PTK 7465 / 7465W MG</td>
         <td class="num">7.4</td>
         <td class="num">9.0</td>
@@ -153,8 +141,8 @@ Higher is better. Prices in <select class="currency-select inline-currency">
         <td class="num">5.56</td>
         <td class="num" data-price-eur="7.00">€7.00</td>
         <td class="num strong">0.46</td>
-        <td class="flight untested-cell">Untested</td>
-        <td class="notes">HV coreless, metal gear, waterproof, 180°, 25T. 5kg = stall torque; effective torque lower. Entomoid.</td>
+        <td class="flight" data-flight-rating="5">Strong Flight <a href="https://youtu.be/iSIwwHDRsHg" class="yt-link" target="_blank">📺</a><a href="https://youtu.be/Ta3ghJrFt-0" class="yt-link" target="_blank">📺</a><a href="https://youtu.be/6kXmIZEmYUA" class="yt-link" target="_blank">📺</a></td>
+        <td class="notes">HV coreless, metal gear, waterproof, 180°, 25T. 5kg = stall torque; effective torque lower. Kestrel 45g, Albatross 57g, Butterfly 54g, Entomoid.</td>
       </tr>
       <tr class="untested">
         <td>VOTIK PTK 7465 Plus</td>

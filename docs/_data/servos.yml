@@ -118,10 +118,7 @@ servos:
     price: 5.50
     efficiency: 4.68
     eff_per_euro_scale: 1.03
-    flight_performance:
-      rating: 5
-      note: Strong Flight <a href="https://youtu.be/iSIwwHDRsHg" class="yt-link" target="_blank">📺</a><a href="https://youtu.be/Ta3ghJrFt-0" class="yt-link" target="_blank">📺</a><a href="https://youtu.be/6kXmIZEmYUA" class="yt-link" target="_blank">📺</a>
-    notes: Best efficiency/€. Kestrel 45g, Albatross 57g, Butterfly 54g
+    notes: Best efficiency/€
 
   - brand: VOTIK
     model: PTK 7465 / 7465W MG
@@ -132,7 +129,10 @@ servos:
     price: 7.00
     efficiency: 5.56
     eff_per_euro_scale: 0.46
-    notes: HV coreless, metal gear, waterproof, 180°, 25T. 5kg = stall torque; effective torque lower. Entomoid.
+    flight_performance:
+      rating: 5
+      note: Strong Flight <a href="https://youtu.be/iSIwwHDRsHg" class="yt-link" target="_blank">📺</a><a href="https://youtu.be/Ta3ghJrFt-0" class="yt-link" target="_blank">📺</a><a href="https://youtu.be/6kXmIZEmYUA" class="yt-link" target="_blank">📺</a>
+    notes: HV coreless, metal gear, waterproof, 180°, 25T. 5kg = stall torque; effective torque lower. Kestrel 45g, Albatross 57g, Butterfly 54g, Entomoid.
 
   - brand: VOTIK
     model: PTK 7465 Plus

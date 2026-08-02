@@ -264,7 +264,7 @@ def build_servo_page(lang)
       Higher is better. Prices in <select class="currency-select inline-currency">
         <option value="EUR">EUR €</option><option value="USD">USD $</option><option value="GBP">GBP £</option>
         <option value="CHF">CHF</option><option value="JPY">JPY ¥</option><option value="BRL">BRL R$</option>
-      </select>. Click column headers to sort. Submit additions via PR to `_data/servos.yml`.
+      </select>. Click column headers to sort — <strong>Shift+click</strong> for multi-column sort. Submit additions via PR to `_data/servos.yml`.
     EN
   when "de"
     <<~DE
@@ -275,7 +275,7 @@ def build_servo_page(lang)
       Höher ist besser. Preise in <select class="currency-select inline-currency">
         <option value="EUR">EUR €</option><option value="USD">USD $</option><option value="GBP">GBP £</option>
         <option value="CHF">CHF</option><option value="JPY">JPY ¥</option><option value="BRL">BRL R$</option>
-      </select>. Spaltenköpfe anklicken zum Sortieren. Ergänzungen per PR an `_data/servos.yml`.
+      </select>. Spaltenköpfe anklicken zum Sortieren — <strong>Shift+Klick</strong> für Mehrfachsortierung. Ergänzungen per PR an `_data/servos.yml`.
     DE
   end
 
