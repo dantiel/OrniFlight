@@ -63,7 +63,7 @@ servos:
     eff_per_euro_scale: 0.84
     flight_performance:
       rating: 4
-      note: Good Flight <a href="https://youtu.be/PmHgHTTnvVI" class="yt-link" target="_blank">📺</a><a href="https://youtu.be/E20FnTzsE6o" class="yt-link" target="_blank">📺</a>
+      note: Good Flight <a href="https://youtu.be/PmHgHTTnvVI" class="yt-link" target="_blank">📺</a>
     notes: Up to 6.2V. Gralha Azul 28g / Seraphim 31g
 
   - brand: Blue Arrow
@@ -123,7 +123,7 @@ servos:
       note: Excellent <a href="https://youtu.be/iSIwwHDRsHg" class="yt-link" target="_blank">📺</a><a href="https://youtu.be/Ta3ghJrFt-0" class="yt-link" target="_blank">📺</a><a href="https://youtu.be/6kXmIZEmYUA" class="yt-link" target="_blank">📺</a>
     notes: Best efficiency/€ — the budget king. 32+ flights by Dr. Kazu
 
-  - brand: Inservos
+  - brand: Blue Arrow
     model: D0576HT-MG-HV
     voltage: 7.4
     weight: 7.9
@@ -134,8 +134,8 @@ servos:
     eff_per_euro_scale: 0.77
     flight_performance:
       rating: 5
-      note: Strong Flight <a href="https://youtu.be/JRferxboRa4" class="yt-link" target="_blank">📺</a>
-    notes: White Heron 44g 1175mm. Gear broke on first test flight
+      note: Strong Flight <a href="https://youtu.be/JRferxboRa4" class="yt-link" target="_blank">📺</a><a href="https://youtu.be/E20FnTzsE6o" class="yt-link" target="_blank">📺</a>
+    notes: "Inservos D0576HT-MG-HV = older batch. White Heron 44g. E20FnTzsE6o: oversized model"
 
   - brand: Inservos
     model: D0474HT-MG-HV
