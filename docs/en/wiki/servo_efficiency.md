@@ -81,8 +81,8 @@ Higher is better. Prices in <select class="currency-select inline-currency">
         <td class="num">7.67</td>
         <td class="num" data-price-eur="11.00">€11.00</td>
         <td class="num strong">0.84</td>
-        <td class="flight" data-flight-rating="4">Good Flight <a href="https://youtu.be/PmHgHTTnvVI" class="yt-link" target="_blank">📺</a></td>
-        <td class="notes">Up to 6.2V. Gralha Azul 28g / Seraphim 31g</td>
+        <td class="flight" data-flight-rating="5">Strong Flight <a href="https://youtu.be/JRferxboRa4" class="yt-link" target="_blank">📺</a><a href="https://youtu.be/PmHgHTTnvVI" class="yt-link" target="_blank">📺</a><a href="https://youtu.be/3Zg00BK7OsA" class="yt-link" target="_blank">📺</a><a href="https://youtu.be/v4sA96qaZxQ" class="yt-link" target="_blank">📺</a><a href="https://youtu.be/D_P8zF7rx3g" class="yt-link" target="_blank">📺</a></td>
+        <td class="notes">Up to 6.2V. Gralha Azul 28g, Seraphim 31g (d4ro) + Falcon30iVV5 165g, Kestrel85 105g (Kazu)</td>
       </tr>
       <tr class="untested">
         <td>Blue Arrow D05023MG</td>
@@ -141,8 +141,8 @@ Higher is better. Prices in <select class="currency-select inline-currency">
         <td class="num">4.68</td>
         <td class="num" data-price-eur="5.50">€5.50</td>
         <td class="num strong">1.03</td>
-        <td class="flight" data-flight-rating="5">Excellent <a href="https://youtu.be/iSIwwHDRsHg" class="yt-link" target="_blank">📺</a><a href="https://youtu.be/Ta3ghJrFt-0" class="yt-link" target="_blank">📺</a><a href="https://youtu.be/6kXmIZEmYUA" class="yt-link" target="_blank">📺</a></td>
-        <td class="notes">Best efficiency/€ — the budget king. 32+ flights by Dr. Kazu</td>
+        <td class="flight" data-flight-rating="5">Strong Flight <a href="https://youtu.be/iSIwwHDRsHg" class="yt-link" target="_blank">📺</a><a href="https://youtu.be/Ta3ghJrFt-0" class="yt-link" target="_blank">📺</a><a href="https://youtu.be/6kXmIZEmYUA" class="yt-link" target="_blank">📺</a></td>
+        <td class="notes">Best efficiency/€. Kazu lists as PTK7465. Kestrel 45g, Albatross 57g, Butterfly 54g (32+ flights)</td>
       </tr>
       <tr>
         <td>Blue Arrow D0576HT-MG-HV</td>
@@ -153,8 +153,8 @@ Higher is better. Prices in <select class="currency-select inline-currency">
         <td class="num">9.49</td>
         <td class="num" data-price-eur="20.00">€20.00</td>
         <td class="num strong">0.77</td>
-        <td class="flight" data-flight-rating="5">Strong Flight <a href="https://youtu.be/JRferxboRa4" class="yt-link" target="_blank">📺</a><a href="https://youtu.be/E20FnTzsE6o" class="yt-link" target="_blank">📺</a></td>
-        <td class="notes">Inservos D0576HT-MG-HV = older batch. White Heron 44g. E20FnTzsE6o: oversized model</td>
+        <td class="flight" data-flight-rating="5">Strong Flight <a href="https://youtu.be/ciE7EcND0qk" class="yt-link" target="_blank">📺</a><a href="https://youtu.be/E20FnTzsE6o" class="yt-link" target="_blank">📺</a></td>
+        <td class="notes">Inservos D0576HT-MG-HV = older batch. White Heron 44g 1175mm. E20FnTzsE6o: oversized model</td>
       </tr>
       <tr>
         <td>Inservos D0474HT-MG-HV</td>

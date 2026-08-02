@@ -579,7 +579,18 @@ td:first-child {
 .servo-table td.flight.untested-cell {
   font-weight: 400;
   font-style: italic;
+  font-size: 0.65rem;
   color: var(--mut);
+}
+.servo-table td.flight a.yt-link {
+  font-size: 0.7rem;
+  text-decoration: none;
+  margin-left: 3px;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+}
+.servo-table td.flight a.yt-link:hover {
+  opacity: 1;
 }
 .servo-table td.notes {
   color: var(--mut);
