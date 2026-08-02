@@ -40,7 +40,8 @@
   font-weight: 700
   font-style: normal
 
-$font-heading: 'SF TransRobotics Extended', 'SF TransRobotics', 'Outfit', sans-serif
+$font-heading-extended: 'SF TransRobotics Extended', 'SF TransRobotics', sans-serif
+$font-heading: 'SF TransRobotics', 'Outfit', sans-serif
 $font-body: 'Outfit', 'SF Pro Text', 'Segoe UI', sans-serif
 $font-code: 'JetBrains Mono', 'SF Mono', 'Fira Code', monospace
 $accent: #8998fe
@@ -85,6 +86,7 @@ html
   --subtle: #6e6e78
   --dim: #4d4d5a
   --nav-text: #{$white}
+  --text-shadow: 0 1px 14px rgba(0, 0, 0, 0.38)
   --overlay-start: rgba(26, 26, 28, 0)
   --overlay-end: rgba(26, 26, 28, 0.92)
   --glass-bg: rgba(28, 28, 34, 0.28)
@@ -121,6 +123,7 @@ html
     --subtle: #a8a8b0
     --dim: #e0e0e4
     --nav-text: #{$white}
+    --text-shadow: 0 1px 14px rgba(240, 240, 248, 0.30)
     --overlay-start: rgba(240, 240, 240, 0)
     --overlay-end: rgba(240, 240, 240, 0.92)
     --glass-bg: rgba(248, 248, 250, 0.28)
@@ -290,6 +293,7 @@ nav
   margin-bottom: 0.3rem
   opacity: 0.72
   letter-spacing: 0.01em
+  text-shadow: var(--text-shadow)
 
 // — Version tag —
 .version
@@ -300,6 +304,7 @@ nav
   color: var(--text-soft)
   margin-top: 1.2rem
   letter-spacing: 0.03em
+  text-shadow: var(--text-shadow)
 
 // — Main Content — High-transparency glass container —
 main
@@ -333,7 +338,7 @@ section
 
 // — Section Headings — Dual-color TransRobotics Extended —
 h2
-  font-family: 'SF TransRobotics Extended', 'SF TransRobotics', sans-serif
+  font-family: $font-heading-extended
   font-size: clamp(1.55rem, 4vw, 2.2rem)
   font-weight: 700
   margin-bottom: 1.8rem
@@ -345,9 +350,9 @@ h2
   -webkit-text-fill-color: transparent
   background-clip: text
 
-// — Sub-headlines — Dual-color TransRobotics Extended —
+// — Sub-headlines — Non-extended for smaller sizes, Extended for subheadline —
 h3, h4
-  font-family: 'SF TransRobotics Extended', 'SF TransRobotics', sans-serif
+  font-family: $font-heading
   font-weight: 700
   letter-spacing: 0.04em
   background: linear-gradient(135deg, var(--accent) 35%, var(--accent-alt) 100%)
@@ -360,8 +365,9 @@ h3
   margin-top: 2rem
   margin-bottom: 0.8rem
 
-  // — Sub-headline: solid accent-alt, no gradient, smaller —
+  // — Sub-headline: Extended Bold, solid accent-alt, no gradient —
   &.subheadline
+    font-family: $font-heading-extended
     font-size: clamp(0.92rem, 2.2vw, 1.2rem)
     font-weight: 700
     letter-spacing: 0.05em
@@ -419,6 +425,7 @@ h2, h3, h4
     -webkit-text-fill-color: var(--accent)
     font-weight: 700
   em
+    font-family: 'SF TransRobotics', 'SF TransRobotics Italic', sans-serif
     background: none
     -webkit-text-fill-color: var(--accent-alt)
     font-style: italic
@@ -470,8 +477,8 @@ dl.grid
   gap: 0.4rem 2rem
 
 dt
-  font-family: $font-heading
-  font-weight: 700
+  font-family: $font-body
+  font-weight: 600
   font-size: 0.8rem
   color: var(--accent)
   padding-top: 0.5rem
@@ -581,7 +588,7 @@ footer
     margin-bottom: 1rem
 
   h1
-    font-family: 'SF TransRobotics Extended', 'SF TransRobotics', sans-serif
+    font-family: $font-heading-extended
     font-weight: 700
     font-size: clamp(1.5rem, 4.5vw, 2.2rem)
     letter-spacing: 0.07em
@@ -618,14 +625,27 @@ body.subpage
         display: none
 
       a
-        font-family: $font-heading
-        font-size: 1.1rem
-        font-weight: 400
+        font-family: $font-body
+        font-size: 1.05rem
+        font-weight: 500
         color: var(--accent)
-        letter-spacing: 0.02em
         border-bottom: 1px solid var(--dim)
 
-      h2, h3, h4
+      h2
+        font-family: $font-heading-extended
+        font-weight: 700
+        font-size: 1.3rem
+        letter-spacing: 0.04em
+        margin-top: 2rem
+        margin-bottom: 0.8rem
+        border-bottom: 1px solid var(--dim)
+        padding-bottom: 0.3rem
+        background: linear-gradient(135deg, var(--accent) 40%, var(--accent-alt) 100%)
+        -webkit-background-clip: text
+        -webkit-text-fill-color: transparent
+        background-clip: text
+
+      h3, h4
         font-family: $font-heading
         font-weight: 700
         letter-spacing: 0.04em
@@ -634,17 +654,15 @@ body.subpage
         -webkit-text-fill-color: transparent
         background-clip: text
 
-      h2
-        font-size: 1.3rem
-        margin-top: 2rem
-        margin-bottom: 0.8rem
-        border-bottom: 1px solid var(--dim)
-        padding-bottom: 0.3rem
-
       h3
         font-size: 1rem
         margin-top: 1.6rem
         margin-bottom: 0.5rem
+
+      h4
+        font-size: 0.88rem
+        margin-top: 1.2rem
+        margin-bottom: 0.4rem
 
       p
         margin-bottom: 0.9rem
@@ -702,8 +720,8 @@ body.subpage
         margin: 1.5rem 0
         th
           text-align: left
-          font-family: $font-heading
-          font-weight: 700
+          font-family: $font-body
+          font-weight: 600
           font-size: 0.72rem
           padding: 0.5rem 0.75rem
           border-bottom: 2px solid var(--accent)
@@ -728,11 +746,10 @@ body.subpage
   li
     margin: 0.5rem 0
     a
-      font-family: $font-heading
-      font-size: 1.15rem
-      font-weight: 450
+      font-family: $font-body
+      font-size: 1.05rem
+      font-weight: 500
       color: var(--accent)
-      font-variation-settings: 'SOFT' 45
       &:hover
         text-decoration: underline
 

@@ -53,6 +53,7 @@ html {
   --subtle: #6e6e78;
   --dim: #4d4d5a;
   --nav-text: #fff;
+  --text-shadow: 0 1px 14px rgba(0, 0, 0, 0.38);
   --overlay-start: rgba(26, 26, 28, 0);
   --overlay-end: rgba(26, 26, 28, 0.92);
   --glass-bg: rgba(28, 28, 34, 0.28);
@@ -89,6 +90,7 @@ html {
     --subtle: #a8a8b0;
     --dim: #e0e0e4;
     --nav-text: #fff;
+    --text-shadow: 0 1px 14px rgba(240, 240, 248, 0.30);
     --overlay-start: rgba(240, 240, 240, 0);
     --overlay-end: rgba(240, 240, 240, 0.92);
     --glass-bg: rgba(248, 248, 250, 0.28);
@@ -272,6 +274,7 @@ nav a:hover {
   margin-bottom: 0.3rem;
   opacity: 0.72;
   letter-spacing: 0.01em;
+  text-shadow: var(--text-shadow);
 }
 
 .version {
@@ -282,6 +285,7 @@ nav a:hover {
   color: var(--text-soft);
   margin-top: 1.2rem;
   letter-spacing: 0.03em;
+  text-shadow: var(--text-shadow);
 }
 
 main {
@@ -329,7 +333,7 @@ h2 {
 }
 
 h3, h4 {
-  font-family: "SF TransRobotics Extended", "SF TransRobotics", sans-serif;
+  font-family: "SF TransRobotics", "Outfit", sans-serif;
   font-weight: 700;
   letter-spacing: 0.04em;
   background: linear-gradient(135deg, var(--accent) 35%, var(--accent-alt) 100%);
@@ -344,6 +348,7 @@ h3 {
   margin-bottom: 0.8rem;
 }
 h3.subheadline {
+  font-family: "SF TransRobotics Extended", "SF TransRobotics", sans-serif;
   font-size: clamp(0.92rem, 2.2vw, 1.2rem);
   font-weight: 700;
   letter-spacing: 0.05em;
@@ -405,6 +410,7 @@ h2 strong, h3 strong, h4 strong {
   font-weight: 700;
 }
 h2 em, h3 em, h4 em {
+  font-family: "SF TransRobotics", "SF TransRobotics Italic", sans-serif;
   background: none;
   -webkit-text-fill-color: var(--accent-alt);
   font-style: italic;
@@ -460,8 +466,8 @@ dl.grid {
 }
 
 dt {
-  font-family: "SF TransRobotics Extended", "SF TransRobotics", "Outfit", sans-serif;
-  font-weight: 700;
+  font-family: "Outfit", "SF Pro Text", "Segoe UI", sans-serif;
+  font-weight: 600;
   font-size: 0.8rem;
   color: var(--accent);
   padding-top: 0.5rem;
@@ -611,15 +617,28 @@ body.subpage .content-page article h1 {
   display: none;
 }
 body.subpage .content-page article a {
-  font-family: "SF TransRobotics Extended", "SF TransRobotics", "Outfit", sans-serif;
-  font-size: 1.1rem;
-  font-weight: 400;
+  font-family: "Outfit", "SF Pro Text", "Segoe UI", sans-serif;
+  font-size: 1.05rem;
+  font-weight: 500;
   color: var(--accent);
-  letter-spacing: 0.02em;
   border-bottom: 1px solid var(--dim);
 }
-body.subpage .content-page article h2, body.subpage .content-page article h3, body.subpage .content-page article h4 {
-  font-family: "SF TransRobotics Extended", "SF TransRobotics", "Outfit", sans-serif;
+body.subpage .content-page article h2 {
+  font-family: "SF TransRobotics Extended", "SF TransRobotics", sans-serif;
+  font-weight: 700;
+  font-size: 1.3rem;
+  letter-spacing: 0.04em;
+  margin-top: 2rem;
+  margin-bottom: 0.8rem;
+  border-bottom: 1px solid var(--dim);
+  padding-bottom: 0.3rem;
+  background: linear-gradient(135deg, var(--accent) 40%, var(--accent-alt) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+body.subpage .content-page article h3, body.subpage .content-page article h4 {
+  font-family: "SF TransRobotics", "Outfit", sans-serif;
   font-weight: 700;
   letter-spacing: 0.04em;
   background: linear-gradient(135deg, var(--accent) 40%, var(--accent-alt) 100%);
@@ -627,17 +646,15 @@ body.subpage .content-page article h2, body.subpage .content-page article h3, bo
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
-body.subpage .content-page article h2 {
-  font-size: 1.3rem;
-  margin-top: 2rem;
-  margin-bottom: 0.8rem;
-  border-bottom: 1px solid var(--dim);
-  padding-bottom: 0.3rem;
-}
 body.subpage .content-page article h3 {
   font-size: 1rem;
   margin-top: 1.6rem;
   margin-bottom: 0.5rem;
+}
+body.subpage .content-page article h4 {
+  font-size: 0.88rem;
+  margin-top: 1.2rem;
+  margin-bottom: 0.4rem;
 }
 body.subpage .content-page article p {
   margin-bottom: 0.9rem;
@@ -698,8 +715,8 @@ body.subpage .content-page article table {
 }
 body.subpage .content-page article table th {
   text-align: left;
-  font-family: "SF TransRobotics Extended", "SF TransRobotics", "Outfit", sans-serif;
-  font-weight: 700;
+  font-family: "Outfit", "SF Pro Text", "Segoe UI", sans-serif;
+  font-weight: 600;
   font-size: 0.72rem;
   padding: 0.5rem 0.75rem;
   border-bottom: 2px solid var(--accent);
@@ -727,11 +744,10 @@ body.subpage .content-page article img {
   margin: 0.5rem 0;
 }
 .page-index li a {
-  font-family: "SF TransRobotics Extended", "SF TransRobotics", "Outfit", sans-serif;
-  font-size: 1.15rem;
-  font-weight: 450;
+  font-family: "Outfit", "SF Pro Text", "Segoe UI", sans-serif;
+  font-size: 1.05rem;
+  font-weight: 500;
   color: var(--accent);
-  font-variation-settings: "SOFT" 45;
 }
 .page-index li a:hover {
   text-decoration: underline;
