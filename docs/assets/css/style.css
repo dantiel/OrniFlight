@@ -283,9 +283,11 @@ nav a:hover {
   font-size: 0.72rem;
   opacity: 0.5;
   color: var(--text-soft);
-  margin-top: 1.2rem;
+  margin: 1.2rem 0 3rem 0;
+  padding-bottom: 1.5rem;
   letter-spacing: 0.03em;
   text-shadow: var(--text-shadow);
+  border-bottom: 1px solid var(--glass-edge);
 }
 
 main {

@@ -59,11 +59,20 @@ Battery, Blackbox, Buzzer, CLI Reference, Controls, Failsafe, GPS, Hardware, LED
 ### Tutorials (6)
 Getting Started, Installation, First Flash, Basic Setup, ONDAS Tuning, PID Tuning
 
-## Server
+## Live Preview
 
 ```bash
-cd docs && bundle exec rake server
-# → http://localhost:8000
+cd docs
+bundle exec rake server
 ```
 
-GitHub Pages serves from `docs/` automatically when enabled in repo settings.
+→ Öffne **http://localhost:8000** im Browser.
+
+Dark/Light folgt deiner Systemeinstellung (`prefers-color-scheme`).
+Die Landing Page liegt bei `/` — Subpages unter `/en/wiki/`, `/en/docs/`, `/en/tutorials/`.
+
+```bash
+./watch.sh   # Auto-Rebuild bei Änderungen
+```
+
+GitHub Pages dient aus `docs/` heraus — Aktivierung in den Repo-Settings.
