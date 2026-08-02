@@ -32,13 +32,13 @@
 <div class='hero-content'>
 <div class='hero-logo'>
 <picture>
-<source media='(prefers-color-scheme: light)' srcset='./assets/images/cf_logo_black.svg'>
-<img alt='OrniFlight' class='logo-svg' src='./assets/images/cf_logo_white.svg'>
+<source media='(prefers-color-scheme: light)' srcset='./assets/images/cf_logo_white.svg'>
+<img alt='OrniFlight' class='logo-svg' src='./assets/images/cf_logo_black.svg'>
 </picture>
 </div>
 <div class='headline'>
 <p class='greeting'>Flapping-wing flight, redefined.</p>
-<p class='version'>STM32F4 ◇ OrniFlight v0.4.6 ◇ apiVersion 1.46</p>
+<p class='version'>STM32F3 ◇ OrniFlight v0.4.6 ◇ apiVersion 1.46</p>
 </div>
 </div>
 </div>
@@ -47,7 +47,7 @@
 <h2>Manifest</h2>
 <h3 class='subheadline'>A new species of flight controller</h3>
 <p class='lead'>OrniFlight exists because a flapping wing controls thrust, pitch, roll, and yaw <strong>within a single stroke</strong> — a channel of expressiveness no propeller can match.</p>
-<p>Nature solved flapping-wing flight 150 million years before the first quadcopter took off. Every sparrow, every albatross, every hummingbird carries flight logic in its nervous system that no PID controller has ever replicated. OrniFlight opens a new domain — where thrust is phase, where stability is rhythm, where the aircraft breathes with every wingbeat. ONDAS, our Oscillating Normalized Dynamic Adaptive Stabilization, is the first control theory built from first principles for flapping aerodynamics. It modulates correction force <em>within</em> the wingbeat — not against it, not despite it, but <strong>with</strong> it. This firmware is free software because flight belongs to no corporation. It runs on commodity STM32F4 hardware because the tools for transcendent flight should cost less than a dinner. OrniFlight inherits a battle-tested architecture and pushes into uncharted air — a <strong>new species of flight controller</strong>, built for wings from the silicon up. The birds have been waiting for us to catch up.</p>
+<p>Nature solved flapping-wing flight 150 million years before the first quadcopter took off. Every sparrow, every albatross, every hummingbird carries flight logic in its nervous system that no PID controller has ever replicated. OrniFlight opens a new domain — where thrust is phase, where stability is rhythm, where the aircraft breathes with every wingbeat. ONDAS, our Oscillating Normalized Dynamic Adaptive Stabilization, is the first control theory built from first principles for flapping aerodynamics. It modulates correction force <em>within</em> the wingbeat — not against it, not despite it, but <strong>with</strong> it. This firmware is free software because flight belongs to no corporation. It runs on commodity STM32F3 hardware because the tools for transcendent flight should cost less than a dinner. OrniFlight inherits a battle-tested architecture and pushes into uncharted air — a <strong>new species of flight controller</strong>, built for wings from the silicon up. The birds have been waiting for us to catch up.</p>
 <div class='highlight'>
 <code>CRSF → rx → OrniFlight → ONDAS → waveform → PWM servos → wings</code>
 </div>
@@ -84,8 +84,8 @@
 </section>
 <section id='hardware'>
 <h2>Hardware</h2>
-<h3 class='subheadline'>Commodity STM32F4/F7 flight controllers</h3>
-<p class='lead'>Runs on any Betaflight 4.0-compatible STM32F4/F7 flight controller with servo-capable timer pins.</p>
+<h3 class='subheadline'>Commodity STM32F3/F4/F7 flight controllers</h3>
+<p class='lead'>Runs on any Betaflight 4.0-compatible STM32F3/F4/F7 flight controller with servo-capable timer pins.</p>
 <table class='specs'>
 <tr>
 <td>Targets</td>
@@ -121,7 +121,7 @@ dfu-util -a 0 -D obj/orniflight_VERSION_OMNIBUSF4.hex</code></pre>
 </main>
 <footer>
 <p><a href="https://github.com/dantiel/OrniFlight" target="_blank">GitHub</a> ◇ <a href="en/wiki/">Wiki</a> ◇ <a href="en/tutorials/">Tutorials</a> ◇ <a href="https://github.com/dantiel/orniflight-configurator" target="_blank">Configurator</a></p>
-<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3 ◇ No Cloud Dependencies</p>
+<p>Hermetic Firmware ◇ STM32F3 ◇ GPL v3 ◇ No Cloud Dependencies</p>
 <p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
 </footer>
 <button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>

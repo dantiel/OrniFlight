@@ -32,13 +32,13 @@
 <div class='hero-content'>
 <div class='hero-logo'>
 <picture>
-<source media='(prefers-color-scheme: light)' srcset='../assets/images/cf_logo_black.svg'>
-<img alt='OrniFlight' class='logo-svg' src='../assets/images/cf_logo_white.svg'>
+<source media='(prefers-color-scheme: light)' srcset='../assets/images/cf_logo_white.svg'>
+<img alt='OrniFlight' class='logo-svg' src='../assets/images/cf_logo_black.svg'>
 </picture>
 </div>
 <div class='headline'>
 <p class='greeting'>Flapping-wing flight, redefined.</p>
-<p class='version'>STM32F4 ◇ OrniFlight v0.4.6 ◇ apiVersion 1.46</p>
+<p class='version'>STM32F3 ◇ OrniFlight v0.4.6 ◇ apiVersion 1.46</p>
 </div>
 </div>
 </div>
@@ -47,7 +47,7 @@
 <h2>Manifest</h2>
 <h3 class='subheadline'>Eine neue Spezies von Flugsteuerung</h3>
 <p class='lead'>OrniFlight existiert, weil ein Schlagflügel Schub, Nick, Roll und Gier <strong>innerhalb eines einzigen Schlags</strong> kontrolliert — ein Ausdruckskanal, den kein Propeller erreicht.</p>
-<p>Die Natur hat den Schlagflug 150 Millionen Jahre vor dem ersten Quadcopter gelöst. Jeder Spatz, jeder Albatros, jeder Kolibri trägt Fluglogik in seinem Nervensystem, die kein PID-Regler je nachgebildet hat. OrniFlight <strong>öffnet eine neue Domäne</strong> — eine, in der Schub Phase ist, in der Stabilität Rhythmus bedeutet, in der das Fluggerät mit jedem Flügelschlag atmet. ONDAS, unsere Oscillating Normalized Dynamic Adaptive Stabilization, ist die erste Regelungstheorie, die aus ersten Prinzipien für Schlagflug-Aerodynamik entwickelt wurde. Sie moduliert Korrekturkraft <em>innerhalb</em> des Flügelschlags — nicht dagegen, nicht trotzdem, sondern <strong>mit</strong> ihm. Diese Firmware ist freie Software, weil Flug keiner Firma gehört. Sie läuft auf gewöhnlicher STM32F4-Hardware, weil die Werkzeuge für transzendenten Flug weniger kosten sollten als ein Abendessen. OrniFlight erbt eine kampferprobte Architektur und stößt in unerschlossene Luft vor — eine <strong>neue Spezies von Flugsteuerung</strong>, von Grund auf für Flügel gebaut. Die Vögel warten darauf, dass wir aufholen.</p>
+<p>Die Natur hat den Schlagflug 150 Millionen Jahre vor dem ersten Quadcopter gelöst. Jeder Spatz, jeder Albatros, jeder Kolibri trägt Fluglogik in seinem Nervensystem, die kein PID-Regler je nachgebildet hat. OrniFlight <strong>öffnet eine neue Domäne</strong> — eine, in der Schub Phase ist, in der Stabilität Rhythmus bedeutet, in der das Fluggerät mit jedem Flügelschlag atmet. ONDAS, unsere Oscillating Normalized Dynamic Adaptive Stabilization, ist die erste Regelungstheorie, die aus ersten Prinzipien für Schlagflug-Aerodynamik entwickelt wurde. Sie moduliert Korrekturkraft <em>innerhalb</em> des Flügelschlags — nicht dagegen, nicht trotzdem, sondern <strong>mit</strong> ihm. Diese Firmware ist freie Software, weil Flug keiner Firma gehört. Sie läuft auf gewöhnlicher STM32F3-Hardware, weil die Werkzeuge für transzendenten Flug weniger kosten sollten als ein Abendessen. OrniFlight erbt eine kampferprobte Architektur und stößt in unerschlossene Luft vor — eine <strong>neue Spezies von Flugsteuerung</strong>, von Grund auf für Flügel gebaut. Die Vögel warten darauf, dass wir aufholen.</p>
 <div class='highlight'>
 <code>CRSF → rx → OrniFlight → ONDAS → Wellenform → PWM-Servos → Flügel</code>
 </div>
@@ -84,8 +84,8 @@
 </section>
 <section id='hardware'>
 <h2>Hardware</h2>
-<h3 class='subheadline'>Standard STM32F4/F7 Flightcontroller</h3>
-<p class='lead'>Läuft auf jedem Betaflight-4.0-kompatiblen STM32F4/F7-Flugcontroller mit servo-fähigen Timer-Pins.</p>
+<h3 class='subheadline'>Standard STM32F3/F4/F7 Flightcontroller</h3>
+<p class='lead'>Läuft auf jedem Betaflight-4.0-kompatiblen STM32F3/F4/F7-Flugcontroller mit servo-fähigen Timer-Pins.</p>
 <table class='specs'>
 <tr>
 <td>Targets</td>
@@ -121,7 +121,7 @@ dfu-util -a 0 -D obj/orniflight_VERSION_OMNIBUSF4.hex</code></pre>
 </main>
 <footer>
 <p><a href="https://github.com/dantiel/OrniFlight" target="_blank">GitHub</a> ◇ <a href="../en/wiki/">Wiki</a> ◇ <a href="../en/tutorials/">Tutorials</a> ◇ <a href="https://github.com/dantiel/orniflight-configurator" target="_blank">Configurator</a></p>
-<p>Hermetische Firmware ◇ STM32F4 ◇ GPL v3 ◇ Keine Cloud-Abhängigkeiten</p>
+<p>Hermetische Firmware ◇ STM32F3 ◇ GPL v3 ◇ Keine Cloud-Abhängigkeiten</p>
 <p class='credit'>OrniFlight — Schlagflug, neu definiert.</p>
 </footer>
 <button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
