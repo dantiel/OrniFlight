@@ -64,6 +64,9 @@ HAML_LAYOUT = <<~'LAYOUT'
       .lang-switch
         - langs.each do |l|
           %a{href: l == lang ? "." : lang_href.call(l), class: l == lang ? "active" : ""}= l.upcase
+    .subpage-hero
+      %img.subpage-bird{src: "#{asset_prefix}/assets/images/of_icon_128.png", alt: ""}
+      %h1= page_title
     %main.content-page
       %article
         != content_html
@@ -82,6 +85,11 @@ HAML_LAYOUT = <<~'LAYOUT'
       addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
 LAYOUT
 
+def asset_prefix_for(out_path)
+  depth = out_path.count('/')
+  depth == 0 ? '.' : ('../' * depth).sub(/\/$/, '')
+end
+
 def lang_href(target_lang)
   target_lang == "en" ? "../" : "../#{target_lang}/"
 end
@@ -90,7 +98,7 @@ def build_markdown_page(md_path, out_path, lang, page_title)
   md_content = File.read(md_path, encoding: "UTF-8")
   content_html = Kramdown::Document.new(md_content).to_html
 
-  asset_prefix = lang == "en" ? ".." : "../.."
+  asset_prefix = asset_prefix_for(out_path)
   dir = "ltr"
 
   engine = Haml::Template.new { HAML_LAYOUT }
@@ -109,7 +117,8 @@ def build_markdown_page(md_path, out_path, lang, page_title)
 end
 
 def build_section_index(lang, section, title_key)
-  asset_prefix = lang == "en" ? ".." : "../.."
+  out_path = "#{lang}/#{section}/index.html"
+  asset_prefix = asset_prefix_for(out_path)
   vars = JSON.parse(File.read("_lang/#{lang}.json", encoding: "UTF-8"))
   page_title = vars[title_key] || section.capitalize
 
@@ -137,7 +146,6 @@ def build_section_index(lang, section, title_key)
     lang_href: method(:lang_href)
   })
 
-  out_path = "#{lang}/#{section}/index.html"
   File.write(out_path, output, encoding: "UTF-8")
   puts "  Built #{out_path} (#{lang.upcase} #{section} index)"
 end

@@ -501,6 +501,30 @@ footer a:hover {
   color: var(--text);
 }
 
+.subpage-hero {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  padding: 3rem 2rem 1.5rem;
+  background: linear-gradient(to bottom, rgba(var(--header-rgb), 0.15) 0%, transparent 100%);
+}
+.subpage-hero .subpage-bird {
+  width: 48px;
+  height: auto;
+  opacity: 0.55;
+  filter: drop-shadow(0 2px 12px rgba(var(--accent-rgb), 0.25));
+  margin-bottom: 1rem;
+}
+.subpage-hero h1 {
+  font-family: "SF TransRobotics Extended", "SF TransRobotics", "Outfit", sans-serif;
+  font-weight: 400;
+  font-size: clamp(1.4rem, 4vw, 2rem);
+  color: var(--accent);
+  letter-spacing: 0.04em;
+  margin: 0;
+  opacity: 0.85;
+}
+
 body.subpage nav {
   position: sticky;
   background: rgba(var(--header-rgb), 0.8);
@@ -522,14 +546,7 @@ body.subpage .content-page article {
   padding: 2rem;
 }
 body.subpage .content-page article h1 {
-  font-family: "SF TransRobotics Extended", "SF TransRobotics", "Outfit", sans-serif;
-  font-size: 2rem;
-  font-weight: 400;
-  margin-bottom: 2rem;
-  color: var(--accent);
-  border-bottom: 2px solid var(--accent);
-  padding-bottom: 0.6rem;
-  letter-spacing: 0.04em;
+  display: none;
 }
 body.subpage .content-page article a {
   font-family: "SF TransRobotics Extended", "SF TransRobotics", "Outfit", sans-serif;
@@ -539,14 +556,23 @@ body.subpage .content-page article a {
   letter-spacing: 0.02em;
   border-bottom: 1px solid var(--dim);
 }
-body.subpage .content-page article h3 {
+body.subpage .content-page article h2, body.subpage .content-page article h3, body.subpage .content-page article h4 {
   font-family: "SF TransRobotics Extended", "SF TransRobotics", "Outfit", sans-serif;
-  font-size: 1rem;
-  margin-top: 1.8rem;
-  margin-bottom: 0.6rem;
-  font-weight: 700;
+  font-weight: 400;
   color: var(--accent);
-  letter-spacing: 0.02em;
+  letter-spacing: 0.03em;
+}
+body.subpage .content-page article h2 {
+  font-size: 1.3rem;
+  margin-top: 2rem;
+  margin-bottom: 0.8rem;
+  border-bottom: 1px solid var(--dim);
+  padding-bottom: 0.3rem;
+}
+body.subpage .content-page article h3 {
+  font-size: 1rem;
+  margin-top: 1.6rem;
+  margin-bottom: 0.5rem;
 }
 body.subpage .content-page article p {
   margin-bottom: 0.9rem;
