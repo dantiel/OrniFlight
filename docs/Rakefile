@@ -121,6 +121,8 @@ def build_section_index(lang, section, title_key)
   asset_prefix = asset_prefix_for(out_path)
   vars = JSON.parse(File.read("_lang/#{lang}.json", encoding: "UTF-8"))
   page_title = vars[title_key] || section.capitalize
+  intro_key = "#{section}_intro"
+  intro_text = vars[intro_key]
 
   md_dir = "#{lang}/#{section}"
   entries = Dir["#{md_dir}/*.md"].map do |f|
@@ -133,7 +135,9 @@ def build_section_index(lang, section, title_key)
     %(<li><a href="./#{e[:file]}.html">#{e[:title]}</a></li>)
   }.join("\n")
 
-  index_html = "<h1>#{page_title}</h1>\n<ul class=\"page-index\">\n#{links_html}\n</ul>"
+  intro_html = intro_text ? %(<p class="lead section-intro">#{intro_text}</p>) : ""
+
+  index_html = "<h1>#{page_title}</h1>\n#{intro_html}\n<ul class=\"page-index\">\n#{links_html}\n</ul>"
 
   engine = Haml::Template.new { HAML_LAYOUT }
   output = engine.render(Object.new, {

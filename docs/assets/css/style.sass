@@ -740,19 +740,38 @@ body.subpage
         max-width: 100%
         border-radius: 4px
 
+// — Section index intro —
+.section-intro
+  font-family: $font-body
+  font-weight: 300
+  font-size: 1.08rem
+  line-height: 1.8
+  margin-bottom: 2rem
+  color: var(--text)
+  opacity: 0.78
+
 // — Page index list —
 .page-index
   list-style: none
   margin: 0
+  display: grid
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr))
+  gap: 0.4rem 2rem
   li
-    margin: 0.5rem 0
+    margin: 0
     a
+      display: block
       font-family: $font-body
-      font-size: 1.05rem
+      font-size: 0.95rem
       font-weight: 500
       color: var(--accent)
+      padding: 0.4rem 0
+      border-bottom: 1px solid var(--dim)
+      transition: color 0.2s, border-color 0.2s
       &:hover
-        text-decoration: underline
+        color: var(--accent-alt)
+        border-bottom-color: var(--accent)
+        text-decoration: none
 
 // — Scroll-to-Top —
 .scroll-top
