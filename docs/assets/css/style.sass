@@ -280,24 +280,11 @@ nav
 .headline
   text-align: center
 
-// — Transrobotic Hero Line — big, dual-color —
-.hero-transrobotic
-  font-family: 'SF TransRobotics Extended', 'SF TransRobotics', sans-serif
-  font-weight: 700
-  font-size: clamp(1.6rem, 4.5vw, 2.8rem)
-  letter-spacing: 0.08em
-  margin-bottom: 0.6rem
-  line-height: 1.15
-  background: linear-gradient(135deg, var(--accent) 45%, var(--accent-alt) 100%)
-  -webkit-background-clip: text
-  -webkit-text-fill-color: transparent
-  background-clip: text
-
-// — Greeting — Outfit thin, clean tagline under logo
+// — Greeting — Outfit italic cursive tagline under logo
 .greeting
   font-family: $font-body
   font-weight: 300
-  font-style: normal
+  font-style: italic
   font-size: clamp(1.4rem, 3.2vw, 1.85rem)
   color: var(--accent-alt)
   margin-bottom: 0.3rem
@@ -343,7 +330,7 @@ section
     border-color: var(--glass-edge-hover)
     box-shadow: 0 4px 36px rgba(0, 0, 0, 0.18), inset 0 1px 0 rgba(var(--accent-rgb), 0.04)
 
-// — Section Headings — Dual-color Transrobotics Extended —
+// — Section Headings — Dual-color TransRobotics Extended —
 h2
   font-family: 'SF TransRobotics Extended', 'SF TransRobotics', sans-serif
   font-size: clamp(1.55rem, 4vw, 2.2rem)
@@ -356,6 +343,26 @@ h2
   -webkit-background-clip: text
   -webkit-text-fill-color: transparent
   background-clip: text
+
+// — Sub-headlines — Dual-color TransRobotics Extended —
+h3, h4
+  font-family: 'SF TransRobotics Extended', 'SF TransRobotics', sans-serif
+  font-weight: 700
+  letter-spacing: 0.04em
+  background: linear-gradient(135deg, var(--accent) 35%, var(--accent-alt) 100%)
+  -webkit-background-clip: text
+  -webkit-text-fill-color: transparent
+  background-clip: text
+
+h3
+  font-size: clamp(1.1rem, 2.8vw, 1.45rem)
+  margin-top: 2rem
+  margin-bottom: 0.8rem
+
+h4
+  font-size: clamp(0.9rem, 2.2vw, 1.15rem)
+  margin-top: 1.5rem
+  margin-bottom: 0.6rem
 
 // — Lead paragraph —
 .lead
@@ -376,10 +383,19 @@ p
 strong
   font-weight: 550
   color: var(--text)
+  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-alt) 100%)
+  -webkit-background-clip: text
+  -webkit-text-fill-color: transparent
+  background-clip: text
 
 em
   font-style: italic
   color: var(--accent-alt)
+
+mark
+  background: none
+  color: var(--accent)
+  font-weight: 500
 
 // — Code blocks —
 code
