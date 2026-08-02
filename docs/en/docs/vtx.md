@@ -28,5 +28,5 @@ VTX control requires a dedicated UART TX pin. Configure the port in **Ports** ta
 
 - Weight is critical — choose lightweight VTX modules (Tramp Nano, Eachine Nano)
 - Antenna mounting: ensure clearance from flapping wings
-- Power filtering: connect VTX power after LC filter to avoid motor noise in video
+- Power filtering: connect VTX power after LC filter to avoid servo noise in video
 - Pit mode is recommended for bench testing to avoid overheating small VTX modules

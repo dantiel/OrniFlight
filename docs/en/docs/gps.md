@@ -11,8 +11,8 @@ GPS enables position hold, return-to-home, and telemetry-based navigation for yo
 
 - BN-880, BN-220, or similar UBlox M8N GPS+Compass modules
 - Connect: TX/RX to a free UART, plus 5V/GND
-- Mount GPS away from power wires and ESCs to minimize interference
-- Compass/magnetometer must be away from magnetic sources (power wires, motors)
+- Mount GPS away from power wires and servo cables to minimize interference
+- Compass/magnetometer must be away from magnetic sources (power wires, servos)
 
 ## Configuration
 

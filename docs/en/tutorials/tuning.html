@@ -6,7 +6,7 @@
 <title>PID Tuning — OrniFlight</title>
 <link href='https://fonts.googleapis.com' rel='preconnect'>
 <link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
-<link href='https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,600;0,700;0,800;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT@0,9..144,300..700,0..100;1,9..144,300..700,0..100&amp;family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
 <link href='../assets/css/style.css' rel='stylesheet'>
 </head>
 <body class='subpage'>
@@ -15,7 +15,7 @@
 <a class='home-link' href='../' title='OrniFlight'>
 <img alt='OrniFlight' src='../assets/images/of_icon_128.png'>
 </a>
-<a href='../#essence'>Essence</a>
+<a href='../#mission'>Mission</a>
 <a href='../wiki/'>Wiki</a>
 <a href='../docs/'>Docs</a>
 <a href='../tutorials/'>Tutorials</a>
@@ -28,11 +28,11 @@
 <article>
 <h1 id="pid-tuning">PID Tuning</h1>
 
-<p>OrniFlight uses a PID (Proportional-Integral-Derivative) controller adapted for flapping-wing flight. Tuning differs significantly from multirotors due to the periodic nature of flapping thrust.</p>
+<p>OrniFlight uses a PID (Proportional-Integral-Derivative) controller adapted for flapping-wing flight. Tuning differs significantly from conventional aircraft due to the periodic nature of flapping thrust.</p>
 
 <h2 id="ornithopter-pid-basics">Ornithopter PID Basics</h2>
 
-<p>Unlike multirotors where thrust is nearly instantaneous, ornithopter thrust oscillates with each wing stroke. This creates:</p>
+<p>Unlike conventional aircraft where thrust is nearly continuous, ornithopter thrust oscillates with each wing stroke. This creates:</p>
 
 <ul>
   <li><strong>Thrust ripple</strong> at flapping frequency (typically 5–15 Hz)</li>
@@ -54,7 +54,7 @@
     <tr>
       <td><strong>P</strong></td>
       <td>Proportional — immediate correction</td>
-      <td>Use lower values than multirotors; oscillation is flapping-synchronous</td>
+      <td>Use conservative values; oscillation is flapping-synchronous</td>
     </tr>
     <tr>
       <td><strong>I</strong></td>

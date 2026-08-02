@@ -1,10 +1,10 @@
 # PID Tuning
 
-OrniFlight uses a PID (Proportional-Integral-Derivative) controller adapted for flapping-wing flight. Tuning differs significantly from multirotors due to the periodic nature of flapping thrust.
+OrniFlight uses a PID (Proportional-Integral-Derivative) controller adapted for flapping-wing flight. Tuning differs significantly from conventional aircraft due to the periodic nature of flapping thrust.
 
 ## Ornithopter PID Basics
 
-Unlike multirotors where thrust is nearly instantaneous, ornithopter thrust oscillates with each wing stroke. This creates:
+Unlike conventional aircraft where thrust is nearly continuous, ornithopter thrust oscillates with each wing stroke. This creates:
 
 - **Thrust ripple** at flapping frequency (typically 5–15 Hz)
 - **Phase-dependent control authority** — same PID output has different effect depending on where in the stroke cycle it's applied
@@ -14,7 +14,7 @@ Unlike multirotors where thrust is nearly instantaneous, ornithopter thrust osci
 
 | Term | Effect | Ornithopter Note |
 |------|--------|-----------------|
-| **P** | Proportional — immediate correction | Use lower values than multirotors; oscillation is flapping-synchronous |
+| **P** | Proportional — immediate correction | Use conservative values; oscillation is flapping-synchronous |
 | **I** | Integral — persistent error correction | Essential for maintaining attitude during glides |
 | **D** | Derivative — dampens oscillations | Tuned to wing stroke rate, not frame oscillations |
 | **F** | Feed-forward — direct stick-to-output | Useful for crisp response on roll axis |

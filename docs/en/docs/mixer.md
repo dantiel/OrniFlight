@@ -1,6 +1,6 @@
 # Mixer
 
-The mixer translates flight controller outputs (roll, pitch, yaw, throttle) into servo and motor signals for your ornithopter.
+The mixer translates flight controller outputs (roll, pitch, yaw, throttle) into servo signals for your ornithopter.
 
 ## Ornithopter Mixer
 
@@ -8,7 +8,6 @@ OrniFlight extends Betaflight's mixer system with ornithopter-specific configura
 
 - **Wing servos**: Convert PID output to wing stroke modulation
 - **Tail servos** (optional): Control elevator/rudder surfaces
-- **ESCs**: Motor speed for non-flapping thrust (if hybrid setup)
 
 ## Mixer Types
 

@@ -41,7 +41,7 @@ Also configure your receiver's fail-safe to output **no pulses** on signal loss.
 
 ## Testing
 
-Test failsafe **without propellers/motors** on the bench:
+Test failsafe **with wing linkage disconnected** on the bench:
 1. Assign FAILSAFE mode to a switch
 2. Arm the craft
 3. Toggle the switch → observe failsafe procedure

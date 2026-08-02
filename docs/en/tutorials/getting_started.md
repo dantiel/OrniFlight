@@ -50,7 +50,7 @@ After flashing, the Configurator will prompt you to apply custom defaults. **Alw
 
 ### 6. First Flight
 
-1. **Remove propellers or disconnect wing linkage for bench testing**
+1. **Disconnect wing linkage for bench testing**
 2. Arm and verify servo movement direction
 3. Check throttle response
 4. For first actual flight: use ANGLE mode, low rates

@@ -9,7 +9,7 @@ Blackbox records flight data for post-flight analysis, tuning, and debugging. Or
 - **PID Output** — P, I, D, F contributions per axis
 - **ONDAS** — Cadence, Ferocity P/D, and other flapping-specific parameters
 - **RC Commands** — stick positions after rates/expo
-- **Motor/Servo Output** — final output to each servo/ESC channel
+- **Servo Output** — final output to each servo channel
 - **Battery** — voltage and current per iteration
 - **GPS** — position, speed, altitude (when available)
 

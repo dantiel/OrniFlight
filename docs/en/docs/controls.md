@@ -1,6 +1,6 @@
 # Controls
 
-OrniFlight uses standard multirotor stick mapping with ornithopter-specific extensions.
+OrniFlight uses standard RC stick mapping with ornithopter-specific extensions.
 
 ## Stick Mapping
 
@@ -45,7 +45,7 @@ In-flight profile switching via AUX channel allows changing PID/ONDAS parameters
 
 ## Rates
 
-Configure rates in the **PID Tuning** tab. For ornithopters, start with lower rates than multirotors — flapping dynamics amplify control inputs:
+Configure rates in the **PID Tuning** tab. For ornithopters, start with conservative rates — flapping dynamics amplify control inputs:
 - RC Rate: 0.80–1.00
 - Super Rate: 0.60–0.70
 - Expo: 0.20–0.40

@@ -15,7 +15,7 @@ Configure elements in the **OSD** tab of OrniFlight Configurator. Drag and drop 
 | Current Draw | Instantaneous amps |
 | mAh Drawn | Cumulative capacity consumed |
 | RSSI | Signal strength from receiver |
-| Flight Mode | Current mode (ACRO, ANGLE, INDEPENDENT, etc.) |
+| Flight Mode | Current mode (INDEPENDENT, GLIDE, etc.) |
 | Throttle Position | Current throttle percentage |
 | Timer | Flight time / armed time |
 | Craft Name | OrniFlight craft name |

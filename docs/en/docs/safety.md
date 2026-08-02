@@ -2,7 +2,7 @@
 
 ## Pre-Flight Checklist
 
-1. **Props/Wings**: Ensure wings are securely mounted and linkage is intact
+1. **Wings**: Ensure wings are securely mounted and linkage is intact
 2. **Battery**: Fully charged, properly secured, correct cell count
 3. **Controls**: Verify stick responses in Configurator receiver tab
 4. **Failsafe**: Test on bench before flight (see [Failsafe](failsafe.html))
@@ -14,7 +14,7 @@
 OrniFlight uses multiple safeties before arming:
 
 - **Throttle low**: Throttle must be at minimum
-- **Angle**: Craft must be reasonably level (if ANGLE/HORIZON calibrated)
+- **Level**: Craft must be reasonably level
 - **RX Signal**: Valid receiver signal required
 - **CPU Load**: System must not be overloaded
 - **Calibration**: Accelerometer and gyro must be calibrated
@@ -25,13 +25,13 @@ OrniFlight uses multiple safeties before arming:
 - Maintain safe distance from people and animals
 - Monitor battery voltage — land before warning threshold
 - In FPV: always fly with a spotter
-- Wind: ornithopters are more wind-sensitive than multirotors — know your limits
+- Wind: ornithopters can be wind-sensitive — know your limits
 
 ## Emergency Procedures
 
 | Situation | Action |
 |-----------|--------|
-| Loss of orientation | Switch to ANGLE mode, center sticks |
+| Loss of orientation | Switch to INDEPENDENT mode, center sticks |
 | Signal loss | Failsafe will auto-land (if LAND procedure configured) |
 | Wing damage | Disarm immediately — wings stop |
 | Bird strike | Disarm, assess damage before re-arming |

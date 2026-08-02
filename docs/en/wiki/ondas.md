@@ -2,7 +2,7 @@
 
 ## The Core Principle
 
-A fixed-wing aircraft or quadcopter generates control forces **continuously** — a control surface deflection or motor RPM change produces a steady-state moment. An ornithopter does not. Every gram of thrust, every Newton of torque, is **phase-bound** within the wingbeat cycle. The same force impulse applied at different points in the stroke produces fundamentally different results.
+A fixed-wing or conventional aircraft generates control forces **continuously** — a control surface deflection or RPM change produces a steady-state moment. An ornithopter does not. Every gram of thrust, every Newton of torque, is **phase-bound** within the wingbeat cycle. The same force impulse applied at different points in the stroke produces fundamentally different results.
 
 ONDAS acknowledges this reality and modulates stabilization effort synchronously with the flapping cycle.
 
