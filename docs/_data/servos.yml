@@ -121,7 +121,29 @@ servos:
     flight_performance:
       rating: 5
       note: Strong Flight <a href="https://youtu.be/iSIwwHDRsHg" class="yt-link" target="_blank">📺</a><a href="https://youtu.be/Ta3ghJrFt-0" class="yt-link" target="_blank">📺</a><a href="https://youtu.be/6kXmIZEmYUA" class="yt-link" target="_blank">📺</a>
-    notes: Best efficiency/€. Kazu lists as PTK7465. Kestrel 45g, Albatross 57g, Butterfly 54g (32+ flights)
+    notes: Best efficiency/€. Kestrel 45g, Albatross 57g, Butterfly 54g (32+ flights by Kazu)
+
+  - brand: VOTIK
+    model: PTK 7465 / 7465W MG
+    voltage: 7.4
+    weight: 9.0
+    torque: 5.0
+    speed: 0.10
+    price: 7.00
+    efficiency: 5.56
+    eff_per_euro_scale: 0.46
+    notes: HV coreless, metal gear, waterproof, 180°, 25T. 5kg = stall torque; effective torque lower. Entomoid.
+
+  - brand: VOTIK
+    model: PTK 7465 Plus
+    voltage: 7.4
+    weight: 9.0
+    torque: 7.5
+    speed: 0.08
+    price: 10.00
+    efficiency: 10.42
+    eff_per_euro_scale: 0.53
+    notes: Upgraded 7465 — higher torque (7.5kg stall), faster. Specs need verification.
 
   - brand: Blue Arrow
     model: D0576HT-MG-HV

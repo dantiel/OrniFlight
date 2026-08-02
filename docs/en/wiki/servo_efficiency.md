@@ -142,7 +142,31 @@ Higher is better. Prices in <select class="currency-select inline-currency">
         <td class="num" data-price-eur="5.50">€5.50</td>
         <td class="num strong">1.03</td>
         <td class="flight" data-flight-rating="5">Strong Flight <a href="https://youtu.be/iSIwwHDRsHg" class="yt-link" target="_blank">📺</a><a href="https://youtu.be/Ta3ghJrFt-0" class="yt-link" target="_blank">📺</a><a href="https://youtu.be/6kXmIZEmYUA" class="yt-link" target="_blank">📺</a></td>
-        <td class="notes">Best efficiency/€. Kazu lists as PTK7465. Kestrel 45g, Albatross 57g, Butterfly 54g (32+ flights)</td>
+        <td class="notes">Best efficiency/€. Kestrel 45g, Albatross 57g, Butterfly 54g (32+ flights by Kazu)</td>
+      </tr>
+      <tr class="untested">
+        <td>VOTIK PTK 7465 / 7465W MG</td>
+        <td class="num">7.4</td>
+        <td class="num">9.0</td>
+        <td class="num">5.00</td>
+        <td class="num">0.10</td>
+        <td class="num">5.56</td>
+        <td class="num" data-price-eur="7.00">€7.00</td>
+        <td class="num strong">0.46</td>
+        <td class="flight untested-cell">Untested</td>
+        <td class="notes">HV coreless, metal gear, waterproof, 180°, 25T. 5kg = stall torque; effective torque lower. Entomoid.</td>
+      </tr>
+      <tr class="untested">
+        <td>VOTIK PTK 7465 Plus</td>
+        <td class="num">7.4</td>
+        <td class="num">9.0</td>
+        <td class="num">7.50</td>
+        <td class="num">0.08</td>
+        <td class="num">10.42</td>
+        <td class="num" data-price-eur="10.00">€10.00</td>
+        <td class="num strong">0.53</td>
+        <td class="flight untested-cell">Untested</td>
+        <td class="notes">Upgraded 7465 — higher torque (7.5kg stall), faster. Specs need verification.</td>
       </tr>
       <tr>
         <td>Blue Arrow D0576HT-MG-HV</td>
