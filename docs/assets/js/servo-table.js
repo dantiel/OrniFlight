@@ -20,6 +20,17 @@
     BRL: 'R$',
   }
 
+  function detectLocale() {
+    var lang = (navigator.language || 'en').toLowerCase()
+    if (lang.indexOf('de') === 0 || lang.indexOf('at') === 0) return 'EUR'
+    if (lang.indexOf('ch') === 0) return 'CHF'
+    if (lang.indexOf('jp') === 0) return 'JPY'
+    if (lang.indexOf('br') === 0) return 'BRL'
+    if (lang.indexOf('gb') === 0) return 'GBP'
+    if (lang.indexOf('us') === 0) return 'USD'
+    return 'EUR'
+  }
+
   const table = document.querySelector('.servo-table')
   if (!table) return
 
@@ -29,7 +40,7 @@
 
   // ── Currency ──────────────────────────────────────────────
   const currencySelect = document.querySelector('.currency-select')
-  let currentCurrency = localStorage.getItem('orni-currency') || 'EUR'
+  let currentCurrency = localStorage.getItem('orni-currency') || detectLocale()
 
   if (currencySelect) {
     currencySelect.value = currentCurrency

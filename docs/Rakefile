@@ -184,15 +184,19 @@ def build_servo_page(lang)
     eff = s["eff_per_euro_scale"]
     eff_str = eff.is_a?(Numeric) ? ("%.2f" % eff) : eff.to_s
     fp = s["flight_performance"]
+    untested_label = lang == "de" ? "Ungetestet" : "Untested"
     if fp.is_a?(Hash)
       rating = fp["rating"].to_i
       note   = fp["note"].to_s
+      flight_attr = %( data-flight-rating="#{rating}")
+      flight_cell = note
+      row_extra = ""
     else
       rating = 0
-      note   = ""
+      flight_attr = ""
+      flight_cell = untested_label
+      row_extra = %( class="untested")
     end
-    flight_attr = rating > 0 ? %( data-flight-rating="#{rating}") : ""
-    flight_cell = note
     notes = s["notes"] || ""
 
     price_raw = s["price"]
@@ -211,7 +215,7 @@ def build_servo_page(lang)
     eff_raw = ("%.2f" % s["efficiency"])
     voltage_s = ("%.1f" % s["voltage"])
 
-    %(      <tr>
+    %(      <tr#{row_extra}>
         <td>#{s["brand"]} #{s["model"]}</td>
         <td class="num">#{voltage_s}</td>
         <td class="num">#{weight_s}</td>
@@ -220,27 +224,12 @@ def build_servo_page(lang)
         <td class="num">#{eff_raw}</td>
         <td class="num"#{price_attr}>#{price_cell}</td>
         <td class="num strong">#{eff_str}</td>
-        <td class="flight"#{flight_attr}>#{flight_cell}</td>
+        <td class="flight untested-cell"#{flight_attr}>#{flight_cell}</td>
         <td class="notes">#{notes}</td>
       </tr>)
   end.join("\n")
 
-  currency_bar = <<~BAR
-    <div class="currency-bar">
-      <label for="currency-select">Currency</label>
-      <select id="currency-select" class="currency-select">
-        <option value="EUR">EUR €</option>
-        <option value="USD">USD $</option>
-        <option value="GBP">GBP £</option>
-        <option value="CHF">CHF</option>
-        <option value="JPY">JPY ¥</option>
-        <option value="BRL">BRL R$</option>
-      </select>
-    </div>
-  BAR
-
   table_html = <<~TABLE
-    #{currency_bar}
     <table class="servo-table">
       <thead>
         <tr>
@@ -270,7 +259,10 @@ def build_servo_page(lang)
 
       A curated selection of servos tested and ranked for ornithopter use.
       **Efficiency** = Torque / (Weight × Speed). **Eff/€ ★** = Efficiency per Euro, scaled by &cuberoot;torque for fairness across sizes.
-      Higher is better. Flight-tested entries marked with real-world results.
+      Higher is better. Prices in <select class="currency-select inline-currency">
+        <option value="EUR">EUR €</option><option value="USD">USD $</option><option value="GBP">GBP £</option>
+        <option value="CHF">CHF</option><option value="JPY">JPY ¥</option><option value="BRL">BRL R$</option>
+      </select> — follows your region. Flight-tested entries marked with real-world results.
 
       Click column headers to sort. Submit additions via PR to `_data/servos.yml`.
     EN
@@ -280,7 +272,10 @@ def build_servo_page(lang)
 
       Eine kuratierte Auswahl getesteter Servos für Ornithopter.
       **Effizienz** = Drehmoment / (Gewicht × Geschwindigkeit). **Eff/€ ★** = Effizienz pro Euro, skaliert mit &cuberoot;Drehmoment.
-      Höher ist besser. Fluggetestete Einträge mit Praxisergebnissen.
+      Höher ist besser. Preise in <select class="currency-select inline-currency">
+        <option value="EUR">EUR €</option><option value="USD">USD $</option><option value="GBP">GBP £</option>
+        <option value="CHF">CHF</option><option value="JPY">JPY ¥</option><option value="BRL">BRL R$</option>
+      </select> — passt sich deiner Region an. Fluggetestete Einträge mit Praxisergebnissen.
 
       Spaltenköpfe anklicken zum Sortieren. Ergänzungen per PR an `_data/servos.yml`.
     DE

@@ -558,15 +558,41 @@ td:first-child {
   font-weight: 600;
 }
 .servo-table td.flight {
-  color: var(--accent-alt);
   font-weight: 550;
   font-size: 0.73rem;
+}
+.servo-table td.flight.fp-5 {
+  color: var(--accent);
+}
+.servo-table td.flight.fp-4 {
+  color: var(--accent-alt);
+}
+.servo-table td.flight.fp-3 {
+  color: var(--text-soft);
+}
+.servo-table td.flight.fp-2 {
+  color: var(--mut);
+}
+.servo-table td.flight.fp-1 {
+  color: #e05555;
+}
+.servo-table td.flight.untested-cell {
+  font-weight: 400;
+  font-style: italic;
+  color: var(--mut);
 }
 .servo-table td.notes {
   color: var(--mut);
   font-size: 0.7rem;
   max-width: 160px;
   white-space: normal;
+}
+.servo-table tr.untested {
+  opacity: 0.45;
+  transition: opacity 0.3s;
+}
+.servo-table tr.untested:hover {
+  opacity: 0.75;
 }
 .servo-table th.sortable {
   cursor: pointer;
@@ -602,36 +628,37 @@ td:first-child {
   opacity: 1;
 }
 
-.currency-bar {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  margin: 0 0 1.2rem;
-  font-size: 0.72rem;
-  color: var(--mut);
-}
-.currency-bar label {
-  font-family: "SF TransRobotics", "Outfit", sans-serif;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  font-size: 0.62rem;
-}
-.currency-bar select {
+.inline-currency {
   font-family: "JetBrains Mono", "SF Mono", "Fira Code", monospace;
   font-size: 0.72rem;
-  padding: 0.28rem 0.5rem;
+  padding: 0.15rem 0.35rem;
+  margin: 0 0.15rem;
   background: rgba(var(--box-rgb), 0.22);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   border: 1px solid var(--glass-edge);
-  border-radius: 5px;
+  border-radius: 4px;
   color: var(--text-soft);
   cursor: pointer;
   outline: none;
+  vertical-align: baseline;
 }
-.currency-bar select:focus {
+.inline-currency:focus {
   border-color: var(--accent);
+  color: var(--accent);
+}
+
+.yt-link {
+  display: inline-block;
+  margin-left: 0.3rem;
+  font-size: 0.62rem;
+  text-decoration: none;
+  color: var(--accent-alt);
+  opacity: 0.7;
+  transition: opacity 0.2s;
+}
+.yt-link:hover {
+  opacity: 1;
   color: var(--accent);
 }
 
