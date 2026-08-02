@@ -1,3 +1,4 @@
+@charset "UTF-8";
 @font-face {
   font-family: "SF TransRobotics";
   src: url("../fonts/SF TransRobotics.ttf") format("truetype");
@@ -567,14 +568,71 @@ td:first-child {
   max-width: 160px;
   white-space: normal;
 }
-.servo-table .voltage-sep td {
-  padding: 0.55rem 0.55rem 0.3rem;
-  font-family: "SF TransRobotics Extended", "SF TransRobotics", sans-serif;
-  font-size: 0.73rem;
-  letter-spacing: 0.06em;
+.servo-table th.sortable {
+  cursor: pointer;
+  user-select: none;
+  position: relative;
+  transition: color 0.2s;
+}
+.servo-table th.sortable:hover {
   color: var(--accent);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-  background: rgba(var(--box-alt-rgb), 0.12);
+}
+.servo-table th.sortable::after {
+  content: "";
+  position: absolute;
+  right: 2px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.55rem;
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+.servo-table th.sortable:hover::after {
+  opacity: 0.35;
+}
+.servo-table th.sort-asc, .servo-table th.sort-desc {
+  color: var(--accent);
+}
+.servo-table th.sort-asc::after {
+  content: "▲";
+  opacity: 1;
+}
+.servo-table th.sort-desc::after {
+  content: "▼";
+  opacity: 1;
+}
+
+.currency-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0 0 1.2rem;
+  font-size: 0.72rem;
+  color: var(--mut);
+}
+.currency-bar label {
+  font-family: "SF TransRobotics", "Outfit", sans-serif;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-size: 0.62rem;
+}
+.currency-bar select {
+  font-family: "JetBrains Mono", "SF Mono", "Fira Code", monospace;
+  font-size: 0.72rem;
+  padding: 0.28rem 0.5rem;
+  background: rgba(var(--box-rgb), 0.22);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid var(--glass-edge);
+  border-radius: 5px;
+  color: var(--text-soft);
+  cursor: pointer;
+  outline: none;
+}
+.currency-bar select:focus {
+  border-color: var(--accent);
+  color: var(--accent);
 }
 
 .build pre {

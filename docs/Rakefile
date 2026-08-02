@@ -180,42 +180,63 @@ def build_servo_page(lang)
   data = YAML.safe_load(File.read("_data/servos.yml", encoding: "UTF-8"))
   servos = data["servos"]
 
-  voltage_groups = servos.group_by { |s| s["voltage"] }.sort_by { |v, _| v }
+  rows = servos.map do |s|
+    eff = s["eff_per_euro_scale"]
+    eff_str = eff.is_a?(Numeric) ? ("%.2f" % eff) : eff.to_s
+    flight = s["flight_tested"] || ""
+    notes = s["notes"] || ""
 
-  rows = voltage_groups.flat_map do |voltage, group|
-    group.map.with_index do |s, i|
-      eff = s["eff_per_euro_scale"]
-      eff_str = eff.is_a?(Numeric) ? ("%.2f" % eff) : eff.to_s
-      flight = s["flight_tested"] || ""
-      notes = s["notes"] || ""
-      price = s["price"].is_a?(Numeric) ? ("%.2f" % s["price"]) : s["price"].to_s
-      torque_s = ("%.2f" % s["torque"])
-      speed_s = ("%.2f" % s["speed"])
-      weight_s = ("%.1f" % s["weight"])
-      eff_raw = ("%.2f" % s["efficiency"])
+    price_raw = s["price"]
+    if price_raw.is_a?(Numeric)
+      price_str = ("%.2f" % price_raw)
+      price_attr = %( data-price-eur="#{price_str}")
+      price_cell = "€#{price_str}"
+    else
+      price_attr = ""
+      price_cell = price_raw.to_s
+    end
 
-      sep = (i == 0) ? %(      <tr class="voltage-sep"><td colspan="9"><strong>#{voltage}V</strong></td></tr>) : ""
+    torque_s = ("%.2f" % s["torque"])
+    speed_s = ("%.2f" % s["speed"])
+    weight_s = ("%.1f" % s["weight"])
+    eff_raw = ("%.2f" % s["efficiency"])
+    voltage_s = ("%.1f" % s["voltage"])
 
-      %(#{sep}
-      <tr>
+    %(      <tr>
         <td>#{s["brand"]} #{s["model"]}</td>
+        <td class="num">#{voltage_s}</td>
         <td class="num">#{weight_s}</td>
         <td class="num">#{torque_s}</td>
         <td class="num">#{speed_s}</td>
         <td class="num">#{eff_raw}</td>
-        <td class="num">€#{price}</td>
+        <td class="num"#{price_attr}>#{price_cell}</td>
         <td class="num strong">#{eff_str}</td>
         <td class="flight">#{flight}</td>
         <td class="notes">#{notes}</td>
       </tr>)
-    end
   end.join("\n")
 
+  currency_bar = <<~BAR
+    <div class="currency-bar">
+      <label for="currency-select">Currency</label>
+      <select id="currency-select" class="currency-select">
+        <option value="EUR">EUR €</option>
+        <option value="USD">USD $</option>
+        <option value="GBP">GBP £</option>
+        <option value="CHF">CHF</option>
+        <option value="JPY">JPY ¥</option>
+        <option value="BRL">BRL R$</option>
+      </select>
+    </div>
+  BAR
+
   table_html = <<~TABLE
+    #{currency_bar}
     <table class="servo-table">
       <thead>
         <tr>
           <th>Servo</th>
+          <th class="num">V</th>
           <th class="num">Weight g</th>
           <th class="num">Torque kg/cm</th>
           <th class="num">Speed s/60°</th>
@@ -230,6 +251,7 @@ def build_servo_page(lang)
     #{rows}
       </tbody>
     </table>
+    <script src="../../assets/js/servo-table.js"></script>
   TABLE
 
   intro = case lang
@@ -241,7 +263,7 @@ def build_servo_page(lang)
       **Efficiency** = Torque / (Weight × Speed). **Eff/€ ★** = Efficiency per Euro, scaled by &cuberoot;torque for fairness across sizes.
       Higher is better. Flight-tested entries marked with real-world results.
 
-      Full database: [Google Sheets](https://docs.google.com/spreadsheets/d/1kbXwi2PySJBidbxUcYD6d7tkyjuGbEnygb2siktYi50) — [YAML source](../_data/servos.yml)
+      Click column headers to sort. Submit additions via PR to `_data/servos.yml`.
     EN
   when "de"
     <<~DE
@@ -251,7 +273,7 @@ def build_servo_page(lang)
       **Effizienz** = Drehmoment / (Gewicht × Geschwindigkeit). **Eff/€ ★** = Effizienz pro Euro, skaliert mit &cuberoot;Drehmoment.
       Höher ist besser. Fluggetestete Einträge mit Praxisergebnissen.
 
-      Vollständige Datenbank: [Google Sheets](https://docs.google.com/spreadsheets/d/1kbXwi2PySJBidbxUcYD6d7tkyjuGbEnygb2siktYi50) — [YAML-Quelle](../_data/servos.yml)
+      Spaltenköpfe anklicken zum Sortieren. Ergänzungen per PR an `_data/servos.yml`.
     DE
   end
 
