@@ -19,7 +19,7 @@ Cadence is the most critical ONDAS filter because it determines **when** correct
 | Upstroke center | Thrust rearward, pitch-up |
 | Upstroke end | Wing reversal, minimal effect |
 
-**Cadence shifts the modulation window** to align with the phase where the aerodynamic lever arm is longest. Wrong cadence = fighting wing physics. Correct cadence = every watt becomes control authority.
+**Cadence shifts the modulation window** to align with the phase where the aerodynamic lever arm is longest. Wrong cadence = fighting wing physics. Correct cadence = every milliwatt becomes control authority.
 
 ### Parameters
 
