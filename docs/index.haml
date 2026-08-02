@@ -31,8 +31,8 @@
       .hero-content
         .hero-logo
           %picture
-            %source{srcset: "#{asset_prefix}/assets/images/cf_logo_white.svg", media: "(prefers-color-scheme: light)"}
-            %img.logo-svg{src: "#{asset_prefix}/assets/images/cf_logo_black.svg", alt: "OrniFlight"}
+            %source{srcset: "#{asset_prefix}/assets/images/cf_logo_black.svg", media: "(prefers-color-scheme: light)"}
+            %img.logo-svg{src: "#{asset_prefix}/assets/images/cf_logo_white.svg", alt: "OrniFlight"}
         .headline
           %p.greeting= hero_greeting
           %p.version= hero_version
@@ -40,6 +40,7 @@
     %main
       %section#manifest
         %h2= manifest_title
+        %h3.subheadline= manifest_subheadline
         %p.lead!= manifest_lead
         %p!= manifest_body
         .highlight
@@ -47,6 +48,7 @@
 
       %section#ondas
         %h2= ondas_title
+        %h3.subheadline= ondas_subheadline
         %p.lead!= ondas_lead
         %p!= ondas_body
         .highlight
@@ -56,6 +58,7 @@
 
       %section#features
         %h2= features_title
+        %h3.subheadline= features_subheadline
         %dl.grid
           %dt= feat_profiles_title
           %dd= feat_profiles_desc
@@ -72,6 +75,7 @@
 
       %section#hardware
         %h2= hw_title
+        %h3.subheadline= hardware_subheadline
         %p.lead= hw_lead
         %table.specs
           %tr

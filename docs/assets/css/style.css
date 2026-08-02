@@ -277,10 +277,11 @@ nav a:hover {
 .version {
   font-family: "Outfit", "SF Pro Text", "Segoe UI", sans-serif;
   font-weight: 300;
-  font-size: 0.62rem;
-  opacity: 0.3;
-  color: var(--mut);
+  font-size: 0.72rem;
+  opacity: 0.5;
+  color: var(--text-soft);
   margin-top: 1.2rem;
+  letter-spacing: 0.03em;
 }
 
 main {
@@ -342,6 +343,18 @@ h3 {
   margin-top: 2rem;
   margin-bottom: 0.8rem;
 }
+h3.subheadline {
+  font-size: clamp(0.92rem, 2.2vw, 1.2rem);
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  background: none;
+  -webkit-text-fill-color: var(--accent-alt);
+  color: var(--accent-alt);
+  margin-top: -0.9rem;
+  margin-bottom: 1.2rem;
+  opacity: 0.82;
+  border-bottom: none;
+}
 
 h4 {
   font-size: clamp(0.9rem, 2.2vw, 1.15rem);
@@ -384,6 +397,17 @@ mark {
   background: none;
   color: var(--accent);
   font-weight: 500;
+}
+
+h2 strong, h3 strong, h4 strong {
+  background: none;
+  -webkit-text-fill-color: var(--accent);
+  font-weight: 700;
+}
+h2 em, h3 em, h4 em {
+  background: none;
+  -webkit-text-fill-color: var(--accent-alt);
+  font-style: italic;
 }
 
 code {
@@ -596,9 +620,12 @@ body.subpage .content-page article a {
 }
 body.subpage .content-page article h2, body.subpage .content-page article h3, body.subpage .content-page article h4 {
   font-family: "SF TransRobotics Extended", "SF TransRobotics", "Outfit", sans-serif;
-  font-weight: 400;
-  color: var(--accent);
-  letter-spacing: 0.03em;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  background: linear-gradient(135deg, var(--accent) 40%, var(--accent-alt) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 body.subpage .content-page article h2 {
   font-size: 1.3rem;

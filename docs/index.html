@@ -32,8 +32,8 @@
 <div class='hero-content'>
 <div class='hero-logo'>
 <picture>
-<source media='(prefers-color-scheme: light)' srcset='./assets/images/cf_logo_white.svg'>
-<img alt='OrniFlight' class='logo-svg' src='./assets/images/cf_logo_black.svg'>
+<source media='(prefers-color-scheme: light)' srcset='./assets/images/cf_logo_black.svg'>
+<img alt='OrniFlight' class='logo-svg' src='./assets/images/cf_logo_white.svg'>
 </picture>
 </div>
 <div class='headline'>
@@ -45,6 +45,7 @@
 <main>
 <section id='manifest'>
 <h2>Manifest</h2>
+<h3 class='subheadline'>A new species of flight controller</h3>
 <p class='lead'>OrniFlight exists because a flapping wing controls thrust, pitch, roll, and yaw <strong>within a single stroke</strong> — a channel of expressiveness no propeller can match.</p>
 <p>Nature solved flapping-wing flight 150 million years before the first quadcopter took off. Every sparrow, every albatross, every hummingbird carries flight logic in its nervous system that no PID controller has ever replicated. OrniFlight opens a new domain — where thrust is phase, where stability is rhythm, where the aircraft breathes with every wingbeat. ONDAS, our Oscillating Normalized Dynamic Adaptive Stabilization, is the first control theory built from first principles for flapping aerodynamics. It modulates correction force <em>within</em> the wingbeat — not against it, not despite it, but <strong>with</strong> it. This firmware is free software because flight belongs to no corporation. It runs on commodity STM32F4 hardware because the tools for transcendent flight should cost less than a dinner. OrniFlight inherits a battle-tested architecture and pushes into uncharted air — a <strong>new species of flight controller</strong>, built for wings from the silicon up. The birds have been waiting for us to catch up.</p>
 <div class='highlight'>
@@ -53,6 +54,7 @@
 </section>
 <section id='ondas'>
 <h2>ONDAS</h2>
+<h3 class='subheadline'>Ten dimensions of phase-aware control</h3>
 <p class='lead'><strong>Oscillating Normalized Dynamic Adaptive Stabilization</strong> — the first control theory built specifically for flapping-wing aerodynamics.</p>
 <p>Quad PIDs assume continuous thrust. Ornithopter thrust is <strong>phasic</strong> — the same impulse creates different moments depending on <em>when</em> in the stroke it's applied. ONDAS uses cadence, ferocity, asymmetry, warp, anchor, resonance, prescience, espelho, saudade, and SSFF — an orchestra of phase-aware modulators — to place every corrective gram exactly where aerodynamics can use it.</p>
 <div class='highlight'>
@@ -64,6 +66,7 @@
 </section>
 <section id='features'>
 <h2>Features</h2>
+<h3 class='subheadline'>Everything the wing deserves</h3>
 <dl class='grid'>
 <dt>Flight Profiles</dt>
 <dd>4 independent profiles (0–3), switchable in-flight via BOX mode. Each holds full ONDAS tuning, wave shape, and aeroelastic coefficients.</dd>
@@ -81,6 +84,7 @@
 </section>
 <section id='hardware'>
 <h2>Hardware</h2>
+<h3 class='subheadline'>Commodity STM32F4/F7 flight controllers</h3>
 <p class='lead'>Runs on any Betaflight 4.0-compatible STM32F4/F7 flight controller with servo-capable timer pins.</p>
 <table class='specs'>
 <tr>

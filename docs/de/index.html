@@ -32,8 +32,8 @@
 <div class='hero-content'>
 <div class='hero-logo'>
 <picture>
-<source media='(prefers-color-scheme: light)' srcset='../assets/images/cf_logo_white.svg'>
-<img alt='OrniFlight' class='logo-svg' src='../assets/images/cf_logo_black.svg'>
+<source media='(prefers-color-scheme: light)' srcset='../assets/images/cf_logo_black.svg'>
+<img alt='OrniFlight' class='logo-svg' src='../assets/images/cf_logo_white.svg'>
 </picture>
 </div>
 <div class='headline'>
@@ -45,6 +45,7 @@
 <main>
 <section id='manifest'>
 <h2>Manifest</h2>
+<h3 class='subheadline'>Eine neue Spezies von Flugsteuerung</h3>
 <p class='lead'>OrniFlight existiert, weil ein Schlagflügel Schub, Nick, Roll und Gier <strong>innerhalb eines einzigen Schlags</strong> kontrolliert — ein Ausdruckskanal, den kein Propeller erreicht.</p>
 <p>Die Natur hat den Schlagflug 150 Millionen Jahre vor dem ersten Quadcopter gelöst. Jeder Spatz, jeder Albatros, jeder Kolibri trägt Fluglogik in seinem Nervensystem, die kein PID-Regler je nachgebildet hat. OrniFlight <strong>öffnet eine neue Domäne</strong> — eine, in der Schub Phase ist, in der Stabilität Rhythmus bedeutet, in der das Fluggerät mit jedem Flügelschlag atmet. ONDAS, unsere Oscillating Normalized Dynamic Adaptive Stabilization, ist die erste Regelungstheorie, die aus ersten Prinzipien für Schlagflug-Aerodynamik entwickelt wurde. Sie moduliert Korrekturkraft <em>innerhalb</em> des Flügelschlags — nicht dagegen, nicht trotzdem, sondern <strong>mit</strong> ihm. Diese Firmware ist freie Software, weil Flug keiner Firma gehört. Sie läuft auf gewöhnlicher STM32F4-Hardware, weil die Werkzeuge für transzendenten Flug weniger kosten sollten als ein Abendessen. OrniFlight erbt eine kampferprobte Architektur und stößt in unerschlossene Luft vor — eine <strong>neue Spezies von Flugsteuerung</strong>, von Grund auf für Flügel gebaut. Die Vögel warten darauf, dass wir aufholen.</p>
 <div class='highlight'>
@@ -53,6 +54,7 @@
 </section>
 <section id='ondas'>
 <h2>ONDAS</h2>
+<h3 class='subheadline'>Zehn Dimensionen phasenbewusster Regelung</h3>
 <p class='lead'><strong>Oscillating Normalized Dynamic Adaptive Stabilization</strong> — die erste Regelungstheorie, die spezifisch für Schlagflügel-Aerodynamik entwickelt wurde.</p>
 <p>Quad-PIDs gehen von kontinuierlichem Schub aus. Ornithopter-Schub ist <strong>phasisch</strong> — derselbe Impuls erzeugt unterschiedliche Momente, je nachdem <em>wann</em> im Schlag er appliziert wird. ONDAS nutzt Cadence, Ferocity, Asymmetry, Warp, Anchor, Resonance, Prescience, Espelho, Saudade und SSFF — ein Orchester phasenbewusster Modulatoren — um jedes korrigierende Gramm genau dorthin zu platzieren, wo die Aerodynamik es nutzen kann.</p>
 <div class='highlight'>
@@ -64,6 +66,7 @@
 </section>
 <section id='features'>
 <h2>Features</h2>
+<h3 class='subheadline'>Alles, was der Flügel verdient</h3>
 <dl class='grid'>
 <dt>Flugprofile</dt>
 <dd>4 unabhängige Profile (0–3), im Flug per BOX-Mode umschaltbar. Jedes enthält vollständiges ONDAS-Tuning, Wellenform und aeroelastische Koeffizienten.</dd>
@@ -81,6 +84,7 @@
 </section>
 <section id='hardware'>
 <h2>Hardware</h2>
+<h3 class='subheadline'>Standard STM32F4/F7 Flightcontroller</h3>
 <p class='lead'>Läuft auf jedem Betaflight-4.0-kompatiblen STM32F4/F7-Flugcontroller mit servo-fähigen Timer-Pins.</p>
 <table class='specs'>
 <tr>
