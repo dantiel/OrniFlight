@@ -290,7 +290,18 @@ servos:
     flight_performance:
       rating: 4
       note: Good Flight
-    notes: Magnet potentiometer
+    notes: Magnet potentiometer. MS320 is newer version with similar specs
+
+  - brand: KST
+    model: MS320
+    voltage: 7.4
+    weight: 21.0
+    torque: 5.5
+    speed: 0.08
+    price: 36.00
+    efficiency: 3.27
+    eff_per_euro_scale: 0.16
+    notes: Newer version of MR320. Atalanta (d4ro)
 
   - brand: KST
     model: X08 Plus V5

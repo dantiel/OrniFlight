@@ -310,7 +310,19 @@ Höher ist besser. Preise in <select class="currency-select inline-currency">
         <td class="num" data-price-eur="36.00">€36.00</td>
         <td class="num strong">0.16</td>
         <td class="flight" data-flight-rating="4">Good Flight</td>
-        <td class="notes">Magnet potentiometer</td>
+        <td class="notes">Magnet potentiometer. MS320 is newer version with similar specs</td>
+      </tr>
+      <tr class="untested">
+        <td>KST MS320</td>
+        <td class="num">7.4</td>
+        <td class="num">21.0</td>
+        <td class="num">5.50</td>
+        <td class="num">0.08</td>
+        <td class="num">3.27</td>
+        <td class="num" data-price-eur="36.00">€36.00</td>
+        <td class="num strong">0.16</td>
+        <td class="flight untested-cell">Ungetestet</td>
+        <td class="notes">Newer version of MR320. Atalanta (d4ro)</td>
       </tr>
       <tr class="untested">
         <td>KST X08 Plus V5</td>
