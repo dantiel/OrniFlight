@@ -32,6 +32,8 @@
 <article>
 <h1 id="supported-hardware">Supported Hardware</h1>
 
+<p>OrniFlight runs on commodity STM32F3/F4/F7 flight controllers. The baseline is <strong>STM32F3</strong> — any F3 target with servo-capable timer pins will fly.</p>
+
 <h2 id="flight-controllers">Flight Controllers</h2>
 
 <table>
@@ -41,54 +43,60 @@
       <th>MCU</th>
       <th>IMU</th>
       <th>Flash</th>
-      <th>OSD</th>
+      <th>Receiver</th>
       <th>Status</th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <td><strong>OMNIBUSF4</strong></td>
-      <td>STM32F405</td>
+      <td><strong>TINYFISH</strong></td>
+      <td>STM32F303</td>
       <td>MPU6000 (SPI)</td>
-      <td>16MB</td>
-      <td>AT7456E</td>
+      <td>256 KB</td>
+      <td>FrSky D8 (integrated)</td>
       <td>✅ Primary</td>
     </tr>
     <tr>
-      <td><strong>TINYFISH</strong></td>
-      <td>STM32F411</td>
+      <td><strong>OMNIBUSF4</strong></td>
+      <td>STM32F405</td>
       <td>MPU6000 (SPI)</td>
-      <td>256KB</td>
+      <td>1 MB + 16 MB SPI</td>
       <td>—</td>
       <td>✅ Supported</td>
     </tr>
   </tbody>
 </table>
 
-<h3 id="omnibusf4">OMNIBUSF4</h3>
+<h3 id="tinyfish--the-lightest-orniflight-target">TINYFISH — The Lightest OrniFlight Target</h3>
 
-<p>The primary development target. Full-featured F4 flight controller with OSD, ample flash for Blackbox logging, and sufficient UARTs for all peripherals.</p>
+<p>Designed by fishpepper, TINYFISH is the ideal ornithopter flight controller: featherweight, F3-based, and carrying an <strong>integrated FrSky D8 receiver</strong> on-board. No external RX, no extra wiring — just power, servos, and fly.</p>
+
+<ul>
+  <li><strong>MCU</strong>: STM32F303CCT6 @ 72 MHz</li>
+  <li><strong>Gyro</strong>: MPU6000 (SPI, 8 kHz capable)</li>
+  <li><strong>Flash</strong>: 256 KB on-chip</li>
+  <li><strong>RAM</strong>: 40 KB</li>
+  <li><strong>Receiver</strong>: Integrated FrSky D8 (SBUS internally routed to UART2)</li>
+  <li><strong>UARTs</strong>: VCP + 2 hardware UARTs (UART1 free for GPS/CRSF add-on)</li>
+  <li><strong>Input</strong>: 2-4S LiPo (direct servo power)</li>
+  <li><strong>Weight</strong>: ~2.5 g</li>
+</ul>
+
+<p>TINYFISH proves that transcendent flapping control doesn’t need an F7. The STM32F303 runs the full ONDAS pipeline — 10 modulation channels, trapezoidal wing ODE, 4 flight profiles — within 256 KB.</p>
+
+<h3 id="omnibusf4--the-accessible-workhorse">OMNIBUSF4 — The Accessible Workhorse</h3>
+
+<p>The classic F4 target. Cheap, ubiquitous, full-featured with OSD and ample SPI flash for Blackbox logging. The go-to for development and larger builds.</p>
 
 <ul>
   <li><strong>MCU</strong>: STM32F405RGT6 @ 168 MHz</li>
   <li><strong>Gyro</strong>: MPU6000 (SPI, 8 kHz capable)</li>
-  <li><strong>Flash</strong>: 16MB for Blackbox</li>
+  <li><strong>Flash</strong>: 1 MB on-chip + 16 MB SPI (Blackbox)</li>
+  <li><strong>RAM</strong>: 192 KB</li>
   <li><strong>OSD</strong>: AT7456E (compatible with MAX7456)</li>
   <li><strong>UARTs</strong>: VCP + 5 hardware UARTs</li>
   <li><strong>Barometer</strong>: BMP280 (some variants)</li>
   <li><strong>Input</strong>: 2-6S LiPo</li>
-</ul>
-
-<h3 id="tinyfish">TINYFISH</h3>
-
-<p>Compact F4 target for small ornithopters and micro flappers.</p>
-
-<ul>
-  <li><strong>MCU</strong>: STM32F411CEU6 @ 100 MHz</li>
-  <li><strong>Gyro</strong>: MPU6000 (SPI)</li>
-  <li><strong>Flash</strong>: 256KB onboard</li>
-  <li><strong>UARTs</strong>: VCP + 2 hardware UARTs</li>
-  <li><strong>Input</strong>: 2-4S LiPo</li>
 </ul>
 
 <hr />

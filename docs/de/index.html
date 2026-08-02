@@ -89,7 +89,7 @@
 <table class='specs'>
 <tr>
 <td>Targets</td>
-<td>OMNIBUSF4, TINYFISH (F4), MATEKF405, KAKUTEF7 …</td>
+<td>TINYFISH (F3, integrierter FrSky-Empfänger), OMNIBUSF4, MATEKF405, KAKUTEF7 …</td>
 </tr>
 <tr>
 <td>Servo-Ausgang</td>
@@ -97,15 +97,15 @@
 </tr>
 <tr>
 <td>Empfänger</td>
-<td>CRSF (Crossfire / ExpressLRS), SBUS, Spektrum, SUMD</td>
+<td>CRSF (Crossfire / ExpressLRS), SBUS, Spektrum, SUMD — plus integriertes FrSky auf TINYFISH</td>
 </tr>
 <tr>
-<td>Flash (OMNIBUSF4)</td>
-<td class='value'>31% belegt</td>
+<td>Flash</td>
+<td class='value'>256 KB (TINYFISH F3) / 1 MB (OMNIBUSF4)</td>
 </tr>
 <tr>
-<td>RAM (OMNIBUSF4)</td>
-<td class='value'>~40% belegt</td>
+<td>RAM</td>
+<td class='value'>40 KB (TINYFISH F3) / 192 KB (OMNIBUSF4)</td>
 </tr>
 </table>
 <p class='doc-link'>
@@ -114,8 +114,10 @@
 </section>
 <section class='build'>
 <h2>Build &amp; Flash</h2>
-<pre><code>make TARGET=OMNIBUSF4
-dfu-util -a 0 -D obj/orniflight_VERSION_OMNIBUSF4.hex</code></pre>
+<pre><code>make TARGET=TINYFISH\ndfu-util -a 0 -D obj/orniflight_VERSION_TINYFISH.hex
+
+# oder für OMNIBUSF4:
+make TARGET=OMNIBUSF4\ndfu-util -a 0 -D obj/orniflight_VERSION_OMNIBUSF4.hex</code></pre>
 <p class='compatible'>GPL v3 ◇ Basiert auf Betaflight 4.0.6 ◇ Sauberer Build: null Warnungen</p>
 </section>
 </main>

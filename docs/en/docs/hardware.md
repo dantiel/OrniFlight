@@ -1,33 +1,41 @@
 # Supported Hardware
 
+OrniFlight runs on commodity STM32F3/F4/F7 flight controllers. The baseline is **STM32F3** — any F3 target with servo-capable timer pins will fly.
+
 ## Flight Controllers
 
-| Board | MCU | IMU | Flash | OSD | Status |
-|-------|-----|-----|-------|-----|--------|
-| **OMNIBUSF4** | STM32F405 | MPU6000 (SPI) | 16MB | AT7456E | ✅ Primary |
-| **TINYFISH** | STM32F411 | MPU6000 (SPI) | 256KB | — | ✅ Supported |
+| Board | MCU | IMU | Flash | Receiver | Status |
+|-------|-----|-----|-------|----------|--------|
+| **TINYFISH** | STM32F303 | MPU6000 (SPI) | 256 KB | FrSky D8 (integrated) | ✅ Primary |
+| **OMNIBUSF4** | STM32F405 | MPU6000 (SPI) | 1 MB + 16 MB SPI | — | ✅ Supported |
 
-### OMNIBUSF4
+### TINYFISH — The Lightest OrniFlight Target
 
-The primary development target. Full-featured F4 flight controller with OSD, ample flash for Blackbox logging, and sufficient UARTs for all peripherals.
+Designed by fishpepper, TINYFISH is the ideal ornithopter flight controller: featherweight, F3-based, and carrying an **integrated FrSky D8 receiver** on-board. No external RX, no extra wiring — just power, servos, and fly.
+
+- **MCU**: STM32F303CCT6 @ 72 MHz
+- **Gyro**: MPU6000 (SPI, 8 kHz capable)
+- **Flash**: 256 KB on-chip
+- **RAM**: 40 KB
+- **Receiver**: Integrated FrSky D8 (SBUS internally routed to UART2)
+- **UARTs**: VCP + 2 hardware UARTs (UART1 free for GPS/CRSF add-on)
+- **Input**: 2-4S LiPo (direct servo power)
+- **Weight**: ~2.5 g
+
+TINYFISH proves that transcendent flapping control doesn't need an F7. The STM32F303 runs the full ONDAS pipeline — 10 modulation channels, trapezoidal wing ODE, 4 flight profiles — within 256 KB.
+
+### OMNIBUSF4 — The Accessible Workhorse
+
+The classic F4 target. Cheap, ubiquitous, full-featured with OSD and ample SPI flash for Blackbox logging. The go-to for development and larger builds.
 
 - **MCU**: STM32F405RGT6 @ 168 MHz
 - **Gyro**: MPU6000 (SPI, 8 kHz capable)
-- **Flash**: 16MB for Blackbox
+- **Flash**: 1 MB on-chip + 16 MB SPI (Blackbox)
+- **RAM**: 192 KB
 - **OSD**: AT7456E (compatible with MAX7456)
 - **UARTs**: VCP + 5 hardware UARTs
 - **Barometer**: BMP280 (some variants)
 - **Input**: 2-6S LiPo
-
-### TINYFISH
-
-Compact F4 target for small ornithopters and micro flappers.
-
-- **MCU**: STM32F411CEU6 @ 100 MHz
-- **Gyro**: MPU6000 (SPI)
-- **Flash**: 256KB onboard
-- **UARTs**: VCP + 2 hardware UARTs
-- **Input**: 2-4S LiPo
 
 ---
 
