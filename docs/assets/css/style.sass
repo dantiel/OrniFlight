@@ -595,6 +595,51 @@ td
     min-width: 72px
     text-align: right
 
+// ✦ Brand filter bar ✦
+.brand-filter-bar
+  display: flex
+  align-items: center
+  gap: 0.6rem
+  margin-bottom: 1rem
+  flex-wrap: wrap
+
+  .br-label
+    font-family: $font-heading
+    font-size: 0.62rem
+    font-weight: 700
+    letter-spacing: 0.06em
+    text-transform: uppercase
+    color: var(--mut)
+    white-space: nowrap
+
+  .brand-select
+    appearance: none
+    -webkit-appearance: none
+    background: rgba(var(--box-rgb), 0.25)
+    border: 1px solid var(--glass-edge)
+    border-radius: 6px
+    color: var(--text-soft)
+    font-family: $font-code
+    font-size: 0.70rem
+    padding: 0.25rem 0.5rem
+    cursor: pointer
+    min-width: 130px
+    transition: border-color 0.2s, box-shadow 0.2s
+
+    &:hover
+      border-color: var(--accent)
+      box-shadow: 0 0 8px rgba(var(--accent-rgb), 0.15)
+
+    &:focus
+      outline: none
+      border-color: var(--accent)
+      box-shadow: 0 0 0 2px rgba(var(--accent-rgb), 0.2)
+
+    option
+      background: var(--body-bg)
+      color: var(--text-soft)
+      padding: 0.25rem 0.5rem
+
 // ✦ Servo efficiency table — glass card style ✦
 // ✦ Table wrapper — NO overflow so sticky thead works vertically ✦
 .table-wrap

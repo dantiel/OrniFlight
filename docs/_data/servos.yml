@@ -129,10 +129,21 @@ servos:
     price: 7.00
     efficiency: 5.56
     eff_per_euro_scale: 0.46
+    notes: HV coreless, metal gear, waterproof, 180°, 25T. 5kg = stall torque; effective torque lower. Most flights at 8.4V — see 8.4V entry.
+
+  - brand: VOTIK
+    model: PTK 7465 / 7465W MG
+    voltage: 8.4
+    weight: 9.0
+    torque: 5.7
+    speed: 0.09
+    price: 7.00
+    efficiency: 7.04
+    eff_per_euro_scale: 0.56
     flight_performance:
       rating: 5
       note: Strong Flight <a href="https://youtu.be/iSIwwHDRsHg" class="yt-link" target="_blank">📺</a><a href="https://youtu.be/Ta3ghJrFt-0" class="yt-link" target="_blank">📺</a><a href="https://youtu.be/6kXmIZEmYUA" class="yt-link" target="_blank">📺</a><a href="https://youtu.be/Zoqq1vi_pIQ" class="yt-link" target="_blank">📺</a><a href="https://youtu.be/S_oFCYte0PA" class="yt-link" target="_blank">📺</a>
-    notes: HV coreless, metal gear, waterproof, 180°, 25T. 5kg = stall torque; effective torque lower. Kestrel 45g, Albatross 57g, Butterfly 54g, Entomoid. SFOArchaeopteryx153 53g.
+    notes: "8.4V spec — most flights at this voltage. Kestrel 45g, Albatross 57g, Butterfly 54g, Entomoid. SFOArchaeopteryx153 53g."
 
   - brand: VOTIK
     model: PTK 7465 Plus
@@ -401,6 +412,17 @@ servos:
     efficiency: 10.83
     eff_per_euro_scale: ~
     notes: Highest raw efficiency in class; factory price only
+
+  - brand: DEMAND
+    model: DBS6084V
+    voltage: 8.4
+    weight: 80.0
+    torque: 60.0
+    speed: 0.15
+    price: ~
+    efficiency: 5.00
+    eff_per_euro_scale: ~
+    notes: Kazu's Pteranodon 131 (232cm, 325g AUW). Stall torque 60 kg·cm. Speed estimated — verify.
 
   # ── Larger / Reference ──────────────────────────────────────
   - brand: HDKJ

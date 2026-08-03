@@ -589,6 +589,51 @@ td:first-child {
   text-align: right;
 }
 
+.brand-filter-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+.brand-filter-bar .br-label {
+  font-family: "SF TransRobotics", "Outfit", sans-serif;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--mut);
+  white-space: nowrap;
+}
+.brand-filter-bar .brand-select {
+  appearance: none;
+  -webkit-appearance: none;
+  background: rgba(var(--box-rgb), 0.25);
+  border: 1px solid var(--glass-edge);
+  border-radius: 6px;
+  color: var(--text-soft);
+  font-family: "JetBrains Mono", "SF Mono", "Fira Code", monospace;
+  font-size: 0.7rem;
+  padding: 0.25rem 0.5rem;
+  cursor: pointer;
+  min-width: 130px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.brand-filter-bar .brand-select:hover {
+  border-color: var(--accent);
+  box-shadow: 0 0 8px rgba(var(--accent-rgb), 0.15);
+}
+.brand-filter-bar .brand-select:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px rgba(var(--accent-rgb), 0.2);
+}
+.brand-filter-bar .brand-select option {
+  background: var(--body-bg);
+  color: var(--text-soft);
+  padding: 0.25rem 0.5rem;
+}
+
 .table-wrap {
   margin: 2rem 0;
   border: 1px solid var(--glass-edge);

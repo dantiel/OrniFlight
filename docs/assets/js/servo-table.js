@@ -122,16 +122,52 @@
         vrTrack.style.setProperty('--vr-right', rightPct + '%')
       }
 
-      // Filter rows
-      tbody.querySelectorAll('tr').forEach(function (row) {
-        var v = parseFloat(row.getAttribute('data-voltage'))
-        row.style.display = (!isNaN(v) && v >= minV - 0.01 && v <= maxV + 0.01) ? '' : 'none'
-      })
+      // Filter rows (voltage + brand combined)
+      applyFilters()
     }
 
     vrMin.addEventListener('input', updateVoltageRange)
     vrMax.addEventListener('input', updateVoltageRange)
     updateVoltageRange() // initial fill track + readout
+  }
+
+  // ── Brand Filter ─────────────────────────────────────────
+  var brandSelect = document.querySelector('.brand-select')
+  var activeBrand = null  // null = all
+
+  if (brandSelect) {
+    // Populate brand options from table data
+    var brandsSeen = {}
+    tbody.querySelectorAll('tr').forEach(function (row) {
+      var b = row.getAttribute('data-brand')
+      if (b && !brandsSeen[b]) { brandsSeen[b] = true }
+    })
+    var sortedBrands = Object.keys(brandsSeen).sort()
+    sortedBrands.forEach(function (b) {
+      var opt = document.createElement('option')
+      opt.value = b
+      opt.textContent = b
+      brandSelect.appendChild(opt)
+    })
+
+    brandSelect.addEventListener('change', function () {
+      activeBrand = this.value === '*' ? null : this.value
+      applyFilters()
+    })
+  }
+
+  // ── Combined Filter ──────────────────────────────────────
+  function applyFilters() {
+    var minV = vrMin ? parseFloat(vrMin.value) : 4.8
+    var maxV = vrMax ? parseFloat(vrMax.value) : 8.4
+
+    tbody.querySelectorAll('tr').forEach(function (row) {
+      var v = parseFloat(row.getAttribute('data-voltage'))
+      var b = row.getAttribute('data-brand')
+      var voltageMatch = !isNaN(v) && v >= minV - 0.01 && v <= maxV + 0.01
+      var brandMatch = !activeBrand || activeBrand === b
+      row.style.display = (voltageMatch && brandMatch) ? '' : 'none'
+    })
   }
 
   // ── Multi-Column Sort (Shift+click for additive) ─────────

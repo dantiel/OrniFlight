@@ -231,8 +231,9 @@ def build_servo_page(lang)
     eff_raw = ("%.2f" % s["efficiency"])
     voltage_s = ("%.1f" % s["voltage"])
 
-    %(      <tr#{row_extra} data-voltage="#{voltage_s}">
-        <td>#{s["brand"]} #{s["model"]}</td>
+    brand = s["brand"].to_s
+    %(      <tr#{row_extra} data-voltage="#{voltage_s}" data-brand="#{brand}">
+        <td>#{brand} #{s["model"]}</td>
         <td class="num">#{voltage_s}</td>
         <td class="num">#{weight_s}</td>
         <td class="num">#{torque_s}</td>
@@ -253,6 +254,12 @@ def build_servo_page(lang)
         <input type="range" class="vr-max" min="4.8" max="8.4" step="0.1" value="8.4">
       </div>
       <span class="vr-readout">4.8V – 8.4V</span>
+    </div>
+    <div class="brand-filter-bar">
+      <span class="br-label">Brand</span>
+      <select class="brand-select">
+        <option value="*" selected>All</option>
+      </select>
     </div>
     <div class="table-wrap">
     <table class="servo-table">
