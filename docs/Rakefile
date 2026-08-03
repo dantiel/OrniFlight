@@ -225,10 +225,14 @@ def build_servo_page(lang)
       price_cell = price_raw.to_s
     end
 
-    torque_s = ("%.2f" % s["torque"])
-    speed_s = ("%.2f" % s["speed"])
-    weight_s = ("%.1f" % s["weight"])
-    eff_raw = ("%.2f" % s["efficiency"])
+    torque_raw = s["torque"]
+    torque_s = torque_raw.is_a?(Numeric) ? ("%.2f" % torque_raw) : torque_raw.to_s
+    speed_raw = s["speed"]
+    speed_s = speed_raw.is_a?(Numeric) ? ("%.2f" % speed_raw) : speed_raw.to_s
+    weight_raw = s["weight"]
+    weight_s = weight_raw.is_a?(Numeric) ? ("%.1f" % weight_raw) : weight_raw.to_s
+    eff_raw_val = s["efficiency"]
+    eff_raw = eff_raw_val.is_a?(Numeric) ? ("%.2f" % eff_raw_val) : eff_raw_val.to_s
     voltage_s = ("%.1f" % s["voltage"])
 
     brand = s["brand"].to_s
@@ -250,10 +254,10 @@ def build_servo_page(lang)
     <div class="voltage-range-bar">
       <span class="vr-label">Voltage</span>
       <div class="vr-track">
-        <input type="range" class="vr-min" min="4.8" max="8.4" step="0.1" value="4.8">
-        <input type="range" class="vr-max" min="4.8" max="8.4" step="0.1" value="8.4">
+        <input type="range" class="vr-min" min="4.8" max="14.0" step="0.1" value="4.8">
+        <input type="range" class="vr-max" min="4.8" max="14.0" step="0.1" value="14.0">
       </div>
-      <span class="vr-readout">4.8V – 8.4V</span>
+      <span class="vr-readout">4.8V – 14.0V</span>
     </div>
     <div class="brand-filter-bar">
       <span class="br-label">Brand</span>

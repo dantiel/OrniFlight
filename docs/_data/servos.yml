@@ -268,9 +268,37 @@ servos:
     eff_per_euro_scale: 0.50
     notes: Entry-level WV
 
-  - brand: Blue Bird
-    model: A10H WV
+  - brand: SAVÖX
+    model: SV-1270TG
     voltage: 7.4
+    weight: 56.0
+    torque: 35.0
+    speed: 0.11
+    price: ~
+    efficiency: ~
+    eff_per_euro_scale: ~
+    notes: Titanium gear, coreless, HV. Standard-size. Takemura runs at 12.6V (3S) overvolt successfully — see 12.6V entry.
+    flight_performance:
+      rating: 5
+      note: Strong Flight <a href="https://youtu.be/oGS77rTCsmE" class="yt-link" target="_blank">📺</a><a href="https://youtu.be/_WR-8EJUYNI" class="yt-link" target="_blank">📺</a>
+
+  - brand: SAVÖX
+    model: SV-1270TG (3S overvolt)
+    voltage: 12.6
+    weight: 56.0
+    torque: 35.0
+    speed: 0.08
+    price: ~
+    efficiency: ~
+    eff_per_euro_scale: ~
+    notes: "Overvolted 3S (rated 7.4V). Takemura — tried connecting 3cell to servo rated at 7.4V... works well. By raising servo voltage, thrust was improved. 315g AUW, 1800mm span. Use at own risk."
+    flight_performance:
+      rating: 5
+      note: Strong Flight <a href="https://youtu.be/DGuJ5ZNm-KE" class="yt-link" target="_blank">📺</a>
+
+  - brand: Blue Arrow
+    model: X-4 HTMG HV
+    voltage: 8.4
     weight: 7.4
     torque: 3.2
     speed: 0.07
@@ -423,6 +451,9 @@ servos:
     efficiency: 5.00
     eff_per_euro_scale: ~
     notes: Kazu's Pteranodon 131 (232cm, 325g AUW). Stall torque 60 kg·cm. Speed estimated — verify.
+    flight_performance:
+      rating: 5
+      note: Strong Flight <a href="https://youtu.be/tIGbU3pV1l4" class="yt-link" target="_blank">📺</a>
 
   # ── Larger / Reference ──────────────────────────────────────
   - brand: HDKJ

@@ -11,10 +11,10 @@ Higher is better. Click column headers to sort — <strong>Shift+click</strong> 
 <div class="voltage-range-bar">
   <span class="vr-label">Voltage</span>
   <div class="vr-track">
-    <input type="range" class="vr-min" min="4.8" max="8.4" step="0.1" value="4.8">
-    <input type="range" class="vr-max" min="4.8" max="8.4" step="0.1" value="8.4">
+    <input type="range" class="vr-min" min="4.8" max="14.0" step="0.1" value="4.8">
+    <input type="range" class="vr-max" min="4.8" max="14.0" step="0.1" value="14.0">
   </div>
-  <span class="vr-readout">4.8V – 8.4V</span>
+  <span class="vr-readout">4.8V – 14.0V</span>
 </div>
 <div class="brand-filter-bar">
   <span class="br-label">Brand</span>
@@ -303,9 +303,33 @@ Higher is better. Click column headers to sort — <strong>Shift+click</strong> 
         <td class="flight untested-cell">Untested</td>
         <td class="notes">Entry-level WV</td>
       </tr>
-      <tr class="untested" data-voltage="7.4" data-brand="Blue Bird">
-        <td>Blue Bird A10H WV</td>
+      <tr data-voltage="7.4" data-brand="SAVÖX">
+        <td>SAVÖX SV-1270TG</td>
         <td class="num">7.4</td>
+        <td class="num">56.0</td>
+        <td class="num">35.00</td>
+        <td class="num">0.11</td>
+        <td class="num"></td>
+        <td class="num"></td>
+        <td class="num strong"></td>
+        <td class="flight" data-flight-rating="5">Strong Flight <a href="https://youtu.be/oGS77rTCsmE" class="yt-link" target="_blank">📺</a><a href="https://youtu.be/_WR-8EJUYNI" class="yt-link" target="_blank">📺</a></td>
+        <td class="notes">Titanium gear, coreless, HV. Standard-size. Takemura runs at 12.6V (3S) overvolt successfully — see 12.6V entry.</td>
+      </tr>
+      <tr data-voltage="12.6" data-brand="SAVÖX">
+        <td>SAVÖX SV-1270TG (3S overvolt)</td>
+        <td class="num">12.6</td>
+        <td class="num">56.0</td>
+        <td class="num">35.00</td>
+        <td class="num">0.08</td>
+        <td class="num"></td>
+        <td class="num"></td>
+        <td class="num strong"></td>
+        <td class="flight" data-flight-rating="5">Strong Flight <a href="https://youtu.be/DGuJ5ZNm-KE" class="yt-link" target="_blank">📺</a></td>
+        <td class="notes">Overvolted 3S (rated 7.4V). Takemura — tried connecting 3cell to servo rated at 7.4V... works well. By raising servo voltage, thrust was improved. 315g AUW, 1800mm span. Use at own risk.</td>
+      </tr>
+      <tr class="untested" data-voltage="8.4" data-brand="Blue Arrow">
+        <td>Blue Arrow X-4 HTMG HV</td>
+        <td class="num">8.4</td>
         <td class="num">7.4</td>
         <td class="num">3.20</td>
         <td class="num">0.07</td>
@@ -459,7 +483,7 @@ Higher is better. Click column headers to sort — <strong>Shift+click</strong> 
         <td class="flight untested-cell">Untested</td>
         <td class="notes">Highest raw efficiency in class; factory price only</td>
       </tr>
-      <tr class="untested" data-voltage="8.4" data-brand="DEMAND">
+      <tr data-voltage="8.4" data-brand="DEMAND">
         <td>DEMAND DBS6084V</td>
         <td class="num">8.4</td>
         <td class="num">80.0</td>
@@ -468,7 +492,7 @@ Higher is better. Click column headers to sort — <strong>Shift+click</strong> 
         <td class="num">5.00</td>
         <td class="num"></td>
         <td class="num strong"></td>
-        <td class="flight untested-cell">Untested</td>
+        <td class="flight" data-flight-rating="5">Strong Flight <a href="https://youtu.be/tIGbU3pV1l4" class="yt-link" target="_blank">📺</a></td>
         <td class="notes">Kazu's Pteranodon 131 (232cm, 325g AUW). Stall torque 60 kg·cm. Speed estimated — verify.</td>
       </tr>
       <tr class="untested" data-voltage="7.4" data-brand="HDKJ">

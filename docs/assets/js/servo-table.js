@@ -114,9 +114,9 @@
       }
 
       // Update fill track
-      var rangeSpan = 8.4 - 4.8
+      var rangeSpan = 14.0 - 4.8
       var leftPct  = ((minV - 4.8) / rangeSpan) * 100
-      var rightPct = ((8.4 - maxV) / rangeSpan) * 100
+      var rightPct = ((14.0 - maxV) / rangeSpan) * 100
       if (vrTrack) {
         vrTrack.style.setProperty('--vr-left',  leftPct  + '%')
         vrTrack.style.setProperty('--vr-right', rightPct + '%')
@@ -159,7 +159,7 @@
   // ── Combined Filter ──────────────────────────────────────
   function applyFilters() {
     var minV = vrMin ? parseFloat(vrMin.value) : 4.8
-    var maxV = vrMax ? parseFloat(vrMax.value) : 8.4
+    var maxV = vrMax ? parseFloat(vrMax.value) : 14.0
 
     tbody.querySelectorAll('tr').forEach(function (row) {
       var v = parseFloat(row.getAttribute('data-voltage'))
