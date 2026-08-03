@@ -53,6 +53,15 @@
     })
   }
 
+  var CURRENCY_NAMES = {
+    EUR: 'Euro',
+    USD: 'Dollar',
+    GBP: 'Pound',
+    CHF: 'Franc',
+    JPY: 'Yen',
+    BRL: 'Real',
+  }
+
   function convertPrices() {
     var rate = RATES[currentCurrency] || 1.0
     var sym = SYMBOLS[currentCurrency] || '€'
@@ -65,6 +74,21 @@
           ? sym + Math.round(converted).toLocaleString()
           : sym + converted.toFixed(2)
     })
+
+    // Update currency symbols everywhere (intro, header, etc.)
+    document.querySelectorAll('.currency-symbol').forEach(function (el) {
+      el.textContent = sym
+    })
+
+    // Update currency select display text to show currency name
+    if (currencySelect) {
+      var name = CURRENCY_NAMES[currentCurrency] || currentCurrency
+      currencySelect.options[currencySelect.selectedIndex].textContent = name
+      // Refresh all option texts
+      Array.prototype.forEach.call(currencySelect.options, function (opt) {
+        opt.textContent = CURRENCY_NAMES[opt.value] || opt.value
+      })
+    }
   }
 
   // ── Multi-Column Sort ─────────────────────────────────────

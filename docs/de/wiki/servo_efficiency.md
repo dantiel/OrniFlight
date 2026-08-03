@@ -1,11 +1,11 @@
 # Servo-Effizienz
 
 Eine kuratierte Auswahl getesteter Servos für Ornithopter.
-**Effizienz** = Drehmoment / (Gewicht × Geschwindigkeit). **Eff/€ €** = Effizienz pro Euro, skaliert mit &cuberoot;Drehmoment.
-Höher ist besser. Preise in <span class="currency-inline"><select class="currency-select inline-currency">
-  <option value="EUR">EUR</option><option value="USD">USD</option><option value="GBP">GBP</option>
-  <option value="CHF">CHF</option><option value="JPY">JPY</option><option value="BRL">BRL</option>
-</select></span>. Spaltenköpfe anklicken zum Sortieren — <strong>Shift+Klick</strong> für Mehrfachsortierung. Ergänzungen per PR an `_data/servos.yml`.
+**Effizienz** = Drehmoment / (Gewicht × Geschwindigkeit). **Eff/<span class="currency-symbol">€</span>** = Effizienz pro <span class="currency-inline"><select class="currency-select inline-currency">
+  <option value="EUR">Euro</option><option value="USD">Dollar</option><option value="GBP">Pound</option>
+  <option value="CHF">Franc</option><option value="JPY">Yen</option><option value="BRL">Real</option>
+</select></span>, skaliert mit &cuberoot;Drehmoment.
+Höher ist besser. Spaltenköpfe anklicken zum Sortieren — <strong>Shift+Klick</strong> für Mehrfachsortierung. Ergänzungen per PR an `_data/servos.yml`.
 
 
 <div class="table-wrap">
@@ -19,7 +19,7 @@ Höher ist besser. Preise in <span class="currency-inline"><select class="curren
       <th class="num">Speed s/60°</th>
       <th class="num">Efficiency</th>
       <th class="num">Price</th>
-      <th class="num">Eff/€ €</th>
+      <th class="num">Eff/<span class="currency-symbol">€</span></th>
       <th>Flight Performance</th>
       <th>Notes</th>
     </tr>

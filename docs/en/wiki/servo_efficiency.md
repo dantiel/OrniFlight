@@ -1,11 +1,11 @@
 # Servo Efficiency
 
 A curated selection of servos tested and ranked for ornithopter use.
-**Efficiency** = Torque / (Weight × Speed). **Eff/€ €** = Efficiency per Euro, scaled by &cuberoot;torque for fairness across sizes.
-Higher is better. Prices in <span class="currency-inline"><select class="currency-select inline-currency">
-  <option value="EUR">EUR</option><option value="USD">USD</option><option value="GBP">GBP</option>
-  <option value="CHF">CHF</option><option value="JPY">JPY</option><option value="BRL">BRL</option>
-</select></span>. Click column headers to sort — <strong>Shift+click</strong> for multi-column sort. Submit additions via PR to `_data/servos.yml`.
+**Efficiency** = Torque / (Weight × Speed). **Eff/<span class="currency-symbol">€</span>** = Efficiency per <span class="currency-inline"><select class="currency-select inline-currency">
+  <option value="EUR">Euro</option><option value="USD">Dollar</option><option value="GBP">Pound</option>
+  <option value="CHF">Franc</option><option value="JPY">Yen</option><option value="BRL">Real</option>
+</select></span>, scaled by &cuberoot;torque for fairness across sizes.
+Higher is better. Click column headers to sort — <strong>Shift+click</strong> for multi-column sort. Submit additions per PR to `_data/servos.yml`.
 
 
 <div class="table-wrap">
@@ -19,7 +19,7 @@ Higher is better. Prices in <span class="currency-inline"><select class="currenc
       <th class="num">Speed s/60°</th>
       <th class="num">Efficiency</th>
       <th class="num">Price</th>
-      <th class="num">Eff/€ €</th>
+      <th class="num">Eff/<span class="currency-symbol">€</span></th>
       <th>Flight Performance</th>
       <th>Notes</th>
     </tr>
