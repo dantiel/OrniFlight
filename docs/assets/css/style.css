@@ -510,22 +510,32 @@ td:first-child {
   color: var(--accent);
 }
 
-.servo-table {
-  width: 100%;
-  border-collapse: collapse;
+.table-wrap {
+  overflow-x: auto;
   margin: 2rem 0;
-  font-size: 0.8rem;
+  border: 1px solid var(--glass-edge);
+  border-radius: 10px;
   background: rgba(var(--box-rgb), 0.18);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border: 1px solid var(--glass-edge);
-  border-radius: 10px;
-  overflow: hidden;
-  display: block;
-  overflow-x: auto;
+}
+
+.servo-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.8rem;
+  min-width: 700px;
 }
 .servo-table thead {
+  position: sticky;
+  top: 3.5rem;
+  z-index: 10;
   border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+.servo-table thead th {
+  background: rgba(var(--box-rgb), 0.92);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
 }
 .servo-table th {
   padding: 0.75rem 0.55rem;
@@ -654,24 +664,48 @@ td:first-child {
   margin-bottom: 1.5rem;
 }
 
+body.servo-page .content-page {
+  max-width: none;
+  margin-left: 1.5rem;
+  margin-right: 1.5rem;
+}
+@media (max-width: 480px) {
+  body.servo-page .content-page {
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+  }
+}
+
+.currency-inline {
+  display: inline;
+}
+
 .inline-currency {
-  font-family: "JetBrains Mono", "SF Mono", "Fira Code", monospace;
-  font-size: 0.72rem;
-  padding: 0.15rem 0.35rem;
-  margin: 0 0.15rem;
-  background: rgba(var(--box-rgb), 0.22);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  border: 1px solid var(--glass-edge);
-  border-radius: 4px;
-  color: var(--text-soft);
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  font: inherit;
+  font-weight: 550;
+  color: var(--accent);
+  background: transparent;
+  border: none;
+  border-bottom: 1px dashed var(--accent);
+  padding: 0;
+  margin: 0;
   cursor: pointer;
   outline: none;
   vertical-align: baseline;
+  line-height: inherit;
 }
 .inline-currency:focus {
-  border-color: var(--accent);
-  color: var(--accent);
+  color: var(--accent-alt);
+  border-bottom-color: var(--accent-alt);
+}
+.inline-currency option {
+  background: var(--box);
+  color: var(--text);
+  font-family: "Outfit", "SF Pro Text", "Segoe UI", sans-serif;
+  font-size: 0.85rem;
 }
 
 .yt-link {

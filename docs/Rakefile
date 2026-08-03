@@ -53,7 +53,8 @@ HAML_LAYOUT = <<~'LAYOUT'
     %link{rel: "preconnect", href: "https://fonts.gstatic.com", crossorigin: true}
     %link{rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap"}
     %link{rel: "stylesheet", href: "#{asset_prefix}/assets/css/style.css"}
-  %body.subpage
+  - body_cls = defined?(body_class) && body_class ? body_class : "subpage"
+  %body{:class => body_cls}
     .hero-bg
     %nav
       %a.home-link{href: "#{asset_prefix}/", title: "OrniFlight"}
@@ -96,7 +97,7 @@ def lang_href(target_lang)
   target_lang == "en" ? "../" : "../#{target_lang}/"
 end
 
-def build_markdown_page(md_path, out_path, lang, page_title)
+def build_markdown_page(md_path, out_path, lang, page_title, body_class: nil)
   md_content = File.read(md_path, encoding: "UTF-8")
   content_html = Kramdown::Document.new(md_content).to_html
 
@@ -111,7 +112,8 @@ def build_markdown_page(md_path, out_path, lang, page_title)
     asset_prefix: asset_prefix,
     content_html: content_html,
     langs: LANGS,
-    lang_href: method(:lang_href)
+    lang_href: method(:lang_href),
+    body_class: body_class
   })
 
   File.write(out_path, output, encoding: "UTF-8")
@@ -167,7 +169,8 @@ task :pages do
         out_path = "#{md_dir}/#{name}.html"
         title = File.readlines(md_path, encoding: "UTF-8").first.to_s.strip.sub(/^#\s*/, "")
         title = name.tr("_", " ").capitalize if title.empty?
-        build_markdown_page(md_path, out_path, lang, title)
+        extra = name == "servo_efficiency" ? {body_class: "subpage servo-page"} : {}
+        build_markdown_page(md_path, out_path, lang, title, **extra)
       end
       build_section_index(lang, section, "nav_#{section}")
     end
@@ -232,6 +235,7 @@ def build_servo_page(lang)
   end.join("\n")
 
   table_html = <<~TABLE
+    <div class="table-wrap">
     <table class="servo-table">
       <thead>
         <tr>
@@ -242,7 +246,7 @@ def build_servo_page(lang)
           <th class="num">Speed s/60°</th>
           <th class="num">Efficiency</th>
           <th class="num">Price</th>
-          <th class="num">Eff/€ ★</th>
+          <th class="num">Eff/€ €</th>
           <th>Flight Performance</th>
           <th>Notes</th>
         </tr>
@@ -251,6 +255,7 @@ def build_servo_page(lang)
     #{rows}
       </tbody>
     </table>
+    </div>
     <script src="../../assets/js/servo-table.js"></script>
   TABLE
 
@@ -260,22 +265,22 @@ def build_servo_page(lang)
       # Servo Efficiency
 
       A curated selection of servos tested and ranked for ornithopter use.
-      **Efficiency** = Torque / (Weight × Speed). **Eff/€ ★** = Efficiency per Euro, scaled by &cuberoot;torque for fairness across sizes.
-      Higher is better. Prices in <select class="currency-select inline-currency">
-        <option value="EUR">EUR €</option><option value="USD">USD $</option><option value="GBP">GBP £</option>
-        <option value="CHF">CHF</option><option value="JPY">JPY ¥</option><option value="BRL">BRL R$</option>
-      </select>. Click column headers to sort — <strong>Shift+click</strong> for multi-column sort. Submit additions via PR to `_data/servos.yml`.
+      **Efficiency** = Torque / (Weight × Speed). **Eff/€ €** = Efficiency per Euro, scaled by &cuberoot;torque for fairness across sizes.
+      Higher is better. Prices in <span class="currency-inline"><select class="currency-select inline-currency">
+        <option value="EUR">EUR</option><option value="USD">USD</option><option value="GBP">GBP</option>
+        <option value="CHF">CHF</option><option value="JPY">JPY</option><option value="BRL">BRL</option>
+      </select></span>. Click column headers to sort — <strong>Shift+click</strong> for multi-column sort. Submit additions via PR to `_data/servos.yml`.
     EN
   when "de"
     <<~DE
       # Servo-Effizienz
 
       Eine kuratierte Auswahl getesteter Servos für Ornithopter.
-      **Effizienz** = Drehmoment / (Gewicht × Geschwindigkeit). **Eff/€ ★** = Effizienz pro Euro, skaliert mit &cuberoot;Drehmoment.
-      Höher ist besser. Preise in <select class="currency-select inline-currency">
-        <option value="EUR">EUR €</option><option value="USD">USD $</option><option value="GBP">GBP £</option>
-        <option value="CHF">CHF</option><option value="JPY">JPY ¥</option><option value="BRL">BRL R$</option>
-      </select>. Spaltenköpfe anklicken zum Sortieren — <strong>Shift+Klick</strong> für Mehrfachsortierung. Ergänzungen per PR an `_data/servos.yml`.
+      **Effizienz** = Drehmoment / (Gewicht × Geschwindigkeit). **Eff/€ €** = Effizienz pro Euro, skaliert mit &cuberoot;Drehmoment.
+      Höher ist besser. Preise in <span class="currency-inline"><select class="currency-select inline-currency">
+        <option value="EUR">EUR</option><option value="USD">USD</option><option value="GBP">GBP</option>
+        <option value="CHF">CHF</option><option value="JPY">JPY</option><option value="BRL">BRL</option>
+      </select></span>. Spaltenköpfe anklicken zum Sortieren — <strong>Shift+Klick</strong> für Mehrfachsortierung. Ergänzungen per PR an `_data/servos.yml`.
     DE
   end
 

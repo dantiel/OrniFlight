@@ -117,8 +117,9 @@
         // Toggle single column
         sortState[0].dir = sortState[0].dir === 'asc' ? 'desc' : 'asc'
       } else {
-        // Replace with single column
-        sortState = [{col: colIndex, dir: 'asc'}]
+        // Replace with single column (mutate, don't reassign)
+        sortState.length = 0
+        sortState.push({col: colIndex, dir: 'asc'})
       }
     }
 
@@ -143,24 +144,31 @@
   }
 
   function doSort() {
-    var rows = Array.from(tbody.querySelectorAll('tr'))
+    var rows = Array.prototype.slice.call(tbody.querySelectorAll('tr'))
+
+    if (sortState.length === 0) return
 
     rows.sort(function (a, b) {
       for (var i = 0; i < sortState.length; i++) {
         var s = sortState[i]
-        var result = compareCells(a.children[s.col], b.children[s.col], s.col, s.dir)
+        var aCell = a.children[s.col]
+        var bCell = b.children[s.col]
+        if (!aCell || !bCell) continue
+        var result = compareCells(aCell, bCell, s.col, s.dir)
         if (result !== 0) return result
       }
       return 0
     })
 
-    rows.forEach(function (row) {
-      tbody.appendChild(row)
-    })
+    // Use DocumentFragment for bulk DOM update
+    var frag = document.createDocumentFragment()
+    for (var r = 0; r < rows.length; r++) {
+      frag.appendChild(rows[r])
+    }
+    tbody.appendChild(frag)
   }
 
   function compareCells(aCell, bCell, colIndex, dir) {
-    if (!aCell || !bCell) return 0
     var type = COL_TYPES[colIndex] || 'string'
     var aVal, bVal
 
@@ -176,8 +184,8 @@
       if (isNaN(aVal)) aVal = 0
       if (isNaN(bVal)) bVal = 0
     } else {
-      aVal = aCell.textContent.trim().toLowerCase()
-      bVal = bCell.textContent.trim().toLowerCase()
+      aVal = (aCell.textContent || '').trim().toLowerCase()
+      bVal = (bCell.textContent || '').trim().toLowerCase()
       var cmp = aVal.localeCompare(bVal)
       return dir === 'asc' ? cmp : -cmp
     }

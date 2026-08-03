@@ -516,23 +516,33 @@ td
   font-size: 1rem
   color: var(--accent)
 
-// — Servo efficiency table — glass card style —
-.servo-table
-  width: 100%
-  border-collapse: collapse
+// ??? Servo efficiency table ??? glass card style ???
+// ??? Table wrapper for horizontal scroll + sticky header ???
+.table-wrap
+  overflow-x: auto
   margin: 2rem 0
-  font-size: 0.80rem
+  border: 1px solid var(--glass-edge)
+  border-radius: 10px
   background: rgba(var(--box-rgb), 0.18)
   backdrop-filter: blur(12px)
   -webkit-backdrop-filter: blur(12px)
-  border: 1px solid var(--glass-edge)
-  border-radius: 10px
-  overflow: hidden
-  display: block
-  overflow-x: auto
+
+.servo-table
+  width: 100%
+  border-collapse: collapse
+  font-size: 0.80rem
+  min-width: 700px
 
   thead
+    position: sticky
+    top: 3.5rem
+    z-index: 10
     border-bottom: 1px solid rgba(255, 255, 255, 0.06)
+
+    th
+      background: rgba(var(--box-rgb), 0.92)
+      backdrop-filter: blur(14px)
+      -webkit-backdrop-filter: blur(14px)
 
   th
     padding: 0.75rem 0.55rem
@@ -600,7 +610,7 @@ td
       max-width: 160px
       white-space: normal
 
-  // — Untested rows — half opacity —
+  // ??? Untested rows ??? half opacity ???
   tr.untested
     opacity: 0.45
     transition: opacity 0.3s
@@ -608,7 +618,7 @@ td
     &:hover
       opacity: 0.75
 
-  // — Sortable headers —
+  // ??? Sortable headers ???
   th.sortable
     cursor: pointer
     user-select: none
@@ -642,7 +652,7 @@ td
     content: '▼'
     opacity: 1
 
-  // — Multi-sort order indicators —
+  // ??? Multi-sort order indicators ???
   .sort-order
     position: absolute
     right: 2px
@@ -652,32 +662,55 @@ td
     line-height: 1
     pointer-events: none
 
-  // — Sort hint —
+  // ??? Sort hint ???
   .sort-hint
     font-size: 0.65rem
     color: var(--mut)
     margin-top: -1rem
     margin-bottom: 1.5rem
 
-// — Inline currency select — (appears mid-paragraph)
+// ??? Servo page full-width override ???
+body.servo-page
+  .content-page
+    max-width: none
+    margin-left: 1.5rem
+    margin-right: 1.5rem
+
+  @media (max-width: 480px)
+    .content-page
+      margin-left: 0.5rem
+      margin-right: 0.5rem
+
+// ??? Inline currency select ??? replaces "EUR" in sentence naturally
+.currency-inline
+  display: inline
+
 .inline-currency
-  font-family: $font-code
-  font-size: 0.72rem
-  padding: 0.15rem 0.35rem
-  margin: 0 0.15rem
-  background: rgba(var(--box-rgb), 0.22)
-  backdrop-filter: blur(8px)
-  -webkit-backdrop-filter: blur(8px)
-  border: 1px solid var(--glass-edge)
-  border-radius: 4px
-  color: var(--text-soft)
+  appearance: none
+  -webkit-appearance: none
+  -moz-appearance: none
+  font: inherit
+  font-weight: 550
+  color: var(--accent)
+  background: transparent
+  border: none
+  border-bottom: 1px dashed var(--accent)
+  padding: 0
+  margin: 0
   cursor: pointer
   outline: none
   vertical-align: baseline
+  line-height: inherit
 
   &:focus
-    border-color: var(--accent)
-    color: var(--accent)
+    color: var(--accent-alt)
+    border-bottom-color: var(--accent-alt)
+
+  option
+    background: var(--box)
+    color: var(--text)
+    font-family: $font-body
+    font-size: 0.85rem
 
 // — Tiny YouTube link in flight-performance cells —
 .yt-link
