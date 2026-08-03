@@ -1,6 +1,5 @@
 # OrniFlight Servo Efficiency Database
-# Curated from: https://docs.google.com/spreadsheets/d/1kbXwi2PySJBidbxUcYD6d7tkyjuGbEnygb2siktYi50
-# 
+#
 # Columns:
 #   efficiency = Torque-Weight-Speed-Ratio = torque / (weight * speed)  [kg·s / cm·g·deg]
 #   eff_per_euro_scale = efficiency_per_euro / ∛torque  [scaled value/€]
