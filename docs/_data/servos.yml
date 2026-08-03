@@ -406,7 +406,7 @@ servos:
     price: 28.00
     efficiency: 9.36
     eff_per_euro_scale: 0.71
-    notes: Gear failure after few flights
+    notes: Weak gears. Tested in Raven (not oldest model).
 
   - brand: DUALSKY
     model: DS169F

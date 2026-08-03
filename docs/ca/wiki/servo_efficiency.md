@@ -445,7 +445,7 @@ Higher is better. Click column headers to sort — <strong>Shift+click</strong> 
         <td class="num" data-price-eur="28.00">€28.00</td>
         <td class="num strong">0.71</td>
         <td class="flight untested-cell">Untested</td>
-        <td class="notes">Gear failure after few flights</td>
+        <td class="notes">Weak gears. Tested in Raven (not oldest model).</td>
       </tr>
       <tr class="untested" data-voltage="7.4" data-brand="DUALSKY">
         <td>DUALSKY DS169F</td>
