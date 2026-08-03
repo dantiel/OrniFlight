@@ -596,9 +596,8 @@ td
     text-align: right
 
 // ✦ Servo efficiency table — glass card style ✦
-// ✦ Table wrapper for horizontal scroll + sticky header ✦
+// ✦ Table wrapper — NO overflow so sticky thead works vertically ✦
 .table-wrap
-  overflow-x: auto
   margin: 2rem 0
   border: 1px solid var(--glass-edge)
   border-radius: 10px
@@ -614,12 +613,13 @@ td
 
   thead
     position: sticky
-    top: 3.5rem
+    top: 3.15rem
     z-index: 10
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.06), 0 4px 12px rgba(0, 0, 0, 0.50)
 
     th
       background: var(--body-bg)
-      border-bottom: 1px solid rgba(255, 255, 255, 0.10)
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08)
 
   th
     padding: 0.75rem 0.55rem
@@ -748,6 +748,8 @@ td
 
 // ??? Servo page full-width override ???
 body.subpage.servo-page
+  overflow-x: auto
+
   .content-page
     max-width: none
     margin-left: 1.5rem

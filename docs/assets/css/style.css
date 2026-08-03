@@ -590,7 +590,6 @@ td:first-child {
 }
 
 .table-wrap {
-  overflow-x: auto;
   margin: 2rem 0;
   border: 1px solid var(--glass-edge);
   border-radius: 10px;
@@ -607,12 +606,13 @@ td:first-child {
 }
 .servo-table thead {
   position: sticky;
-  top: 3.5rem;
+  top: 3.15rem;
   z-index: 10;
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.06), 0 4px 12px rgba(0, 0, 0, 0.5);
 }
 .servo-table thead th {
   background: var(--body-bg);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 .servo-table th {
   padding: 0.75rem 0.55rem;
@@ -741,6 +741,9 @@ td:first-child {
   margin-bottom: 1.5rem;
 }
 
+body.subpage.servo-page {
+  overflow-x: auto;
+}
 body.subpage.servo-page .content-page {
   max-width: none;
   margin-left: 1.5rem;
