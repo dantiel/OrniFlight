@@ -5,17 +5,17 @@ A curated selection of servos tested and ranked for ornithopter use.
   <option value="EUR">Euro</option><option value="USD">Dollar</option><option value="GBP">Pound</option>
   <option value="CHF">Franc</option><option value="JPY">Yen</option><option value="BRL">Real</option>
 </select></span>, scaled by ∛torque for fairness across sizes.
-Higher is better. Click column headers to sort — <strong>Shift+click</strong> for multi-column sort. Filter by voltage. Submit additions per PR to `_data/servos.yml`.
+Higher is better. Click column headers to sort — <strong>Shift+click</strong> for multi-column sort. Drag the voltage slider to narrow. Submit additions per PR to `_data/servos.yml`.
 
 
-<div class="voltage-filter-bar"><label>Voltage: <select class="voltage-select">
-  <option value="">All</option>
-  <option value="4.8">4.8V</option>
-  <option value="5.0">5.0V</option>
-  <option value="6.0">6.0V</option>
-  <option value="7.4">7.4V</option>
-  <option value="8.4">8.4V</option>
-</select></label></div>
+<div class="voltage-range-bar">
+  <span class="vr-label">Voltage</span>
+  <div class="vr-track">
+    <input type="range" class="vr-min" min="4.8" max="8.4" step="0.1" value="4.8">
+    <input type="range" class="vr-max" min="4.8" max="8.4" step="0.1" value="8.4">
+  </div>
+  <span class="vr-readout">4.8V – 8.4V</span>
+</div>
 <div class="table-wrap">
 <table class="servo-table">
   <thead>

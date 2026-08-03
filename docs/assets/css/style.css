@@ -510,35 +510,83 @@ td:first-child {
   color: var(--accent);
 }
 
-.voltage-filter-bar {
-  display: flex;
-  justify-content: flex-end;
-  margin-top: 0.5rem;
-  margin-bottom: -0.5rem;
-  font-size: 0.82rem;
-  color: var(--text-soft);
-}
-.voltage-filter-bar label {
+.voltage-range-bar {
   display: flex;
   align-items: center;
-  gap: 0.4rem;
+  justify-content: flex-end;
+  gap: 0.6rem;
+  margin-top: 0.6rem;
+  margin-bottom: -0.4rem;
+  font-size: 0.8rem;
+  color: var(--text-soft);
 }
-.voltage-filter-bar .voltage-select {
-  appearance: none;
+.voltage-range-bar .vr-label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--mut);
+}
+.voltage-range-bar .vr-track {
+  position: relative;
+  width: 170px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+}
+.voltage-range-bar .vr-track input[type=range] {
+  position: absolute;
+  width: 100%;
+  margin: 0;
   -webkit-appearance: none;
-  -moz-appearance: none;
-  font: inherit;
-  font-weight: 550;
+  appearance: none;
+  background: transparent;
+  pointer-events: none;
+  height: 22px;
+  z-index: 2;
+}
+.voltage-range-bar .vr-track input[type=range]::-webkit-slider-runnable-track {
+  -webkit-appearance: none;
+  height: 5px;
+  background: rgba(var(--box-rgb), 0.25);
+  border-radius: 3px;
+}
+.voltage-range-bar .vr-track input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  pointer-events: all;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--accent);
+  border: 2px solid var(--accent);
+  margin-top: -4.5px;
+  cursor: grab;
+  transition: transform 0.15s;
+}
+.voltage-range-bar .vr-track input[type=range]::-webkit-slider-thumb:active {
+  cursor: grabbing;
+  transform: scale(1.2);
+}
+.voltage-range-bar .vr-track::before {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  height: 5px;
+  background: var(--accent);
+  opacity: 0.35;
+  border-radius: 3px;
+  left: var(--vr-left, 0%);
+  right: var(--vr-right, 0%);
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+.voltage-range-bar .vr-readout {
+  font-family: "JetBrains Mono", "SF Mono", "Fira Code", monospace;
+  font-size: 0.73rem;
+  font-weight: 600;
   color: var(--accent);
-  background: rgba(var(--box-rgb), 0.3);
-  border: 1px solid var(--glass-edge);
-  border-radius: 5px;
-  padding: 0.2rem 1.4rem 0.2rem 0.5rem;
-  cursor: pointer;
-  outline: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='6'%3E%3Cpath d='M0 0l4 6 4-6' fill='%23a0b0c0'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 0.35rem center;
+  min-width: 72px;
+  text-align: right;
 }
 
 .table-wrap {
@@ -561,12 +609,10 @@ td:first-child {
   position: sticky;
   top: 3.5rem;
   z-index: 10;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 }
 .servo-table thead th {
-  background: rgba(var(--box-rgb), 0.92);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
+  background: var(--body-bg);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 .servo-table th {
   padding: 0.75rem 0.55rem;

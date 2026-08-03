@@ -86,17 +86,52 @@
     }
   }
 
-  // ── Voltage Filter ───────────────────────────────────────
-  var voltageSelect = document.querySelector('.voltage-select')
+  // ── Voltage Range Slider ─────────────────────────────────
+  var vrMin  = document.querySelector('.vr-min')
+  var vrMax  = document.querySelector('.vr-max')
+  var vrRead = document.querySelector('.vr-readout')
+  var vrTrack = document.querySelector('.vr-track')
 
-  if (voltageSelect) {
-    voltageSelect.addEventListener('change', function () {
-      var val = this.value
+  if (vrMin && vrMax) {
+    function clampVoltage(v) {
+      return Math.round(v * 10) / 10
+    }
+
+    function updateVoltageRange() {
+      var minV = parseFloat(vrMin.value)
+      var maxV = parseFloat(vrMax.value)
+
+      // Prevent crossover
+      if (minV > maxV) {
+        var tmp = minV; minV = maxV; maxV = tmp
+        vrMin.value = minV
+        vrMax.value = maxV
+      }
+
+      // Update readout
+      if (vrRead) {
+        vrRead.textContent = clampVoltage(minV) + 'V \u2013 ' + clampVoltage(maxV) + 'V'
+      }
+
+      // Update fill track
+      var rangeSpan = 8.4 - 4.8
+      var leftPct  = ((minV - 4.8) / rangeSpan) * 100
+      var rightPct = ((8.4 - maxV) / rangeSpan) * 100
+      if (vrTrack) {
+        vrTrack.style.setProperty('--vr-left',  leftPct  + '%')
+        vrTrack.style.setProperty('--vr-right', rightPct + '%')
+      }
+
+      // Filter rows
       tbody.querySelectorAll('tr').forEach(function (row) {
-        var v = row.getAttribute('data-voltage')
-        row.style.display = (!val || v === val) ? '' : 'none'
+        var v = parseFloat(row.getAttribute('data-voltage'))
+        row.style.display = (!isNaN(v) && v >= minV - 0.01 && v <= maxV + 0.01) ? '' : 'none'
       })
-    })
+    }
+
+    vrMin.addEventListener('input', updateVoltageRange)
+    vrMax.addEventListener('input', updateVoltageRange)
+    updateVoltageRange() // initial fill track + readout
   }
 
   // ── Multi-Column Sort (Shift+click for additive) ─────────
