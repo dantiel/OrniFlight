@@ -82,7 +82,7 @@ Higher is better. Prices in <select class="currency-select inline-currency">
         <td class="num" data-price-eur="11.00">€11.00</td>
         <td class="num strong">0.84</td>
         <td class="flight" data-flight-rating="5">Strong Flight <a href="https://youtu.be/JRferxboRa4" class="yt-link" target="_blank">📺</a><a href="https://youtu.be/PmHgHTTnvVI" class="yt-link" target="_blank">📺</a><a href="https://youtu.be/3Zg00BK7OsA" class="yt-link" target="_blank">📺</a><a href="https://youtu.be/DDCTZBTKwXI" class="yt-link" target="_blank">📺</a><a href="https://youtu.be/vvQm53s7RGA" class="yt-link" target="_blank">📺</a><a href="https://youtu.be/Rf4AKSMnUzg" class="yt-link" target="_blank">📺</a></td>
-        <td class="notes">Up to 6.2V. Gralha Azul 28g, Seraphim 31g. Multi-tester: SFO86, SFO87, Butterfly88</td>
+        <td class="notes">Up to 6.2V. Gralha Azul 28g, Seraphim 31g. SFO86, SFO87, Butterfly88</td>
       </tr>
       <tr class="untested">
         <td>Blue Arrow D05023MG</td>
@@ -141,8 +141,8 @@ Higher is better. Prices in <select class="currency-select inline-currency">
         <td class="num">5.56</td>
         <td class="num" data-price-eur="7.00">€7.00</td>
         <td class="num strong">0.46</td>
-        <td class="flight" data-flight-rating="5">Strong Flight <a href="https://youtu.be/iSIwwHDRsHg" class="yt-link" target="_blank">📺</a><a href="https://youtu.be/Ta3ghJrFt-0" class="yt-link" target="_blank">📺</a><a href="https://youtu.be/6kXmIZEmYUA" class="yt-link" target="_blank">📺</a></td>
-        <td class="notes">HV coreless, metal gear, waterproof, 180°, 25T. 5kg = stall torque; effective torque lower. Kestrel 45g, Albatross 57g, Butterfly 54g, Entomoid.</td>
+        <td class="flight" data-flight-rating="5">Strong Flight <a href="https://youtu.be/iSIwwHDRsHg" class="yt-link" target="_blank">📺</a><a href="https://youtu.be/Ta3ghJrFt-0" class="yt-link" target="_blank">📺</a><a href="https://youtu.be/6kXmIZEmYUA" class="yt-link" target="_blank">📺</a><a href="https://youtu.be/Zoqq1vi_pIQ" class="yt-link" target="_blank">📺</a><a href="https://youtu.be/S_oFCYte0PA" class="yt-link" target="_blank">📺</a></td>
+        <td class="notes">HV coreless, metal gear, waterproof, 180°, 25T. 5kg = stall torque; effective torque lower. Kestrel 45g, Albatross 57g, Butterfly 54g, Entomoid. SFOArchaeopteryx153 53g.</td>
       </tr>
       <tr class="untested">
         <td>VOTIK PTK 7465 Plus</td>
@@ -166,7 +166,7 @@ Higher is better. Prices in <select class="currency-select inline-currency">
         <td class="num" data-price-eur="20.00">€20.00</td>
         <td class="num strong">0.77</td>
         <td class="flight" data-flight-rating="5">Strong Flight <a href="https://youtu.be/ciE7EcND0qk" class="yt-link" target="_blank">📺</a><a href="https://youtu.be/E20FnTzsE6o" class="yt-link" target="_blank">📺</a><a href="https://youtu.be/KyeOrNMXXjU" class="yt-link" target="_blank">📺</a></td>
-        <td class="notes">Inservos D0576HT-MG-HV = older batch. White Heron 44g 1175mm. E20FnTzsE6o: oversized model. Fenghuangopterus 1096mm</td>
+        <td class="notes">Inservos D0576HT-MG-HV = older batch. White Heron 44g 1175mm. E20FnTzsE6o: oversized model. Fenghuangopterus 1096mm. Nycto also uses this servo (not flown high yet).</td>
       </tr>
       <tr>
         <td>Inservos D0474HT-MG-HV</td>
@@ -312,7 +312,7 @@ Higher is better. Prices in <select class="currency-select inline-currency">
         <td class="flight" data-flight-rating="4">Good Flight</td>
         <td class="notes">Magnet potentiometer. MS320 is newer version with similar specs</td>
       </tr>
-      <tr class="untested">
+      <tr>
         <td>KST MS320</td>
         <td class="num">7.4</td>
         <td class="num">21.0</td>
@@ -321,8 +321,8 @@ Higher is better. Prices in <select class="currency-select inline-currency">
         <td class="num">3.27</td>
         <td class="num" data-price-eur="36.00">€36.00</td>
         <td class="num strong">0.16</td>
-        <td class="flight untested-cell">Untested</td>
-        <td class="notes">Newer version of MR320. Atalanta (d4ro)</td>
+        <td class="flight" data-flight-rating="5">Atalanta <a href="https://youtu.be/L2cKz4z80As" class="yt-link" target="_blank">📺</a></td>
+        <td class="notes">Newer version of MR320</td>
       </tr>
       <tr class="untested">
         <td>KST X08 Plus V5</td>

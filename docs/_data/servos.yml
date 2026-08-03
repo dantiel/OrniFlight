@@ -64,7 +64,7 @@ servos:
     flight_performance:
       rating: 5
       note: Strong Flight <a href="https://youtu.be/JRferxboRa4" class="yt-link" target="_blank">📺</a><a href="https://youtu.be/PmHgHTTnvVI" class="yt-link" target="_blank">📺</a><a href="https://youtu.be/3Zg00BK7OsA" class="yt-link" target="_blank">📺</a><a href="https://youtu.be/DDCTZBTKwXI" class="yt-link" target="_blank">📺</a><a href="https://youtu.be/vvQm53s7RGA" class="yt-link" target="_blank">📺</a><a href="https://youtu.be/Rf4AKSMnUzg" class="yt-link" target="_blank">📺</a>
-    notes: "Up to 6.2V. Gralha Azul 28g, Seraphim 31g. Multi-tester: SFO86, SFO87, Butterfly88"
+    notes: "Up to 6.2V. Gralha Azul 28g, Seraphim 31g. SFO86, SFO87, Butterfly88"
 
   - brand: Blue Arrow
     model: D05023MG
@@ -131,8 +131,8 @@ servos:
     eff_per_euro_scale: 0.46
     flight_performance:
       rating: 5
-      note: Strong Flight <a href="https://youtu.be/iSIwwHDRsHg" class="yt-link" target="_blank">📺</a><a href="https://youtu.be/Ta3ghJrFt-0" class="yt-link" target="_blank">📺</a><a href="https://youtu.be/6kXmIZEmYUA" class="yt-link" target="_blank">📺</a>
-    notes: HV coreless, metal gear, waterproof, 180°, 25T. 5kg = stall torque; effective torque lower. Kestrel 45g, Albatross 57g, Butterfly 54g, Entomoid.
+      note: Strong Flight <a href="https://youtu.be/iSIwwHDRsHg" class="yt-link" target="_blank">📺</a><a href="https://youtu.be/Ta3ghJrFt-0" class="yt-link" target="_blank">📺</a><a href="https://youtu.be/6kXmIZEmYUA" class="yt-link" target="_blank">📺</a><a href="https://youtu.be/Zoqq1vi_pIQ" class="yt-link" target="_blank">📺</a><a href="https://youtu.be/S_oFCYte0PA" class="yt-link" target="_blank">📺</a>
+    notes: HV coreless, metal gear, waterproof, 180°, 25T. 5kg = stall torque; effective torque lower. Kestrel 45g, Albatross 57g, Butterfly 54g, Entomoid. SFOArchaeopteryx153 53g.
 
   - brand: VOTIK
     model: PTK 7465 Plus
@@ -157,7 +157,7 @@ servos:
     flight_performance:
       rating: 5
       note: Strong Flight <a href="https://youtu.be/ciE7EcND0qk" class="yt-link" target="_blank">📺</a><a href="https://youtu.be/E20FnTzsE6o" class="yt-link" target="_blank">📺</a><a href="https://youtu.be/KyeOrNMXXjU" class="yt-link" target="_blank">📺</a>
-    notes: "Inservos D0576HT-MG-HV = older batch. White Heron 44g 1175mm. E20FnTzsE6o: oversized model. Fenghuangopterus 1096mm"
+    notes: "Inservos D0576HT-MG-HV = older batch. White Heron 44g 1175mm. E20FnTzsE6o: oversized model. Fenghuangopterus 1096mm. Nycto also uses this servo (not flown high yet)."
 
   - brand: Inservos
     model: D0474HT-MG-HV
@@ -301,7 +301,10 @@ servos:
     price: 36.00
     efficiency: 3.27
     eff_per_euro_scale: 0.16
-    notes: Newer version of MR320. Atalanta (d4ro)
+    notes: Newer version of MR320
+    flight_performance:
+      rating: 5
+      note: Atalanta <a href="https://youtu.be/L2cKz4z80As" class="yt-link" target="_blank">📺</a>
 
   - brand: KST
     model: X08 Plus V5
