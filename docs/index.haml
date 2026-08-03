@@ -107,6 +107,10 @@
     %footer
       %p!= footer_resources
       %p= footer_hermetic
+      %p.lang-footer
+        %select.lang-select{onchange: "var v=this.value;if(v){var p='.';window.location=p+(v==='en'?'':v+'/')}"}
+          - all_langs.each do |l|
+            %option{value: l[:code], selected: l[:code] == current_lang ? "selected" : nil}= l[:name]
       %p.credit= footer_credit
 
     %button.scroll-top{onclick: "window.scrollTo({top:0,behavior:'smooth'})", "aria-label" => "Scroll to top"}

@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='ca'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../assets/css/style.css' rel='stylesheet'>
+</head>
+<body>
+<div class='hero-bg'></div>
+<div class='hero-overlay'></div>
+<nav>
+<a class='home-link' href='#' onclick='majesticScroll(); return false;' title='OrniFlight'>
+<img alt='OrniFlight' src='../assets/images/of_icon_128.png'>
+</a>
+<a href='#manifest'>Manifest</a>
+<a href='#ondas'>ONDAS</a>
+<a href='#features'>Features</a>
+<a href='#hardware'>Hardware</a>
+<a href='en/wiki/'>Wiki</a>
+<a href='en/docs/'>Docs</a>
+<a href='en/wiki/servo_efficiency.html'>Servos</a>
+<a href='en/tutorials/'>Tutorials</a>
+<div class='lang-switch'>
+<a class='active' href='../'>EN</a>
+<a class='' href='../de/'>DE</a>
+</div>
+</nav>
+<div id='header'>
+<div class='hero-content'>
+<div class='hero-logo'>
+<picture>
+<source media='(prefers-color-scheme: light)' srcset='../assets/images/cf_logo_white.svg'>
+<img alt='OrniFlight' class='logo-svg' src='../assets/images/cf_logo_black.svg'>
+</picture>
+</div>
+<div class='headline'>
+<p class='greeting'>Flapping-wing flight, redefined.</p>
+</div>
+</div>
+</div>
+<main>
+<p class='version'>STM32F3 · OrniFlight v0.4.6 · apiVersion 1.46</p>
+<section id='manifest'>
+<h2>Manifest</h2>
+<h3 class='subheadline'>A new species of flight controller</h3>
+<p class='lead'>OrniFlight exists because a flapping wing controls thrust, pitch, roll, and yaw <strong>within a single stroke</strong> — a channel of expressiveness no propeller can match.</p>
+<p>Nature solved flapping-wing flight 150 million years before the first quadcopter took off. Every sparrow, every albatross, every hummingbird carries flight logic in its nervous system that no PID controller has ever replicated. OrniFlight opens a new domain — where thrust is phase, where stability is rhythm, where the aircraft breathes with every wingbeat. ONDAS, our Oscillating Normalized Dynamic Adaptive Stabilization, is the first control theory built from first principles for flapping aerodynamics. It modulates correction force <em>within</em> the wingbeat — not against it, not despite it, but <strong>with</strong> it. This firmware is free software because flight belongs to no corporation. It runs on commodity STM32F3 hardware because the tools for transcendent flight should cost less than a dinner. OrniFlight inherits a battle-tested architecture and pushes into uncharted air — a <strong>new species of flight controller</strong>, built for wings from the silicon up. The birds have been waiting for us to catch up.</p>
+<div class='highlight'>
+<code>CRSF · rx · OrniFlight · ONDAS · waveform · PWM servos · wings</code>
+</div>
+</section>
+<section id='ondas'>
+<h2>ONDAS</h2>
+<h3 class='subheadline'>Oscillating Normalized Dynamic Adaptive Stabilization</h3>
+<p class='lead'><strong>Oscillating Normalized Dynamic Adaptive Stabilization</strong> — the first control theory built specifically for flapping-wing aerodynamics.</p>
+<p>Quad PIDs assume continuous thrust. Ornithopter thrust is <strong>phasic</strong> — the same impulse creates different moments depending on <em>when</em> in the stroke it's applied. ONDAS uses cadence, ferocity, asymmetry, warp, anchor, resonance, prescience, espelho, saudade, and SSFF — an orchestra of phase-aware modulators — to place every corrective gram exactly where aerodynamics can use it.</p>
+<div class='highlight'>
+<code>cadence · ferocity · asymmetry · warp · anchor · resonance · prescience · espelho · saudade · SSFF</code>
+</div>
+<p class='doc-link'>
+<a href='../en/wiki/ondas.html'>Full ONDAS Theory →</a>
+</p>
+</section>
+<section id='features'>
+<h2>Features</h2>
+<h3 class='subheadline'>Everything the wing deserves</h3>
+<dl class='grid'>
+<dt>Flight Profiles</dt>
+<dd>4 independent profiles (0–3), switchable in-flight via BOX mode. Each holds full ONDAS tuning, wave shape, and aeroelastic coefficients.</dd>
+<dt>Unified Frequency Channel</dt>
+<dd>Single RC channel with min/max Hz mapping. Works identically in INDEPENDENT and GLIDE flight modes — one pot, both regimes.</dd>
+<dt>GralhaAzul Wing Dynamics</dt>
+<dd>Trapezoidal waveform generation with servo speed limiting, amplitude mapping, flap magnitude, and wing origin geometry — the wing-ODE core.</dd>
+<dt>10-Channel ONDAS Modulation</dt>
+<dd>Cadence timing, ferocity P/D on 3 axes, balance, warp, anchor, resonance — per-profile, real-time adjustable via MSP.</dd>
+<dt>MSP Configurator (apiVersion 1.46)</dt>
+<dd>Full ONDAS tuning GUI — all 19 profile fields, frequency channel, GralhaAzul, Phase 2 gains. Profile switcher for per-slot editing.</dd>
+<dt>GLIDE + INDEPENDENT Modes</dt>
+<dd>Two flight regimes: GLIDE (throttle-centred, natural soaring) and INDEPENDENT (direct flap frequency via RC channel). BOX-selectable.</dd>
+</dl>
+</section>
+<section id='hardware'>
+<h2>Hardware</h2>
+<h3 class='subheadline'>Commodity STM32F3/F4/F7 flight controllers</h3>
+<p class='lead'>Runs on any Betaflight 4.0-compatible STM32F3/F4/F7 flight controller with servo-capable timer pins.</p>
+<table class='specs'>
+<tr>
+<td>Targets</td>
+<td>TINYFISH (F3, integrated FrSky RX), OMNIBUSF4, MATEKF405, KAKUTEF7 …</td>
+</tr>
+<tr>
+<td>Servo Output</td>
+<td>Up to 4 programmable servo channels, 50–400 Hz PWM</td>
+</tr>
+<tr>
+<td>Receiver</td>
+<td>CRSF (Crossfire / ExpressLRS), SBUS, Spektrum, SUMD — plus integrated FrSky on TINYFISH</td>
+</tr>
+<tr>
+<td>Flash</td>
+<td class='value'>256 KB (TINYFISH F3) / 1 MB (OMNIBUSF4)</td>
+</tr>
+<tr>
+<td>RAM</td>
+<td class='value'>40 KB (TINYFISH F3) / 192 KB (OMNIBUSF4)</td>
+</tr>
+</table>
+<p class='doc-link'>
+<a href='../en/tutorials/'>Getting Started →</a>
+</p>
+</section>
+<section class='build'>
+<h2>Build &amp; Flash</h2>
+<pre><code>make TARGET=TINYFISH
+dfu-util -a 0 -D obj/orniflight_VERSION_TINYFISH.hex
+
+# or for OMNIBUSF4:
+make TARGET=OMNIBUSF4
+dfu-util -a 0 -D obj/orniflight_VERSION_OMNIBUSF4.hex</code></pre>
+<p class='compatible'>GPL v3 · Forked from Betaflight 4.0.6 · Clean build: zero warnings</p>
+</section>
+</main>
+<footer>
+<p><a href="https://github.com/dantiel/OrniFlight" target="_blank">GitHub</a> · <a href="en/wiki/">Wiki</a> · <a href="en/tutorials/">Tutorials</a> · <a href="https://github.com/dantiel/orniflight-configurator" target="_blank">Configurator</a></p>
+<p>Hermetic Firmware · STM32F3 · GPL v3 · No Cloud Dependencies</p>
+<p class='lang-footer'>
+<select class='lang-select' onchange='var v=this.value;if(v){var p=&#39;.&#39;;window.location=p+(v===&#39;en&#39;?&#39;&#39;:v+&#39;/&#39;)}'>
+<option value='en'>English</option>
+<option value='de'>Deutsch</option>
+<option selected='selected' value='ca'>Català</option>
+<option value='es'>Español</option>
+<option value='fr'>Français</option>
+<option value='gl'>Galego</option>
+<option value='hr'>Hrvatski</option>
+<option value='id'>Bahasa Indonesia</option>
+<option value='it'>Italiano</option>
+<option value='ja'>日本語</option>
+<option value='ko'>한국어</option>
+<option value='lv'>Latviešu</option>
+<option value='pt'>Português</option>
+<option value='ru'>Русский</option>
+<option value='sv'>Svenska</option>
+<option value='zh_CN'>中文</option>
+</select>
+</p>
+<p class='credit'>OrniFlight · Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const hero = document.querySelector('.hero-content');
+  const overlay = document.querySelector('.hero-overlay');
+  const nav = document.querySelector('nav');
+  const scrollBtn = document.querySelector('.scroll-top');
+  
+  function majesticScroll() {
+    const start = window.scrollY;
+    const duration = 1500;
+    const startTime = performance.now();
+  
+    function step(now) {
+      const elapsed = now - startTime;
+      const t = Math.min(elapsed / duration, 1);
+      const eased = 1 - Math.pow(1 - t, 4);
+      window.scrollTo(0, start * (1 - eased));
+      if (t < 1) requestAnimationFrame(step);
+    }
+  
+    requestAnimationFrame(step);
+  }
+  
+  function tick() {
+    const scroll = window.scrollY;
+    const vh = window.innerHeight;
+    const t = Math.min(scroll / vh, 1);
+  
+    hero.style.setProperty('--scroll', t.toFixed(3));
+    hero.style.opacity = 1 - t * 0.7;
+    hero.style.transform = `translateY(${t * 40}px)`;
+  
+    overlay.style.opacity = Math.min(t * 0.9, 0.9);
+  
+    nav.classList.toggle('scrolled', scroll > 40);
+    scrollBtn.classList.toggle('visible', scroll > vh * 0.6);
+  
+    requestAnimationFrame(tick);
+  }
+  
+  requestAnimationFrame(tick);
+</script>
+</body>
+</html>

@@ -1,4 +1,4 @@
-// OrniFlight Servo Efficiency — Multi-Sort Table + Currency Converter
+// OrniFlight Servo Efficiency — Sortable Table + Currency Converter + Voltage Filter
 ;(function () {
   'use strict'
 
@@ -20,7 +20,14 @@
     BRL: 'R$',
   }
 
-  var ORDER_CHARS = ['①', '②', '③', '④', '⑤']
+  var CURRENCY_NAMES = {
+    EUR: 'Euro',
+    USD: 'Dollar',
+    GBP: 'Pound',
+    CHF: 'Franc',
+    JPY: 'Yen',
+    BRL: 'Real',
+  }
 
   function detectLocale() {
     var lang = (navigator.language || 'en').toLowerCase()
@@ -40,7 +47,7 @@
   var tbody = table.querySelector('tbody')
   var headers = thead.querySelectorAll('th')
 
-  // ── Currency ──────────────────────────────────────────────
+  // ── Currency ─────────────────────────────────────────────
   var currencySelect = document.querySelector('.currency-select')
   var currentCurrency = localStorage.getItem('orni-currency') || detectLocale()
 
@@ -51,15 +58,6 @@
       localStorage.setItem('orni-currency', currentCurrency)
       convertPrices()
     })
-  }
-
-  var CURRENCY_NAMES = {
-    EUR: 'Euro',
-    USD: 'Dollar',
-    GBP: 'Pound',
-    CHF: 'Franc',
-    JPY: 'Yen',
-    BRL: 'Real',
   }
 
   function convertPrices() {
@@ -75,116 +73,137 @@
           : sym + converted.toFixed(2)
     })
 
-    // Update currency symbols everywhere (intro, header, etc.)
+    // Update currency symbols everywhere
     document.querySelectorAll('.currency-symbol').forEach(function (el) {
       el.textContent = sym
     })
 
-    // Update currency select display text to show currency name
+    // Refresh option display names
     if (currencySelect) {
-      var name = CURRENCY_NAMES[currentCurrency] || currentCurrency
-      currencySelect.options[currencySelect.selectedIndex].textContent = name
-      // Refresh all option texts
       Array.prototype.forEach.call(currencySelect.options, function (opt) {
         opt.textContent = CURRENCY_NAMES[opt.value] || opt.value
       })
     }
   }
 
-  // ── Multi-Column Sort ─────────────────────────────────────
-  // Column types: 0=Servo(string) 1=V(number) 2=Weight 3=Torque 4=Speed 5=Efficiency 6=Price 7=Eff/€ 8=Flight 9=Notes
-  var COL_TYPES = [
-    'string',
-    'number',
-    'number',
-    'number',
-    'number',
-    'number',
-    'price',
-    'number',
-    'rating',
-    'string',
-  ]
+  // ── Voltage Filter ───────────────────────────────────────
+  var voltageSelect = document.querySelector('.voltage-select')
 
-  var sortState = [] // [{col: 0, dir: 'asc'}, ...]
+  if (voltageSelect) {
+    voltageSelect.addEventListener('change', function () {
+      var val = this.value
+      tbody.querySelectorAll('tr').forEach(function (row) {
+        var v = row.getAttribute('data-voltage')
+        row.style.display = (!val || v === val) ? '' : 'none'
+      })
+    })
+  }
 
-  // Inject sort-order indicator spans
-  headers.forEach(function (th) {
+  // ── Multi-Column Sort (Shift+click for additive) ─────────
+  var sortState = []  // [{col, dir}, ...] — most significant first
+
+  headers.forEach(function (th, i) {
     var indicator = document.createElement('span')
     indicator.className = 'sort-order'
     th.appendChild(indicator)
-  })
 
-  headers.forEach(function (th, i) {
     th.addEventListener('click', function (e) {
-      sortTable(i, e.shiftKey)
+      if (e.shiftKey) {
+        // Toggle through: not present → asc → desc → remove
+        var idx = -1
+        for (var s = 0; s < sortState.length; s++) {
+          if (sortState[s].col === i) { idx = s; break }
+        }
+        if (idx >= 0) {
+          if (sortState[idx].dir === 'asc') {
+            sortState[idx].dir = 'desc'
+          } else {
+            sortState.splice(idx, 1)
+          }
+        } else {
+          sortState.push({col: i, dir: 'asc'})
+        }
+      } else {
+        // Single-column: toggle asc/desc, replace state
+        var wasSame = sortState.length === 1 && sortState[0].col === i
+        sortState.length = 0
+        sortState.push({col: i, dir: wasSame && getPrevDir(i) === 'asc' ? 'desc' : 'asc'})
+      }
+      updateIndicator()
+      doSort()
     })
     th.classList.add('sortable')
   })
 
-  function sortTable(colIndex, additive) {
-    var existingIdx = -1
-    for (var i = 0; i < sortState.length; i++) {
-      if (sortState[i].col === colIndex) { existingIdx = i; break }
-    }
-
-    if (additive) {
-      if (existingIdx >= 0) {
-        // Toggle direction in place
-        sortState[existingIdx].dir = sortState[existingIdx].dir === 'asc' ? 'desc' : 'asc'
-      } else {
-        // Append to chain
-        sortState.push({col: colIndex, dir: 'asc'})
-      }
-    } else {
-      if (sortState.length === 1 && sortState[0].col === colIndex) {
-        // Toggle single column
-        sortState[0].dir = sortState[0].dir === 'asc' ? 'desc' : 'asc'
-      } else {
-        // Replace with single column (mutate, don't reassign)
-        sortState.length = 0
-        sortState.push({col: colIndex, dir: 'asc'})
-      }
-    }
-
-    updateIndicators()
-    doSort()
+  function getPrevDir(col) {
+    // Used only for single-column toggle before state was cleared
+    var th = headers[col]
+    if (th.classList.contains('sort-asc')) return 'asc'
+    if (th.classList.contains('sort-desc')) return 'desc'
+    return ''
   }
 
-  function updateIndicators() {
+  function updateIndicator() {
     headers.forEach(function (th) {
       th.classList.remove('sort-asc', 'sort-desc')
       var ind = th.querySelector('.sort-order')
       if (ind) ind.textContent = ''
     })
-    sortState.forEach(function (s, idx) {
-      var th = headers[s.col]
-      th.classList.add(s.dir === 'asc' ? 'sort-asc' : 'sort-desc')
+    for (var s = 0; s < sortState.length; s++) {
+      var st = sortState[s]
+      var th = headers[st.col]
+      th.classList.add(st.dir === 'asc' ? 'sort-asc' : 'sort-desc')
       var ind = th.querySelector('.sort-order')
-      if (ind && idx < ORDER_CHARS.length) {
-        ind.textContent = ORDER_CHARS[idx]
+      if (ind && sortState.length > 1) {
+        ind.textContent = s + 1
       }
-    })
+    }
+  }
+
+  function getCellValue(cell, colIndex) {
+    if (colIndex === 6) {
+      // Price — use data attribute
+      return parseFloat(cell.getAttribute('data-price-eur')) || 0
+    }
+    if (colIndex === 8) {
+      // Flight Performance — use rating
+      return parseInt(cell.getAttribute('data-flight-rating')) || 0
+    }
+    // Numeric columns: 1(V), 2(Weight), 3(Torque), 4(Speed), 5(Efficiency), 7(Eff/€)
+    if (colIndex >= 1 && colIndex <= 7) {
+      return parseFloat(cell.textContent.replace(/[^0-9.\-]/g, '')) || 0
+    }
+    // String columns: 0(Servo), 9(Notes)
+    return (cell.textContent || '').trim().toLowerCase()
   }
 
   function doSort() {
     var rows = Array.prototype.slice.call(tbody.querySelectorAll('tr'))
-
     if (sortState.length === 0) return
 
-    rows.sort(function (a, b) {
-      for (var i = 0; i < sortState.length; i++) {
-        var s = sortState[i]
-        var aCell = a.children[s.col]
-        var bCell = b.children[s.col]
-        if (!aCell || !bCell) continue
-        var result = compareCells(aCell, bCell, s.col, s.dir)
-        if (result !== 0) return result
-      }
-      return 0
-    })
+    // Cascading stable sort: least significant first, most significant last
+    for (var s = sortState.length - 1; s >= 0; s--) {
+      var col = sortState[s].col
+      var dir = sortState[s].dir
+      var isNumeric = col >= 1 && col <= 8
 
-    // Use DocumentFragment for bulk DOM update
+      rows.sort(function (a, b) {
+        var aCell = a.children[col]
+        var bCell = b.children[col]
+        if (!aCell || !bCell) return 0
+        var aVal = getCellValue(aCell, col)
+        var bVal = getCellValue(bCell, col)
+
+        if (isNumeric) {
+          var diff = aVal - bVal
+          return dir === 'asc' ? diff : -diff
+        } else {
+          var cmp = String(aVal).localeCompare(String(bVal))
+          return dir === 'asc' ? cmp : -cmp
+        }
+      })
+    }
+
     var frag = document.createDocumentFragment()
     for (var r = 0; r < rows.length; r++) {
       frag.appendChild(rows[r])
@@ -192,33 +211,7 @@
     tbody.appendChild(frag)
   }
 
-  function compareCells(aCell, bCell, colIndex, dir) {
-    var type = COL_TYPES[colIndex] || 'string'
-    var aVal, bVal
-
-    if (type === 'price') {
-      aVal = parseFloat(aCell.getAttribute('data-price-eur')) || 0
-      bVal = parseFloat(bCell.getAttribute('data-price-eur')) || 0
-    } else if (type === 'rating') {
-      aVal = parseInt(aCell.getAttribute('data-flight-rating')) || 0
-      bVal = parseInt(bCell.getAttribute('data-flight-rating')) || 0
-    } else if (type === 'number') {
-      aVal = parseFloat(aCell.textContent.replace(/[^0-9.\-]/g, ''))
-      bVal = parseFloat(bCell.textContent.replace(/[^0-9.\-]/g, ''))
-      if (isNaN(aVal)) aVal = 0
-      if (isNaN(bVal)) bVal = 0
-    } else {
-      aVal = (aCell.textContent || '').trim().toLowerCase()
-      bVal = (bCell.textContent || '').trim().toLowerCase()
-      var cmp = aVal.localeCompare(bVal)
-      return dir === 'asc' ? cmp : -cmp
-    }
-
-    var diff = aVal - bVal
-    return dir === 'asc' ? diff : -diff
-  }
-
-  // ── Apply rating classes ──────────────────────────────────
+  // ── Rating Classes ───────────────────────────────────────
   tbody.querySelectorAll('td[data-flight-rating]').forEach(function (cell) {
     var r = parseInt(cell.getAttribute('data-flight-rating'))
     if (r >= 1 && r <= 5) cell.classList.add('fp-' + r)

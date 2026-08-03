@@ -5,8 +5,8 @@ require "yaml"
 require "haml"
 require "kramdown"
 
-LANGS = %w[en de]
-SUBFOLDERS = LANGS.flat_map { |l| ["#{l}", "#{l}/wiki", "#{l}/docs", "#{l}/tutorials"] }
+LANGS = %w[en de ca es fr gl hr id it ja ko lv pt ru sv zh_CN]
+SUBFOLDERS = %w[en de].flat_map { |l| ["#{l}", "#{l}/wiki", "#{l}/docs", "#{l}/tutorials"] }
 
 CLOBBER.include(
   "index.html",
@@ -19,6 +19,8 @@ CLOBBER.include(
 
 def build_landing(lang)
   vars = JSON.parse(File.read("_lang/#{lang}.json", encoding: "UTF-8"))
+  vars["all_langs"] = ALL_LANGS_DATA
+  vars["current_lang"] = lang
   template = File.read("index.haml", encoding: "UTF-8")
   engine = Haml::Template.new { template }
   output = engine.render(Object.new, vars)
@@ -65,8 +67,8 @@ HAML_LAYOUT = <<~'LAYOUT'
       %a{href: "#{asset_prefix}/en/wiki/servo_efficiency.html"} Servos
       %a{href: "#{asset_prefix}/en/tutorials/"} Tutorials
       .lang-switch
-        - langs.each do |l|
-          %a{href: l == lang ? "." : lang_href.call(l), class: l == lang ? "active" : ""}= l.upcase
+        %a{href: lang == "en" ? "." : "../", class: lang == "en" ? "active" : ""} EN
+        %a{href: lang == "de" ? "." : "../de/", class: lang == "de" ? "active" : ""} DE
     .subpage-hero
       %img.subpage-bird{src: "#{asset_prefix}/assets/images/of_icon_128.png", alt: ""}
       %h1= page_title
@@ -80,6 +82,10 @@ HAML_LAYOUT = <<~'LAYOUT'
         %a{href: "#{asset_prefix}/en/wiki/"} Wiki
         ◇
         %a{href: "#{asset_prefix}/en/tutorials/"} Tutorials
+      %p.lang-footer
+        %select.lang-select{onchange: "var v=this.value;if(v){var p='#{asset_prefix}/';window.location=p+(v==='en'?'':v+'/')}"}
+          - all_langs.each do |l|
+            %option{value: l[:code], selected: l[:code] == lang ? "selected" : nil}= l[:name]
       %p Hermetic Firmware ◇ STM32F4 ◇ GPL v3
       %p.credit OrniFlight — Flapping-wing flight, redefined.
     %button.scroll-top{onclick: "window.scrollTo({top:0,behavior:'smooth'})", "aria-label" => "Scroll to top"}
@@ -93,9 +99,16 @@ def asset_prefix_for(out_path)
   depth == 0 ? '.' : ('../' * depth).sub(/\/$/, '')
 end
 
-def lang_href(target_lang)
-  target_lang == "en" ? "../" : "../#{target_lang}/"
-end
+LANG_NAMES = {
+  "en" => "English", "de" => "Deutsch", "ca" => "Català",
+  "es" => "Español", "fr" => "Français", "gl" => "Galego",
+  "hr" => "Hrvatski", "id" => "Bahasa Indonesia", "it" => "Italiano",
+  "ja" => "日本語", "ko" => "한국어", "lv" => "Latviešu",
+  "pt" => "Português", "ru" => "Русский", "sv" => "Svenska",
+  "zh_CN" => "中文"
+}.freeze
+
+ALL_LANGS_DATA = LANGS.map { |l| {code: l, name: LANG_NAMES[l] || l} }.freeze
 
 def build_markdown_page(md_path, out_path, lang, page_title, body_class: nil)
   md_content = File.read(md_path, encoding: "UTF-8")
@@ -111,8 +124,7 @@ def build_markdown_page(md_path, out_path, lang, page_title, body_class: nil)
     page_title: page_title,
     asset_prefix: asset_prefix,
     content_html: content_html,
-    langs: LANGS,
-    lang_href: method(:lang_href),
+    all_langs: ALL_LANGS_DATA,
     body_class: body_class
   })
 
@@ -150,8 +162,7 @@ def build_section_index(lang, section, title_key)
     page_title: page_title,
     asset_prefix: asset_prefix,
     content_html: index_html,
-    langs: LANGS,
-    lang_href: method(:lang_href)
+    all_langs: ALL_LANGS_DATA
   })
 
   File.write(out_path, output, encoding: "UTF-8")
@@ -220,7 +231,7 @@ def build_servo_page(lang)
     eff_raw = ("%.2f" % s["efficiency"])
     voltage_s = ("%.1f" % s["voltage"])
 
-    %(      <tr#{row_extra}>
+    %(      <tr#{row_extra} data-voltage="#{voltage_s}">
         <td>#{s["brand"]} #{s["model"]}</td>
         <td class="num">#{voltage_s}</td>
         <td class="num">#{weight_s}</td>
@@ -235,6 +246,14 @@ def build_servo_page(lang)
   end.join("\n")
 
   table_html = <<~TABLE
+    <div class="voltage-filter-bar"><label>Voltage: <select class="voltage-select">
+      <option value="">All</option>
+      <option value="4.8">4.8V</option>
+      <option value="5.0">5.0V</option>
+      <option value="6.0">6.0V</option>
+      <option value="7.4">7.4V</option>
+      <option value="8.4">8.4V</option>
+    </select></label></div>
     <div class="table-wrap">
     <table class="servo-table">
       <thead>
@@ -268,8 +287,8 @@ def build_servo_page(lang)
       **Efficiency** = Torque / (Weight × Speed). **Eff/<span class="currency-symbol">€</span>** = Efficiency per <span class="currency-inline"><select class="currency-select inline-currency">
         <option value="EUR">Euro</option><option value="USD">Dollar</option><option value="GBP">Pound</option>
         <option value="CHF">Franc</option><option value="JPY">Yen</option><option value="BRL">Real</option>
-      </select></span>, scaled by &cuberoot;torque for fairness across sizes.
-      Higher is better. Click column headers to sort — <strong>Shift+click</strong> for multi-column sort. Submit additions per PR to `_data/servos.yml`.
+      </select></span>, scaled by ∛torque for fairness across sizes.
+      Higher is better. Click column headers to sort — <strong>Shift+click</strong> for multi-column sort. Filter by voltage. Submit additions per PR to `_data/servos.yml`.
     EN
   when "de"
     <<~DE
@@ -279,9 +298,20 @@ def build_servo_page(lang)
       **Effizienz** = Drehmoment / (Gewicht × Geschwindigkeit). **Eff/<span class="currency-symbol">€</span>** = Effizienz pro <span class="currency-inline"><select class="currency-select inline-currency">
         <option value="EUR">Euro</option><option value="USD">Dollar</option><option value="GBP">Pound</option>
         <option value="CHF">Franc</option><option value="JPY">Yen</option><option value="BRL">Real</option>
-      </select></span>, skaliert mit &cuberoot;Drehmoment.
-      Höher ist besser. Spaltenköpfe anklicken zum Sortieren — <strong>Shift+Klick</strong> für Mehrfachsortierung. Ergänzungen per PR an `_data/servos.yml`.
+      </select></span>, skaliert mit ∛Drehmoment.
+      Höher ist besser. Spaltenköpfe anklicken zum Sortieren — <strong>Shift+Klick</strong> für mehrspaltige Sortierung. Nach Spannung filtern. Ergänzungen per PR an `_data/servos.yml`.
     DE
+  else
+    <<~EN
+      # Servo Efficiency
+
+      A curated selection of servos tested and ranked for ornithopter use.
+      **Efficiency** = Torque / (Weight × Speed). **Eff/<span class="currency-symbol">€</span>** = Efficiency per <span class="currency-inline"><select class="currency-select inline-currency">
+        <option value="EUR">Euro</option><option value="USD">Dollar</option><option value="GBP">Pound</option>
+        <option value="CHF">Franc</option><option value="JPY">Yen</option><option value="BRL">Real</option>
+      </select></span>, scaled by ∛torque for fairness across sizes.
+      Higher is better. Click column headers to sort — <strong>Shift+click</strong> for multi-column sort. Filter by voltage. Submit additions per PR to `_data/servos.yml`.
+    EN
   end
 
   md_content = intro + "\n\n" + table_html + "\n"
