@@ -118,6 +118,11 @@ servos:
     efficiency: 4.68
     eff_per_euro_scale: 1.03
     notes: Best efficiency/€
+    flight_performance:
+      rating: Good Flight
+      videos:
+        - id: YEXH1zKZ4lY
+          label: Ornithopter Flight
 
   - brand: VOTIK
     model: PTK 7465 / 7465W MG
