@@ -24,9 +24,6 @@
       %a{href: "en/docs/"}= nav_docs
       %a{href: "en/wiki/servo_efficiency.html"}= nav_servos
       %a{href: "en/tutorials/"}= nav_tutorials
-      .lang-switch
-        %a{href: lang_href_en, class: lang_class_en} EN
-        %a{href: lang_href_de, class: lang_class_de} DE
 
     #header
       .hero-content
@@ -108,9 +105,14 @@
       %p!= footer_resources
       %p= footer_hermetic
       %p.lang-footer
-        %select.lang-select{onchange: "var v=this.value;if(v){var p='.';window.location=p+(v==='en'?'':v+'/')}"}
-          - all_langs.each do |l|
-            %option{value: l[:code], selected: l[:code] == current_lang ? "selected" : nil}= l[:name]
+        - all_langs.each_with_index do |l, i|
+          - if l[:code] == current_lang
+            %strong= l[:name]
+          - else
+            - href = l[:code] == "en" ? "#{asset_prefix}/" : "#{asset_prefix}/#{l[:code]}/"
+            %a{href: href}= l[:name]
+          - unless i == all_langs.size - 1
+            &nbsp;◇&nbsp;
       %p.credit= footer_credit
 
     %button.scroll-top{onclick: "window.scrollTo({top:0,behavior:'smooth'})", "aria-label" => "Scroll to top"}

@@ -190,26 +190,6 @@ nav a:hover {
   opacity: 1;
 }
 
-.lang-switch {
-  display: flex;
-  align-items: center;
-  gap: 0.35rem;
-  margin-left: 0.5rem;
-}
-.lang-switch a {
-  font-size: 0.6rem;
-  opacity: 0.35;
-  padding: 0.1rem 0.2rem;
-}
-.lang-switch a:hover {
-  opacity: 0.7;
-}
-.lang-switch a.active {
-  opacity: 0.85;
-  color: var(--accent);
-  pointer-events: none;
-}
-
 .hero-bg {
   position: fixed;
   top: 0;
@@ -898,32 +878,22 @@ footer a:hover {
 }
 footer .lang-footer {
   margin-top: 1.2rem;
-  opacity: 0.55;
-}
-footer .lang-select {
-  appearance: none;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  font: inherit;
   font-size: 0.68rem;
-  font-weight: 500;
+  line-height: 1.9;
+  opacity: 0.55;
+  word-spacing: 0.3em;
+}
+footer .lang-footer a {
+  color: inherit;
+  text-decoration: none;
+}
+footer .lang-footer a:hover {
   color: var(--accent);
-  background: transparent;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 6px;
-  padding: 0.25rem 1.6rem 0.25rem 0.7rem;
-  cursor: pointer;
-  outline: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='5'%3E%3Cpath d='M0 0l4 5 4-5z' fill='%23b8a0ff'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 0.5rem center;
+  text-decoration: underline;
 }
-footer .lang-select:focus, footer .lang-select:hover {
-  border-color: var(--accent);
-}
-footer .lang-select option {
-  background: var(--box);
-  color: var(--text);
+footer .lang-footer strong {
+  color: var(--accent);
+  font-weight: 600;
 }
 
 .credit {
@@ -1190,12 +1160,6 @@ body.subpage .content-page article img {
   nav a.home-link img {
     height: 18px;
   }
-  .lang-switch {
-    margin-left: 0;
-  }
-  .lang-switch a {
-    font-size: 0.44rem;
-  }
   .hero-content {
     padding-top: 2.5rem;
     padding-left: 1rem;
@@ -1242,9 +1206,6 @@ body.subpage .content-page article img {
   text-align: right;
 }
 [dir=rtl] nav {
-  flex-direction: row-reverse;
-}
-[dir=rtl] .lang-switch {
   flex-direction: row-reverse;
 }
 [dir=rtl] dl.grid {

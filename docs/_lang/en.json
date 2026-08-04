@@ -1,10 +1,6 @@
 {
   "lang": "en",
   "dir": "ltr",
-  "lang_href_en": ".",
-  "lang_href_de": "de/",
-  "lang_class_en": "active",
-  "lang_class_de": "",
   "asset_prefix": ".",
   "title": "OrniFlight",
   "nav_manifest": "Manifest",
