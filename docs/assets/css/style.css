@@ -251,7 +251,7 @@ nav a:hover {
   font-weight: 300;
   font-style: italic;
   font-size: clamp(1.4rem, 3.2vw, 1.85rem);
-  color: var(--accent-alt);
+  color: var(--text-soft);
   margin-bottom: 0.3rem;
   opacity: 0.72;
   letter-spacing: 0.01em;
@@ -918,7 +918,7 @@ footer .lang-footer strong {
   margin-bottom: 0.5rem;
 }
 .subpage-hero .subpage-bird img {
-  width: 64px;
+  width: min(60vw, 320px);
   height: auto;
   opacity: 0.72;
   filter: drop-shadow(0 3px 16px rgba(var(--accent-rgb), 0.3));
