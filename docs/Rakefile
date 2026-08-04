@@ -71,8 +71,8 @@ HAML_LAYOUT = <<~'LAYOUT'
       %a{href: "#{asset_prefix}/en/tutorials/"} Tutorials
     .subpage-hero
       %picture.subpage-bird
-        %source{srcset: "#{asset_prefix}/assets/images/cf_logo_white.svg", media: "(prefers-color-scheme: light)"}
-        %img{src: "#{asset_prefix}/assets/images/cf_logo_black.svg", alt: ""}
+        %source{srcset: "#{asset_prefix}/assets/images/cf_logo_bird_white.svg", media: "(prefers-color-scheme: light)"}
+        %img{src: "#{asset_prefix}/assets/images/cf_logo_bird_black.svg", alt: ""}
       %h1= page_title
     %main.content-page
       %article

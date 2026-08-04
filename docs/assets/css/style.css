@@ -918,10 +918,10 @@ footer .lang-footer strong {
   margin-bottom: 0.5rem;
 }
 .subpage-hero .subpage-bird img {
-  width: 36px;
+  width: 64px;
   height: auto;
-  opacity: 0.55;
-  filter: drop-shadow(0 2px 12px rgba(var(--accent-rgb), 0.25));
+  opacity: 0.72;
+  filter: drop-shadow(0 3px 16px rgba(var(--accent-rgb), 0.3));
 }
 .subpage-hero h1 {
   font-family: "SF TransRobotics Extended", "SF TransRobotics", sans-serif;
