@@ -71,6 +71,8 @@ HAML_LAYOUT = <<~'LAYOUT'
       %picture.subpage-bird
         %source{srcset: "#{asset_prefix}/assets/images/cf_logo_white.svg", media: "(prefers-color-scheme: light)"}
         %img{src: "#{asset_prefix}/assets/images/cf_logo_black.svg", alt: ""}
+      - if defined?(section_label) && section_label
+        %p.subpage-label= section_label
       %h1= page_title
     %main.content-page
       %article
@@ -115,12 +117,13 @@ LANG_NAMES = {
 
 ALL_LANGS_DATA = LANGS.map { |l| {code: l, name: LANG_NAMES[l] || l} }.freeze
 
-def build_markdown_page(md_path, out_path, lang, page_title, body_class: nil)
+def build_markdown_page(md_path, out_path, lang, page_title, body_class: nil, section_label: nil)
   md_content = File.read(md_path, encoding: "UTF-8")
   content_html = Kramdown::Document.new(md_content).to_html
 
   asset_prefix = asset_prefix_for(out_path)
   dir = "ltr"
+  section_label ||= File.dirname(out_path).split('/').last.capitalize rescue nil
 
   engine = Haml::Template.new { HAML_LAYOUT }
   output = engine.render(Object.new, {
@@ -130,7 +133,8 @@ def build_markdown_page(md_path, out_path, lang, page_title, body_class: nil)
     asset_prefix: asset_prefix,
     content_html: content_html,
     all_langs: ALL_LANGS_DATA,
-    body_class: body_class
+    body_class: body_class,
+    section_label: section_label
   })
 
   File.write(out_path, output, encoding: "UTF-8")
@@ -167,7 +171,8 @@ def build_section_index(lang, section, title_key)
     page_title: page_title,
     asset_prefix: asset_prefix,
     content_html: index_html,
-    all_langs: ALL_LANGS_DATA
+    all_langs: ALL_LANGS_DATA,
+    section_label: section.capitalize
   })
 
   File.write(out_path, output, encoding: "UTF-8")
