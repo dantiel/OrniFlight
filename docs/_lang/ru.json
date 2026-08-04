@@ -1,7 +1,7 @@
 {
   "lang": "ru",
   "dir": "ltr",
-  "asset_prefix": ".",
+  "asset_prefix": "..",
   "title": "OrniFlight",
   "nav_manifest": "Манифест",
   "nav_ondas": "ONDAS",

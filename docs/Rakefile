@@ -19,6 +19,7 @@ CLOBBER.include(
 
 def build_landing(lang)
   vars = JSON.parse(File.read("_lang/#{lang}.json", encoding: "UTF-8"))
+  vars["asset_prefix"] = lang == "en" ? "." : ".."
   vars["all_langs"] = ALL_LANGS_DATA
   vars["current_lang"] = lang
   template = File.read("index.haml", encoding: "UTF-8")
@@ -60,14 +61,18 @@ HAML_LAYOUT = <<~'LAYOUT'
     .hero-bg
     %nav
       %a.home-link{href: "#{asset_prefix}/", title: "OrniFlight"}
-        %img{src: "#{asset_prefix}/assets/images/of_icon_128.png", alt: "OrniFlight"}
+        %picture
+          %source{srcset: "#{asset_prefix}/assets/images/cf_logo_white.svg", media: "(prefers-color-scheme: light)"}
+          %img.nav-logo{src: "#{asset_prefix}/assets/images/cf_logo_black.svg", alt: "OrniFlight"}
       %a{href: "#{asset_prefix}/#manifest"} Manifest
       %a{href: "#{asset_prefix}/en/wiki/"} Wiki
       %a{href: "#{asset_prefix}/en/docs/"} Docs
       %a{href: "#{asset_prefix}/en/wiki/servo_efficiency.html"} Servos
       %a{href: "#{asset_prefix}/en/tutorials/"} Tutorials
     .subpage-hero
-      %img.subpage-bird{src: "#{asset_prefix}/assets/images/of_icon_128.png", alt: ""}
+      %picture.subpage-bird
+        %source{srcset: "#{asset_prefix}/assets/images/cf_logo_white.svg", media: "(prefers-color-scheme: light)"}
+        %img{src: "#{asset_prefix}/assets/images/cf_logo_black.svg", alt: ""}
       %h1= page_title
     %main.content-page
       %article

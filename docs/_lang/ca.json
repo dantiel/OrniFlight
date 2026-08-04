@@ -1,7 +1,7 @@
 {
   "lang": "ca",
   "dir": "ltr",
-  "asset_prefix": ".",
+  "asset_prefix": "..",
   "title": "OrniFlight",
   "nav_manifest": "Manifest",
   "nav_ondas": "ONDAS",
