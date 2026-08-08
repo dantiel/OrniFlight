@@ -71,8 +71,8 @@ In a stall: high sink rate → D detects the rate → increases ferocity. Simult
 
 | Parameter | Function |
 |-----------|----------|
-| **Balance** | Left/right wing symmetry correction — compensates for manufacturing tolerances and wear |
-| **Warp** | Stroke waveform warping — non-linear reshaping of the sinusoid for specific aerodynamic profiles |
+| **Balance** | Up/down thrust symmetry — I-term bias between upstroke and downstroke. Compensates for wing asymmetry, manufacturing tolerances, and wear |
+| **Warp** | Roll/Yaw P → L/R ferocity differential — right and left wings flap independently on the roll axis for bank and turn maneuvers |
 | **Anchor** | Phase anchoring — locks modulation to a specific phase reference, resisting drift |
 | **Resonance** | Airframe resonance compensation — avoids exciting structural modes of the airframe |
 

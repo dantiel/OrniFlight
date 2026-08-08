@@ -22,7 +22,7 @@
 <a href='#hardware'>Hardware</a>
 <a href='../en/wiki/'>Wiki</a>
 <a href='../en/docs/'>Docs</a>
-<a href='../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../en/wiki/servo_efficiency.html'>Sirvientes</a>
 <a href='../en/tutorials/'>Tutoriales</a>
 </nav>
 <div id='header'>
@@ -34,7 +34,7 @@
 </picture>
 </div>
 <div class='headline'>
-<p class='greeting'>Flapping-wing flight, redefined.</p>
+<p class='greeting'>Vuelo de ala voladora, redefinido.</p>
 </div>
 </div>
 </div>
@@ -43,7 +43,7 @@
 <section id='manifest'>
 <h2>Manifiesto</h2>
 <h3 class='subheadline'>Una nueva especie de controlador de vuelo</h3>
-<p class='lead'>OrniFlight exists because a flapping wing controls thrust, pitch, roll, and yaw <strong>within a single stroke</strong> — a channel of expressiveness no propeller can match.</p>
+<p class='lead'>OrniFlight existe porque un ala de aleteo controla el empuje, el cabeceo, el balanceo y la guiñada <strong>en un solo golpe</strong>, un canal de expresividad que ninguna hélice puede igualar.</p>
 <p>Nature solved flapping-wing flight 150 million years before the first quadcopter took off. Every sparrow, every albatross, every hummingbird carries flight logic in its nervous system that no PID controller has ever replicated. OrniFlight opens a new domain — where thrust is phase, where stability is rhythm, where the aircraft breathes with every wingbeat. ONDAS, our Oscillating Normalized Dynamic Adaptive Stabilization, is the first control theory built from first principles for flapping aerodynamics. It modulates correction force <em>within</em> the wingbeat — not against it, not despite it, but <strong>with</strong> it. This firmware is free software because flight belongs to no corporation. It runs on commodity STM32F3 hardware because the tools for transcendent flight should cost less than a dinner. OrniFlight inherits a battle-tested architecture and pushes into uncharted air — a <strong>new species of flight controller</strong>, built for wings from the silicon up. The birds have been waiting for us to catch up.</p>
 <div class='highlight'>
 <code>CRSF → rx → OrniFlight → ONDAS → waveform → PWM servos → wings</code>
@@ -52,8 +52,8 @@
 <section id='ondas'>
 <h2>ONDAS</h2>
 <h3 class='subheadline'>Estabilización Dinámica Adaptativa Normalizada Oscilante</h3>
-<p class='lead'><strong>Oscillating Normalized Dynamic Adaptive Stabilization</strong> — the first control theory built specifically for flapping-wing aerodynamics.</p>
-<p>Quad PIDs assume continuous thrust. Ornithopter thrust is <strong>phasic</strong> — the same impulse creates different moments depending on <em>when</em> in the stroke it's applied. ONDAS uses cadence, ferocity, asymmetry, warp, anchor, resonance, prescience, espelho, saudade, and SSFF — an orchestra of phase-aware modulators — to place every corrective gram exactly where aerodynamics can use it.</p>
+<p class='lead'><strong>Estabilización adaptativa dinámica normalizada oscilante</strong>: la primera teoría de control construida específicamente para la aerodinámica de aleteo de alas.</p>
+<p>Los PID cuádruples asumen un empuje continuo. El empuje del ornitóptero es <strong>fásico</strong>: el mismo impulso crea diferentes momentos dependiendo de <em>cuándo se</em> aplique en el golpe. ONDAS utiliza cadencia, ferocidad, asimetría, deformación, anclaje, resonancia, presciencia, espelho, saudade y SSFF, una orquesta de moduladores conscientes de la fase, para colocar cada gramo correctivo exactamente donde la aerodinámica puede usarlo.</p>
 <div class='highlight'>
 <code>cadence · ferocity · asymmetry · warp · anchor · resonance · prescience · espelho · saudade · SSFF</code>
 </div>
@@ -66,35 +66,35 @@
 <h3 class='subheadline'>Todo lo que el ala merece</h3>
 <dl class='grid'>
 <dt>Perfiles de Vuelo</dt>
-<dd>4 independent profiles (0–3), switchable in-flight via BOX mode. Each holds full ONDAS tuning, wave shape, and aeroelastic coefficients.</dd>
+<dd>4 perfiles independientes (0–3), conmutables en vuelo a través del modo CAJA. Cada uno tiene un ajuste completo de ONDAS, forma de onda y coeficientes aeroelásticos.</dd>
 <dt>Canal de Frecuencia Unificado</dt>
-<dd>Single RC channel with min/max Hz mapping. Works identically in INDEPENDENT and GLIDE flight modes — one pot, both regimes.</dd>
+<dd>Canal RC único con mapeo de Hz mín./máx. Funciona de forma idéntica en los modos de vuelo INDEPENDIENTE y de PLANEO: una olla, ambos regímenes.</dd>
 <dt>Dinámica de Ala GralhaAzul</dt>
-<dd>Trapezoidal waveform generation with servo speed limiting, amplitude mapping, flap magnitude, and wing origin geometry — the wing-ODE core.</dd>
+<dd>Generación de formas de onda trapezoidales con limitación de velocidad del servo, mapeo de amplitud, magnitud del flap y geometría del origen del ala: el núcleo Wing-ODE.</dd>
 <dt>Modulación ONDAS de 10 Canales</dt>
-<dd>Cadence timing, ferocity P/D on 3 axes, balance, warp, anchor, resonance — per-profile, real-time adjustable via MSP.</dd>
+<dd>Tiempo de cadencia, ferocidad P/D en 3 ejes, equilibrio, deformación, anclaje, resonancia: por perfil, ajustable en tiempo real a través de MSP.</dd>
 <dt>Configurador MSP (apiVersion 1.46)</dt>
-<dd>Full ONDAS tuning GUI — all 19 profile fields, frequency channel, GralhaAzul, Phase 2 gains. Profile switcher for per-slot editing.</dd>
+<dd>GUI de sintonización completa de ONDAS: todos los 19 campos de perfil, canal de frecuencia, GralhaAzul, ganancias de fase 2. Conmutador de perfiles para la edición por ranura.</dd>
 <dt>Modos GLIDE e INDEPENDENT</dt>
-<dd>Two flight regimes: GLIDE (throttle-centred, natural soaring) and INDEPENDENT (direct flap frequency via RC channel). BOX-selectable.</dd>
+<dd>Dos regímenes de vuelo: PLANEO (centrado en el acelerador, alza natural) e INDEPENDIENTE (frecuencia directa del flap a través del canal RC). Seleccionable por BOX.</dd>
 </dl>
 </section>
 <section id='hardware'>
 <h2>Hardware</h2>
 <h3 class='subheadline'>Controladores de vuelo STM32F3/F4/F7</h3>
-<p class='lead'>Runs on any Betaflight 4.0-compatible STM32F3/F4/F7 flight controller with servo-capable timer pins.</p>
+<p class='lead'>Funciona con cualquier controlador de vuelo STM32F3/F4/F7 compatible con Betaflight 4.0 con pines de temporizador con capacidad de servo.</p>
 <table class='specs'>
 <tr>
 <td>Objetivos</td>
-<td>TINYFISH (F3, integrated FrSky RX), OMNIBUSF4, MATEKF405, KAKUTEF7 …</td>
+<td>TINYFISH (F3, FrSky RX integrado), OMNIBUSF4, MATEKF405, KAKUTEF7 ...</td>
 </tr>
 <tr>
 <td>Salida Servo</td>
-<td>Up to 4 programmable servo channels, 50–400 Hz PWM</td>
+<td>Hasta 4 servocanales programables, 50–400 Hz PWM</td>
 </tr>
 <tr>
 <td>Receptor</td>
-<td>CRSF (Crossfire / ExpressLRS), SBUS, Spektrum, SUMD — plus integrated FrSky on TINYFISH</td>
+<td>CRSF (Crossfire / ExpressLRS), SBU, Spektrum, SUMD — además de FrSky integrado en TINYFISH</td>
 </tr>
 <tr>
 <td>Flash</td>

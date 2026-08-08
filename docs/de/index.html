@@ -18,7 +18,7 @@
 </a>
 <a href='#manifest'>Manifest</a>
 <a href='#ondas'>ONDAS</a>
-<a href='#features'>Features</a>
+<a href='#features'>Funktionen</a>
 <a href='#hardware'>Hardware</a>
 <a href='../en/wiki/'>Wiki</a>
 <a href='../en/docs/'>Docs</a>
@@ -34,7 +34,7 @@
 </picture>
 </div>
 <div class='headline'>
-<p class='greeting'>Flapping-wing flight, redefined.</p>
+<p class='greeting'>Schlagflügelflug, neu definiert.</p>
 </div>
 </div>
 </div>
@@ -43,17 +43,17 @@
 <section id='manifest'>
 <h2>Manifest</h2>
 <h3 class='subheadline'>Eine neue Spezies von Flugsteuerung</h3>
-<p class='lead'>OrniFlight existiert, weil ein Schlagflügel Schub, Nick, Roll und Gier <strong>innerhalb eines einzigen Schlags</strong> kontrolliert — ein Ausdruckskanal, den kein Propeller erreicht.</p>
-<p>Die Natur hat den Schlagflug 150 Millionen Jahre vor dem ersten Quadcopter gelöst. Jeder Spatz, jeder Albatros, jeder Kolibri trägt Fluglogik in seinem Nervensystem, die kein PID-Regler je nachgebildet hat. OrniFlight <strong>öffnet eine neue Domäne</strong> — eine, in der Schub Phase ist, in der Stabilität Rhythmus bedeutet, in der das Fluggerät mit jedem Flügelschlag atmet. ONDAS, unsere Oscillating Normalized Dynamic Adaptive Stabilization, ist die erste Regelungstheorie, die aus ersten Prinzipien für Schlagflug-Aerodynamik entwickelt wurde. Sie moduliert Korrekturkraft <em>innerhalb</em> des Flügelschlags — nicht dagegen, nicht trotzdem, sondern <strong>mit</strong> ihm. Diese Firmware ist freie Software, weil Flug keiner Firma gehört. Sie läuft auf gewöhnlicher STM32F3-Hardware, weil die Werkzeuge für transzendenten Flug weniger kosten sollten als ein Abendessen. OrniFlight erbt eine kampferprobte Architektur und stößt in unerschlossene Luft vor — eine <strong>neue Spezies von Flugsteuerung</strong>, von Grund auf für Flügel gebaut. Die Vögel warten darauf, dass wir aufholen.</p>
+<p class='lead'>OrniFlight existiert, weil ein schlagender Flügel Schub, Nick, Roll und Gier <strong>innerhalb eines einzigen Flügelschlags</strong> steuert — ein Ausdruckskanal, dem kein Propeller gewachsen ist.</p>
+<p>Die Natur löste den Schlagflügelflug 150 Millionen Jahre bevor der erste Quadcopter abhob. Jeder Spatz, jeder Albatros, jeder Kolibri trägt Fluglogik in seinem Nervensystem, die kein PID-Regler je nachgebildet hat. OrniFlight öffnet ein neues Reich — wo Schub Phase ist, wo Stabilität Rhythmus ist, wo das Fluggerät mit jedem Flügelschlag atmet. ONDAS, unsere Oszillierende Normalisierte Dynamische Adaptive Stabilisierung, ist die erste Regelungstheorie, die aus ersten Prinzipien für Schlagflügel-Aerodynamik entwickelt wurde. Sie moduliert Korrekturkraft <em>innerhalb</em> des Flügelschlags — nicht dagegen, nicht trotzdem, sondern <strong>mit</strong> ihm. Diese Firmware ist freie Software, denn Flug gehört keinem Konzern. Sie läuft auf handelsüblicher STM32F3-Hardware, denn die Werkzeuge für transzendenten Flug sollten weniger kosten als ein Abendessen. OrniFlight erbt eine kampferprobte Architektur und stößt in unberührte Luft vor — eine <strong>neue Spezies Flugcontroller</strong>, gebaut für Flügel vom Silizium an. Die Vögel haben darauf gewartet, dass wir aufholen.</p>
 <div class='highlight'>
 <code>CRSF → rx → OrniFlight → ONDAS → Wellenform → PWM-Servos → Flügel</code>
 </div>
 </section>
 <section id='ondas'>
 <h2>ONDAS</h2>
-<h3 class='subheadline'>Oscillating Normalized Dynamic Adaptive Stabilization</h3>
-<p class='lead'><strong>Oscillating Normalized Dynamic Adaptive Stabilization</strong> — die erste Regelungstheorie, die spezifisch für Schlagflügel-Aerodynamik entwickelt wurde.</p>
-<p>Quad-PIDs gehen von kontinuierlichem Schub aus. Ornithopter-Schub ist <strong>phasisch</strong> — derselbe Impuls erzeugt unterschiedliche Momente, je nachdem <em>wann</em> im Schlag er appliziert wird. ONDAS nutzt Cadence, Ferocity, Asymmetry, Warp, Anchor, Resonance, Prescience, Espelho, Saudade und SSFF — ein Orchester phasenbewusster Modulatoren — um jedes korrigierende Gramm genau dorthin zu platzieren, wo die Aerodynamik es nutzen kann.</p>
+<h3 class='subheadline'>Oszillierende Normalisierte Dynamische Adaptive Stabilisierung</h3>
+<p class='lead'><strong>Oszillierende Normalisierte Dynamische Adaptive Stabilisierung</strong> — die erste Regelungstheorie, die spezifisch für Schlagflügel-Aerodynamik entwickelt wurde.</p>
+<p>Quad-PIDs setzen kontinuierlichen Schub voraus. Ornithopterschub ist <strong>phasisch</strong> — derselbe Impuls erzeugt unterschiedliche Momente, je nachdem <em>wann</em> im Flügelschlag er wirkt. ONDAS nutzt Kadenz, Ferocität, Asymmetrie, Warp, Anker, Resonanz, Voraussicht, Espelho, Saudade und SSFF — ein Orchester phasenbewusster Modulatoren — um jedes Korrekturgramm genau dorthin zu setzen, wo die Aerodynamik es nutzen kann.</p>
 <div class='highlight'>
 <code>cadence · ferocity · asymmetry · warp · anchor · resonance · prescience · espelho · saudade · SSFF</code>
 </div>
@@ -62,31 +62,31 @@
 </p>
 </section>
 <section id='features'>
-<h2>Features</h2>
+<h2>Funktionen</h2>
 <h3 class='subheadline'>Alles, was der Flügel verdient</h3>
 <dl class='grid'>
 <dt>Flugprofile</dt>
-<dd>4 unabhängige Profile (0–3), im Flug per BOX-Mode umschaltbar. Jedes enthält vollständiges ONDAS-Tuning, Wellenform und aeroelastische Koeffizienten.</dd>
-<dt>Unified Frequency Channel</dt>
-<dd>Ein einziger RC-Kanal mit Min/Max-Hz-Abbildung. Funktioniert identisch in INDEPENDENT und GLIDE — ein Poti, beide Flugzustände.</dd>
+<dd>4 unabhängige Profile (0–3), im Flug via BOX-Modus umschaltbar. Jedes enthält vollständiges ONDAS-Tuning, Wellenform und aeroelastische Koeffizienten.</dd>
+<dt>Vereinigter Frequenzkanal</dt>
+<dd>Einzelner RC-Kanal mit Min/Max-Hz-Zuordnung. Funktioniert identisch in INDEPENDENT- und GLIDE-Flugmodi — ein Poti, beide Regime.</dd>
 <dt>GralhaAzul Flügeldynamik</dt>
-<dd>Trapezförmige Wellenform mit Servo-Speed-Limit, Amplituden-Mapping, Flap-Magnitude und Flügel-Geometrie — der Flügel-ODE-Kern.</dd>
+<dd>Trapez-Wellenformgenerierung mit Servo-Geschwindigkeitsbegrenzung, Amplituden-Mapping, Flügelschlaggröße und Flügelursprungsgeometrie — der Flügel-ODE-Kern.</dd>
 <dt>10-Kanal ONDAS-Modulation</dt>
-<dd>Cadence-Timing, Ferocity P/D auf 3 Achsen, Balance, Warp, Anchor, Resonance — pro Profil, in Echtzeit per MSP einstellbar.</dd>
-<dt>MSP Configurator (apiVersion 1.46)</dt>
-<dd>Vollständige ONDAS-Tuning-GUI — alle 19 Profilfelder, Frequenzkanal, GralhaAzul, Phase-2-Gains. Profil-Switcher für Slot-bezogene Bearbeitung.</dd>
-<dt>GLIDE + INDEPENDENT Modi</dt>
-<dd>Zwei Flugregime: GLIDE (gaszentriert, natürliches Gleiten) und INDEPENDENT (direkte Schlagfrequenz per RC-Kanal). Per BOX schaltbar.</dd>
+<dd>Kadenz-Timing, Ferocität P/D auf 3 Achsen, Balance, Warp, Anker, Resonanz — pro Profil, in Echtzeit via MSP einstellbar.</dd>
+<dt>MSP-Konfigurator (apiVersion 1.46)</dt>
+<dd>Vollständige ONDAS-Tuning-GUI — alle 19 Profilfelder, Frequenzkanal, GralhaAzul, Phase-2-Gains. Profilumschalter für Slot-basierte Bearbeitung.</dd>
+<dt>GLIDE- &amp; INDEPENDENT-Modi</dt>
+<dd>Zwei Flugregime: GLIDE (Gas-zentriert, natürliches Gleiten) und INDEPENDENT (direkte Flügelschlagfrequenz via RC-Kanal). BOX-auswählbar.</dd>
 </dl>
 </section>
 <section id='hardware'>
 <h2>Hardware</h2>
 <h3 class='subheadline'>Standard STM32F3/F4/F7 Flightcontroller</h3>
-<p class='lead'>Läuft auf jedem Betaflight-4.0-kompatiblen STM32F3/F4/F7-Flugcontroller mit servo-fähigen Timer-Pins.</p>
+<p class='lead'>Läuft auf jedem Betaflight-4.0-kompatiblen STM32F3/F4/F7 Flight Controller mit servo-fähigen Timer-Pins.</p>
 <table class='specs'>
 <tr>
-<td>Targets</td>
-<td>TINYFISH (F3, integrierter FrSky-Empfänger), OMNIBUSF4, MATEKF405, KAKUTEF7 …</td>
+<td>Ziele</td>
+<td>TINYFISH (F3, integrierter FrSky RX), OMNIBUSF4, MATEKF405, KAKUTEF7 …</td>
 </tr>
 <tr>
 <td>Servo-Ausgang</td>
@@ -110,12 +110,12 @@
 </p>
 </section>
 <section class='build'>
-<h2>Build &amp; Flash</h2>
+<h2>Bauen &amp; Flashen</h2>
 <pre><code>make TARGET=TINYFISH\ndfu-util -a 0 -D obj/orniflight_VERSION_TINYFISH.hex
 
 # oder für OMNIBUSF4:
 make TARGET=OMNIBUSF4\ndfu-util -a 0 -D obj/orniflight_VERSION_OMNIBUSF4.hex</code></pre>
-<p class='compatible'>GPL v3 ◇ Basiert auf Betaflight 4.0.6 ◇ Sauberer Build: null Warnungen</p>
+<p class='compatible'>GPL v3 ◇ Abgezweigt von Betaflight 4.0.6 ◇ Sauberer Build: null Warnungen</p>
 </section>
 </main>
 <footer>
@@ -154,7 +154,7 @@ make TARGET=OMNIBUSF4\ndfu-util -a 0 -D obj/orniflight_VERSION_OMNIBUSF4.hex</co
 &nbsp;◇&nbsp;
 <a href='../zh_CN/'>中文</a>
 </p>
-<p class='credit'>OrniFlight — Schlagflug, neu definiert.</p>
+<p class='credit'>OrniFlight — Schlagflügelflug, neu definiert.</p>
 </footer>
 <button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
 <script>

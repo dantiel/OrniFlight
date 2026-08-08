@@ -34,7 +34,7 @@
 </picture>
 </div>
 <div class='headline'>
-<p class='greeting'>Flapping-wing flight, redefined.</p>
+<p class='greeting'>새롭게 정의된 플랩핑 윙 비행.</p>
 </div>
 </div>
 </div>
@@ -43,7 +43,7 @@
 <section id='manifest'>
 <h2>선언문</h2>
 <h3 class='subheadline'>비행 제어기의 새로운 종</h3>
-<p class='lead'>OrniFlight exists because a flapping wing controls thrust, pitch, roll, and yaw <strong>within a single stroke</strong> — a channel of expressiveness no propeller can match.</p>
+<p class='lead'>OrniFlight는 펄럭이는 날개가 <strong>단일 스트로크 내에서</strong> 추력, 피치, 롤 및 요를 제어하기 때문에 존재합니다. 이는 프로펠러가 일치시킬 수 없는 표현성의 채널입니다.</p>
 <p>Nature solved flapping-wing flight 150 million years before the first quadcopter took off. Every sparrow, every albatross, every hummingbird carries flight logic in its nervous system that no PID controller has ever replicated. OrniFlight opens a new domain — where thrust is phase, where stability is rhythm, where the aircraft breathes with every wingbeat. ONDAS, our Oscillating Normalized Dynamic Adaptive Stabilization, is the first control theory built from first principles for flapping aerodynamics. It modulates correction force <em>within</em> the wingbeat — not against it, not despite it, but <strong>with</strong> it. This firmware is free software because flight belongs to no corporation. It runs on commodity STM32F3 hardware because the tools for transcendent flight should cost less than a dinner. OrniFlight inherits a battle-tested architecture and pushes into uncharted air — a <strong>new species of flight controller</strong>, built for wings from the silicon up. The birds have been waiting for us to catch up.</p>
 <div class='highlight'>
 <code>CRSF → rx → OrniFlight → ONDAS → waveform → PWM servos → wings</code>
@@ -52,8 +52,8 @@
 <section id='ondas'>
 <h2>ONDAS</h2>
 <h3 class='subheadline'>진동 정규화 동적 적응 안정화</h3>
-<p class='lead'><strong>Oscillating Normalized Dynamic Adaptive Stabilization</strong> — the first control theory built specifically for flapping-wing aerodynamics.</p>
-<p>Quad PIDs assume continuous thrust. Ornithopter thrust is <strong>phasic</strong> — the same impulse creates different moments depending on <em>when</em> in the stroke it's applied. ONDAS uses cadence, ferocity, asymmetry, warp, anchor, resonance, prescience, espelho, saudade, and SSFF — an orchestra of phase-aware modulators — to place every corrective gram exactly where aerodynamics can use it.</p>
+<p class='lead'>진동 정규화된 동적 적응 안정화 (<strong>Oscillating Normalized Dynamic Adaptive Stabilization</strong>) — 날개 공기역학을 위해 특별히 제작된 최초의 제어 이론.</p>
+<p>쿼드 PID는 연속 추력을 가정합니다. Ornithopter 추력은 <strong>위상적입니다</strong>. 동일한 임펄스는 스트로크에 적용된 <em>시점에</em> 따라 다른 순간을 생성합니다. 온다스는 케이던스, 격렬함, 비대칭성, 워프, 앵커, 공명, 프리시언스, 에스펠류, 사우데이드 및 SSFF (위상 인식 변조기의 오케스트라) 를 사용하여 모든 교정 그램을 공기 역학이 사용할 수 있는 곳에 정확히 배치합니다.</p>
 <div class='highlight'>
 <code>cadence · ferocity · asymmetry · warp · anchor · resonance · prescience · espelho · saudade · SSFF</code>
 </div>
@@ -66,38 +66,38 @@
 <h3 class='subheadline'>날개가 받을 자격이 있는 모든 것</h3>
 <dl class='grid'>
 <dt>비행 프로필</dt>
-<dd>4 independent profiles (0–3), switchable in-flight via BOX mode. Each holds full ONDAS tuning, wave shape, and aeroelastic coefficients.</dd>
+<dd>4개의 독립 프로파일 (0–3), 박스 모드를 통해 기내 전환 가능. 각각은 완전한 온다스 튜닝, 파형 및 공탄성 계수를 보유합니다.</dd>
 <dt>통합 주파수 채널</dt>
-<dd>Single RC channel with min/max Hz mapping. Works identically in INDEPENDENT and GLIDE flight modes — one pot, both regimes.</dd>
+<dd>최소/최대 Hz 매핑이 있는 단일 RC 채널. 독립 및 활공 비행 모드에서 동일하게 작동합니다 — 하나의 냄비, 두 체제 모두.</dd>
 <dt>GralhaAzul 날개 역학</dt>
-<dd>Trapezoidal waveform generation with servo speed limiting, amplitude mapping, flap magnitude, and wing origin geometry — the wing-ODE core.</dd>
+<dd>서보 속도 제한, 진폭 매핑, 플랩 크기 및 날개 원점 형상을 가진 사다리꼴 파형 생성 — 날개-ODE 코어.</dd>
 <dt>10채널 ONDAS 변조</dt>
-<dd>Cadence timing, ferocity P/D on 3 axes, balance, warp, anchor, resonance — per-profile, real-time adjustable via MSP.</dd>
+<dd>케이던스 타이밍, 3축의 강렬한 P/D, 밸런스, 워프, 앵커, 공명 — 프로필당, MSP를 통해 실시간 조정 가능.</dd>
 <dt>MSP 구성기 (apiVersion 1.46)</dt>
-<dd>Full ONDAS tuning GUI — all 19 profile fields, frequency channel, GralhaAzul, Phase 2 gains. Profile switcher for per-slot editing.</dd>
+<dd>전체 온다스 튜닝 GUI — 모든 19 프로파일 필드, 주파수 채널, GralhaAzul, 2단계 이득. 슬롯당 편집을 위한 프로필 스위처.</dd>
 <dt>GLIDE 및 INDEPENDENT 모드</dt>
-<dd>Two flight regimes: GLIDE (throttle-centred, natural soaring) and INDEPENDENT (direct flap frequency via RC channel). BOX-selectable.</dd>
+<dd>두 가지 비행 체제: 글라이드 (스로틀 중심, 자연 치솟음) 및 독립 (RC 채널을 통한 직접 플랩 주파수). BOX 선택 가능.</dd>
 </dl>
 </section>
 <section id='hardware'>
 <h2>하드웨어</h2>
 <h3 class='subheadline'>STM32F3/F4/F7 비행 제어기</h3>
-<p class='lead'>Runs on any Betaflight 4.0-compatible STM32F3/F4/F7 flight controller with servo-capable timer pins.</p>
+<p class='lead'>서보 기능 타이머 핀이 있는 모든 Betaflight 4.0 호환 STM32F3/F4/F7 비행 컨트롤러에서 실행됩니다.</p>
 <table class='specs'>
 <tr>
 <td>타겟</td>
-<td>TINYFISH (F3, integrated FrSky RX), OMNIBUSF4, MATEKF405, KAKUTEF7 …</td>
+<td>TINYFISH (F3, 통합 FrSky RX), OMNIBUSF4, MATEKF405, KAKUTEF7…</td>
 </tr>
 <tr>
 <td>서보 출력</td>
-<td>Up to 4 programmable servo channels, 50–400 Hz PWM</td>
+<td>최대 4개의 프로그래밍 가능한 서보 채널, 50-400Hz PWM</td>
 </tr>
 <tr>
 <td>수신기</td>
-<td>CRSF (Crossfire / ExpressLRS), SBUS, Spektrum, SUMD — plus integrated FrSky on TINYFISH</td>
+<td>CRSF (Crossfire/ExpressLRS), SBUS, Spektrum, SUMD — TINYFISH에 통합된 FrSky</td>
 </tr>
 <tr>
-<td>Flash</td>
+<td>플래시</td>
 <td class='value'>256 KB (TINYFISH F3) / 1 MB (OMNIBUSF4)</td>
 </tr>
 <tr>

@@ -34,7 +34,7 @@
 </picture>
 </div>
 <div class='headline'>
-<p class='greeting'>Flapping-wing flight, redefined.</p>
+<p class='greeting'>扑翼飞行，重新定义。</p>
 </div>
 </div>
 </div>
@@ -43,7 +43,7 @@
 <section id='manifest'>
 <h2>宣言</h2>
 <h3 class='subheadline'>新一代飞控</h3>
-<p class='lead'>OrniFlight exists because a flapping wing controls thrust, pitch, roll, and yaw <strong>within a single stroke</strong> — a channel of expressiveness no propeller can match.</p>
+<p class='lead'>OrniFlight之所以存在，是因为扑翼在一个<strong>行程内</strong>控制推力、俯仰、滚转和偏航--这是一个螺旋桨无法比拟的表现力通道。</p>
 <p>Nature solved flapping-wing flight 150 million years before the first quadcopter took off. Every sparrow, every albatross, every hummingbird carries flight logic in its nervous system that no PID controller has ever replicated. OrniFlight opens a new domain — where thrust is phase, where stability is rhythm, where the aircraft breathes with every wingbeat. ONDAS, our Oscillating Normalized Dynamic Adaptive Stabilization, is the first control theory built from first principles for flapping aerodynamics. It modulates correction force <em>within</em> the wingbeat — not against it, not despite it, but <strong>with</strong> it. This firmware is free software because flight belongs to no corporation. It runs on commodity STM32F3 hardware because the tools for transcendent flight should cost less than a dinner. OrniFlight inherits a battle-tested architecture and pushes into uncharted air — a <strong>new species of flight controller</strong>, built for wings from the silicon up. The birds have been waiting for us to catch up.</p>
 <div class='highlight'>
 <code>CRSF → rx → OrniFlight → ONDAS → waveform → PWM servos → wings</code>
@@ -52,8 +52,8 @@
 <section id='ondas'>
 <h2>ONDAS</h2>
 <h3 class='subheadline'>振荡归一化动态自适应稳定</h3>
-<p class='lead'><strong>Oscillating Normalized Dynamic Adaptive Stabilization</strong> — the first control theory built specifically for flapping-wing aerodynamics.</p>
-<p>Quad PIDs assume continuous thrust. Ornithopter thrust is <strong>phasic</strong> — the same impulse creates different moments depending on <em>when</em> in the stroke it's applied. ONDAS uses cadence, ferocity, asymmetry, warp, anchor, resonance, prescience, espelho, saudade, and SSFF — an orchestra of phase-aware modulators — to place every corrective gram exactly where aerodynamics can use it.</p>
+<p class='lead'><strong>振荡归一化动态自适应稳定</strong>—第一个专为扑翼空气动力学构建的控制理论。</p>
+<p>四PID假设连续推力。Ornithopter的推力是<strong>相</strong>位的—相同的冲动会产生不同的时刻，具体取决于它在<em>何时</em>施加。ONDAS使用节奏、凶猛、不对称、翘曲、锚定、共振、先见之明、espelho、saudade和SSFF （相位感知调制器的管弦乐队）来准确放置空气动力学可以使用的每个校正克。</p>
 <div class='highlight'>
 <code>cadence · ferocity · asymmetry · warp · anchor · resonance · prescience · espelho · saudade · SSFF</code>
 </div>
@@ -66,35 +66,35 @@
 <h3 class='subheadline'>翅膀应得的一切</h3>
 <dl class='grid'>
 <dt>飞行配置</dt>
-<dd>4 independent profiles (0–3), switchable in-flight via BOX mode. Each holds full ONDAS tuning, wave shape, and aeroelastic coefficients.</dd>
+<dd>4个独立轮廓（ 0–3 ） ，可通过箱式模式在飞行中切换。每个都具有完整的ONDAS调谐、波形和气动弹性系数。</dd>
 <dt>统一频率通道</dt>
-<dd>Single RC channel with min/max Hz mapping. Works identically in INDEPENDENT and GLIDE flight modes — one pot, both regimes.</dd>
+<dd>单个RC通道，最小/最大Hz映射。在独立和滑翔飞行模式下工作相同—一个锅，两种状态。</dd>
 <dt>GralhaAzul 机翼动力学</dt>
-<dd>Trapezoidal waveform generation with servo speed limiting, amplitude mapping, flap magnitude, and wing origin geometry — the wing-ODE core.</dd>
+<dd>具有伺服限速、振幅映射、襟翼幅值和机翼原点几何形状的梯形波形生成—机翼-ODE核心。</dd>
 <dt>10通道 ONDAS 调制</dt>
-<dd>Cadence timing, ferocity P/D on 3 axes, balance, warp, anchor, resonance — per-profile, real-time adjustable via MSP.</dd>
+<dd>节奏定时， 3轴凶猛P/D ，平衡，翘曲，锚定，共振—每个轮廓，通过MSP实时可调。</dd>
 <dt>MSP 配置器 (apiVersion 1.46)</dt>
-<dd>Full ONDAS tuning GUI — all 19 profile fields, frequency channel, GralhaAzul, Phase 2 gains. Profile switcher for per-slot editing.</dd>
+<dd>全ONDAS调整GUI —所有19个配置文件字段，频率通道， GralhaAzul ，第2阶段增益。用于每时隙编辑的配置文件切换器。</dd>
 <dt>GLIDE 与 INDEPENDENT 模式</dt>
-<dd>Two flight regimes: GLIDE (throttle-centred, natural soaring) and INDEPENDENT (direct flap frequency via RC channel). BOX-selectable.</dd>
+<dd>两种飞行方式：滑翔（以油门为中心，自然飙升）和独立（通过RC通道直接襟翼频率）。BOX可选。</dd>
 </dl>
 </section>
 <section id='hardware'>
 <h2>硬件</h2>
 <h3 class='subheadline'>STM32F3/F4/F7 飞控</h3>
-<p class='lead'>Runs on any Betaflight 4.0-compatible STM32F3/F4/F7 flight controller with servo-capable timer pins.</p>
+<p class='lead'>可在任何兼容Betaflight 4.0的STM32F3/F4/F7飞行控制器上运行，带有伺服定时器引脚。</p>
 <table class='specs'>
 <tr>
 <td>目标</td>
-<td>TINYFISH (F3, integrated FrSky RX), OMNIBUSF4, MATEKF405, KAKUTEF7 …</td>
+<td>TINYFISH （ F3 ，集成FrSky RX ）、OMNIBUSF4、MATEKF405、KAKUTEF7……</td>
 </tr>
 <tr>
 <td>舵机输出</td>
-<td>Up to 4 programmable servo channels, 50–400 Hz PWM</td>
+<td>最多4个可编程伺服通道， 50–400 Hz PWM</td>
 </tr>
 <tr>
 <td>接收机</td>
-<td>CRSF (Crossfire / ExpressLRS), SBUS, Spektrum, SUMD — plus integrated FrSky on TINYFISH</td>
+<td>CRSF （ Crossfire/ExpressLRS ）、SBUS、Spektrum、SUMD -以及TINYFISH上的集成FrSky</td>
 </tr>
 <tr>
 <td>闪存</td>
