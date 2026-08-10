@@ -43,19 +43,19 @@
 <section id='manifest'>
 <h2>Manifes</h2>
 <h3 class='subheadline'>Spesies baru pengontrol penerbangan</h3>
-<p class='lead'>OrniFlight exists because a flapping wing controls thrust, pitch, roll, and yaw <strong>within a single stroke</strong> — a channel of expressiveness no propeller can match.</p>
-<p>Nature solved flapping-wing flight 150 million years before the first quadcopter took off. Every sparrow, every albatross, every hummingbird carries flight logic in its nervous system that no PID controller has ever replicated. OrniFlight opens a new domain — where thrust is phase, where stability is rhythm, where the aircraft breathes with every wingbeat. ONDAS, our Oscillating Normalized Dynamic Adaptive Stabilization, is the first control theory built from first principles for flapping aerodynamics. It modulates correction force <em>within</em> the wingbeat — not against it, not despite it, but <strong>with</strong> it. This firmware is free software because flight belongs to no corporation. It runs on commodity STM32F3 hardware because the tools for transcendent flight should cost less than a dinner. OrniFlight inherits a battle-tested architecture and pushes into uncharted air — a <strong>new species of flight controller</strong>, built for wings from the silicon up. The birds have been waiting for us to catch up.</p>
+<p class='lead'>OrniFlight ada karena sayap yang mengepak mengontrol dorong, pitch, roll, dan yaw <strong>dalam satu langkah</strong> — saluran ekspresif yang tidak dapat ditandingi oleh baling - baling.</p>
+<p>Alam memecahkan masalah penerbangan mengepakkan sayap 150 juta tahun sebelum quadcopter pertama lepas landas. Setiap burung pipit, setiap elang laut, setiap burung kolibri membawa logika terbang dalam sistem sarafnya yang tidak pernah ditiru oleh pengontrol PID. OrniFlight membuka domain baru — di mana daya dorong adalah fase, di mana stabilitas adalah ritme, di mana pesawat bernapas dengan setiap kepakan sayap. ONDAS, Oscillating Normalized Dynamic Adaptive Stabilization kami, adalah teori kontrol pertama yang dibangun dari prinsip pertama untuk mengepakkan aerodinamika. Ini memodulasi gaya koreksi <em>di dalam</em> kepakan sayap — bukan melawannya, tidak mengabaikannya, namun <strong>dengan</strong> itu. Firmware ini adalah perangkat lunak gratis karena penerbangan bukan milik perusahaan apa pun. Ini berjalan pada perangkat keras komoditas STM32F3 karena peralatan untuk penerbangan transenden harganya lebih murah daripada makan malam. OrniFlight mewarisi arsitektur yang telah teruji dalam pertempuran dan terbang ke udara yang belum dipetakan — sebuah <strong>spesies pengontrol penerbangan baru</strong>, yang dibuat untuk sayap dari silikon ke atas. Burung-burung telah menunggu kita untuk menyusul.</p>
 <div class='highlight'>
-<code>CRSF → rx → OrniFlight → ONDAS → waveform → PWM servos → wings</code>
+<code>CRSF → rx → OrniFlight → ONDAS → bentuk gelombang → PWM servos → wings</code>
 </div>
 </section>
 <section id='ondas'>
 <h2>ONDAS</h2>
 <h3 class='subheadline'>Stabilisasi Adaptif Dinamis Ternormalisasi Berosilasi</h3>
-<p class='lead'><strong>Oscillating Normalized Dynamic Adaptive Stabilization</strong> — the first control theory built specifically for flapping-wing aerodynamics.</p>
-<p>Quad PIDs assume continuous thrust. Ornithopter thrust is <strong>phasic</strong> — the same impulse creates different moments depending on <em>when</em> in the stroke it's applied. ONDAS uses cadence, ferocity, balance, warp, anchor, resonance, prescience, espelho, saudade, and SSFF — an orchestra of phase-aware modulators — to place every corrective gram exactly where aerodynamics can use it.</p>
+<p class='lead'><strong>Stabilisasi Adaptif Dinamis Normalisasi Berosilasi</strong> — teori kontrol pertama yang dibangun khusus untuk aerodinamika sayap mengepak.</p>
+<p>PID Quad mengasumsikan dorongan terus menerus. Dorongan ornithopter <strong>bersifat</strong> fasik — impuls yang sama menciptakan momen yang berbeda tergantung pada <em>saat</em> stroke diterapkan. ONDAS menggunakan irama, keganasan, keseimbangan, lungsin, jangkar, resonansi, prescience, espelho, saudade, dan SSFF — sebuah orkestra modulator sadar fase — untuk menempatkan setiap gram korektif tepat di mana aerodinamika dapat menggunakannya.</p>
 <div class='highlight'>
-<code>cadence · ferocity · balance · warp · anchor · resonance · prescience · espelho · saudade · SSFF</code>
+<code>irama · keganasan · keseimbangan · warp · jangkar · resonansi · prescience · espelho · saudade · SSFF</code>
 </div>
 <p class='doc-link'>
 <a href='../en/wiki/ondas.html'>Teori Lengkap ONDAS →</a>
@@ -72,7 +72,7 @@
 <dt>Dinamika Sayap GralhaAzul</dt>
 <dd>Trapezoidal waveform generation with servo speed limiting, amplitude mapping, flap magnitude, and wing origin geometry — the wing-ODE core.</dd>
 <dt>Modulasi ONDAS 10-Kanal</dt>
-<dd>Cadence timing, ferocity P/D on 3 axes, balance, warp, anchor, resonance — per-profile, real-time adjustable via MSP.</dd>
+<dd>Cadence timing, ferocity P/D on 3 axes, balance, warp, anchor, resonance — per — profile, real - time adjustable via MSP.</dd>
 <dt>Konfigurator MSP (apiVersion 1.46)</dt>
 <dd>Full ONDAS tuning GUI — all 19 profile fields, frequency channel, GralhaAzul, Phase 2 gains. Profile switcher for per-slot editing.</dd>
 <dt>Mode GLIDE &amp; INDEPENDENT</dt>
@@ -82,7 +82,7 @@
 <section id='hardware'>
 <h2>Perangkat Keras</h2>
 <h3 class='subheadline'>Pengontrol penerbangan STM32F3/F4/F7</h3>
-<p class='lead'>Runs on any Betaflight 4.0-compatible STM32F3/F4/F7 flight controller with servo-capable timer pins.</p>
+<p class='lead'>Berjalan pada pengontrol penerbangan STM32F3/F4/F7 yang kompatibel dengan Betaflight 4.0 dengan pin timer berkemampuan servo.</p>
 <table class='specs'>
 <tr>
 <td>Target</td>

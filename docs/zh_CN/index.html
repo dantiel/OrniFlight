@@ -44,9 +44,9 @@
 <h2>宣言</h2>
 <h3 class='subheadline'>新一代飞控</h3>
 <p class='lead'>OrniFlight之所以存在，是因为扑翼在一个<strong>行程内</strong>控制推力、俯仰、滚转和偏航--这是一个螺旋桨无法比拟的表现力通道。</p>
-<p>Nature solved flapping-wing flight 150 million years before the first quadcopter took off. Every sparrow, every albatross, every hummingbird carries flight logic in its nervous system that no PID controller has ever replicated. OrniFlight opens a new domain — where thrust is phase, where stability is rhythm, where the aircraft breathes with every wingbeat. ONDAS, our Oscillating Normalized Dynamic Adaptive Stabilization, is the first control theory built from first principles for flapping aerodynamics. It modulates correction force <em>within</em> the wingbeat — not against it, not despite it, but <strong>with</strong> it. This firmware is free software because flight belongs to no corporation. It runs on commodity STM32F3 hardware because the tools for transcendent flight should cost less than a dinner. OrniFlight inherits a battle-tested architecture and pushes into uncharted air — a <strong>new species of flight controller</strong>, built for wings from the silicon up. The birds have been waiting for us to catch up.</p>
+<p>大自然在第一架四轴飞行器起飞前1.5亿年解决了扑翼飞行。每只麻雀、每只信天翁、每只蜂鸟的神经系统都带有飞行逻辑，这是PID控制器从未复制的。OrniFlight开辟了一个新的领域--推力是相位，稳定是节奏，飞机每次翅膀跳动都会呼吸。 ONDAS ，我们的振荡归一化动态自适应稳定，是根据扑翼空气动力学的第一原理建立的第一个控制理论。它调节翅膀节拍<em>内的</em>校正力—不是针对它，也不是尽管它，而是<strong>与它一起</strong>。此固件是免费软件，因为FLIGHT不属于任何公司。它在商品STM32F3硬件上运行，因为超凡飞行的工具应该比晚餐便宜。 OrniFlight继承了一<strong>种久经考验的架构，并将其推入了未知的空气中--一种新型的飞行控制器</strong>，专为从硅片上方的翅膀而设计。鸟儿们一直在等着我们赶上来。</p>
 <div class='highlight'>
-<code>CRSF → rx → OrniFlight → ONDAS → waveform → PWM servos → wings</code>
+<code>CRSF → rx OrniFlight → → Ondas→波形→PWM伺服机→翼</code>
 </div>
 </section>
 <section id='ondas'>

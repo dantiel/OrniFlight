@@ -43,19 +43,19 @@
 <section id='manifest'>
 <h2>Manifesto</h2>
 <h3 class='subheadline'>Unha nova especie de controlador de voo</h3>
-<p class='lead'>OrniFlight exists because a flapping wing controls thrust, pitch, roll, and yaw <strong>within a single stroke</strong> — a channel of expressiveness no propeller can match.</p>
-<p>Nature solved flapping-wing flight 150 million years before the first quadcopter took off. Every sparrow, every albatross, every hummingbird carries flight logic in its nervous system that no PID controller has ever replicated. OrniFlight opens a new domain — where thrust is phase, where stability is rhythm, where the aircraft breathes with every wingbeat. ONDAS, our Oscillating Normalized Dynamic Adaptive Stabilization, is the first control theory built from first principles for flapping aerodynamics. It modulates correction force <em>within</em> the wingbeat — not against it, not despite it, but <strong>with</strong> it. This firmware is free software because flight belongs to no corporation. It runs on commodity STM32F3 hardware because the tools for transcendent flight should cost less than a dinner. OrniFlight inherits a battle-tested architecture and pushes into uncharted air — a <strong>new species of flight controller</strong>, built for wings from the silicon up. The birds have been waiting for us to catch up.</p>
+<p class='lead'>OrniFlight existe porque unha á flapping controla o empuxe, o lanzamento, o rolo e o <strong>xau dentro dun só golpe</strong> — unha canle de expresividade que ningunha hélice pode coincidir.</p>
+<p>A natureza resolveu o voo flapping-wing 150 millóns de anos antes de que o primeiro cuadricóptero despegase. Cada gorrión, cada albatros, cada colibrí leva unha lóxica de voo no seu sistema nervioso que ningún controlador de PID replicou nunca. OrniFlight abre un novo dominio — onde o impulso é fase, onde a estabilidade é ritmo, onde o avión respira con cada batimento alar. ONDAS, our Oscillating Normalized Dynamic Adaptive Stabilization, is the first control theory built from first principles for flapping aerodynamics. It modulates correction force <em>within</em> the wingbeat — not against it, not despite it, but <strong>with</strong> it. This firmware is free software because flight belongs to no corporation. It runs on commodity STM32F3 hardware because the tools for transcendent flight should cost less than a dinner. OrniFlight inherits a battle-tested architecture and pushes into uncharted air — a <strong>new species of flight controller</strong>, built for wings from the silicon up. The birds have been waiting for us to catch up.</p>
 <div class='highlight'>
-<code>CRSF → rx → OrniFlight → ONDAS → waveform → PWM servos → wings</code>
+<code>CRSF → rx OrniFlight → → Ondas → forma de onda → PWM servos → asas</code>
 </div>
 </section>
 <section id='ondas'>
 <h2>ONDAS</h2>
 <h3 class='subheadline'>Estabilización Dinámica Adaptativa Normalizada Oscilante</h3>
-<p class='lead'><strong>Oscillating Normalized Dynamic Adaptive Stabilization</strong> — the first control theory built specifically for flapping-wing aerodynamics.</p>
-<p>Quad PIDs assume continuous thrust. Ornithopter thrust is <strong>phasic</strong> — the same impulse creates different moments depending on <em>when</em> in the stroke it's applied. ONDAS uses cadence, ferocity, balance, warp, anchor, resonance, prescience, espelho, saudade, and SSFF — an orchestra of phase-aware modulators — to place every corrective gram exactly where aerodynamics can use it.</p>
+<p class='lead'><strong>Estabilización Adaptativa Dinámica Normalizada Oscilante</strong> — a primeira teoría de control construída especificamente para a aerodinámica das ás aleteadas.</p>
+<p>Quad PIDs asumen impulso continuo. O impulso do <strong>ornitóptero é fásico</strong> — o mesmo impulso crea momentos diferentes dependendo de <em>cando</em> no golpe se aplique. ONDAS usa cadencia, ferocidade, equilibrio, verruga, áncora, resonancia, presciencia, espelho, saudade, e SSFF — unha orquestra de moduladores conscientes de fase — para colocar cada gramo correctivo exactamente onde a aerodinámica pode usalo.</p>
 <div class='highlight'>
-<code>cadence · ferocity · balance · warp · anchor · resonance · prescience · espelho · saudade · SSFF</code>
+<code>cadencia · ferocidade · equilibrio · verruga · áncora · resonancia · presciencia · espelho · saudade · SSFF</code>
 </div>
 <p class='doc-link'>
 <a href='../en/wiki/ondas.html'>Teoría Completa de ONDAS →</a>
@@ -72,7 +72,7 @@
 <dt>Dinámica de Á GralhaAzul</dt>
 <dd>Trapezoidal waveform generation with servo speed limiting, amplitude mapping, flap magnitude, and wing origin geometry — the wing-ODE core.</dd>
 <dt>Modulación ONDAS de 10-Canles</dt>
-<dd>Cadence timing, ferocity P/D on 3 axes, balance, warp, anchor, resonance — per-profile, real-time adjustable via MSP.</dd>
+<dd>Cadence timing, ferocidade P/D en 3 eixos, equilibrio, verruga, áncora, resonancia — por perfil, axustable en tempo real vía MSP.</dd>
 <dt>Configurador MSP (apiVersion 1.46)</dt>
 <dd>Full ONDAS tuning GUI — all 19 profile fields, frequency channel, GralhaAzul, Phase 2 gains. Profile switcher for per-slot editing.</dd>
 <dt>Modos GLIDE e INDEPENDENT</dt>
@@ -82,7 +82,7 @@
 <section id='hardware'>
 <h2>Hardware</h2>
 <h3 class='subheadline'>Controladores de voo STM32F3/F4/F7</h3>
-<p class='lead'>Runs on any Betaflight 4.0-compatible STM32F3/F4/F7 flight controller with servo-capable timer pins.</p>
+<p class='lead'>Funciona en calquera controlador de voo STM32F3/F4/F7 compatible con Betaflight 4.0 con pins temporizadores servo-capaz.</p>
 <table class='specs'>
 <tr>
 <td>Obxectivos</td>

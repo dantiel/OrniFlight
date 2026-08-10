@@ -44,9 +44,9 @@
 <h2>Манифест</h2>
 <h3 class='subheadline'>Новый вид полётного контроллера</h3>
 <p class='lead'>OrniFlight существует, потому что машущее крыло контролирует тягу, тангаж, крен и рыскание <strong>в течение одного хода</strong> — канал выразительности, с которым не может сравниться ни один пропеллер.</p>
-<p>Nature solved flapping-wing flight 150 million years before the first quadcopter took off. Every sparrow, every albatross, every hummingbird carries flight logic in its nervous system that no PID controller has ever replicated. OrniFlight opens a new domain — where thrust is phase, where stability is rhythm, where the aircraft breathes with every wingbeat. ONDAS, our Oscillating Normalized Dynamic Adaptive Stabilization, is the first control theory built from first principles for flapping aerodynamics. It modulates correction force <em>within</em> the wingbeat — not against it, not despite it, but <strong>with</strong> it. This firmware is free software because flight belongs to no corporation. It runs on commodity STM32F3 hardware because the tools for transcendent flight should cost less than a dinner. OrniFlight inherits a battle-tested architecture and pushes into uncharted air — a <strong>new species of flight controller</strong>, built for wings from the silicon up. The birds have been waiting for us to catch up.</p>
+<p>Природа решила проблему полета с машущим крылом за 150 миллионов лет до того, как взлетел первый квадрокоптер. Каждый воробей, каждый альбатрос, каждая колибри несет в своей нервной системе логику полета, которую никогда не воспроизводил ни один ПИД-регулятор. OrniFlight открывает новую область — где тяга - фаза, где стабильность - ритм, где самолет дышит с каждым ударом крыла. ONDAS, наша осциллирующая нормализованная динамическая адаптивная стабилизация, является первой теорией управления, построенной на первых принципах аэродинамики махания. Он модулирует силу коррекции <em>внутри</em> удара крыла — не против него, не несмотря на него, а <strong>с</strong> ним. Эта прошивка является бесплатным программным обеспечением, потому что Flight не принадлежит ни одной корпорации. Он работает на обычном оборудовании STM32F3, потому что инструменты для трансцендентного полета должны стоить меньше, чем обед. OrniFlight наследует проверенную в бою архитектуру и выталкивает в неизведанный воздух — <strong>новый вид контроллера полета</strong>, построенный для крыльев из кремния вверх. Птицы ждали, когда мы догоним.</p>
 <div class='highlight'>
-<code>CRSF → rx → OrniFlight → ONDAS → waveform → PWM servos → wings</code>
+<code>CRSF → rx → OrniFlight → ONDAS → форма волны → ШИМ сервоприводы → крылья</code>
 </div>
 </section>
 <section id='ondas'>
@@ -72,7 +72,7 @@
 <dt>Динамика крыла GralhaAzul</dt>
 <dd>Генерация трапециевидного сигнала с ограничением скорости сервопривода, амплитудным отображением, амплитудой закрылка и геометрией начала крыла — ядро Wing-ODE.</dd>
 <dt>10-канальная модуляция ONDAS</dt>
-<dd>Cadence timing, ferocity P/D on 3 axes, balance, warp, anchor, resonance — per-profile, real-time adjustable via MSP.</dd>
+<dd>Тайминг каденса, свирепость P/D по 3 осям, баланс, деформация, якорь, резонанс — для каждого профиля, регулируется в реальном времени через MSP.</dd>
 <dt>Конфигуратор MSP (apiVersion 1.46)</dt>
 <dd>Полный GUI настройки ONDAS — все 19 полей профиля, частотный канал, GralhaAzul, Фаза 2 усиления. Переключатель профилей для редактирования ПО слотам.</dd>
 <dt>Режимы GLIDE и INDEPENDENT</dt>

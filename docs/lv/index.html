@@ -43,19 +43,19 @@
 <section id='manifest'>
 <h2>Manifests</h2>
 <h3 class='subheadline'>Jauna lidojuma kontrolieru suga</h3>
-<p class='lead'>OrniFlight exists because a flapping wing controls thrust, pitch, roll, and yaw <strong>within a single stroke</strong> — a channel of expressiveness no propeller can match.</p>
-<p>Nature solved flapping-wing flight 150 million years before the first quadcopter took off. Every sparrow, every albatross, every hummingbird carries flight logic in its nervous system that no PID controller has ever replicated. OrniFlight opens a new domain — where thrust is phase, where stability is rhythm, where the aircraft breathes with every wingbeat. ONDAS, our Oscillating Normalized Dynamic Adaptive Stabilization, is the first control theory built from first principles for flapping aerodynamics. It modulates correction force <em>within</em> the wingbeat — not against it, not despite it, but <strong>with</strong> it. This firmware is free software because flight belongs to no corporation. It runs on commodity STM32F3 hardware because the tools for transcendent flight should cost less than a dinner. OrniFlight inherits a battle-tested architecture and pushes into uncharted air — a <strong>new species of flight controller</strong>, built for wings from the silicon up. The birds have been waiting for us to catch up.</p>
+<p class='lead'>OrniFlight pastāv tāpēc, ka plīvojošs spārns kontrolē vilci, augstumu, pagriešanos un <strong>pagriešanos vienā gājienā</strong> — izteiksmības kanālu, kuru dzenskrūve nevar saskaņot.</p>
+<p>Daba atrisināja lidojumu ar spārniem 150 miljonus gadu pirms pirmā kvadrokoptera pacelšanās. Katrs zvirbulis, katrs albatross, katrs kolibri savā nervu sistēmā nes lidojuma loģiku, kādu neviens PID kontrolieris nekad nav atkārtojis. OrniFlight atver jaunu domēnu — kur vilce ir fāze, kur stabilitāte ir ritms, kur lidmašīna elpo ar katru spārna sitienu. ONDAS, mūsu oscilējošā normalizētā dinamiskā adaptīvā stabilizācija, ir pirmā vadības teorija, kas veidota no pirmajiem aerodinamikas principiem. Tas modulē korekcijas spēku <em>spārna sitiena iekšienē</em> — nevis pret to, ne par spīti tam, bet gan <strong>ar</strong> to. Šī programmaparatūra ir bezmaksas programmatūra, jo lidojums nepieder nevienai korporācijai. Tas darbojas ar STM32F3 aparatūru, jo transcendenta lidojuma instrumentiem vajadzētu maksāt mazāk nekā vakariņas. OrniFlight ir mantojis kaujās pārbaudītu arhitektūru un iespiežas neatklātā gaisā — <strong>jaunas lidojuma vadības ierīces</strong>, kas veidotas spārniem no silīcija uz augšu. Putni gaidīja, kad panāksim.</p>
 <div class='highlight'>
-<code>CRSF → rx → OrniFlight → ONDAS → waveform → PWM servos → wings</code>
+<code>CRSF → rx → OrniFlight → ONDAS → līknes → PWM servo → spārni</code>
 </div>
 </section>
 <section id='ondas'>
 <h2>ONDAS</h2>
 <h3 class='subheadline'>Svārstību Normalizētā Dinamiskā Adaptīvā Stabilizācija</h3>
-<p class='lead'><strong>Oscillating Normalized Dynamic Adaptive Stabilization</strong> — the first control theory built specifically for flapping-wing aerodynamics.</p>
-<p>Quad PIDs assume continuous thrust. Ornithopter thrust is <strong>phasic</strong> — the same impulse creates different moments depending on <em>when</em> in the stroke it's applied. ONDAS uses cadence, ferocity, balance, warp, anchor, resonance, prescience, espelho, saudade, and SSFF — an orchestra of phase-aware modulators — to place every corrective gram exactly where aerodynamics can use it.</p>
+<p class='lead'><strong>Oscillating Normalized Dynamic Adaptive Stabilization</strong> — pirmā vadības teorija, kas īpaši izstrādāta flapping-wing aerodinamikai.</p>
+<p>Četru PID pieņem nepārtrauktu vilci. Ornitoptera vilce ir <strong>fāziska</strong> — viens un tas pats impulss rada dažādus mirkļus atkarībā no tā, <em>kad</em> gājienā tas tiek pielietots. ONDAS izmanto kadenci, nežēlību, līdzsvaru, velkus, enkuru, rezonansi, prescience, espelho, saudade un SSFF — fāzei atbilstošu modulatoru orķestri, lai katru koriģējošo gramu novietotu tieši tur, kur to var izmantot aerodinamika.</p>
 <div class='highlight'>
-<code>cadence · ferocity · balance · warp · anchor · resonance · prescience · espelho · saudade · SSFF</code>
+<code>kadence · nežēlība · līdzsvars · velki · enkurs · rezonanse · prescience · espelho · saudade · SSFF</code>
 </div>
 <p class='doc-link'>
 <a href='../en/wiki/ondas.html'>Pilnīga ONDAS Teorija →</a>
@@ -72,7 +72,7 @@
 <dt>GralhaAzul Spārnu Dinamika</dt>
 <dd>Trapezoidal waveform generation with servo speed limiting, amplitude mapping, flap magnitude, and wing origin geometry — the wing-ODE core.</dd>
 <dt>10-Kanālu ONDAS Modulācija</dt>
-<dd>Cadence timing, ferocity P/D on 3 axes, balance, warp, anchor, resonance — per-profile, real-time adjustable via MSP.</dd>
+<dd>Kadences laiks, niknums P/D uz 3 asīm, balanss, deformācija, enkurs, rezonanse — katram profilam, reāllaikā regulējams, izmantojot MSP.</dd>
 <dt>MSP Konfigurators (apiVersion 1.46)</dt>
 <dd>Full ONDAS tuning GUI — all 19 profile fields, frequency channel, GralhaAzul, Phase 2 gains. Profile switcher for per-slot editing.</dd>
 <dt>GLIDE un INDEPENDENT Režīmi</dt>
@@ -82,7 +82,7 @@
 <section id='hardware'>
 <h2>Aparatūra</h2>
 <h3 class='subheadline'>STM32F3/F4/F7 lidojuma kontrolieri</h3>
-<p class='lead'>Runs on any Betaflight 4.0-compatible STM32F3/F4/F7 flight controller with servo-capable timer pins.</p>
+<p class='lead'>Darbojas ar jebkuru Betaflight 4.0 saderīgu STM32F3/F4/F7 lidojuma kontrolleri ar taimera tapām, kas ir saderīgas ar servovadību.</p>
 <table class='specs'>
 <tr>
 <td>Mērķi</td>

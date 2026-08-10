@@ -43,19 +43,19 @@
 <section id='manifest'>
 <h2>Manifestera</h2>
 <h3 class='subheadline'>En ny art av flygkontroll</h3>
-<p class='lead'>OrniFlight exists because a flapping wing controls thrust, pitch, roll, and yaw <strong>within a single stroke</strong> — a channel of expressiveness no propeller can match.</p>
-<p>Nature solved flapping-wing flight 150 million years before the first quadcopter took off. Every sparrow, every albatross, every hummingbird carries flight logic in its nervous system that no PID controller has ever replicated. OrniFlight opens a new domain — where thrust is phase, where stability is rhythm, where the aircraft breathes with every wingbeat. ONDAS, our Oscillating Normalized Dynamic Adaptive Stabilization, is the first control theory built from first principles for flapping aerodynamics. It modulates correction force <em>within</em> the wingbeat — not against it, not despite it, but <strong>with</strong> it. This firmware is free software because flight belongs to no corporation. It runs on commodity STM32F3 hardware because the tools for transcendent flight should cost less than a dinner. OrniFlight inherits a battle-tested architecture and pushes into uncharted air — a <strong>new species of flight controller</strong>, built for wings from the silicon up. The birds have been waiting for us to catch up.</p>
+<p class='lead'>OrniFlight finns eftersom en flaxande vinge styr dragkraft, stigning, rullning och gir <strong>inom ett enda slag</strong> — en kanal med uttrycksfullhet som ingen propeller kan matcha.</p>
+<p>Naturen löste flaxande vingflyg 150 miljoner år innan den första quadcoptern lyfte. Varje sparv, varje albatross, varje kolibri bär flyglogik i sitt nervsystem som ingen PID-kontroller någonsin har replikerat. OrniFlight öppnar en ny domän — där dragkraft är fas, där stabilitet är rytm, där flygplanet andas med varje vingslag. ONDAS, vår oscillerande normaliserade dynamiska adaptiva stabilisering, är den första styrteorin byggd från de första principerna för flaxande aerodynamik. Den modulerar korrigeringskraften <em>inom</em> vingslaget — inte mot den, inte trots den, utan <strong>med</strong> den. Denna firmware är fri programvara eftersom flight inte tillhör något företag. Den körs på STM32F3-hårdvara eftersom verktygen för transcendent flyg borde kosta mindre än en middag. OrniFlight ärver en stridstestad arkitektur och skjuter upp i okända luft – en <strong>ny typ av flygkontroller</strong>, byggd för vingar från kisel och uppåt. Fåglarna har väntat på att vi ska komma ikapp.</p>
 <div class='highlight'>
-<code>CRSF → rx → OrniFlight → ONDAS → waveform → PWM servos → wings</code>
+<code>CRSF → rx → OrniFlight → ONDAS → vågform → PWM → servovingar</code>
 </div>
 </section>
 <section id='ondas'>
 <h2>ONDAS</h2>
 <h3 class='subheadline'>Oscillerande Normaliserad Dynamisk Adaptiv Stabilisering</h3>
-<p class='lead'><strong>Oscillating Normalized Dynamic Adaptive Stabilization</strong> — the first control theory built specifically for flapping-wing aerodynamics.</p>
-<p>Quad PIDs assume continuous thrust. Ornithopter thrust is <strong>phasic</strong> — the same impulse creates different moments depending on <em>when</em> in the stroke it's applied. ONDAS uses cadence, ferocity, balance, warp, anchor, resonance, prescience, espelho, saudade, and SSFF — an orchestra of phase-aware modulators — to place every corrective gram exactly where aerodynamics can use it.</p>
+<p class='lead'><strong>Oscillerande normaliserad dynamisk adaptiv stabilisering</strong> — den första kontrollteorin byggd speciellt för flaxande vingaerodynamik.</p>
+<p>Quad PID antar kontinuerlig dragkraft. Ornitopters dragkraft är <strong>fasisk</strong> — samma impuls skapar olika ögonblick beroende på <em>när</em> i slaget den appliceras. ONDAS använder kadens, vildhet, balans, varp, ankare, resonans, prescience, espelho, saudade och SSFF — en orkester av fasmedvetna modulatorer — för att placera varje korrigerande gram exakt där aerodynamiken kan använda det.</p>
 <div class='highlight'>
-<code>cadence · ferocity · balance · warp · anchor · resonance · prescience · espelho · saudade · SSFF</code>
+<code>kadens · vildhet · balans · varp · ankare · resonans · förutseende · espelho · saudade · SSFF</code>
 </div>
 <p class='doc-link'>
 <a href='../en/wiki/ondas.html'>Fullständig ONDAS Teori →</a>
@@ -72,7 +72,7 @@
 <dt>GralhaAzul Vingdynamik</dt>
 <dd>Trapezoidal waveform generation with servo speed limiting, amplitude mapping, flap magnitude, and wing origin geometry — the wing-ODE core.</dd>
 <dt>10-Kanals ONDAS Modulation</dt>
-<dd>Cadence timing, ferocity P/D on 3 axes, balance, warp, anchor, resonance — per-profile, real-time adjustable via MSP.</dd>
+<dd>Kadens timing, ferocity P/D på 3 axlar, balans, varp, ankare, resonans — per profil, realtidsjusterbar via MSP.</dd>
 <dt>MSP Konfigurator (apiVersion 1.46)</dt>
 <dd>Full ONDAS tuning GUI — all 19 profile fields, frequency channel, GralhaAzul, Phase 2 gains. Profile switcher for per-slot editing.</dd>
 <dt>GLIDE &amp; INDEPENDENT Lägen</dt>
@@ -82,7 +82,7 @@
 <section id='hardware'>
 <h2>Hårdvara</h2>
 <h3 class='subheadline'>STM32F3/F4/F7 flygkontroller</h3>
-<p class='lead'>Runs on any Betaflight 4.0-compatible STM32F3/F4/F7 flight controller with servo-capable timer pins.</p>
+<p class='lead'>Körs på alla Betaflight 4.0-kompatibla STM32F3/F4/F7-flygkontroller med servokapabla tidsstift.</p>
 <table class='specs'>
 <tr>
 <td>Mål</td>

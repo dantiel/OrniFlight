@@ -172,7 +172,7 @@ def build_section_index(lang, section, title_key)
     asset_prefix: asset_prefix,
     content_html: index_html,
     all_langs: ALL_LANGS_DATA,
-    section_label: section.capitalize
+    section_label: nil
   })
 
   File.write(out_path, output, encoding: "UTF-8")
