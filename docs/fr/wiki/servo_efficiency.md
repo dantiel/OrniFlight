@@ -492,7 +492,7 @@ Higher is better. Click column headers to sort — <strong>Shift+click</strong> 
         <td class="num">5.00</td>
         <td class="num"></td>
         <td class="num strong"></td>
-        <td class="flight" data-flight-rating="5">Strong Flight <a href="https://youtu.be/tIGbU3pV1l4" class="yt-link" target="_blank">📺</a></td>
+        <td class="flight" data-flight-rating="2">Weak Flight <a href="https://youtu.be/tIGbU3pV1l4" class="yt-link" target="_blank">📺</a></td>
         <td class="notes">Kazu's Pteranodon 131 (232cm, 325g AUW). Stall torque 60 kg·cm. Speed estimated — verify.</td>
       </tr>
       <tr class="untested" data-voltage="7.4" data-brand="HDKJ">
