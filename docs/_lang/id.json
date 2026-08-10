@@ -8,7 +8,7 @@
   "nav_features": "Fitur",
   "nav_hardware": "Perangkat",
   "nav_wiki": "Wiki",
-  "nav_docs": "Docs",
+  "nav_docs": "dokumen",
   "manifest_subheadline": "Spesies baru pengontrol penerbangan",
   "ondas_subheadline": "Stabilisasi Adaptif Dinamis Ternormalisasi Berosilasi",
   "features_subheadline": "Segala yang layak untuk sayap",
@@ -60,5 +60,6 @@
   "build_compatible": "GPL v3 ◇ Fork dari Betaflight 4.0.6 ◇ Build bersih: nol peringatan",
   "footer_hermetic": "Firmware Hermetik ◇ STM32F3 ◇ GPL v3 ◇ Tanpa Ketergantungan Cloud",
   "footer_credit": "OrniFlight — Penerbangan sayap kepak, didefinisikan ulang.",
-  "footer_resources": "<a href=\"https://github.com/dantiel/OrniFlight\" target=\"_blank\">GitHub</a> ◇ <a href=\"en/wiki/\">Wiki</a> ◇ <a href=\"en/tutorials/\">Tutorials</a> ◇ <a href=\"https://github.com/dantiel/orniflight-configurator\" target=\"_blank\">Configurator</a>"
+  "footer_resources": "<a href=\"https://github.com/dantiel/OrniFlight\" target=\"_blank\">GitHub</a> ◇ <a href=\"en/wiki/\">Wiki</a> ◇ <a href=\"en/tutorials/\">Tutorials</a> ◇ <a href=\"https://github.com/dantiel/orniflight-configurator\" target=\"_blank\">Configurator</a>",
+  "hardware_title": "Perangkat keras"
 }

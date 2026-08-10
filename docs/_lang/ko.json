@@ -7,8 +7,8 @@
   "nav_ondas": "ONDAS",
   "nav_features": "기능",
   "nav_hardware": "하드웨어",
-  "nav_wiki": "Wiki",
-  "nav_docs": "Docs",
+  "nav_wiki": "위키",
+  "nav_docs": "문서",
   "manifest_subheadline": "비행 제어기의 새로운 종",
   "ondas_subheadline": "진동 정규화 동적 적응 안정화",
   "features_subheadline": "날개가 받을 자격이 있는 모든 것",
@@ -60,5 +60,6 @@
   "build_compatible": "GPL v3 ◇ Betaflight 4.0.6 포크 ◇ 클린 빌드: 경고 없음",
   "footer_hermetic": "밀교적 펌웨어 ◇ STM32F3 ◇ GPL v3 ◇ 클라우드 종속성 없음",
   "footer_credit": "OrniFlight — 날갯짓 비행, 재정의.",
-  "footer_resources": "<a href=\"https://github.com/dantiel/OrniFlight\" target=\"_blank\">GitHub</a> ◇ <a href=\"en/wiki/\">Wiki</a> ◇ <a href=\"en/tutorials/\">Tutorials</a> ◇ <a href=\"https://github.com/dantiel/orniflight-configurator\" target=\"_blank\">Configurator</a>"
+  "footer_resources": "<a href=\"https://github.com/dantiel/OrniFlight\" target=\"_blank\">GitHub</a> ◇ <a href=\"en/wiki/\">Wiki</a> ◇ <a href=\"en/tutorials/\">Tutorials</a> ◇ <a href=\"https://github.com/dantiel/orniflight-configurator\" target=\"_blank\">Configurator</a>",
+  "hardware_title": "하드웨어"
 }

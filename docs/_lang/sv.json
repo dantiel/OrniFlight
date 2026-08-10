@@ -3,12 +3,12 @@
   "dir": "ltr",
   "asset_prefix": "..",
   "title": "OrniFlight",
-  "nav_manifest": "Manifest",
+  "nav_manifest": "Manifestera",
   "nav_ondas": "ONDAS",
   "nav_features": "Funktioner",
   "nav_hardware": "Hårdvara",
   "nav_wiki": "Wiki",
-  "nav_docs": "Docs",
+  "nav_docs": "Dokument",
   "manifest_subheadline": "En ny art av flygkontroll",
   "ondas_subheadline": "Oscillerande Normaliserad Dynamisk Adaptiv Stabilisering",
   "features_subheadline": "Allt vingen förtjänar",
@@ -17,7 +17,7 @@
   "nav_tutorials": "Guider",
   "hero_greeting": "Flapping-wing flight, redefined.",
   "hero_version": "STM32F3 ◇ OrniFlight v0.4.6 ◇ apiVersion 1.46",
-  "manifest_title": "Manifest",
+  "manifest_title": "Manifestera",
   "manifest_lead": "OrniFlight exists because a flapping wing controls thrust, pitch, roll, and yaw <strong>within a single stroke</strong> — a channel of expressiveness no propeller can match.",
   "manifest_body": "Nature solved flapping-wing flight 150 million years before the first quadcopter took off. Every sparrow, every albatross, every hummingbird carries flight logic in its nervous system that no PID controller has ever replicated. OrniFlight opens a new domain — where thrust is phase, where stability is rhythm, where the aircraft breathes with every wingbeat. ONDAS, our Oscillating Normalized Dynamic Adaptive Stabilization, is the first control theory built from first principles for flapping aerodynamics. It modulates correction force <em>within</em> the wingbeat — not against it, not despite it, but <strong>with</strong> it. This firmware is free software because flight belongs to no corporation. It runs on commodity STM32F3 hardware because the tools for transcendent flight should cost less than a dinner. OrniFlight inherits a battle-tested architecture and pushes into uncharted air — a <strong>new species of flight controller</strong>, built for wings from the silicon up. The birds have been waiting for us to catch up.",
   "manifest_highlight": "CRSF → rx → OrniFlight → ONDAS → waveform → PWM servos → wings",
@@ -60,5 +60,6 @@
   "build_compatible": "GPL v3 ◇ Fork av Betaflight 4.0.6 ◇ Ren build: noll varningar",
   "footer_hermetic": "Hermetisk Firmware ◇ STM32F3 ◇ GPL v3 ◇ Inga Molnberoenden",
   "footer_credit": "OrniFlight — Vingslagsflygning, omdefinierad.",
-  "footer_resources": "<a href=\"https://github.com/dantiel/OrniFlight\" target=\"_blank\">GitHub</a> ◇ <a href=\"en/wiki/\">Wiki</a> ◇ <a href=\"en/tutorials/\">Tutorials</a> ◇ <a href=\"https://github.com/dantiel/orniflight-configurator\" target=\"_blank\">Configurator</a>"
+  "footer_resources": "<a href=\"https://github.com/dantiel/OrniFlight\" target=\"_blank\">GitHub</a> ◇ <a href=\"en/wiki/\">Wiki</a> ◇ <a href=\"en/tutorials/\">Tutorials</a> ◇ <a href=\"https://github.com/dantiel/orniflight-configurator\" target=\"_blank\">Configurator</a>",
+  "hardware_title": "Hårdvara"
 }

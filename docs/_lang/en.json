@@ -60,5 +60,6 @@
   "build_compatible": "GPL v3 ◇ Forked from Betaflight 4.0.6 ◇ Clean build: zero warnings",
   "footer_hermetic": "Hermetic Firmware ◇ STM32F3 ◇ GPL v3 ◇ No Cloud Dependencies",
   "footer_credit": "OrniFlight — Flapping-wing flight, redefined.",
-  "footer_resources": "<a href=\"https://github.com/dantiel/OrniFlight\" target=\"_blank\">GitHub</a> ◇ <a href=\"en/wiki/\">Wiki</a> ◇ <a href=\"en/tutorials/\">Tutorials</a> ◇ <a href=\"https://github.com/dantiel/orniflight-configurator\" target=\"_blank\">Configurator</a>"
+  "footer_resources": "<a href=\"https://github.com/dantiel/OrniFlight\" target=\"_blank\">GitHub</a> ◇ <a href=\"en/wiki/\">Wiki</a> ◇ <a href=\"en/tutorials/\">Tutorials</a> ◇ <a href=\"https://github.com/dantiel/orniflight-configurator\" target=\"_blank\">Configurator</a>",
+  "hardware_title": "Hardware"
 }

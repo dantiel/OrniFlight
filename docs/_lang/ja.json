@@ -7,8 +7,8 @@
   "nav_ondas": "ONDAS",
   "nav_features": "機能",
   "nav_hardware": "ハードウェア",
-  "nav_wiki": "Wiki",
-  "nav_docs": "Docs",
+  "nav_wiki": "ウィキ",
+  "nav_docs": "ドキュメント",
   "manifest_subheadline": "飛行制御装置の新種",
   "ondas_subheadline": "振動正規化動的適応安定化",
   "features_subheadline": "翼にふさわしいすべて",
@@ -60,5 +60,6 @@
   "build_compatible": "GPL v3 ◇ Betaflight 4.0.6より分岐 ◇ クリーンビルド：警告ゼロ",
   "footer_hermetic": "密教的ファームウェア ◇ STM32F3 ◇ GPL v3 ◇ クラウド依存なし",
   "footer_credit": "OrniFlight —— 羽ばたき飛行、再定義。",
-  "footer_resources": "<a href=\"https://github.com/dantiel/OrniFlight\" target=\"_blank\">GitHub</a> ◇ <a href=\"en/wiki/\">Wiki</a> ◇ <a href=\"en/tutorials/\">Tutorials</a> ◇ <a href=\"https://github.com/dantiel/orniflight-configurator\" target=\"_blank\">Configurator</a>"
+  "footer_resources": "<a href=\"https://github.com/dantiel/OrniFlight\" target=\"_blank\">GitHub</a> ◇ <a href=\"en/wiki/\">Wiki</a> ◇ <a href=\"en/tutorials/\">Tutorials</a> ◇ <a href=\"https://github.com/dantiel/orniflight-configurator\" target=\"_blank\">Configurator</a>",
+  "hardware_title": "ハードウェア"
 }

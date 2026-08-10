@@ -8,7 +8,7 @@
   "nav_features": "Funcionalidades",
   "nav_hardware": "Hardware",
   "nav_wiki": "Wiki",
-  "nav_docs": "Docs",
+  "nav_docs": "Documentos",
   "manifest_subheadline": "Uma nova espécie de controlador de voo",
   "ondas_subheadline": "Estabilização Dinâmica Adaptativa Normalizada Oscilante",
   "features_subheadline": "Tudo o que a asa merece",
@@ -60,5 +60,6 @@
   "build_compatible": "GPL v3 ◇ Fork do Betaflight 4.0.6 ◇ Build limpo: zero avisos",
   "footer_hermetic": "Firmware Hermético ◇ STM32F3 ◇ GPL v3 ◇ Sem Dependências na Nuvem",
   "footer_credit": "OrniFlight — Voo de asa batente, redefinido.",
-  "footer_resources": "<a href=\"https://github.com/dantiel/OrniFlight\" target=\"_blank\">GitHub</a> ◇ <a href=\"en/wiki/\">Wiki</a> ◇ <a href=\"en/tutorials/\">Tutorials</a> ◇ <a href=\"https://github.com/dantiel/orniflight-configurator\" target=\"_blank\">Configurator</a>"
+  "footer_resources": "<a href=\"https://github.com/dantiel/OrniFlight\" target=\"_blank\">GitHub</a> ◇ <a href=\"en/wiki/\">Wiki</a> ◇ <a href=\"en/tutorials/\">Tutorials</a> ◇ <a href=\"https://github.com/dantiel/orniflight-configurator\" target=\"_blank\">Configurator</a>",
+  "hardware_title": "Hardware"
 }

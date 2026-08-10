@@ -8,12 +8,12 @@
   "nav_features": "Funcións",
   "nav_hardware": "Hardware",
   "nav_wiki": "Wiki",
-  "nav_docs": "Docs",
+  "nav_docs": "Documentos",
   "manifest_subheadline": "Unha nova especie de controlador de voo",
   "ondas_subheadline": "Estabilización Dinámica Adaptativa Normalizada Oscilante",
   "features_subheadline": "Todo o que a á merece",
   "hardware_subheadline": "Controladores de voo STM32F3/F4/F7",
-  "nav_servos": "Servidoras",
+  "nav_servos": "Servos",
   "nav_tutorials": "Titoriais",
   "hero_greeting": "Voo flapping-wing, redefinido.",
   "hero_version": "STM32F3 ◇ OrniFlight v0.4.6 ◇ apiVersion 1.46",
@@ -60,5 +60,6 @@
   "build_compatible": "GPL v3 ◇ Fork de Betaflight 4.0.6 ◇ Compilación limpa: cero avisos",
   "footer_hermetic": "Firmware Hermético ◇ STM32F3 ◇ GPL v3 ◇ Sen Dependencias na Nube",
   "footer_credit": "OrniFlight — Voo de á batente, redefinido.",
-  "footer_resources": "<a href=\"https://github.com/dantiel/OrniFlight\" target=\"_blank\">GitHub</a> ◇ <a href=\"en/wiki/\">Wiki</a> ◇ <a href=\"en/tutorials/\">Tutorials</a> ◇ <a href=\"https://github.com/dantiel/orniflight-configurator\" target=\"_blank\">Configurator</a>"
+  "footer_resources": "<a href=\"https://github.com/dantiel/OrniFlight\" target=\"_blank\">GitHub</a> ◇ <a href=\"en/wiki/\">Wiki</a> ◇ <a href=\"en/tutorials/\">Tutorials</a> ◇ <a href=\"https://github.com/dantiel/orniflight-configurator\" target=\"_blank\">Configurator</a>",
+  "hardware_title": "Hardware"
 }

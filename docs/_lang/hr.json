@@ -8,7 +8,7 @@
   "nav_features": "Značajke",
   "nav_hardware": "Hardver",
   "nav_wiki": "Wiki",
-  "nav_docs": "Docs",
+  "nav_docs": "dokumenti",
   "manifest_subheadline": "Nova vrsta kontrolera leta",
   "ondas_subheadline": "Oscilirajuća Normalizirana Dinamička Adaptivna Stabilizacija",
   "features_subheadline": "Sve što krilo zaslužuje",
@@ -60,5 +60,6 @@
   "build_compatible": "GPL v3 ◇ Fork od Betaflight 4.0.6 ◇ Čista izgradnja: nula upozorenja",
   "footer_hermetic": "Hermetički Firmware ◇ STM32F3 ◇ GPL v3 ◇ Bez Ovisnosti o Oblaku",
   "footer_credit": "OrniFlight — Let mahanjem krila, redefiniran.",
-  "footer_resources": "<a href=\"https://github.com/dantiel/OrniFlight\" target=\"_blank\">GitHub</a> ◇ <a href=\"en/wiki/\">Wiki</a> ◇ <a href=\"en/tutorials/\">Tutorials</a> ◇ <a href=\"https://github.com/dantiel/orniflight-configurator\" target=\"_blank\">Configurator</a>"
+  "footer_resources": "<a href=\"https://github.com/dantiel/OrniFlight\" target=\"_blank\">GitHub</a> ◇ <a href=\"en/wiki/\">Wiki</a> ◇ <a href=\"en/tutorials/\">Tutorials</a> ◇ <a href=\"https://github.com/dantiel/orniflight-configurator\" target=\"_blank\">Configurator</a>",
+  "hardware_title": "Hardver"
 }

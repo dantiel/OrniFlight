@@ -7,8 +7,8 @@
   "nav_ondas": "ONDAS",
   "nav_features": "Функции",
   "nav_hardware": "Оборудование",
-  "nav_wiki": "Wiki",
-  "nav_docs": "Docs",
+  "nav_wiki": "Вики",
+  "nav_docs": "Документы",
   "manifest_subheadline": "Новый вид полётного контроллера",
   "ondas_subheadline": "Осциллирующая Нормализованная Динамическая Адаптивная Стабилизация",
   "features_subheadline": "Всё, чего заслуживает крыло",
@@ -60,5 +60,6 @@
   "build_compatible": "GPL v3 ◇ Форк Betaflight 4.0.6 ◇ Чистая сборка: ноль предупреждений",
   "footer_hermetic": "Герметичная прошивка ◇ STM32F3 ◇ GPL v3 ◇ Без облачных зависимостей",
   "footer_credit": "OrniFlight — Машущий полёт, переосмыслен.",
-  "footer_resources": "<a href=\"https://github.com/dantiel/OrniFlight\" target=\"_blank\">GitHub</a> ◇ <a href=\"en/wiki/\">Wiki</a> ◇ <a href=\"en/tutorials/\">Tutorials</a> ◇ <a href=\"https://github.com/dantiel/orniflight-configurator\" target=\"_blank\">Configurator</a>"
+  "footer_resources": "<a href=\"https://github.com/dantiel/OrniFlight\" target=\"_blank\">GitHub</a> ◇ <a href=\"en/wiki/\">Wiki</a> ◇ <a href=\"en/tutorials/\">Tutorials</a> ◇ <a href=\"https://github.com/dantiel/orniflight-configurator\" target=\"_blank\">Configurator</a>",
+  "hardware_title": "Аппаратное обеспечение"
 }

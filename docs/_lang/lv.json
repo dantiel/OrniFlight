@@ -8,7 +8,7 @@
   "nav_features": "Funkcijas",
   "nav_hardware": "Aparatūra",
   "nav_wiki": "Wiki",
-  "nav_docs": "Docs",
+  "nav_docs": "Dokumenti",
   "manifest_subheadline": "Jauna lidojuma kontrolieru suga",
   "ondas_subheadline": "Svārstību Normalizētā Dinamiskā Adaptīvā Stabilizācija",
   "features_subheadline": "Viss, ko spārns ir pelnījis",
@@ -60,5 +60,6 @@
   "build_compatible": "GPL v3 ◇ Betaflight 4.0.6 atzars ◇ Tīra būvēšana: nulle brīdinājumu",
   "footer_hermetic": "Hermētiskā Programmaparatūra ◇ STM32F3 ◇ GPL v3 ◇ Bez Mākoņa Atkarībām",
   "footer_credit": "OrniFlight — Spārnu vēziena lidojums, no jauna definēts.",
-  "footer_resources": "<a href=\"https://github.com/dantiel/OrniFlight\" target=\"_blank\">GitHub</a> ◇ <a href=\"en/wiki/\">Wiki</a> ◇ <a href=\"en/tutorials/\">Tutorials</a> ◇ <a href=\"https://github.com/dantiel/orniflight-configurator\" target=\"_blank\">Configurator</a>"
+  "footer_resources": "<a href=\"https://github.com/dantiel/OrniFlight\" target=\"_blank\">GitHub</a> ◇ <a href=\"en/wiki/\">Wiki</a> ◇ <a href=\"en/tutorials/\">Tutorials</a> ◇ <a href=\"https://github.com/dantiel/orniflight-configurator\" target=\"_blank\">Configurator</a>",
+  "hardware_title": "Aparatūra"
 }
