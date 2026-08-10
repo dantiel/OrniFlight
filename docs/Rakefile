@@ -64,7 +64,7 @@ HAML_LAYOUT = <<~'LAYOUT'
         %img.nav-logo{src: "#{asset_prefix}/assets/images/cf_logo_bird_black.svg", alt: "OrniFlight"}
       %a{href: "#{asset_prefix}/#manifest"} Manifest
       %a{href: "#{asset_prefix}/en/wiki/"} Wiki
-      %a{href: "#{asset_prefix}/en/docs/"} Docs
+      %a{href: "#{asset_prefix}/en/docs/"} Documentation
       %a{href: "#{asset_prefix}/en/wiki/servo_efficiency.html"} Servos
       %a{href: "#{asset_prefix}/en/tutorials/"} Tutorials
     .subpage-hero
@@ -162,7 +162,7 @@ def build_section_index(lang, section, title_key)
 
   intro_html = intro_text ? %(<p class="lead section-intro">#{intro_text}</p>) : ""
 
-  index_html = "<h1>#{page_title}</h1>\n#{intro_html}\n<ul class=\"page-index\">\n#{links_html}\n</ul>"
+  index_html = "#{intro_html}\n<ul class=\"page-index\">\n#{links_html}\n</ul>"
 
   engine = Haml::Template.new { HAML_LAYOUT }
   output = engine.render(Object.new, {
