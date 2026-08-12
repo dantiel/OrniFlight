@@ -20,10 +20,10 @@
       %a{href: "#ondas"}= nav_ondas
       %a{href: "#features"}= nav_features
       %a{href: "#hardware"}= nav_hardware
-      %a{href: "#{asset_prefix}/en/wiki/"}= nav_wiki
-      %a{href: "#{asset_prefix}/en/docs/"}= nav_docs
-      %a{href: "#{asset_prefix}/en/wiki/servo_efficiency.html"}= nav_servos
-      %a{href: "#{asset_prefix}/en/tutorials/"}= nav_tutorials
+      %a{href: "#{asset_prefix}/#{lang}/wiki/"}= nav_wiki
+      %a{href: "#{asset_prefix}/#{lang}/docs/"}= nav_docs
+      %a{href: "#{asset_prefix}/#{lang}/wiki/servo_efficiency.html"}= nav_servos
+      %a{href: "#{asset_prefix}/#{lang}/tutorials/"}= nav_tutorials
 
     #header
       .hero-content
@@ -53,7 +53,7 @@
         .highlight
           %code= ondas_highlight
         %p.doc-link
-          %a{href: "#{asset_prefix}/en/wiki/ondas.html"}= ondas_wiki_link
+          %a{href: "#{asset_prefix}/#{lang}/wiki/ondas.html"}= ondas_wiki_link
 
       %section#features
         %h2= features_title
@@ -93,7 +93,7 @@
             %td= hw_ram_label
             %td.value= hw_ram_val
         %p.doc-link
-          %a{href: "#{asset_prefix}/en/tutorials/"}= hw_start_link
+          %a{href: "#{asset_prefix}/#{lang}/tutorials/"}= hw_start_link
 
       %section.build
         %h2= build_title

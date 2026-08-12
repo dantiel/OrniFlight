@@ -20,7 +20,10 @@ CLOBBER.include(
 def build_landing(lang)
   vars = JSON.parse(File.read("_lang/#{lang}.json", encoding: "UTF-8"))
   vars["asset_prefix"] = lang == "en" ? "." : ".."
-  vars["footer_resources"] = vars["footer_resources"].gsub('href="en/', %(href="#{vars["asset_prefix"]}/en/))
+  vars["footer_resources"] = vars["footer_resources"]
+    .gsub('href="en/', %(href="#{vars["asset_prefix"]}/#{lang}/))
+    .gsub('>Wiki</a>', ">#{vars['nav_wiki']}</a>")
+    .gsub('>Tutorials</a>', ">#{vars['nav_tutorials']}</a>")
   vars["all_langs"] = ALL_LANGS_DATA
   vars["current_lang"] = lang
   template = File.read("index.haml", encoding: "UTF-8")
@@ -63,11 +66,11 @@ HAML_LAYOUT = <<~'LAYOUT'
     %nav
       %a.home-link{href: "#{asset_prefix}/", title: "OrniFlight"}
         %img.nav-logo{src: "#{asset_prefix}/assets/images/cf_logo_bird_black.svg", alt: "OrniFlight"}
-      %a{href: "#{asset_prefix}/#manifest"} Manifest
-      %a{href: "#{asset_prefix}/en/wiki/"} Wiki
-      %a{href: "#{asset_prefix}/en/docs/"} Documentation
-      %a{href: "#{asset_prefix}/en/wiki/servo_efficiency.html"} Servos
-      %a{href: "#{asset_prefix}/en/tutorials/"} Tutorials
+      %a{href: "#{asset_prefix}/#manifest"}= nav_manifest
+      %a{href: "#{asset_prefix}/#{lang}/wiki/"}= nav_wiki
+      %a{href: "#{asset_prefix}/#{lang}/docs/"}= nav_docs
+      %a{href: "#{asset_prefix}/#{lang}/wiki/servo_efficiency.html"}= nav_servos
+      %a{href: "#{asset_prefix}/#{lang}/tutorials/"}= nav_tutorials
     .subpage-hero
       %picture.subpage-bird
         %source{srcset: "#{asset_prefix}/assets/images/cf_logo_white.svg", media: "(prefers-color-scheme: light)"}
@@ -82,9 +85,9 @@ HAML_LAYOUT = <<~'LAYOUT'
       %p
         %a{href: "https://github.com/dantiel/OrniFlight"} GitHub
         ◇
-        %a{href: "#{asset_prefix}/en/wiki/"} Wiki
+        %a{href: "#{asset_prefix}/#{lang}/wiki/"}= nav_wiki
         ◇
-        %a{href: "#{asset_prefix}/en/tutorials/"} Tutorials
+        %a{href: "#{asset_prefix}/#{lang}/tutorials/"}= nav_tutorials
       %p.lang-footer
         - all_langs.each_with_index do |l, i|
           - if l[:code] == lang
@@ -125,6 +128,7 @@ def build_markdown_page(md_path, out_path, lang, page_title, body_class: nil, se
   asset_prefix = asset_prefix_for(out_path)
   dir = "ltr"
   section_label ||= File.dirname(out_path).split('/').last.capitalize rescue nil
+  vars = JSON.parse(File.read("_lang/#{lang}.json", encoding: "UTF-8"))
 
   engine = Haml::Template.new { HAML_LAYOUT }
   output = engine.render(Object.new, {
@@ -135,7 +139,12 @@ def build_markdown_page(md_path, out_path, lang, page_title, body_class: nil, se
     content_html: content_html,
     all_langs: ALL_LANGS_DATA,
     body_class: body_class,
-    section_label: section_label
+    section_label: section_label,
+    nav_manifest: vars["nav_manifest"],
+    nav_wiki: vars["nav_wiki"],
+    nav_docs: vars["nav_docs"],
+    nav_servos: vars["nav_servos"],
+    nav_tutorials: vars["nav_tutorials"]
   })
 
   File.write(out_path, output, encoding: "UTF-8")
@@ -186,7 +195,12 @@ def build_section_index(lang, section, title_key)
     asset_prefix: asset_prefix,
     content_html: index_html,
     all_langs: ALL_LANGS_DATA,
-    section_label: nil
+    section_label: nil,
+    nav_manifest: vars["nav_manifest"],
+    nav_wiki: vars["nav_wiki"],
+    nav_docs: vars["nav_docs"],
+    nav_servos: vars["nav_servos"],
+    nav_tutorials: vars["nav_tutorials"]
   })
 
   File.write(out_path, output, encoding: "UTF-8")
