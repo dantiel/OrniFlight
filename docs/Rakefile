@@ -149,15 +149,28 @@ def build_section_index(lang, section, title_key)
   intro_key = "#{section}_intro"
   intro_text = vars[intro_key]
 
+  en_dir = "en/#{section}"
   md_dir = "#{lang}/#{section}"
-  entries = Dir["#{md_dir}/*.md"].map do |f|
-    name = File.basename(f, ".md")
-    first_line = File.readlines(f, encoding: "UTF-8").first.to_s.strip.sub(/^#\s*/, "")
-    { file: name, title: first_line.empty? ? name.tr("_", " ").capitalize : first_line }
-  end.sort_by { |e| e[:title].downcase }
+
+  # Merge local + English articles; local entries take priority, EN-only link to en/
+  seen = {}
+  entries = []
+  [md_dir, en_dir].each do |dir|
+    next unless Dir.exist?(dir)
+    Dir["#{dir}/*.md"].each do |f|
+      name = File.basename(f, ".md")
+      next if seen[name]
+      seen[name] = true
+      first_line = File.readlines(f, encoding: "UTF-8").first.to_s.strip.sub(/^#\s*/, "")
+      title = first_line.empty? ? name.tr("_", " ").capitalize : first_line
+      link = (dir == md_dir) ? "./#{name}.html" : "../en/#{section}/#{name}.html"
+      entries << { file: name, title: title, link: link }
+    end
+  end
+  entries.sort_by! { |e| e[:title].downcase }
 
   links_html = entries.map { |e|
-    %(<li><a href="./#{e[:file]}.html">#{e[:title]}</a></li>)
+    %(<li><a href="#{e[:link]}">#{e[:title]}</a></li>)
   }.join("\n")
 
   intro_html = intro_text ? %(<p class="lead section-intro">#{intro_text}</p>) : ""
@@ -184,14 +197,15 @@ task :pages do
   LANGS.each do |lang|
     %w[wiki docs tutorials].each do |section|
       md_dir = "#{lang}/#{section}"
-      next unless Dir.exist?(md_dir)
-      Dir["#{md_dir}/*.md"].each do |md_path|
-        name = File.basename(md_path, ".md")
-        out_path = "#{md_dir}/#{name}.html"
-        title = File.readlines(md_path, encoding: "UTF-8").first.to_s.strip.sub(/^#\s*/, "")
-        title = name.tr("_", " ").capitalize if title.empty?
-        extra = name == "servo_efficiency" ? {body_class: "subpage servo-page"} : {}
-        build_markdown_page(md_path, out_path, lang, title, **extra)
+      if Dir.exist?(md_dir)
+        Dir["#{md_dir}/*.md"].each do |md_path|
+          name = File.basename(md_path, ".md")
+          out_path = "#{md_dir}/#{name}.html"
+          title = File.readlines(md_path, encoding: "UTF-8").first.to_s.strip.sub(/^#\s*/, "")
+          title = name.tr("_", " ").capitalize if title.empty?
+          extra = name == "servo_efficiency" ? {body_class: "subpage servo-page"} : {}
+          build_markdown_page(md_path, out_path, lang, title, **extra)
+        end
       end
       build_section_index(lang, section, "nav_#{section}")
     end
