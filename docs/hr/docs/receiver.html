@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='hr'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>Prijemnik (RX) — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Docs</p>
+<h1>Prijemnik (RX)</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="prijemnik-rx">Prijemnik (RX)</h1>
+
+<p>OrniFlight podržava više protokola prijemnika za radio kontrolu vašeg ornitoptera.</p>
+
+<h2 id="podrani-protokoli">Podržani protokoli</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Protokol</th>
+      <th>Upišite</th>
+      <th>Bilješke</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>CRSF</strong> (Unakrsna vatra)</td>
+      <td>Serijski</td>
+      <td>Niska latencija, telemetrija, preporučeno</td>
+    </tr>
+    <tr>
+      <td><strong>SBUS</strong></td>
+      <td>Serijski</td>
+      <td>Obrnuto, potreban je pretvarač na F4</td>
+    </tr>
+    <tr>
+      <td><strong>IBUS</strong> (FlySky)</td>
+      <td>Serijski</td>
+      <td>Neobrnuto, izravno UART</td>
+    </tr>
+    <tr>
+      <td><strong>PPM</strong></td>
+      <td>Jednožilni analogni</td>
+      <td>8ch, naslijeđe, ne preporučuje se</td>
+    </tr>
+    <tr>
+      <td><strong>SPEKTRUM</strong></td>
+      <td>Serijski</td>
+      <td>1024/2048, vezanje putem CLI</td>
+    </tr>
+    <tr>
+      <td><strong>FPORT</strong></td>
+      <td>Serijski</td>
+      <td>FrSky, kombinira RX+telemetriju</td>
+    </tr>
+    <tr>
+      <td><strong>GHST</strong> (Duh)</td>
+      <td>Serijski</td>
+      <td>ImmersionRC, niska latencija</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="serijska-rx-konfiguracija">Serijska RX konfiguracija</h2>
+
+<ol>
+  <li>Spojite prijemnik na slobodni UART RX pin</li>
+  <li>U konfiguratoru → <strong>Portovi</strong>: postavite UART na <code>Serial RX</code></li>
+  <li>U konfiguratoru → <strong>Konfiguracija</strong>: odaberite protokol</li>
+  <li>Za SBUS na F4: omogućite <code>set sbus_inversion = ON</code></li>
+</ol>
+
+<h2 id="cli-brzo-postavljanje">CLI Brzo postavljanje</h2>
+
+<p><code>
+feature RX_SERIAL
+set serialrx_provider = CRSF
+set serialrx_inverted = OFF
+set serialrx_halfduplex = OFF
+save
+</code></p>
+
+<h2 id="sigurno">Sigurno</h2>
+
+<p>Konfigurirajte prijemnik failsafe tako da prijamnik emitira <strong>bez impulsa</strong> pri gubitku signala. Kontrolor leta će to zatim detektirati i aktivirati vlastitu proceduru zaštite od greške. Pogledajte <a href="failsafe.html">Failsafe</a> za konfiguraciju na razini FC.</p>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<strong>Hrvatski</strong>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<a href='../../ko/'>한국어</a>
+&nbsp;◇&nbsp;
+<a href='../../lv/'>Latviešu</a>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<a href='../../zh_CN/'>中文</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

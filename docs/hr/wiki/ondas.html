@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='hr'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>ONDAS — Oscilirajuća normalizirana dinamička adaptivna stabilizacija — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Wiki</p>
+<h1>ONDAS — Oscilirajuća normalizirana dinamička adaptivna stabilizacija</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="ondas--oscilirajua-normalizirana-dinamika-adaptivna-stabilizacija">ONDAS — Oscilirajuća normalizirana dinamička adaptivna stabilizacija</h1>
+
+<h2 id="temeljni-princip">Temeljni princip</h2>
+
+<p>Zrakoplov s fiksnim krilima ili konvencionalni zrakoplov generira upravljačke sile <strong>kontinuirano</strong> — otklon upravljačke površine ili RPM promjena proizvodi moment stabilnog stanja. Ornitopter ne. Svaki gram potiska, svaki Newton okretnog momenta, <strong>fazno je povezan</strong> unutar ciklusa otkucaja krila. Isti impuls sile primijenjen na različitim točkama zaveslaja daje bitno različite rezultate.</p>
+
+<p>ONDAS priznaje ovu stvarnost i modulira napor stabilizacije sinkrono s ciklusom mlataranja.</p>
+
+<hr />
+
+<h2 id="cadence--mozak-za-mjerenje-vremena">Cadence — Mozak za mjerenje vremena</h2>
+
+<p>Cadence je najkritičniji ONDAS filter jer određuje <strong>kada</strong> se korekcija događa unutar svakog otkucaja krila.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Faza moždanog udara</th>
+      <th>Učinak primjene sile</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Downstroke centar</td>
+      <td>Maksimalni uzgon, autoritet kotrljanja</td>
+    </tr>
+    <tr>
+      <td>Kraj hoda prema dolje (kočenje)</td>
+      <td>Inducirani otpor → moment skretanja</td>
+    </tr>
+    <tr>
+      <td>Upstroke centar</td>
+      <td>Potisak unatrag, podizanje</td>
+    </tr>
+    <tr>
+      <td>Uzlazni kraj</td>
+      <td>Preokret krila, minimalni učinak</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><strong>Cadence pomiče prozor modulacije</strong> kako bi se uskladio s fazom u kojoj je krak aerodinamičke poluge najduži. Pogrešna kadenca = fizika borbenog krila. Ispravna kadenca = svaki milivat postaje kontrolno tijelo.</p>
+
+<h3 id="parametri">Parametri</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>Parametar</th>
+      <th>Vrijednost</th>
+      <th>Funkcija</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>ONDAS_K0</code></td>
+      <td>1.0</td>
+      <td>Pomak osnovne faze</td>
+    </tr>
+    <tr>
+      <td><code>ONDAS_K2</code></td>
+      <td>10,0</td>
+      <td>Fazno širenje / oštrina</td>
+    </tr>
+    <tr>
+      <td><code>ONDAS_PHASE_SCALE</code></td>
+      <td>0,00005</td>
+      <td>Mali faktor, velika poluga</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h2 id="ferocity-p--trenutani-asimetrini-potisak">Ferocity P — Trenutačni asimetrični potisak</h2>
+
+<p>Ferocity P povećava <strong>kvadratnost valnog oblika</strong> (trapezoidno oblikovanje: zadržavanje na ±1, kosinusna rampa između) proporcionalno trenutnoj pogrešci PID.</p>
+
+<ul>
+  <li>Više potiska na jednu stranu → trenutno</li>
+  <li>Zakočeno krilo na kraju zamaha doživljava <strong>inducirani otpor</strong> — ovo je protutrenutak</li>
+  <li>Učinak: izravan, proporcionalan, trenutan</li>
+</ul>
+
+<hr />
+
+<h2 id="ferocity-d--anticipatory-drag-exploitation">Ferocity D — Anticipatory Drag Exploitation</h2>
+
+<p>Ferocity D upotpunjuje sliku. Gdje P osigurava asimetriju potiska, D koristi <strong>otpor kontralateralnog krila</strong> kao kočnicu.</p>
+
+<ul>
+  <li>Čita stopu pogreške promjene i <strong>predviđa</strong></li>
+  <li>Može namjerno iskoristiti otpor usporenog krila za trenutke skretanja/nagiba</li>
+  <li>P+D zajedno stvaraju <strong>diferencijalni momentni par</strong> — potisak na strani A, povlačenje na strani B — učinkovitiji od samo potiska</li>
+</ul>
+
+<hr />
+
+<h2 id="tri-naina-cadenceferocity-d-poveavaju-ferocity">Tri načina Cadence/Ferocity D povećavaju Ferocity</h2>
+
+<h3 id="izravni--d-pojaava-p-tijekom-brze-promjene-pogreke">1. Izravni — D pojačava P tijekom brze promjene pogreške</h3>
+
+<p>U naletima ili agresivnim manevrima, <code>error_rate</code> je velik. D to množi i dodaje osnovnoj žestini. Krilo postaje <em>oštrije</em> (trapezoidnije) jer P+D zajedno zahtijevaju više pravokutnosti nego P sam. Rezultat: maksimalan autoritet upravo kada je kritično.</p>
+
+<h3 id="indirektno--cadence-pomie-toku-poluge">2. Indirektno — Cadence pomiče točku poluge</h3>
+
+<p>Cadence modulira <em>kada</em> u ciklusu djeluje žestina. Pomicanje prozora u aerodinamički osjetljiviju fazu (npr. središte zaveslaja prema dolje u odnosu na kraj zaveslaja) znači da <strong>ista vrijednost žestine</strong> proizvodi više učinka — učinkovito pojačavanje bez numeričke promjene.</p>
+
+<h3 id="kombinacija--d--cadence-tijekom-oporavka-od-zastoja">3. Kombinacija — D × Cadence tijekom oporavka od zastoja</h3>
+
+<p>U zastoju: visoka stopa potonuća → D otkriva brzinu → povećava žestinu. Istovremeno, kadenca pomiče modulaciju u fazu zaveslaja u kojoj krilo ima maksimalni zagriz. Međudjelovanje: D daje snagu, kadencu pravi trenutak. Bez kadence, D-force dolazi u krivu fazu i beskorisno se raspršuje.</p>
+
+<hr />
+
+<h2 id="dodatni-ondas-parametri">Dodatni ONDAS parametri</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Parametar</th>
+      <th>Funkcija</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Balance</strong></td>
+      <td>Simetrija potiska gore/dolje — I-term pristranost između zaveslaja prema gore i dolje. Kompenzira asimetriju krila, proizvodne tolerancije i trošenje</td>
+    </tr>
+    <tr>
+      <td><strong>Warp</strong></td>
+      <td>Roll/Yaw P → L/R ferocity diferencijal — desno i lijevo krilo neovisno o osi zakretanja za manevre nagiba i skretanja</td>
+    </tr>
+    <tr>
+      <td><strong>Anchor</strong></td>
+      <td>Fazno sidrenje — zaključava modulaciju na određenu referencu faze, odupirući se pomaku</td>
+    </tr>
+    <tr>
+      <td><strong>Resonance</strong></td>
+      <td>Kompenzacija rezonancije konstrukcije zrakoplova — izbjegava uzbudljive strukturne modove konstrukcije zrakoplova</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h2 id="analogija">Analogija</h2>
+
+<p><strong>Cadence je dirigent. Ferocity P i D su instrumenti.</strong></p>
+
+<p>Bez dirigenta sviraju — ali ne zajedno. S jednim, buka postaje glazba.</p>
+
+<hr />
+
+<h2 id="vidi-takoer">Vidi također</h2>
+
+<ul>
+  <li><a href="../../tutorials/ondas_tuning.html">ONDAS Vodič za ugađanje</a> — praktični postupak ugađanja</li>
+  <li><a href="msp.html">MSP protokol</a> — format žice za ONDAS parametre</li>
+  <li><a href="profiles.html">Profili leta</a> — konfiguracija svjesna profila ONDAS</li>
+</ul>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<strong>Hrvatski</strong>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<a href='../../ko/'>한국어</a>
+&nbsp;◇&nbsp;
+<a href='../../lv/'>Latviešu</a>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<a href='../../zh_CN/'>中文</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

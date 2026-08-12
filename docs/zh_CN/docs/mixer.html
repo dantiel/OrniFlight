@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='zh_CN'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>混合器 — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Docs</p>
+<h1>混合器</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="section">混合器</h1>
+
+<p>混合器将飞行控制器输出（横滚、俯仰、偏航、油门）转换为扑翼机的伺服信号。</p>
+
+<h2 id="section-1">扑翼机混合器</h2>
+
+<p>OrniFlight 通过扑翼机特定配置扩展了 Betaflight 的混合器系统。搅拌机手柄：</p>
+
+<ul>
+  <li><strong>机翼伺服系统</strong>：将 PID 输出转换为机翼行程调制</li>
+  <li><strong>尾部伺服系统</strong>（可选）：控制升降舵/方向舵表面</li>
+</ul>
+
+<h2 id="section-2">混合器类型</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>搅拌机</th>
+      <th>使用案例</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>ORNITHOPTER</strong></td>
+      <td>带 2 个机翼舵机的标准双翼扑翼机</td>
+    </tr>
+    <tr>
+      <td><strong>ORNITHOPTER_4S</strong></td>
+      <td>4-伺服扑翼机（独立左/右翼控制）</td>
+    </tr>
+    <tr>
+      <td><strong>ORNITHOPTER_TAIL</strong></td>
+      <td>双翼+尾升降舵+方向舵</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="section-3">伺服配置</h2>
+
+<p>在 <strong>Servos</strong> 选项卡中或通过 CLI 配置：</p>
+
+<p>呜呜呜</p>
+
+<h2 id="ondas-">ONDAS 集成</h2>
+
+<p>该混合器与 ONDAS（扑翼机非线性动力空气动力系统）协同工作：</p>
+
+<ul>
+  <li><strong>油门</strong> → 设置基础扑动幅度</li>
+  <li><strong>ONDA Cadence</strong> → 在每个笔划内移动调制窗口</li>
+  <li><strong>ONDA Ferocity</strong> → 修改笔划波形形状（正弦 ↔ 梯形）</li>
+  <li><strong>ONDA Balance</strong> → 左/右翼对称校正</li>
+</ul>
+
+<p>有关详细的 ONDAS 理论，请参阅 <a href="../wiki/ondas.html">ONDAS Wiki</a>。</p>
+
+<h2 id="cli-">CLI 设置</h2>
+
+<p>呜呜呜</p>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<a href='../../hr/'>Hrvatski</a>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<a href='../../ko/'>한국어</a>
+&nbsp;◇&nbsp;
+<a href='../../lv/'>Latviešu</a>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<strong>中文</strong>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

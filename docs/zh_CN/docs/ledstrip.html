@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='zh_CN'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>LED 地带 — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Docs</p>
+<h1>LED 地带</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="led-">LED 地带</h1>
+
+<p>OrniFlight 支持可寻址 WS2812/SK6812 LED 条，用于状态指示和视觉反馈。</p>
+
+<h2 id="section">配置</h2>
+
+<p>LED 条带在 OrniFlight 配置器的 <strong>LED Strip</strong> 选项卡中进行配置。每个 LED 的位置、颜色和功能都可以单独设置。</p>
+
+<h2 id="section-1">函数</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>功能</th>
+      <th>视觉效果</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>电池指示器</td>
+      <td>颜色渐变从绿色 → 黄色 → 红色</td>
+    </tr>
+    <tr>
+      <td>RSSI</td>
+      <td>信号强度显示</td>
+    </tr>
+    <tr>
+      <td>手臂状态</td>
+      <td>布防/撤防颜色变化</td>
+    </tr>
+    <tr>
+      <td>飞行模式</td>
+      <td>特定于模式的颜色</td>
+    </tr>
+    <tr>
+      <td>警告</td>
+      <td>低电量时的闪烁模式，故障安全</td>
+    </tr>
+    <tr>
+      <td>扑动指示器</td>
+      <td>当前扑动频率下的脉冲</td>
+    </tr>
+    <tr>
+      <td>推力方向</td>
+      <td>指示横滚/俯仰/偏航输出的颜色偏移</td>
+    </tr>
+    <tr>
+      <td>GPS</td>
+      <td>卫星锁定和返航方向</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="section-2">硬件</h2>
+
+<ul>
+  <li>WS2812 或 SK6812 RGB LED</li>
+  <li>连接到飞行控制器上的 <strong>LED</strong> 焊盘/引脚</li>
+  <li>从 BEC 为 LED 供电（不要使用 5V 从 3.3V — 供电）</li>
+  <li>对于长条（&gt;8 个 LED），将 5V 电源直接连接到电池垫，而不是通过 FC</li>
+</ul>
+
+<h2 id="section-3">扑翼机使用</h2>
+
+<p><strong>扑动指示器</strong>是 OrniFlight — LED 所独有的，其脉冲与机翼冲程频率同步，以视觉方式表示扑动节奏，并帮助调整 ONDAS 节奏参数。</p>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<a href='../../hr/'>Hrvatski</a>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<a href='../../ko/'>한국어</a>
+&nbsp;◇&nbsp;
+<a href='../../lv/'>Latviešu</a>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<strong>中文</strong>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

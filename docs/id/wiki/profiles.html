@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='id'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>Profil Penerbangan — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Wiki</p>
+<h1>Profil Penerbangan</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="profil-penerbangan">Profil Penerbangan</h1>
+
+<blockquote>
+  <p><em>4 slot penyetelan independen, dapat dialihkan dalam penerbangan.</em></p>
+</blockquote>
+
+<h2 id="konsep">Konsep</h2>
+
+<p>OrniFlight menyimpan 4 struct <code>ornithopterProfile_t</code> lengkap — masing-masing berisi 19 ONDAS dan parameter dinamika sayap. Mode BOX (<code>BOXORNITHOPTERPROFILE</code>, permanentId 52) memilih profil aktif melalui sakelar RC 2 posisi yang dipetakan ke 4 slot (0–3).</p>
+
+<h2 id="mengapa-profil">Mengapa Profil?</h2>
+
+<p>Mode penerbangan yang berbeda memerlukan penyetelan yang berbeda:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Profil</th>
+      <th>Kasus Penggunaan</th>
+      <th>Cadence</th>
+      <th>Ferocity</th>
+      <th>Catatan</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>0</td>
+      <td><strong>Pelayaran</strong></td>
+      <td>Pertengahan (50)</td>
+      <td>Rendah (30)</td>
+      <td>Penerbangan maju yang efisien</td>
+    </tr>
+    <tr>
+      <td>1</td>
+      <td><strong>Aerobatik</strong></td>
+      <td>Rendah (20)</td>
+      <td>Tinggi (80)</td>
+      <td>Otoritas maksimum</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td><strong>Melayang/Berkeliaran</strong></td>
+      <td>Tinggi (70)</td>
+      <td>Pertengahan (50)</td>
+      <td>Stabilitas atas kecepatan</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td><strong>Meluncur</strong></td>
+      <td>Pertengahan (50)</td>
+      <td>Rendah (10)</td>
+      <td>Intervensi minimal</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="apa-yang-ada-di-profil">Apa yang Ada di Profil</h2>
+
+<p>Semua 19 bidang <code>ornithopterProfile_t</code>:</p>
+
+<ul>
+  <li><strong>Geometri luncur</strong>: glide_angle</li>
+  <li><strong>ONDAS v2 (10)</strong>: irama, ferocity_d/p/roll/yaw, keseimbangan, warp, warp_yaw, jangkar, resonansi</li>
+  <li><strong>Phase 2 (4)</strong>: kesadaran, espelho, saudade, ssff</li>
+  <li><strong>Bentuk gelombang (2)</strong>: ferocity_downstroke, ferocity_upstroke</li>
+  <li><strong>Aeroelastik (2)</strong>: aeroelastic_glide_coefisien, aeroelastic_flap_coefisien</li>
+</ul>
+
+<h2 id="yang-global-bukan-per-profil">Yang Global (Bukan Per Profil)</h2>
+
+<ul>
+  <li>Saluran frekuensi (satu saluran RC, berfungsi di INDEPENDENT dan GLIDE)</li>
+  <li>Sudut pemasangan servo</li>
+  <li>Pergeseran fase mengepak</li>
+  <li>geometri GralhaAzul (servo_speed, max_amplitude, flap_magnitude, wing_origin)</li>
+</ul>
+
+<p>Ini adalah konstanta fisik badan pesawat — yang tidak berubah seiring dengan rezim penerbangan.</p>
+
+<h2 id="beralih-dalam-penerbangan">Beralih Dalam Penerbangan</h2>
+
+<ol>
+  <li>Tetapkan sakelar 2 posisi atau 3 posisi ke saluran cadangan</li>
+  <li>Di tab Configurator Modes, petakan rentang tersebut ke <code>ORNITHOPTER PROFILE</code></li>
+  <li>Setiap posisi sakelar memilih salah satu dari 4 slot</li>
+  <li>Dropdown profil Configurator mengedit slot <em>yang saat ini dipilih</em> melalui MSP</li>
+</ol>
+
+<hr />
+
+<p><em>Lihat <code>src/main/flight/ornithopter_profile.h</code> untuk definisi struct.</em></p>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<a href='../../hr/'>Hrvatski</a>
+&nbsp;◇&nbsp;
+<strong>Bahasa Indonesia</strong>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<a href='../../ko/'>한국어</a>
+&nbsp;◇&nbsp;
+<a href='../../lv/'>Latviešu</a>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<a href='../../zh_CN/'>中文</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

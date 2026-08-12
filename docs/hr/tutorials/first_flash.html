@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='hr'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>Prvi bljesak — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Tutorials</p>
+<h1>Prvi bljesak</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="prvi-bljesak">Prvi bljesak</h1>
+
+<blockquote>
+  <p><em>Postavljanje OrniFlight na vaš kontroler leta — korak po korak.</em></p>
+</blockquote>
+
+<h2 id="to-trebate">Što trebate</h2>
+
+<ul>
+  <li>kontroler leta baziran na STM32F4 (OMNIBUSF4, TINYFISH, MATEKF405, itd.)</li>
+  <li>USB kabel</li>
+  <li><a href="http://dfu-util.sourceforge.net/">dfu-util</a> ili STM32CubeProgrammer</li>
+  <li>OrniFlight <code>.hex</code> datoteka sa <a href="https://github.com/dantiel/OrniFlight/releases">stranice izdanja</a></li>
+</ul>
+
+<h2 id="korak-1-uite-u-nain-rada-dfu">Korak 1: Uđite u način rada DFU</h2>
+
+<ol>
+  <li><strong>Držite tipku BOOT</strong> na kontroleru leta</li>
+  <li><strong>Uključite USB</strong> dok držite gumb</li>
+  <li><strong>Otpustite</strong> nakon 2 sekunde</li>
+</ol>
+
+<p>Provjerite na macOS/Linuxu:</p>
+
+<p><code>
+dfu-util -l
+</code></p>
+
+<p>Trebao bi pokazati <code>Found DFU: [0483:df11]</code></p>
+
+<h2 id="korak-2-flash">Korak 2: Flash</h2>
+
+<p><code>
+dfu-util -a 0 -D obj/orniflight_0.4.6_OMNIBUSF4.hex
+</code></p>
+
+<h2 id="korak-3-prvo-pokretanje">Korak 3: Prvo pokretanje</h2>
+
+<ol>
+  <li>Isključite USB</li>
+  <li>Ponovno uključite USB (nemojte držati BOOT)</li>
+  <li>Povežite se preko OrniFlight konfiguratora</li>
+</ol>
+
+<h2 id="korak-4-osnovna-konfiguracija">Korak 4: Osnovna konfiguracija</h2>
+
+<p>U konfiguratoru:</p>
+
+<ol>
+  <li><strong>Kartica Portovi</strong>: Konfigurirajte UART za vaš prijemnik (serijski RX)</li>
+  <li><strong>Konfiguracijska kartica</strong>: Odaberite protokol prijemnika (preporučuje se CRSF)</li>
+  <li><strong>Kartica Načini rada</strong>: Postavite prekidače ARM, GLIDE/INDEPENDENT i PROFILE</li>
+  <li><strong>Napredna kartica → ONDAS</strong>: Pregledajte zadane postavke, prvo podesite Cadence</li>
+</ol>
+
+<h2 id="rjeavanje-problema">Rješavanje problema</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Problem</th>
+      <th>Popravi</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>DFU uređaj nije pronađen</td>
+      <td>Pokušajte s drugim USB kabelom, provjerite gumb BOOT</td>
+    </tr>
+    <tr>
+      <td>Flash ne radi</td>
+      <td>Provjerite instalaciju dfu-util, USB dozvole</td>
+    </tr>
+    <tr>
+      <td>Nema pokretanja nakon bljeskanja</td>
+      <td>Ponovno bljeskajte, potvrdite da hex odgovara vašem cilju</td>
+    </tr>
+    <tr>
+      <td>Konfigurator se ne spaja</td>
+      <td>Provjerite COM port i brzinu prijenosa</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<p><em>Sljedeće: <a href="basic_setup.html">Osnovno postavljanje</a> →</em></p>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<strong>Hrvatski</strong>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<a href='../../ko/'>한국어</a>
+&nbsp;◇&nbsp;
+<a href='../../lv/'>Latviešu</a>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<a href='../../zh_CN/'>中文</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='lv'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>Telemetrija — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Docs</p>
+<h1>Telemetrija</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="telemetrija">Telemetrija</h1>
+
+<p>Telemetrija nosūta lidojuma datus no OrniFlight uz jūsu radio raidītāju — akumulatora spriegumu, strāvu, RSSI, GPS koordinātas, augstumu un daudz ko citu.</p>
+
+<h2 id="atbalsttie-protokoli">Atbalstītie protokoli</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Protokols</th>
+      <th>Radio sistēma</th>
+      <th>Vadu skaits</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>CRSF</strong></td>
+      <td>Crossfire / Tracer / ELRS</td>
+      <td>Integrēts ar RX (divvirzienu)</td>
+    </tr>
+    <tr>
+      <td><strong>SmartPort</strong></td>
+      <td>FrSky</td>
+      <td>1 vads (TX tapa)</td>
+    </tr>
+    <tr>
+      <td><strong>HoTT</strong></td>
+      <td>Graupner</td>
+      <td>1 vads (TX+TZ)</td>
+    </tr>
+    <tr>
+      <td><strong>IBUS</strong></td>
+      <td>FlySky</td>
+      <td>1 vads (sensors TX)</td>
+    </tr>
+    <tr>
+      <td><strong>LTM</strong></td>
+      <td>Gaismas telemetrija (MWP)</td>
+      <td>1 vads (TX)</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="konfigurcija">Konfigurācija</h2>
+
+<ol>
+  <li>Programmā Configurator → <strong>Ports</strong>: iestatiet UART TX tapu uz atbilstošo telemetrijas protokolu.</li>
+  <li>Iespējot telemetrijas funkciju: <code>feature TELEMETRY</code></li>
+  <li>Ja nepieciešams, konfigurējiet telemetrijas inversiju</li>
+</ol>
+
+<p><strong>CRSF</strong> telemetrija tiek apstrādāta automātiski —, nav nepieciešams atsevišķs ports.</p>
+
+<h2 id="smartport-frsky">SmartPort (FrSky)</h2>
+
+<p>SmartPort prasa signāla inversiju F4 procesoros. Vai nu:
+- Izmantojiet lidojuma kontrolieri ar iebūvētu invertoru
+- Izmantojiet SoftSerial ar <code>set tlm_inversion = ON</code></p>
+
+<p><code>
+feature TELEMETRY
+set tlm_inverted = ON
+set tlm_halfduplex = ON
+</code></p>
+
+<h2 id="telemetrijas-dati">Telemetrijas dati</h2>
+
+<p>OrniFlight pārraida:
+- VBAT spriegums (galvenais akumulators)
+- Pašreizējais patēriņš / patērētais mAh
+- RSSI (signāla stiprums)
+- Lidojuma režīms / rokas statuss
+- GPS koordinātas (ja ir aprīkojumā)
+- Augstums/vario (ja barometrs)
+- ONDAS lidojuma profils ir aktīvs</p>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<a href='../../hr/'>Hrvatski</a>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<a href='../../ko/'>한국어</a>
+&nbsp;◇&nbsp;
+<strong>Latviešu</strong>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<a href='../../zh_CN/'>中文</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

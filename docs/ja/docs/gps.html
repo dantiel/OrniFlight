@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='ja'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>GPS — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Docs</p>
+<h1>GPS</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="gps">GPS</h1>
+
+<p>GPS は、鳥飛行プターの位置保持、ホームへの復帰、テレメトリベースのナビゲーションを可能にします。 OrniFlight の GPS 機能は機能しますが、実験的なものと考えられています — は常に視界内で飛行します。</p>
+
+<h2 id="section">サポートされているプロトコル</h2>
+
+<ul>
+  <li><strong>UBLOX</strong> (推奨) — UBlox バイナリ プロトコル、効率的で信頼性の高い</li>
+  <li><strong>NMEA</strong> — テキストベースの標準プロトコル</li>
+</ul>
+
+<h2 id="section-1">ハードウェア</h2>
+
+<ul>
+  <li>BN-880、BN-220、または類似の UBlox M8N GPS+Compass モジュール</li>
+  <li>接続: TX/RX を空きの UART に加えて 5V/GND に接続</li>
+  <li>干渉を最小限に抑えるために、GPS を電源線やサーボケーブルから離して取り付けます。</li>
+  <li>コンパス/磁力計は磁気源 (電源線、サーボ) から離す必要があります。</li>
+</ul>
+
+<h2 id="section-2">構成</h2>
+
+<p><code>
+feature GPS
+set gps_provider = UBLOX
+set gps_sbas_mode = AUTO
+set gps_auto_baud = ON
+set gps_ublox_use_galileo = ON
+</code></p>
+
+<ol>
+  <li><strong>ポート</strong> タブでシリアル ポートを GPS に割り当てます (UBlox のデフォルトは 115200 ボー)
+2.GPS機能を有効にする
+3.プロバイダーの設定</li>
+  <li>保存して再起動します</li>
+</ol>
+
+<h2 id="osd-">OSD 要素</h2>
+
+<p>OSD に表示される GPS データには次のものが含まれます。
+- 衛星数と修正タイプ
+- GPS 座標 (緯度/経度)
+- 対地速度
+- 高度 (GPS)
+- 家からの距離
+- ホーム方向矢印</p>
+
+<h2 id="section-3">羽ばたき飛行装置に関する考慮事項</h2>
+
+<ul>
+  <li>GPS アンテナは空がきれいに見える必要があります — 取り付け位置は羽ばたきの場合に重要です</li>
+  <li>小型羽ばたき飛行装置では重量ペナルティが大きくなる</li>
+  <li>GPS 支援の RTH (ホームへ戻る) では、羽ばたき飛行ダイナミクスのナビゲーション PID 値を慎重に調整する必要があります</li>
+</ul>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<a href='../../hr/'>Hrvatski</a>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<strong>日本語</strong>
+&nbsp;◇&nbsp;
+<a href='../../ko/'>한국어</a>
+&nbsp;◇&nbsp;
+<a href='../../lv/'>Latviešu</a>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<a href='../../zh_CN/'>中文</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

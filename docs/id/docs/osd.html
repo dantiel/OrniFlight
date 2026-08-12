@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='id'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>Tampilan Di Layar (OSD) — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Docs</p>
+<h1>Tampilan Di Layar (OSD)</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="tampilan-di-layar-osd">Tampilan Di Layar (OSD)</h1>
+
+<p>OrniFlight menyertakan OSD (Tampilan di Layar) bawaan menggunakan chip MAX7456 atau AT7456E. Zzz14zzz melapisi data penerbangan ke umpan video FPV Anda.</p>
+
+<h2 id="elemen-yang-didukung">Elemen yang Didukung</h2>
+
+<p>Konfigurasikan elemen di tab <strong>OSD</strong> pada OrniFlight Configurator. Seret dan lepas elemen untuk memposisikannya di layar.</p>
+
+<h3 id="data-penerbangan">Data Penerbangan</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>Elemen</th>
+      <th>Menampilkan</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Tegangan Baterai</td>
+      <td>Tegangan baterai utama (misalnya 14.8V)</td>
+    </tr>
+    <tr>
+      <td>Tegangan Sel Rata-rata</td>
+      <td>Tegangan per sel (misalnya 3,7V)</td>
+    </tr>
+    <tr>
+      <td>Undian Saat Ini</td>
+      <td>Ampli sesaat</td>
+    </tr>
+    <tr>
+      <td>mAh Ditarik</td>
+      <td>Kapasitas kumulatif yang dikonsumsi</td>
+    </tr>
+    <tr>
+      <td>RSSI</td>
+      <td>Kekuatan sinyal dari penerima</td>
+    </tr>
+    <tr>
+      <td>Modus Penerbangan</td>
+      <td>Mode saat ini (INDEPENDENT, GLIDE, dll.)</td>
+    </tr>
+    <tr>
+      <td>Posisi Throttle</td>
+      <td>Persentase throttle saat ini</td>
+    </tr>
+    <tr>
+      <td>pengatur waktu</td>
+      <td>Waktu penerbangan / waktu bersenjata</td>
+    </tr>
+    <tr>
+      <td>Nama Kerajinan</td>
+      <td>OrniFlight nama kerajinan</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="khusus-ornithopter">Khusus Ornithopter</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>Elemen</th>
+      <th>Menampilkan</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Frekuensi Mengepakkan</td>
+      <td>Tingkat kepakan sayap saat ini dalam Hz</td>
+    </tr>
+    <tr>
+      <td>Profil ONDAS</td>
+      <td>Nomor profil penerbangan aktif (1-3)</td>
+    </tr>
+    <tr>
+      <td>Cadence Fase</td>
+      <td>Offset fase modulasi saat ini</td>
+    </tr>
+    <tr>
+      <td>Sudut Servo</td>
+      <td>Posisi servo sayap</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="manajemen-font">Manajemen Font</h2>
+
+<p>Zzz18zzz menggunakan sistem tampilan berbasis karakter. Tab <strong>OSD</strong> di Konfigurator OrniFlight menyertakan <strong>Pengelola Font</strong> untuk mengunggah font dan mesin terbang khusus.</p>
+
+<h2 id="cli-pengaturan">CLI Pengaturan</h2>
+
+<p><code>
+set osd_units = METRIC
+set osd_warn_bitmask = 270335  # Warning flag bitmask
+set osd_tim1 = 2560            # Timer 1 source
+set osd_tim2 = 2561            # Timer 2 source
+</code></p>
+
+<h2 id="perangkat-keras">Perangkat keras</h2>
+
+<p>Chip OSD yang saat ini didukung: <strong>AT7456E</strong> (ditemukan di OMNIBUSF4 dan papan yang kompatibel). MAX7456 kompatibel dan terdeteksi otomatis.</p>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<a href='../../hr/'>Hrvatski</a>
+&nbsp;◇&nbsp;
+<strong>Bahasa Indonesia</strong>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<a href='../../ko/'>한국어</a>
+&nbsp;◇&nbsp;
+<a href='../../lv/'>Latviešu</a>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<a href='../../zh_CN/'>中文</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

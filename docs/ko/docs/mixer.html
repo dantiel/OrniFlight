@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='ko'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>믹서 — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Docs</p>
+<h1>믹서</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="section">믹서</h1>
+
+<p>믹서는 비행 컨트롤러 출력(롤, 피치, 요, 스로틀)을 ornithopter의 서보 신호로 변환합니다.</p>
+
+<h2 id="section-1">오니톱터 믹서</h2>
+
+<p>OrniFlight는 ornithopter 전용 구성으로 Betaflight의 믹서 시스템을 확장합니다. 믹서는 다음을 처리합니다.</p>
+
+<ul>
+  <li><strong>윙 서보</strong>: PID 출력을 윙 스트로크 변조로 변환</li>
+  <li><strong>테일 서보</strong>(옵션): 엘리베이터/방향타 표면 제어</li>
+</ul>
+
+<h2 id="section-2">믹서 유형</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>믹서</th>
+      <th>사용 사례</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>ORNITHOPTER</strong></td>
+      <td>2개의 날개 서보를 갖춘 표준 이중 날개 오니톱터</td>
+    </tr>
+    <tr>
+      <td><strong>ORNITHOPTER_4S</strong></td>
+      <td>4서보 오니톱터(좌/우 독립 날개 제어)</td>
+    </tr>
+    <tr>
+      <td><strong>ORNITHOPTER_TAIL</strong></td>
+      <td>이중 날개 + 테일 엘리베이터 + 방향타</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="section-3">서보 구성</h2>
+
+<p><strong>Servos</strong> 탭 또는 CLI를 통해 구성됩니다.</p>
+
+<p><code>
+smix reverse 0 2 r       # Reverse servo 2
+smix 0 0 0 100 0 0 100   # Servo 0: roll mixing
+smix 1 1 1 100 0 0 100   # Servo 1: pitch mixing
+</code></p>
+
+<h2 id="ondas-">ONDAS 통합</h2>
+
+<p>믹서는 ONDAS(Ornithopter Nonlinear Dynamic Aerodynamic System)와 함께 작동합니다.</p>
+
+<ul>
+  <li><strong>스로틀</strong> →는 기본 플래핑 진폭을 설정합니다.</li>
+  <li><strong>ONDA Cadence</strong> →는 각 스트로크 내에서 변조 창을 이동합니다.</li>
+  <li><strong>ONDA Ferocity</strong> →는 스트로크 파형 모양을 수정합니다(정현파 ↔ 사다리꼴)</li>
+  <li><strong>ONDA Balance</strong> → 왼쪽/오른쪽 날개 대칭 수정</li>
+</ul>
+
+<p>자세한 ONDAS 이론은 <a href="../wiki/ondas.html">ONDAS Wiki</a>를 참조하세요.</p>
+
+<h2 id="cli-">CLI 설정</h2>
+
+<p><code>
+mixer = ORNITHOPTER
+set servo_pwm_rate = 330     # Servo update frequency
+set servo_center_pulse = 1500
+set flap_spread = 20         # Wing angle amplitude in degrees
+</code></p>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<a href='../../hr/'>Hrvatski</a>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<strong>한국어</strong>
+&nbsp;◇&nbsp;
+<a href='../../lv/'>Latviešu</a>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<a href='../../zh_CN/'>中文</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

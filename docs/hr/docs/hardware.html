@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='hr'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>Podržani hardver — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Docs</p>
+<h1>Podržani hardver</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="podrani-hardver">Podržani hardver</h1>
+
+<p>OrniFlight radi na standardnim kontrolerima leta STM32F3/F4/F7. Osnovna linija je <strong>STM32F3</strong> — letjet će svaka meta F3 sa servo-sposobnim pinovama tajmera.</p>
+
+<h2 id="kontrolori-leta">Kontrolori leta</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Odbor</th>
+      <th>MCU</th>
+      <th>IMU</th>
+      <th>Bljesak</th>
+      <th>Prijemnik</th>
+      <th>Status</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>TINYFISH</strong></td>
+      <td>STM32F303</td>
+      <td>MPU6000 (SPI)</td>
+      <td>256 KB</td>
+      <td>FrSky D8 (integrirano)</td>
+      <td>✅ Primarni</td>
+    </tr>
+    <tr>
+      <td><strong>OMNIBUSF4</strong></td>
+      <td>STM32F405</td>
+      <td>MPU6000 (SPI)</td>
+      <td>1 MB + 16 MB SPI</td>
+      <td>—</td>
+      <td>✅ Podržano</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="tinyfish--najlaka-orniflight-meta">TINYFISH — Najlakša OrniFlight meta</h3>
+
+<p>Dizajniran od strane fishpeppera, TINYFISH je idealan kontroler leta za ornitopter: lagan kao pero, baziran na F3 i nosi <strong>integrirani FrSky D8 prijemnik</strong> na brodu. Nema vanjskog RX, nema dodatnog ožičenja — samo napajanje, servo i letenje.</p>
+
+<ul>
+  <li><strong>MCU</strong>: STM32F303CCT6 @ 72 MHz</li>
+  <li><strong>Žiroskop</strong>: MPU6000 (SPI, moguć 8 kHz)</li>
+  <li><strong>Flash</strong>: 256 KB na čipu</li>
+  <li><strong>RAM</strong>: 40 KB</li>
+  <li><strong>Prijemnik</strong>: integrirani FrSky D8 (SBUS interno usmjeren na UART2)</li>
+  <li><strong>UART-ovi</strong>: VCP + 2 hardverska UART-a (UART1 besplatno za GPS/CRSF dodatak)</li>
+  <li><strong>Ulaz</strong>: 2-4S LiPo (izravno servo napajanje)</li>
+  <li><strong>Težina</strong>: ~2,5 g</li>
+</ul>
+
+<p>TINYFISH dokazuje da transcendentna kontrola mlataranja ne treba F7. Zzz73zzz pokreće puni ONDAS cjevovod — 10 modulacijskih kanala, trapezoidno krilo ODE, 4 profila leta — unutar 256 KB.</p>
+
+<h3 id="omnibusf4--dostupan-radni-konj">OMNIBUSF4 — Dostupan radni konj</h3>
+
+<p>Klasična meta F4. Jeftin, sveprisutan, sa svim značajkama sa OSD i dovoljno SPI bljeskalice za Blackbox evidentiranje. Kretanje za razvoj i veće gradnje.</p>
+
+<ul>
+  <li><strong>MCU</strong>: STM32F405RGT6 @ 168 MHz</li>
+  <li><strong>Žiroskop</strong>: MPU6000 (SPI, moguć 8 kHz)</li>
+  <li><strong>Flash</strong>: 1 MB na čipu + 16 MB SPI (Blackbox)</li>
+  <li><strong>RAM</strong>: 192 KB</li>
+  <li><strong>OSD</strong>: AT7456E (kompatibilno sa MAX7456)</li>
+  <li><strong>UART-ovi</strong>: VCP + 5 hardverskih UART-ova</li>
+  <li><strong>Barometar</strong>: BMP280 (neke varijante)</li>
+  <li><strong>Ulaz</strong>: 2-6S LiPo</li>
+</ul>
+
+<hr />
+
+<h2 id="anatomija-ornitoptera">Anatomija ornitoptera</h2>
+
+<h3 id="servo-krila">Servo krila</h3>
+
+<p>OrniFlight kontrolira lupanje kroz PWM servo. Ključne specifikacije:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Parametar</th>
+      <th>Tipični raspon</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Pulsna širina</td>
+      <td>500–2500 µs</td>
+    </tr>
+    <tr>
+      <td>Centar</td>
+      <td>1500 µs</td>
+    </tr>
+    <tr>
+      <td>Učestalost</td>
+      <td>50–330 Hz</td>
+    </tr>
+    <tr>
+      <td>Kut hoda</td>
+      <td>±15–45°</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>Za ornitoptere visokih performansi preporučuju se digitalni servo uređaji s brzinom ažuriranja od 330 Hz. Analogni servo uređaji rade na 50 Hz, ali imaju manju preciznost.</p>
+
+<h3 id="prijemnik">Prijemnik</h3>
+
+<p>Podržan je bilo koji protokol serijskog prijemnika. CRSF (TBS Crossfire / ExpressLRS) preporučuje se za:
+- Niska latencija (kritično za kontrolu flappinga)
+- Ugrađena telemetrija
+- RSSI preko protokola (bez dodatnog ožičenja)</p>
+
+<h3 id="baterija">Baterija</h3>
+
+<ul>
+  <li><strong>2S (7.4V)</strong>: Mali ornitopteri, izravno servo pogonjeni</li>
+  <li><strong>3S (11.1V)</strong>: srednji ornitopter, BEC potreban za servo</li>
+  <li><strong>4S (14.8V)</strong>: Veliki ornitopter, preporučuje se vanjski BEC</li>
+</ul>
+
+<hr />
+
+<h2 id="podrane-periferije">Podržane periferije</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Periferni</th>
+      <th>Preko</th>
+      <th>Bilješke</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>GPS</td>
+      <td>UART</td>
+      <td>UBlox M8N ili kompatibilni</td>
+    </tr>
+    <tr>
+      <td>VTX</td>
+      <td>UART TX</td>
+      <td>Skitnica, SmartAudio</td>
+    </tr>
+    <tr>
+      <td>Kamera</td>
+      <td>—</td>
+      <td>Bilo koja analogna kamera FPV</td>
+    </tr>
+    <tr>
+      <td>Zujalo</td>
+      <td>BUZZ jastučić</td>
+      <td>Aktivni zujalica od 5V</td>
+    </tr>
+    <tr>
+      <td>LED traka</td>
+      <td>LED jastučić</td>
+      <td>WS2812 / SK6812</td>
+    </tr>
+    <tr>
+      <td>OpenLog</td>
+      <td>UART TX</td>
+      <td>Zapisivanje u crnu kutiju</td>
+    </tr>
+    <tr>
+      <td>Bluetooth</td>
+      <td>UART</td>
+      <td>MSP prolaz za mobilno podešavanje</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h2 id="budue-mete">Buduće mete</h2>
+
+<p>OrniFlight ima za cilj podržati dodatne STM32F4/F7 ciljeve gdje je dovoljno resursa UART i timera dostupno za flapping servo kontrolu. Doprinosi su dobrodošli.</p>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<strong>Hrvatski</strong>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<a href='../../ko/'>한국어</a>
+&nbsp;◇&nbsp;
+<a href='../../lv/'>Latviešu</a>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<a href='../../zh_CN/'>中文</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

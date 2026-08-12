@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='lv'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>GPS — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Docs</p>
+<h1>GPS</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="gps">GPS</h1>
+
+<p>GPS nodrošina jūsu ornitoptera pozīcijas saglabāšanu, atgriešanos mājās un uz telemetriju balstītu navigāciju. GPS funkcijas programmā OrniFlight ir funkcionālas, taču uzskatāmas par eksperimentālām — vienmēr lido vizuālā redzamības zonā.</p>
+
+<h2 id="atbalsttie-protokoli">Atbalstītie protokoli</h2>
+
+<ul>
+  <li><strong>UBLOX</strong> (ieteicams) — UBlox binārais protokols, efektīvs un uzticams</li>
+  <li><strong>NMEA</strong> — Teksta standarta protokols</li>
+</ul>
+
+<h2 id="aparatra">Aparatūra</h2>
+
+<ul>
+  <li>BN-880, BN-220 vai līdzīgi UBlox M8N GPS+kompasa moduļi</li>
+  <li>Savienojiet: TX/RX ar bezmaksas UART, plus 5V/GND</li>
+  <li>Uzstādiet GPS tālāk no strāvas vadiem un servo kabeļiem, lai samazinātu traucējumus</li>
+  <li>Kompasam/magnetometram jāatrodas prom no magnētiskiem avotiem (barošanas vadiem, servo)</li>
+</ul>
+
+<h2 id="konfigurcija">Konfigurācija</h2>
+
+<p><code>
+feature GPS
+set gps_provider = UBLOX
+set gps_sbas_mode = AUTO
+set gps_auto_baud = ON
+set gps_ublox_use_galileo = ON
+</code></p>
+
+<p>1. Cilnē <strong>Porti</strong> piešķiriet seriālo portu GPS (Ublox noklusējuma vērtība ir 115 200 bodi).
+2. Iespējojiet funkciju GPS
+3. Iestatiet nodrošinātāju
+4. Saglabājiet un restartējiet</p>
+
+<h2 id="osd-elements">OSD Elements</h2>
+
+<p>GPS datos, kas tiek parādīti OSD, ir iekļauts:
+- Satelītu skaits un fiksācijas veids
+- GPS koordinātas (lat/gar)
+- Zemes ātrums
+- Augstums (GPS)
+- Attālums no mājām
+- Mājas virziena bultiņa</p>
+
+<h2 id="ornitoptera-apsvrumi">Ornitoptera apsvērumi</h2>
+
+<ul>
+  <li>GPS antenai ir jābūt skaidrām debesīm; — stiprinājuma vieta ir ļoti svarīga ar plīvojošiem spārniem</li>
+  <li>Mazajiem ornitopteriem svara sods ir ievērojams</li>
+  <li>GPS asistētai RTH (Atgriezties uz sākumlapu) ir nepieciešama rūpīga navigācijas PID vērtību noregulēšana, lai nodrošinātu lidojuma dinamiku.</li>
+</ul>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<a href='../../hr/'>Hrvatski</a>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<a href='../../ko/'>한국어</a>
+&nbsp;◇&nbsp;
+<strong>Latviešu</strong>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<a href='../../zh_CN/'>中文</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

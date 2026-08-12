@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='de'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>ONDAS Tuning-Anleitung — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Tutorials</p>
+<h1>ONDAS Tuning-Anleitung</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="ondas-tuning-anleitung">ONDAS Tuning-Anleitung</h1>
+
+<blockquote>
+  <p><em>Der praktische Begleiter zur ONDAS-Theorie —, wie man jeden Parameter nach Gefühl abstimmt.</em></p>
+</blockquote>
+
+<h2 id="tuning-reihenfolge">Tuning-Reihenfolge</h2>
+
+<p>ONDAS-Parameter sind voneinander abhängig. Stimmen Sie sie in dieser Reihenfolge ab:</p>
+
+<p><code>
+1. Cadence    →  timing
+2. Ferocity D →  primary stabilization
+3. Ferocity P →  response crispness
+4. Balance    →  upstroke/downstroke bias
+5. Warp       →  modulation width
+6. Anchor     →  dry/wet mix
+7. Resonance  →  cycle-to-cycle memory
+8. Phase 2    →  advanced (prescience, espelho, saudade, SSFF)
+</code></p>
+
+<h2 id="schritt-fr-schritt">Schritt für Schritt</h2>
+
+<h3 id="cadence--finden-sie-ihr-phasenfenster">1. Cadence — Finden Sie Ihr Phasenfenster</h3>
+
+<p><strong>Ziel</strong>: Platzieren Sie die Modulation dort, wo Ihr Flügel den meisten Biss hat.</p>
+
+<p><strong>Methode</strong>: 
+- Beginnen Sie mit 50
+- Erhöhung auf 70 — Wird die Rollreaktion schwächer?
+- Auf 30 verringern — Wird die Rollreaktion stärker?
+- Der „stärkste“ Punkt ist der Punkt, an dem die Schlagkraft Ihres Flügels ihren Höhepunkt erreicht</p>
+
+<p><strong>Anzeichen für zu hohe Werte</strong>: Breiige Reaktion, das Handwerk fühlt sich „verzögert“ an
+<strong>Anzeichen für zu niedrigen Wert</strong>: Ruckartige Reaktion, Überschwingen beim Rollen</p>
+
+<h3 id="ferocity-d--stabilisieren-sie-das-handwerk">2. Ferocity D — Stabilisieren Sie das Handwerk</h3>
+
+<p><strong>Ziel</strong>: Primärstabilisierung ohne Schwingungen.</p>
+
+<p><strong>Methode</strong>:
+- Beginnen Sie mit 20
+- Schwebeflug oder gleichmäßiger Vorwärtsflug
+- Erhöhen Sie die Geschwindigkeit, bis das Fahrzeug „steifer“ wird.
+- Ziehen Sie 5 Punkte von der Stelle zurück, an der Sie die Schwingung zum ersten Mal bemerken</p>
+
+<p><strong>Anzeichen für zu hohe Werte</strong>: Feine Vibration, motorisches Summen in den Servos
+<strong>Anzeichen für zu niedrigen Wert</strong>: Fahrzeug driftet, fühlt sich locker an</p>
+
+<h3 id="ferocity-p--knusprigkeit">3. Ferocity P — Knusprigkeit</h3>
+
+<p><strong>Ziel</strong>: Reaktionsfreudig, aber nicht nervös.</p>
+
+<p><strong>Methode</strong>:
+- Beginnen Sie um 15
+- Stoßen Sie den Rollstock — an, beißt das Fahrzeug sofort?
+- Erhöhen Sie den Wert, bis der Knüppel deutlich reagiert
+- Ziehen Sie zurück, wenn Sie eine Überschreitung feststellen</p>
+
+<p><strong>Anzeichen für zu hohe Lautstärke</strong>: Klingeln nach Knüppeleingabe, Rückprall
+<strong>Anzeichen für zu niedrig</strong>: Breiige, verzögerte Reaktion</p>
+
+<h3 id="balance--asymmetrie-tuning">4. Balance — Asymmetrie-Tuning</h3>
+
+<p><strong>Ziel</strong>: Gleiche Autorität in beide Richtungen.</p>
+
+<p><strong>Methode</strong>:
+- Fliegen Sie gerade und gerade
+- Nach links rollen, Reaktionsgeschwindigkeit beachten
+- Nach rechts rollen, Reaktionsgeschwindigkeit beachten
+- Passen Sie die Balance an, um sie auszugleichen</p>
+
+<h3 id="warp-anchor-resonance">5–7. Warp, Anchor, Resonance</h3>
+
+<p>Feinabstimmung der Parameter. Erst anpassen, wenn 1–4 fest sind.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Param</th>
+      <th>Start</th>
+      <th>Anpassen, wann</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Warp</td>
+      <td>50</td>
+      <td>Die Modulation fühlt sich zu weitläufig oder zu spitz an</td>
+    </tr>
+    <tr>
+      <td>Anchor</td>
+      <td>70</td>
+      <td>Möchten Sie mehr/weniger rohes PID gemischt</td>
+    </tr>
+    <tr>
+      <td>Resonance</td>
+      <td>30</td>
+      <td>Der Schwebeflug ist instabil oder der Vorwärtsflug fühlt sich klingelnd an</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="phase-2--erweitert">8. Phase 2 — Erweitert</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>Param</th>
+      <th>Wirkung</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Prescience</td>
+      <td>Timing-Vorlauf — höher = Modulation eilt der Phase mehr voraus</td>
+    </tr>
+    <tr>
+      <td>Espelho</td>
+      <td>Differenzialkupplung — engere Rolle, kann Effizienz verringern</td>
+    </tr>
+    <tr>
+      <td>Saudade</td>
+      <td>Strichspeicher — flüssiger, aber weniger reaktionsschnell</td>
+    </tr>
+    <tr>
+      <td>SSFF</td>
+      <td>Direkte Gyro→wave-Einspritzung — ab 10</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<p><em>Das Ziel ist ein Fahrzeug, das so fliegt, als ob es in der Luft sein möchte. Wenn Sie dagegen ankämpfen, gehen Sie zurück und stimmen Sie von Cadence aufwärts ab.</em></p>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<strong>Deutsch</strong>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<a href='../../hr/'>Hrvatski</a>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<a href='../../ko/'>한국어</a>
+&nbsp;◇&nbsp;
+<a href='../../lv/'>Latviešu</a>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<a href='../../zh_CN/'>中文</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

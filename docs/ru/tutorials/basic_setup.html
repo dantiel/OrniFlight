@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='ru'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>Базовая настройка — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Tutorials</p>
+<h1>Базовая настройка</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="section">Базовая настройка</h1>
+
+<blockquote>
+  <p><em>Настройте свой орнитоптер для первого полета.</em></p>
+</blockquote>
+
+<h2 id="section-1">Предполетный контрольный список</h2>
+
+<p>Прежде всего:</p>
+
+<ul>
+  <li>[ ] Контроллер полета прошит с помощью OrniFlight</li>
+  <li>[ ] Приемник привязан к передатчику</li>
+  <li>[ ] Сервоприводы подключены к правильным выходам PWM.</li>
+  <li>[ ] Аккумулятор подключен (крылья закреплены!)</li>
+</ul>
+
+<h2 id="section-2">Настройка приемника</h2>
+
+<h3 id="crsf-">CRSF (рекомендуется)</h3>
+
+<ol>
+  <li><strong>Вкладка «Порты»</strong>: установите для UART (например, UART1) значение «Serial RX».</li>
+  <li><strong>Вкладка «Конфигурация»</strong>: Режим приемника = «Последовательный приемник», Поставщик = «CRSF»</li>
+  <li>Выключите и включите питание, убедитесь, что входы каналов перемещаются на вкладке «Приемник».</li>
+</ol>
+
+<h3 id="sbus--">SBUS / Другое</h3>
+
+<p>Тот же процесс — выбирает соответствующий протокол на вкладке «Конфигурация».</p>
+
+<h2 id="section-3">Отображение сервоприводов</h2>
+
+<p>На вкладке <strong>Сервоприводы</strong>:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Сервопривод</th>
+      <th>Функция</th>
+      <th>Ставка по умолчанию</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Сервопривод 0</td>
+      <td>Левое крыло</td>
+      <td>250 Гц</td>
+    </tr>
+    <tr>
+      <td>Сервопривод 1</td>
+      <td>Правый фланг</td>
+      <td>250 Гц</td>
+    </tr>
+    <tr>
+      <td>Сервопривод 2</td>
+      <td>Гребень/руль направления</td>
+      <td>50 Гц</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>Отрегулируйте мин/макс/средний диапазон в соответствии с диапазоном вашего сервопривода. Протестируйте с помощью «Override», чтобы проверить направление.</p>
+
+<h2 id="section-4">Выбор режима полета</h2>
+
+<p>На вкладке <strong>Режимы</strong>:</p>
+
+<ol>
+  <li><strong>ARM</strong>: назначить переключатель (безопасность!)</li>
+  <li><strong>ORNITHOPTER INDEPENDENT</strong> или <strong>ORNITHOPTER GLIDE</strong>: выберите основной режим полета.</li>
+  <li><strong>ORNITHOPTER PROFILE</strong>: Дополнительное назначение — для переключения профиля в полете.</li>
+</ol>
+
+<h2 id="ondas--">ONDAS Первая настройка</h2>
+
+<p>Перейдите на вкладку <strong>Дополнительные → ONDAS</strong>:</p>
+
+<ol>
+  <li><strong>Усиление Cadence</strong>: начните с 50 (средний). Это самый важный параметр.</li>
+  <li><strong>Ferocity D Gain</strong>: начните с 30. Это ваша основная стабилизация.</li>
+  <li><strong>Ferocity P Усиление</strong>: начните с 20 для крена/тангажа, 0 для рыскания.</li>
+  <li><strong>Balance Усиление</strong>: 0 (по центру).</li>
+</ol>
+
+<p>Подсоедините аккумулятор, <strong>надежно закрепите орнитоптер</strong> и нажмите ARM. Наблюдайте за движением сервопривода —, оно должно быть плавным, синусоидальным.</p>
+
+<h2 id="section-5">Первый полет</h2>
+
+<ol>
+  <li>Начните с легкого броска против ветра.</li>
+  <li>Используйте режим GLIDE для естественного ощущения парения.</li>
+  <li>Используйте режим INDEPENDENT, если вам нужно прямое управление частотой.</li>
+  <li>Приземлитесь, отрегулируйте ONDAS, повторите.</li>
+</ol>
+
+<hr />
+
+<p><em>Далее: <a href="ondas_tuning.html">ONDAS Руководство по настройке</a> →</em></p>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<a href='../../hr/'>Hrvatski</a>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<a href='../../ko/'>한국어</a>
+&nbsp;◇&nbsp;
+<a href='../../lv/'>Latviešu</a>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<strong>Русский</strong>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<a href='../../zh_CN/'>中文</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

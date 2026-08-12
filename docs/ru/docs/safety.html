@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='ru'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>Безопасность — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Docs</p>
+<h1>Безопасность</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="section">Безопасность</h1>
+
+<h2 id="section-1">Предполетный контрольный список</h2>
+
+<ol>
+  <li><strong>Крылья</strong>: убедитесь, что крылья надежно закреплены и рычажный механизм не поврежден.</li>
+  <li><strong>Аккумулятор</strong>: полностью заряжен, надежно закреплен, правильное количество ячеек.</li>
+  <li><strong>Управление</strong>: проверьте реакцию джойстика на вкладке приемника Конфигуратора.</li>
+  <li><strong>Failsafe</strong>: проверка на стенде перед полетом (см. <a href="failsafe.html">Failsafe</a>)</li>
+  <li><strong>Переключатель постановки на охрану</strong>: настройте и проверьте —, никогда не полагайтесь только на постановку на джойстик.</li>
+  <li><strong>Зона запуска</strong>: в ней нет людей, препятствий и препятствий над головой.</li>
+</ol>
+
+<h2 id="section-2">Безопасность рук</h2>
+
+<p>OrniFlight использует несколько мер безопасности перед постановкой на охрану:</p>
+
+<ul>
+  <li><strong>Дроссельная заслонка низкая</strong>: Дроссельная заслонка должна быть на минимуме.</li>
+  <li><strong>Уровень</strong>: корабль должен быть достаточно ровным.</li>
+  <li><strong>RX Signal</strong>: требуется действительный сигнал приемника.</li>
+  <li><strong>CPU Load</strong>: система не должна быть перегружена.</li>
+  <li><strong>Калибровка</strong>: акселерометр и гироскоп должны быть откалиброваны.</li>
+</ul>
+
+<h2 id="section-3">Безопасность в полете</h2>
+
+<ul>
+  <li><strong>Летайте в пределах прямой видимости</strong></li>
+  <li>Соблюдайте безопасную дистанцию от людей и животных.</li>
+  <li>Контролируйте напряжение батареи — до порога предупреждения.</li>
+  <li>В FPV: всегда летайте с корректировщиком.</li>
+  <li>Ветер: орнитоптеры могут быть чувствительны к ветру. — знайте свои пределы.</li>
+</ul>
+
+<h2 id="section-4">Чрезвычайные процедуры</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Ситуация</th>
+      <th>Действие</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Потеря ориентации</td>
+      <td>Переключитесь в режим INDEPENDENT, центральные джойстики</td>
+    </tr>
+    <tr>
+      <td>Потеря сигнала</td>
+      <td>Failsafe автоматически приземлится (если настроена процедура LAND)</td>
+    </tr>
+    <tr>
+      <td>Повреждение крыла</td>
+      <td>Немедленно разоружить — крылья остановить</td>
+    </tr>
+    <tr>
+      <td>Столкновение с птицами</td>
+      <td>Разоружение, оценка ущерба перед повторной постановкой на охрану</td>
+    </tr>
+    <tr>
+      <td>Низкий заряд батареи</td>
+      <td>Приземляйтесь немедленно — у орнитоптеров нет авторотации</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="section-5">Риски, специфичные для орнитоптеров</h2>
+
+<ul>
+  <li><strong>Опасность защемления</strong>: взмахи крыльями могут привести к травме. — держите руки подальше, когда вооружены.</li>
+  <li><strong>Неисправность тяг</strong>: Предполетная проверка всех толкателей и шаровых шарниров.</li>
+  <li><strong>Resonance</strong>: Определенные частоты взмахов могут вызывать резонансы корпуса. — настройте ONDAS, чтобы избежать</li>
+  <li><strong>Блокировка планирования</strong>: если сервоприводы крыла выходят из строя в ненейтральном положении, контролируемая посадка невозможна. — проверьте отказоустойчивые положения сервоприводов.</li>
+</ul>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<a href='../../hr/'>Hrvatski</a>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<a href='../../ko/'>한국어</a>
+&nbsp;◇&nbsp;
+<a href='../../lv/'>Latviešu</a>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<strong>Русский</strong>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<a href='../../zh_CN/'>中文</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

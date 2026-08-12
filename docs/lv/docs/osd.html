@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='lv'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>Ekrāna displejs (OSD) — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Docs</p>
+<h1>Ekrāna displejs (OSD)</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="ekrna-displejs-osd">Ekrāna displejs (OSD)</h1>
+
+<p>OrniFlight ietver iebūvētu OSD (ekrāna displeju), izmantojot MAX7456 vai AT7456E mikroshēmu. Zzz14zzz pārklāj lidojuma datus jūsu FPV video plūsmā.</p>
+
+<h2 id="atbalsttie-elementi">Atbalstītie elementi</h2>
+
+<p>Konfigurējiet elementus OrniFlight Configurator cilnē <strong>OSD</strong>. Velciet un nometiet elementus, lai novietotu tos ekrānā.</p>
+
+<h3 id="lidojuma-dati">Lidojuma dati</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>Elements</th>
+      <th>Displeji</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Akumulatora spriegums</td>
+      <td>Galvenā akumulatora spriegums (piemēram, 14,8 V)</td>
+    </tr>
+    <tr>
+      <td>Vidējais šūnu spriegums</td>
+      <td>Spriegums uz vienu šūnu (piemēram, 3,7 V)</td>
+    </tr>
+    <tr>
+      <td>Pašreizējā izloze</td>
+      <td>Momentānie ampēri</td>
+    </tr>
+    <tr>
+      <td>mAh Drawn</td>
+      <td>Kumulatīvā patērētā jauda</td>
+    </tr>
+    <tr>
+      <td>RSSI</td>
+      <td>Signāla stiprums no uztvērēja</td>
+    </tr>
+    <tr>
+      <td>Lidojuma režīms</td>
+      <td>Pašreizējais režīms (INDEPENDENT, GLIDE utt.)</td>
+    </tr>
+    <tr>
+      <td>Droseles pozīcija</td>
+      <td>Pašreizējais droseles procents</td>
+    </tr>
+    <tr>
+      <td>Taimeris</td>
+      <td>Lidojuma laiks / bruņotais laiks</td>
+    </tr>
+    <tr>
+      <td>Amatniecības nosaukums</td>
+      <td>OrniFlight amatniecības nosaukums</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="ornitopteram-specifisks">Ornitopteram specifisks</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>Elements</th>
+      <th>Displeji</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Pūšanas biežums</td>
+      <td>Pašreizējais spārna gājiena ātrums Hz</td>
+    </tr>
+    <tr>
+      <td>ONDAS Profils</td>
+      <td>Aktīvā lidojuma profila numurs (1-3)</td>
+    </tr>
+    <tr>
+      <td>Cadence Fāze</td>
+      <td>Strāvas modulācijas fāzes nobīde</td>
+    </tr>
+    <tr>
+      <td>Servo leņķis</td>
+      <td>Spārna servo stāvoklis</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="fontu-prvaldba">Fontu pārvaldība</h2>
+
+<p>Zzz18zzz izmanto uz rakstzīmēm balstītu displeja sistēmu. Zzz8zzz Configurator cilnē <strong>OSD</strong> ir iekļauts <strong>Fontu pārvaldnieks</strong> pielāgotu fontu un glifu augšupielādei.</p>
+
+<h2 id="cli-iestatjumi">CLI iestatījumi</h2>
+
+<p><code>
+set osd_units = METRIC
+set osd_warn_bitmask = 270335  # Warning flag bitmask
+set osd_tim1 = 2560            # Timer 1 source
+set osd_tim2 = 2561            # Timer 2 source
+</code></p>
+
+<h2 id="aparatra">Aparatūra</h2>
+
+<p>Pašlaik atbalstītā OSD mikroshēma: <strong>AT7456E</strong> (atrodas uz OMNIBUSF4 un saderīgām platēm). MAX7456 ir saderīgs un tiek automātiski noteikts.</p>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<a href='../../hr/'>Hrvatski</a>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<a href='../../ko/'>한국어</a>
+&nbsp;◇&nbsp;
+<strong>Latviešu</strong>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<a href='../../zh_CN/'>中文</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='de'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>PID Tuning — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Tutorials</p>
+<h1>PID Tuning</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="pid-tuning">PID Tuning</h1>
+
+<p>OrniFlight verwendet einen PID-Controller (Proportional-Integral-Derivative), der für den Schlagflügelflug geeignet ist. Aufgrund der periodischen Natur des Schlagschubs unterscheidet sich die Abstimmung erheblich von herkömmlichen Flugzeugen.</p>
+
+<h2 id="ornithopter-pid-grundlagen">Ornithopter PID Grundlagen</h2>
+
+<p>Im Gegensatz zu herkömmlichen Flugzeugen, bei denen der Schub nahezu kontinuierlich ist, schwankt der Schub beim Ornithopter mit jedem Flügelschlag. Dadurch entsteht:</p>
+
+<ul>
+  <li><strong>Schubwelligkeit</strong> bei Schlagfrequenz (typischerweise 5–15 Hz)</li>
+  <li><strong>Phasenabhängige Steuerautorität</strong> — Derselbe PID-Ausgang hat unterschiedliche Auswirkungen, je nachdem, an welcher Stelle im Hubzyklus er angewendet wird</li>
+  <li><strong>Gekoppelte Roll-Gier-Dynamik</strong> — asymmetrischer Flügelschub wirkt sich auf beide Achsen gleichzeitig aus</li>
+</ul>
+
+<h2 id="pid-bedingungen">PID Bedingungen</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Begriff</th>
+      <th>Wirkung</th>
+      <th>Ornithopter-Hinweis</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>P</strong></td>
+      <td>Proportionale — sofortige Korrektur</td>
+      <td>Verwenden Sie konservative Werte; Schwingung ist flattersynchron</td>
+    </tr>
+    <tr>
+      <td><strong>Ich</strong></td>
+      <td>Integrale — dauerhafte Fehlerkorrektur</td>
+      <td>Unverzichtbar für die Aufrechterhaltung der Fluglage beim Gleiten</td>
+    </tr>
+    <tr>
+      <td><strong>D</strong></td>
+      <td>Ableitung — dämpft Schwingungen</td>
+      <td>Auf Flügelschlagfrequenz abgestimmt, nicht auf Rahmenschwingungen</td>
+    </tr>
+    <tr>
+      <td><strong>F</strong></td>
+      <td>Feed-Forward — direkter Stick-to-Ausgang</td>
+      <td>Nützlich für eine klare Reaktion auf der Rollachse</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="startwerte">Startwerte</h2>
+
+<p>Für einen mittelgroßen Ornithopter (1–1,5 m Flügelspannweite):</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Achse</th>
+      <th>P</th>
+      <th>Ich</th>
+      <th>D</th>
+      <th>F</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Rolle</td>
+      <td>25</td>
+      <td>30</td>
+      <td>15</td>
+      <td>30</td>
+    </tr>
+    <tr>
+      <td>Tonhöhe</td>
+      <td>30</td>
+      <td>35</td>
+      <td>20</td>
+      <td>35</td>
+    </tr>
+    <tr>
+      <td>Gieren</td>
+      <td>40</td>
+      <td>35</td>
+      <td>10</td>
+      <td>20</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="tuning-verfahren">Tuning-Verfahren</h2>
+
+<h3 id="rate-tuning-zuerst">1. Rate-Tuning zuerst</h3>
+
+<p>Stellen Sie vor der Abstimmung von PID die Raten ein, die sich angenehm anfühlen:
+- Beginnen Sie mit RC Rate 0,90, Super Rate 0,65, Expo 0,30
+- Passen Sie es an Ihren Flugstil und die Größe Ihres Ornithopters an</p>
+
+<h3 id="p-verstrkung">2. P-Verstärkung</h3>
+
+<p>Erhöhen Sie P, bis Sie eine Schwingung mit Schlagfrequenz sehen, und reduzieren Sie sie dann um 20 %:
+- Rolloszillation: Flügelwackeln bei Schlagfrequenz
+- Pitch-Oszillation: Vorwärts- und Rückwärtswippen
+- Gieroszillation: Schwanzwedeln synchronisiert mit den Bewegungen</p>
+
+<h3 id="d-verstrkung">3. D-Verstärkung</h3>
+
+<p>Erhöhen Sie D, um den Rückprall nach scharfen Steuerknüppeleingaben zu dämpfen:
+- Zu viel: Servo-Jitter, Überhitzung
+- Zu wenig: Klingeln nach Roll-/Nickstopps</p>
+
+<h3 id="ich-gewinne">4. Ich gewinne</h3>
+
+<p>Ich erhalte Zähler für anhaltende Drift:
+- Erhöhen, bis die Drift beseitigt ist
+- Zu viel: langsame Oszillation mit 1–2 Hz (unterhalb der Schlagfrequenz)</p>
+
+<h2 id="ondas-integration">ONDAS Integration</h2>
+
+<p>ONDAS (Ornithopter Nonlinear Dynamic Aerodynamic System) moduliert die PID-Ausgabe innerhalb jedes Flügelschlags. Nach der grundlegenden PID-Abstimmung:</p>
+
+<ol>
+  <li>Stellen Sie <strong>Cadence Gain</strong> — ein, um das Modulationsfenster auf die aerodynamisch optimale Phase zu verschieben</li>
+  <li>Stellen Sie <strong>Ferocity P</strong> — sofortigen asymmetrischen Schubschub ein</li>
+  <li>Legen Sie <strong>Ferocity D</strong> — vorausschauende Widerstandsausnutzung fest</li>
+  <li>Passen Sie <strong>Balance</strong> — linke/rechte Flügelsymmetrie an</li>
+</ol>
+
+<p>Ausführliche Informationen zum Verfahren finden Sie im <a href="ondas_tuning.html">ONDAS Tuning Guide</a>.</p>
+
+<h2 id="blackbox-analyse">Blackbox-Analyse</h2>
+
+<p>Aktivieren Sie die Blackbox-Protokollierung, um die Leistung von PID zu visualisieren. Suchen Sie nach:
+- <strong>P-Term-Oszillation</strong> bei Schlagfrequenz → P reduzieren
+- <strong>I-Term-Windup</strong> bei anhaltenden Drehungen → Reduzieren Sie I oder erhöhen Sie I-Term-Relax
+- <strong>D-Term-Geräusch</strong> durch Vibration → Überprüfen Sie zuerst das mechanische Gleichgewicht und reduzieren Sie dann D</p>
+
+<h2 id="flugprofile">Flugprofile</h2>
+
+<p>OrniFlight unterstützt 3 Flugprofile, die während des Fluges umschaltbar sind:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Profil</th>
+      <th>Anwendungsfall</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1</td>
+      <td>Standardkreuzfahrt</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>Hohe Agilität / Aggressivität</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>Effizienz / Thermiksegelflug</td>
+    </tr>
+  </tbody>
+</table>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<strong>Deutsch</strong>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<a href='../../hr/'>Hrvatski</a>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<a href='../../ko/'>한국어</a>
+&nbsp;◇&nbsp;
+<a href='../../lv/'>Latviešu</a>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<a href='../../zh_CN/'>中文</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

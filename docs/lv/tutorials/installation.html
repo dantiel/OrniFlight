@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='lv'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>Uzstādīšana — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Tutorials</p>
+<h1>Uzstādīšana</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="uzstdana">Uzstādīšana</h1>
+
+<p>Kā instalēt OrniFlight programmaparatūru lidojuma kontrolierī.</p>
+
+<h2 id="prieknoteikumi">Priekšnoteikumi</h2>
+
+<ul>
+  <li><strong>OrniFlight Configurator</strong> (jaunākā versija)</li>
+  <li>USB datu kabelis (nav tikai maksas)</li>
+  <li>Atbalstīta lidojuma vadības panelis</li>
+</ul>
+
+<h2 id="atbalsttie-di">Atbalstītie dēļi</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Valde</th>
+      <th>Mērķis</th>
+      <th>Zibspuldze</th>
+      <th>Piezīmes</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>OMNIBUSF4</td>
+      <td><code>OMNIBUSF4</code></td>
+      <td>16 MB</td>
+      <td>STM32F405, MPU6000, OSD</td>
+    </tr>
+    <tr>
+      <td>TINYFISH</td>
+      <td><code>TINYFISH</code></td>
+      <td>256KB</td>
+      <td>STM32F411, MPU6000</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="mirgojoi-soi">Mirgojoši soļi</h2>
+
+<h3 id="ievadiet-dfubootloader-mode">1. Ievadiet DFU/Bootloader Mode</h3>
+
+<p><strong>OMNIBUSF4</strong>: turiet nospiestu pogu BOOT, kamēr pievienojat USB. Sarkans LED paliek nemainīgs — jūs esat DFU režīmā.</p>
+
+<p><strong>TINYFISH</strong>: turiet pogu BOOT, kamēr pievienojat USB.</p>
+
+<h3 id="flash-izmantojot-konfiguratoru">2. Flash, izmantojot konfiguratoru</h3>
+
+<ol>
+  <li>Atveriet programmu OrniFlight Configurator
+2. Atveriet cilni <strong>Firmware Flasher</strong>
+3. Nolaižamajā izvēlnē atlasiet savu mērķi
+4. Izvēlieties programmaparatūras versiju (ieteicama jaunākā stabilā versija)</li>
+  <li>Noklikšķiniet uz <strong>Ielādēt programmaparatūru (tiešsaistē)</strong> vai atlasiet lokālo hex failu
+6. Noklikšķiniet uz <strong>Flash programmaparatūra</strong>.
+7. Pagaidiet “Programmēšana: Veiksmīgi”</li>
+</ol>
+
+<h3 id="pirmais-savienojums">3. Pirmais savienojums</h3>
+
+<p>Pēc mirgošanas:
+1. Atvienojiet un atkārtoti pievienojiet USB (bez pogas BOOT)
+2. Konfiguratoram ir jāpievienojas automātiski
+3. Pieņemiet uzvedni “Lietot pielāgotus noklusējumus”.
+4. Pārbaudiet plates informāciju cilnē Iestatīšana</p>
+
+<h2 id="traucjummeklana">Traucējummeklēšana</h2>
+
+<h3 id="nav-dfu-porta">Nav DFU porta</h3>
+
+<p><strong>macOS/Linux</strong>: DFU jāparādās automātiski. Ja nē:
+<code>bash
+# Check for DFU device
+system_profiler SPUSBDataType | grep -A 10 STM
+</code></p>
+
+<p><strong>Windows</strong>: instalējiet <a href="https://zadig.akeo.ie/">Zadig</a>, lai aizstātu STM32 DFU draiveri:
+1. Palaidiet Zadigu
+2. Opcijas → Visu ierīču saraksts
+3. Atlasiet “STM32 BOOTLOADER”
+4. Aizstāt draiveri ar “WinUSB”</p>
+
+<h3 id="flash-neizdodas">Flash neizdodas</h3>
+
+<p>- Izmēģiniet citu USB kabeli (ar datu pārraidi, nevis tikai uzlādi)
+- Izmēģiniet citu USB portu (tiešo, nevis centrmezglu)
+- Turiet BOOT pogu visa zibspuldzes procesa laikā
+- <strong>OMNIBUSF4</strong>: var būt nepieciešams pilnībā dzēst mikroshēmu. — atzīmējiet opciju “Pilna mikroshēmu dzēšana”.</p>
+
+<h3 id="konfigurators-nevar-izveidot-savienojumu">Konfigurators nevar izveidot savienojumu</h3>
+
+<ul>
+  <li>Pārbaudiet, vai USB kabelis ir datu spējīgs</li>
+  <li>Pārbaudes dēlis nav DFU režīmā (LED mirgo = parastais režīms)</li>
+  <li>Restartējiet konfiguratoru</li>
+  <li>Izmēģiniet citu USB portu</li>
+</ul>
+
+<h2 id="cli-flash-uzlabots">CLI Flash (uzlabots)</h2>
+
+<p>Pieredzējušiem lietotājiem zibspuldze, izmantojot STM32CubeProgrammer vai st-flash:</p>
+
+<p><code>bash
+st-flash write orniflight_0.4.6_OMNIBUSF4.hex 0x08000000
+</code></p>
+
+<p>Pēc mirgošanas pārbaudiet ar:</p>
+
+<p><code>bash
+st-flash verify orniflight_0.4.6_OMNIBUSF4.hex 0x08000000
+</code></p>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<a href='../../hr/'>Hrvatski</a>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<a href='../../ko/'>한국어</a>
+&nbsp;◇&nbsp;
+<strong>Latviešu</strong>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<a href='../../zh_CN/'>中文</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

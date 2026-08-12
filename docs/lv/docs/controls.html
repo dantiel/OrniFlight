@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='lv'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>Vadības ierīces — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Docs</p>
+<h1>Vadības ierīces</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="vadbas-ierces">Vadības ierīces</h1>
+
+<p>OrniFlight izmanto standarta RC nūju kartēšanu ar ornitopteram raksturīgiem paplašinājumiem.</p>
+
+<h2 id="stick-mapping">Stick Mapping</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Stick</th>
+      <th>Ass</th>
+      <th>Primārais efekts</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Droseļvārsts (pa kreisi, vertikāli)</td>
+      <td>Droseļvārsts</td>
+      <td>Svārstīšanās amplitūda / vilces spēks</td>
+    </tr>
+    <tr>
+      <td>Leņķis (pa kreisi, horizontāli)</td>
+      <td>Žāga</td>
+      <td>Diferenciālā spārna vilce pagriešanai</td>
+    </tr>
+    <tr>
+      <td>Solis (pa labi, vertikāli)</td>
+      <td>Piķis</td>
+      <td>Noliekt uz priekšu/atpakaļ</td>
+    </tr>
+    <tr>
+      <td>Roll (pa labi, horizontāli)</td>
+      <td>Roll</td>
+      <td>Kreisā/labā mala</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="lidojuma-remi">Lidojuma režīmi</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Režīms</th>
+      <th>Nūjas uzvedība</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>ACRO</strong></td>
+      <td>Spieķi kontrolē leņķisko ātrumu — bez automātiskā līmeņa</td>
+    </tr>
+    <tr>
+      <td><strong>ANGLE</strong></td>
+      <td>Spieķi vadības leņķis — automātiskais līmenis, kad tas tiek atlaists</td>
+    </tr>
+    <tr>
+      <td><strong>HORIZON</strong></td>
+      <td>ANGLE tuvu centram, ACRO pie pilnas novirzes</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>ACRO ieteicams pieredzējušiem pilotiem. ANGLE ir piemērots pirmajiem lidojumiem un termiskai planēšanai.</p>
+
+<h2 id="ornitopteram-specifisks-vadbas-ierces">Ornitopteram specifiskās vadības ierīces</h2>
+
+<h3 id="independent-rems">INDEPENDENT režīms</h3>
+
+<p>Kad INDEPENDENT režīms ir aktīvs, katrs spārna servo reaģē neatkarīgi:
+- <strong>Kreisā svira</strong> → kreisā spārna servo
+- <strong>Labā nūja</strong> → labā spārna servo
+- Nodrošina asimetrisku plivināšanu agresīviem manevriem</p>
+
+<h3 id="glide-rems">GLIDE režīms</h3>
+
+<p>GLIDE režīms bloķē abus spārnus horizontālā stāvoklī. Ornitopteris kļūst par planieri:
+- <strong>Drosele</strong> neietekmē spārnu stāvokli
+- <strong>Slīpums/Pavirzīšanās/Pavirzīšanās</strong> joprojām ietekmē astes vadības virsmas (ja ir aprīkojumā)</p>
+
+<h3 id="profila-maia">Profila maiņa</h3>
+
+<p>Profila pārslēgšana lidojuma laikā caur AUX kanālu ļauj mainīt PID/ONDAS parametrus lidojuma laikā:
+- <strong>Profils 1</strong>: standarta kruīza iestatījumi
+- <strong>2. profils</strong>: augstas veiklības iestatījumi
+- <strong>3. profils</strong>: efektivitātes/slīdēšanas iestatījumi</p>
+
+<h2 id="likmes">Likmes</h2>
+
+<p>Konfigurējiet tarifus cilnē <strong>PID Tuning</strong>. Ornitopteriem sāciet ar konservatīviem rādītājiem. — plivināšanas dinamika pastiprina vadības ievades:
+- RC Likme: 0,80–1,00
+- Super Rate: 0,60–0,70
+- Expo: 0,20–0,40</p>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<a href='../../hr/'>Hrvatski</a>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<a href='../../ko/'>한국어</a>
+&nbsp;◇&nbsp;
+<strong>Latviešu</strong>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<a href='../../zh_CN/'>中文</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

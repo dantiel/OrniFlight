@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='ca'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>Registre de Blackbox — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Docs</p>
+<h1>Registre de Blackbox</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="registre-de-blackbox">Registre de Blackbox</h1>
+
+<p>Blackbox registra les dades de vol per a l’anàlisi, l’ajustament i la depuració després del vol. OrniFlight admet el registre al xip flash integrat o al dispositiu OpenLog extern.</p>
+
+<h2 id="qu-es-registra">Què es registra</h2>
+
+<ul>
+  <li><strong>Gyro</strong> — velocitat angular de 3 eixos en brut i filtrat</li>
+  <li><strong>Acceleròmetre</strong> — acceleració de 3 eixos</li>
+  <li><strong>PID Sortida</strong> — Contribucions P, I, D, F per eix</li>
+  <li><strong>ONDAS</strong> — Cadence, Ferocity P/D i altres paràmetres específics del bateig</li>
+  <li><strong>Comandes RC</strong> Posicions del pal — després de les tarifes/exposició</li>
+  <li><strong>Sortida de servo</strong> — sortida final a cada canal de servo</li>
+  <li><strong>Bateria</strong> tensió i corrent — per iteració</li>
+  <li><strong>GPS</strong> — posició, velocitat, altitud (quan estigui disponible)</li>
+</ul>
+
+<h2 id="configuraci">Configuració</h2>
+
+<h3 id="flash-integrat-omnibusf4">Flash integrat (OMNIBUSF4)</h3>
+
+<p>El OMNIBUSF4 inclou 16 MB de flaix integrat per al registre de Blackbox. Habilita al configurador:</p>
+
+<ol>
+  <li>Pestanya <strong>Blackbox</strong> → Estableix <code>Blackbox logging device</code> a <code>Onboard flash</code></li>
+  <li>Establiu la taxa de registre (recomaneu: <code>1/N</code> amb N=2-4 per a objectius F4)</li>
+  <li>Assigna un interruptor per iniciar/aturar el registre</li>
+</ol>
+
+<h3 id="zzz36zzz-extern">Zzz36zzz extern</h3>
+
+<p>Connecteu OpenLog a un pin UART TX gratuït:</p>
+
+<ol>
+  <li>Pestanya <strong>Ports</strong> → Estableix el UART a <code>Blackbox logging</code> a 115200 bauds</li>
+  <li>Connecteu OpenLog: FC TX → OpenLog RX, més 5V/GND</li>
+</ol>
+
+<h2 id="eines-danlisi">Eines d’anàlisi</h2>
+
+<ul>
+  <li><a href="https://github.com/betaflight/blackbox-log-viewer">Blackbox Explorer</a> — visualitzador de registres basat en web</li>
+  <li>Converteix <code>blackbox_decode</code> — a CSV per a una anàlisi personalitzada</li>
+</ul>
+
+<h2 id="ondas-especfic">ONDAS-Específic</h2>
+
+<p>Blackbox és essencial per ajustar els paràmetres ONDAS. Les dades registrades ONDAS inclouen:
+- Temporització de la finestra de modulació <code>ondas_cadence_phase</code> —
+- <code>ondas_ferocity_p</code> / <code>ondas_ferocity_d</code> — components d’empenta asimètrics
+- <code>ondas_balance</code> — equilibri ala esquerra/dreta
+- Sortida per servo a cada iteració</p>
+
+<p>Això permet una anàlisi precisa de la mecànica del bateig i les correccions d’asimetria de les ales.</p>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<strong>Català</strong>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<a href='../../hr/'>Hrvatski</a>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<a href='../../ko/'>한국어</a>
+&nbsp;◇&nbsp;
+<a href='../../lv/'>Latviešu</a>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<a href='../../zh_CN/'>中文</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

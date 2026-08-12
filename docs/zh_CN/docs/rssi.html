@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='zh_CN'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>RSSI — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Docs</p>
+<h1>RSSI</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="rssi">RSSI</h1>
+
+<p>RSSI（接收信号强度指示器）显示无线电链路的质量。 OrniFlight 可以从模拟输入、串行接收器数据或协议 RSSI 获取 RSSI。</p>
+
+<h2 id="rssi-">RSSI 来源</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>来源</th>
+      <th>连接</th>
+      <th>配置</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>串行协议</strong></td>
+      <td>无（通过串行 RX 线）</td>
+      <td>CRSF、GHST — 自动</td>
+    </tr>
+    <tr>
+      <td><strong>AUX 频道</strong></td>
+      <td>无（TX 发送 RSSI 作为通道）</td>
+      <td><code>set rssi_channel = 8</code></td>
+    </tr>
+    <tr>
+      <td><strong>模拟 ADC</strong></td>
+      <td>RSSI 垫在 FC → 接收器 RSSI 输出</td>
+      <td><code>set rssi_adc_channel = 1</code></td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="section">配置</h2>
+
+<h3 id="rssi-crsfghstsbus">串行 RSSI (CRSF/GHST/SBUS)</h3>
+
+<p>呜呜呜</p>
+
+<p>RSSI 通过串行协议 — 自动传输，无需额外接线。</p>
+
+<h3 id="rssi-1">模拟 RSSI</h3>
+
+<p>将接收器 RSSI 输出 → RSSI 焊盘连接到飞控上：</p>
+
+<p>呜呜呜</p>
+
+<h3 id="aux--rssi">AUX 频道 RSSI</h3>
+
+<p>配置您的发射器以在特定通道上发送 RSSI，然后：</p>
+
+<p>呜呜呜</p>
+
+<h2 id="section-1">显示</h2>
+
+<p>RSSI 显示在 OSD 中，可以通过遥测传输到您的收音机。配置警告阈值：</p>
+
+<p>呜呜呜</p>
+
+<h2 id="section-2">扑翼机范围</h2>
+
+<p>对于扑翼机来说，RSSI 至关重要，— 扑动翅膀会产生动态 RF 干涉图案。在初始测试飞行期间监控 RSSI，以验证所有机翼位置的可靠链路性能。</p>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<a href='../../hr/'>Hrvatski</a>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<a href='../../ko/'>한국어</a>
+&nbsp;◇&nbsp;
+<a href='../../lv/'>Latviešu</a>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<strong>中文</strong>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

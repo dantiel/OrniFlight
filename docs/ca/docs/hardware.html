@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='ca'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>Maquinari compatible — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Docs</p>
+<h1>Maquinari compatible</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="maquinari-compatible">Maquinari compatible</h1>
+
+<p>OrniFlight funciona amb controladors de vol STM32F3/F4/F7. La línia de base és <strong>STM32F3</strong> — qualsevol objectiu F3 amb agulles de temporitzador amb servomotor volarà.</p>
+
+<h2 id="controladors-de-vol">Controladors de vol</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Junta</th>
+      <th>MCU</th>
+      <th>IMU</th>
+      <th>Flash</th>
+      <th>Receptor</th>
+      <th>Estat</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>TINYFISH</strong></td>
+      <td>STM32F303</td>
+      <td>MPU6000 (SPI)</td>
+      <td>256 KB</td>
+      <td>FrSky D8 (integrat)</td>
+      <td>✅ Primària</td>
+    </tr>
+    <tr>
+      <td><strong>OMNIBUSF4</strong></td>
+      <td>STM32F405</td>
+      <td>MPU6000 (SPI)</td>
+      <td>1 MB + 16 MB SPI</td>
+      <td>—</td>
+      <td>✅ Admet</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="tinyfish--lobjectiu-orniflight-ms-lleuger">TINYFISH — L’objectiu OrniFlight més lleuger</h3>
+
+<p>Dissenyat per fishpepper, TINYFISH és el controlador de vol ornitòpter ideal: pes ploma, basat en F3 i que porta un <strong>receptor FrSky D8 integrat</strong> a bord. Sense RX extern, sense cablejat addicional — només potència, servos i volar.</p>
+
+<ul>
+  <li><strong>MCU</strong>: STM32F303CCT6 @ 72 MHz</li>
+  <li><strong>Gyro</strong>: MPU6000 (SPI, capaç de 8 kHz)</li>
+  <li><strong>Flash</strong>: 256 KB al xip</li>
+  <li><strong>RAM</strong>: 40 KB</li>
+  <li><strong>Receptor</strong>: FrSky D8 integrat (SBUS encaminat internament a UART2)</li>
+  <li><strong>UART</strong>: VCP + 2 UART de maquinari (UART1 gratuït per al complement GPS/CRSF)</li>
+  <li><strong>Entrada</strong>: 2-4S LiPo (potència servo directa)</li>
+  <li><strong>Pes</strong>: ~2,5 g</li>
+</ul>
+
+<p>TINYFISH demostra que el control transcendent d’aleteig no necessita un F7. El STM32F303 executa la canalització completa ONDAS — 10 canals de modulació, ala trapezoïdal ODE, 4 perfils de vol — dins de 256 KB.</p>
+
+<h3 id="omnibusf4--el-cavall-de-batalla-accessible">OMNIBUSF4 — El cavall de batalla accessible</h3>
+
+<p>L’objectiu clàssic F4. Barat, omnipresent, amb totes les funcions amb OSD i un ampli flash SPI per al registre de Blackbox. El favorit per al desenvolupament i les construccions més grans.</p>
+
+<ul>
+  <li><strong>MCU</strong>: STM32F405RGT6 @ 168 MHz</li>
+  <li><strong>Gyro</strong>: MPU6000 (SPI, capacitat de 8 kHz)</li>
+  <li><strong>Flash</strong>: 1 MB al xip + 16 MB SPI (Blackbox)</li>
+  <li><strong>RAM</strong>: 192 KB</li>
+  <li><strong>OSD</strong>: AT7456E (compatible amb MAX7456)</li>
+  <li><strong>UART</strong>: VCP + 5 UART de maquinari</li>
+  <li><strong>Baròmetre</strong>: BMP280 (algunes variants)</li>
+  <li><strong>Entrada</strong>: 2-6S LiPo</li>
+</ul>
+
+<hr />
+
+<h2 id="anatomia-de-lornitpter">Anatomia de l’ornitòpter</h2>
+
+<h3 id="servos-dala">Servos d’ala</h3>
+
+<p>OrniFlight controla el moviment dels servos PWM. Especificacions clau:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Paràmetre</th>
+      <th>Gamma típica</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Amplada del pols</td>
+      <td>500–2500 µs</td>
+    </tr>
+    <tr>
+      <td>Centre</td>
+      <td>1500 µs</td>
+    </tr>
+    <tr>
+      <td>Freqüència</td>
+      <td>50–330 Hz</td>
+    </tr>
+    <tr>
+      <td>Angle de traç</td>
+      <td>±15–45°</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>Per als ornitòpters d’alt rendiment, es recomanen servos digitals amb una velocitat d’actualització de 330 Hz. Els servos analògics funcionen a 50 Hz però tenen una precisió menor.</p>
+
+<h3 id="receptor">Receptor</h3>
+
+<p>S’admet qualsevol protocol de receptor sèrie. Es recomana CRSF (TBS Crossfire / ExpressLRS) per a:
+- Baixa latència (crític per al control de flapping)
+- Telemetria integrada
+- RSSI sobre protocol (sense cablejat addicional)</p>
+
+<h3 id="bateria">Bateria</h3>
+
+<ul>
+  <li><strong>2S (7.4V)</strong>: ornitòpters petits, servoalimentats directament</li>
+  <li><strong>3S (11,1 V)</strong>: ornitòpters mitjans, cal BEC per als servos</li>
+  <li><strong>4S (14,8 V)</strong>: ornitòpters grans, es recomana BEC extern</li>
+</ul>
+
+<hr />
+
+<h2 id="perifrics-compatibles">Perifèrics compatibles</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Perifèric</th>
+      <th>Via</th>
+      <th>Notes</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>GPS</td>
+      <td>UART</td>
+      <td>UBlox M8N o compatible</td>
+    </tr>
+    <tr>
+      <td>VTX</td>
+      <td>UART TX</td>
+      <td>Vagabund, SmartAudio</td>
+    </tr>
+    <tr>
+      <td>Càmera</td>
+      <td>—</td>
+      <td>Qualsevol càmera analògica FPV</td>
+    </tr>
+    <tr>
+      <td>Zumbador</td>
+      <td>BUZZ coixinet</td>
+      <td>Zumbador actiu de 5V</td>
+    </tr>
+    <tr>
+      <td>LED Tira</td>
+      <td>LED coixinet</td>
+      <td>WS2812 / SK6812</td>
+    </tr>
+    <tr>
+      <td>OpenLog</td>
+      <td>UART TX</td>
+      <td>Registre de Blackbox</td>
+    </tr>
+    <tr>
+      <td>Bluetooth</td>
+      <td>UART</td>
+      <td>Passthrough MSP per a la sintonització mòbil</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h2 id="objectius-futurs">Objectius futurs</h2>
+
+<p>OrniFlight té com a objectiu donar suport a objectius STM32F4/F7 addicionals on hi hagi suficients recursos UART i temporitzadors per al control del servo de flapping. Benvingudes aportacions.</p>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<strong>Català</strong>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<a href='../../hr/'>Hrvatski</a>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<a href='../../ko/'>한국어</a>
+&nbsp;◇&nbsp;
+<a href='../../lv/'>Latviešu</a>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<a href='../../zh_CN/'>中文</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

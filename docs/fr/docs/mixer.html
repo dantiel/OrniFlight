@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='fr'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>Mélangeur — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Docs</p>
+<h1>Mélangeur</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="mlangeur">Mélangeur</h1>
+
+<p>Le mélangeur traduit les sorties du contrôleur de vol (roulis, tangage, lacet, accélérateur) en signaux d’asservissement pour votre ornithoptère.</p>
+
+<h2 id="mlangeur-dornithoptres">Mélangeur d’ornithoptères</h2>
+
+<p>OrniFlight étend le système de mixage de Betaflight avec des configurations spécifiques aux ornithoptères. Le mixeur gère :</p>
+
+<ul>
+  <li><strong>Servos d’aile</strong> : Convertissez la sortie PID en modulation de course d’aile</li>
+  <li><strong>Servos de queue</strong> (en option) : Contrôlez les surfaces de profondeur/gouvernail de direction</li>
+</ul>
+
+<h2 id="types-de-mlangeurs">Types de mélangeurs</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Mélangeur</th>
+      <th>Cas d’utilisation</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>ORNITHOPTER</strong></td>
+      <td>Ornithoptère standard à double aile avec 2 servos d’aile</td>
+    </tr>
+    <tr>
+      <td><strong>ORNITHOPTER_4S</strong></td>
+      <td>Ornithoptère à 4 servos (commande indépendante des ailes gauche/droite)</td>
+    </tr>
+    <tr>
+      <td><strong>ORNITHOPTER_TAIL</strong></td>
+      <td>Double aile + élévateur de queue + gouvernail</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="configuration-des-servos">Configuration des servos</h2>
+
+<p>Configuré dans l’onglet <strong>Servos</strong> ou via CLI :</p>
+
+<p><code>
+smix reverse 0 2 r       # Reverse servo 2
+smix 0 0 0 100 0 0 100   # Servo 0: roll mixing
+smix 1 1 1 100 0 0 100   # Servo 1: pitch mixing
+</code></p>
+
+<h2 id="ondas-intgration">ONDAS Intégration</h2>
+
+<p>Le mélangeur fonctionne de concert avec ONDAS (Ornithopter Nonlinear Dynamic Aerodynamic System) :</p>
+
+<ul>
+  <li><strong>Throttle</strong> → définit l’amplitude du battement de base</li>
+  <li><strong>ONDA Cadence</strong> → décale la fenêtre de modulation à chaque coup</li>
+  <li><strong>ONDA Ferocity</strong> → modifie la forme de la forme d’onde de course (sinusoïdale ↔ trapézoïdale)</li>
+  <li><strong>ONDA Balance</strong> → correction de symétrie des ailes gauche/droite</li>
+</ul>
+
+<p>Pour une théorie détaillée de ONDAS, consultez le <a href="../wiki/ondas.html">ONDAS Wiki</a>.</p>
+
+<h2 id="paramtres-cli">Paramètres CLI</h2>
+
+<p><code>
+mixer = ORNITHOPTER
+set servo_pwm_rate = 330     # Servo update frequency
+set servo_center_pulse = 1500
+set flap_spread = 20         # Wing angle amplitude in degrees
+</code></p>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<strong>Français</strong>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<a href='../../hr/'>Hrvatski</a>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<a href='../../ko/'>한국어</a>
+&nbsp;◇&nbsp;
+<a href='../../lv/'>Latviešu</a>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<a href='../../zh_CN/'>中文</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

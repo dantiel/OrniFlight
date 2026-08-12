@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='sv'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>Installation — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Tutorials</p>
+<h1>Installation</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="installation">Installation</h1>
+
+<p>Hur man installerar OrniFlight firmware på din flygkontroll.</p>
+
+<h2 id="frutsttningar">Förutsättningar</h2>
+
+<ul>
+  <li><strong>OrniFlight Configurator</strong> (senaste versionen)</li>
+  <li>USB datakabel (ej endast för laddning)</li>
+  <li>Flygkontrollkort som stöds</li>
+</ul>
+
+<h2 id="anslagstavlor-som-stds">Anslagstavlor som stöds</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Styrelse</th>
+      <th>Mål</th>
+      <th>Flash</th>
+      <th>Anteckningar</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>OMNIBUSF4</td>
+      <td><code>OMNIBUSF4</code></td>
+      <td>16MB</td>
+      <td>STM32F405, MPU6000, OSD</td>
+    </tr>
+    <tr>
+      <td>TINYFISH</td>
+      <td><code>TINYFISH</code></td>
+      <td>256KB</td>
+      <td>STM32F411, MPU6000</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="blinkande-steg">Blinkande steg</h2>
+
+<h3 id="g-till-dfubootloader-lge">1. Gå till DFU/Bootloader-läge</h3>
+
+<p><strong>OMNIBUSF4</strong>: Håll ned BOOT-knappen medan du ansluter USB. Röd LED förblir solid — du är i DFU-läge.</p>
+
+<p><strong>TINYFISH</strong>: Håll ned BOOT-knappen medan du ansluter USB.</p>
+
+<h3 id="flash-via-configurator">2. Flash via Configurator</h3>
+
+<ol>
+  <li>Öppna OrniFlight Configurator</li>
+  <li>Gå till fliken <strong>Firmware Flasher</strong></li>
+  <li>Välj ditt mål i rullgardinsmenyn</li>
+  <li>Välj firmwareversion (senaste stabila rekommenderas)</li>
+  <li>Klicka på <strong>Load Firmware (Online)</strong> eller välj en lokal hex-fil</li>
+  <li>Klicka på <strong>Flash Firmware</strong></li>
+  <li>Vänta på “Programmering: Lyckad”</li>
+</ol>
+
+<h3 id="frsta-anslutningen">3. Första anslutningen</h3>
+
+<p>Efter att ha blinkat:
+1. Koppla från och återanslut USB (utan BOOT-knapp)
+2. Konfiguratorn ska anslutas automatiskt
+3. Acceptera uppmaningen “Apply Custom Defaults”.
+4. Verifiera kortinformation på fliken Inställningar</p>
+
+<h2 id="felskning">Felsökning</h2>
+
+<h3 id="ingen-dfu-port">Ingen DFU-port</h3>
+
+<p><strong>macOS/Linux</strong>: DFU bör visas automatiskt. Om inte:
+<code>bash
+# Check for DFU device
+system_profiler SPUSBDataType | grep -A 10 STM
+</code></p>
+
+<p><strong>Windows</strong>: Installera <a href="https://zadig.akeo.ie/">Zadig</a> för att ersätta STM32 DFU-drivrutinen:
+1. Kör Zadig
+2. Alternativ → Lista alla enheter
+3. Välj “STM32 BOOTLOADER”
+4. Byt ut drivrutinen mot “WinUSB”</p>
+
+<h3 id="flash-misslyckas">Flash misslyckas</h3>
+
+<ul>
+  <li>Prova en annan USB-kabel (datakompatibel, inte endast laddning)</li>
+  <li>Prova en annan USB-port (direkt, inte hubb)</li>
+  <li>Håll ned BOOT-knappen under hela blixtprocessen</li>
+  <li><strong>OMNIBUSF4</strong>: Full chip-radering kan behövas — markera alternativet “Full Chip Erase”</li>
+</ul>
+
+<h3 id="konfiguratorn-ansluter-inte">Konfiguratorn ansluter inte</h3>
+
+<ul>
+  <li>Kontrollera att USB-kabeln är datakompatibel</li>
+  <li>Kontrollera att kortet inte är i DFU-läge (LED blinkar = normalt läge)</li>
+  <li>Starta om Configurator</li>
+  <li>Prova en annan USB-port</li>
+</ul>
+
+<h2 id="cli-flash-avancerat">CLI Flash (avancerat)</h2>
+
+<p>För avancerade användare, flasha via STM32CubeProgrammer eller st-flash:</p>
+
+<p><code>bash
+st-flash write orniflight_0.4.6_OMNIBUSF4.hex 0x08000000
+</code></p>
+
+<p>Efter att ha blinkat, verifiera med:</p>
+
+<p><code>bash
+st-flash verify orniflight_0.4.6_OMNIBUSF4.hex 0x08000000
+</code></p>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<a href='../../hr/'>Hrvatski</a>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<a href='../../ko/'>한국어</a>
+&nbsp;◇&nbsp;
+<a href='../../lv/'>Latviešu</a>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<strong>Svenska</strong>
+&nbsp;◇&nbsp;
+<a href='../../zh_CN/'>中文</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

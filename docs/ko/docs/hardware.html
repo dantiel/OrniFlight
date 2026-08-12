@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='ko'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>지원되는 하드웨어 — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Docs</p>
+<h1>지원되는 하드웨어</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="section">지원되는 하드웨어</h1>
+
+<p>OrniFlight는 상용 STM32F3/F4/F7 비행 컨트롤러에서 실행됩니다. 기준선은 <strong>STM32F3</strong> —입니다. 서보 가능 타이머 핀이 있는 모든 F3 대상은 날아갑니다.</p>
+
+<h2 id="section-1">비행 컨트롤러</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>보드</th>
+      <th>MCU</th>
+      <th>IMU</th>
+      <th>플래시</th>
+      <th>수신기</th>
+      <th>상태</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>TINYFISH</strong></td>
+      <td>STM32F303</td>
+      <td>MPU6000(SPI)</td>
+      <td>256 KB</td>
+      <td>FrSky D8(통합)</td>
+      <td>✅ 기본</td>
+    </tr>
+    <tr>
+      <td><strong>OMNIBUSF4</strong></td>
+      <td>STM32F405</td>
+      <td>MPU6000(SPI)</td>
+      <td>1 MB + 16 MB SPI</td>
+      <td>—</td>
+      <td>✅ 지원됨</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="tinyfish----orniflight-">TINYFISH — 가장 가벼운 OrniFlight 타겟</h3>
+
+<p>fishpepper가 설계한 TINYFISH는 페더급 F3 기반의 이상적인 ornithopter 비행 컨트롤러이며 <strong>통합 FrSky D8 수신기</strong>를 탑재하고 있습니다. 외부 RX 없음, 추가 배선 없음 — 전원, 서보 및 비행만 가능합니다.</p>
+
+<ul>
+  <li><strong>MCU</strong>: STM32F303CCT6 @ 72MHz</li>
+  <li><strong>자이로</strong>: MPU6000(SPI, 8kHz 가능)</li>
+  <li><strong>플래시</strong>: 256 KB 온칩</li>
+  <li><strong>RAM</strong>: 40 KB</li>
+  <li><strong>수신기</strong>: 통합 FrSky D8(SBUS는 내부적으로 UART2로 라우팅됨)</li>
+  <li><strong>UART</strong>: VCP + 2개의 하드웨어 UART(GPS/CRSF 추가 기능의 경우 UART1는 무료)</li>
+  <li><strong>입력</strong>: 2-4S LiPo (직접 서보 전원)</li>
+  <li><strong>무게</strong>: ~2.5g</li>
+</ul>
+
+<p>TINYFISH는 탁월한 플랩핑 제어에 F7가 필요하지 않음을 증명합니다. STM32F303는 전체 ONDAS 파이프라인 — 10개의 변조 채널, 사다리꼴 날개 ODE, 256 KB 내에서 4개의 비행 프로필 —를 실행합니다.</p>
+
+<h3 id="omnibusf4----">OMNIBUSF4 — 접근 가능한 일꾼</h3>
+
+<p>전형적인 F4 타겟입니다. 저렴하고 유비쿼터스적이며 OSD 및 블랙박스 로깅을 위한 충분한 SPI 플래시를 갖춘 모든 기능을 갖추고 있습니다. 개발 및 대규모 빌드를 위한 선택입니다.</p>
+
+<ul>
+  <li><strong>MCU</strong>: STM32F405RGT6 @ 168MHz</li>
+  <li><strong>자이로</strong>: MPU6000(SPI, 8kHz 가능)</li>
+  <li><strong>플래시</strong>: 온칩 1 MB + 16 MB SPI (블랙박스)</li>
+  <li><strong>RAM</strong>: 192 KB</li>
+  <li><strong>OSD</strong>: AT7456E (MAX7456와 호환 가능)</li>
+  <li><strong>UART</strong>: VCP + 5개의 하드웨어 UART</li>
+  <li><strong>기압계</strong>: BMP280(일부 변형)</li>
+  <li><strong>입력</strong>: 2-6S LiPo</li>
+</ul>
+
+<hr />
+
+<h2 id="section-2">오니톱터 해부학</h2>
+
+<h3 id="section-3">윙 서보</h3>
+
+<p>OrniFlight는 PWM 서보를 통해 날개짓을 제어합니다. 주요 사양:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>매개변수</th>
+      <th>일반적인 범위</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>펄스 폭</td>
+      <td>500–2500 µs</td>
+    </tr>
+    <tr>
+      <td>센터</td>
+      <td>1500 µs</td>
+    </tr>
+    <tr>
+      <td>빈도</td>
+      <td>50–330Hz</td>
+    </tr>
+    <tr>
+      <td>스트로크 각도</td>
+      <td>±15–45°</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>고성능 오니톱터의 경우 업데이트 속도가 330Hz인 디지털 서보를 권장합니다. 아날로그 서보는 50Hz에서 작동하지만 정밀도가 낮습니다.</p>
+
+<h3 id="section-4">수신기</h3>
+
+<p>모든 직렬 수신기 프로토콜이 지원됩니다. CRSF(TBS Crossfire / ExpressLRS)는 다음에 권장됩니다.
+- 낮은 대기 시간(플래핑 제어에 중요)
+- 내장 원격 측정
+- 프로토콜을 통한 RSSI(추가 배선 없음)</p>
+
+<h3 id="section-5">배터리</h3>
+
+<ul>
+  <li><strong>2S(7.4V)</strong>: 소형 오니톱터, 직접 서보 전원 공급</li>
+  <li><strong>3S(11.1V)</strong>: 중형 오니톱터, BEC는 서보에 필요합니다.</li>
+  <li><strong>4S(14.8V)</strong>: 대형 오니톱터, 외부 BEC 권장</li>
+</ul>
+
+<hr />
+
+<h2 id="section-6">지원되는 주변기기</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>주변기기</th>
+      <th> </th>
+      <th>를 통해</th>
+      <th>메모</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>GPS</td>
+      <td>UART</td>
+      <td>UBlox M8N 또는 호환 가능</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>VTX</td>
+      <td>UART TX</td>
+      <td>부랑자, SmartAudio</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>카메라</td>
+      <td>—</td>
+      <td>모든 아날로그 FPV 카메라</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>부저</td>
+      <td>BUZZ 패드</td>
+      <td>활성 5V 부저</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>LED 스트립</td>
+      <td>LED 패드</td>
+      <td>WS2812 / SK6812</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>OpenLog</td>
+      <td>UART TX</td>
+      <td>블랙박스 로깅</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>블루투스</td>
+      <td>UART</td>
+      <td>모바일 튜닝을 위한 MSP 패스스루</td>
+      <td> </td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h2 id="section-7">미래 목표</h2>
+
+<p>OrniFlight는 플래핑 서보 제어에 충분한 UART 및 타이머 리소스를 사용할 수 있는 추가 STM32F4/F7 대상을 지원하는 것을 목표로 합니다. 기여를 환영합니다.</p>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<a href='../../hr/'>Hrvatski</a>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<strong>한국어</strong>
+&nbsp;◇&nbsp;
+<a href='../../lv/'>Latviešu</a>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<a href='../../zh_CN/'>中文</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

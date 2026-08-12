@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='ja'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>LED ストリップ — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Docs</p>
+<h1>LED ストリップ</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="led-">LED ストリップ</h1>
+
+<p>OrniFlight は、ステータス表示と視覚的フィードバックのためのアドレス指定可能な WS2812/SK6812 LED ストリップをサポートします。</p>
+
+<h2 id="section">構成</h2>
+
+<p>LED ストリップは、OrniFlight コンフィギュレーターの <strong>LED ストリップ</strong> タブで設定されます。各LEDの位置、色、機能を個別に設定できます。</p>
+
+<h2 id="section-1">関数</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>機能</th>
+      <th>視覚効果</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>バッテリーインジケーター</td>
+      <td>緑→黄色→赤からの色のグラデーション</td>
+    </tr>
+    <tr>
+      <td>RSSI</td>
+      <td>信号強度表示</td>
+    </tr>
+    <tr>
+      <td>アームの状態</td>
+      <td>腕の色の変更/武装解除</td>
+    </tr>
+    <tr>
+      <td>フライトモード</td>
+      <td>モード固有の色</td>
+    </tr>
+    <tr>
+      <td>警告</td>
+      <td>バッテリー残量低下時の点滅パターン、フェイルセーフ</td>
+    </tr>
+    <tr>
+      <td>フラッピングインジケータ</td>
+      <td>現在のフラッピング周波数でのパルス</td>
+    </tr>
+    <tr>
+      <td>スラスト方向</td>
+      <td>ロール/ピッチ/ヨー出力を示すカラーシフト</td>
+    </tr>
+    <tr>
+      <td>GPS</td>
+      <td>衛星ロックとホーム方向</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="section-2">ハードウェア</h2>
+
+<ul>
+  <li>WS2812 または SK6812 RGB LED</li>
+  <li>フライト コントローラーの <strong>LED</strong> パッド/ピンに接続します</li>
+  <li>BEC からの LED の電源 (3.3V — からの電力供給は行わないでください。5V を使用します)</li>
+  <li>長いストリップ (LED が 8 つを超える) の場合は、FC を介さずに、5V 電源をバッテリー パッドに直接接続します。</li>
+</ul>
+
+<h2 id="section-3">羽ばたき飛行装置の使用</h2>
+
+<p><strong>羽ばたきインジケーター</strong>は、OrniFlight — LED が翼のストローク周波数と同期してパルスする独自のもので、羽ばたきのリズムを視覚的に表現し、ONDAS のリズム パラメーターの調整に役立ちます。</p>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<a href='../../hr/'>Hrvatski</a>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<strong>日本語</strong>
+&nbsp;◇&nbsp;
+<a href='../../ko/'>한국어</a>
+&nbsp;◇&nbsp;
+<a href='../../lv/'>Latviešu</a>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<a href='../../zh_CN/'>中文</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

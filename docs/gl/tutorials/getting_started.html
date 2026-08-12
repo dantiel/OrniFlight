@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='gl'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>Comezando — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Tutorials</p>
+<h1>Comezando</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="comezando">Comezando</h1>
+
+<p>Benvido a OrniFlight! Esta guía guíache pola configuración inicial do teu controlador de voo ornitóptero.</p>
+
+<h2 id="o-que-necesitas">O que necesitas</h2>
+
+<ul>
+  <li><strong>OrniFlight Configurator</strong> — descarga de <a href="https://orniflight.org">orniflight.org</a></li>
+  <li><strong>cable USB</strong> — para conectar o controlador de voo ao ordenador</li>
+  <li><strong>Ornitóptero</strong> con:
+    <ul>
+      <li>Controlador de voo compatible (OMNIBUSF4, TINYFISH)</li>
+      <li>Servos para accionamento das ás</li>
+      <li>Receptor conectado ao teu transmisor</li>
+      <li>Batería (2S–4S LiPo)</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="inicio-rpido">Inicio rápido</h2>
+
+<h3 id="firmware-flash">1. Firmware Flash</h3>
+
+<ol>
+  <li>Abre <strong>OrniFlight Configurator</strong></li>
+  <li>Vaia á pestana <strong>Firmware Flasher</strong></li>
+  <li>Seleccione o destino do taboleiro (OMNIBUSF4 ou TINYFISH)</li>
+  <li>Escolla a última versión estable</li>
+  <li>Fai clic en <strong>Cargar firmware</strong> e logo en <strong>Firmware Flash</strong></li>
+</ol>
+
+<h3 id="configuracin-inicial">2. Configuración inicial</h3>
+
+<p>Despois de parpadear, o configurador pediralle que aplique os valores predeterminados personalizados. <strong>Acepta sempre.</strong></p>
+
+<h3 id="configuracin-do-receptor">3. Configuración do receptor</h3>
+
+<ol>
+  <li>Vaia á pestana <strong>Portos</strong> → establece o UART correcto en <code>Serial RX</code></li>
+  <li>Vai á pestana <strong>Configuración</strong> → e selecciona o teu protocolo de receptor (CRSF, SBUS, etc.)</li>
+  <li>Vai á pestana <strong>Receptor</strong> → verifica que os movementos do stick coincidan coas canles esperadas</li>
+  <li>Establecer puntos finais da canle: 1000–2000 con 1500 centro</li>
+</ol>
+
+<h3 id="configuracin-do-servo">4. Configuración do servo</h3>
+
+<ol>
+  <li>Vaia á pestana <strong>Servos</strong></li>
+  <li>Verifique que o mapeo do servo coincida coa configuración das ás do seu ornitóptero</li>
+  <li>Proba a dirección do servo — inversa se é necesario</li>
+  <li>Establece a posición central (alas horizontais = 1500)</li>
+</ol>
+
+<h3 id="configuracin-de-modos">5. Configuración de modos</h3>
+
+<ol>
+  <li>Vaia á pestana <strong>Modos</strong></li>
+  <li>Asigne ARM a un interruptor AUX</li>
+  <li>Asigna modos de voo (ANGLE / ACRO / HORIZON) segundo o desexe</li>
+  <li>Asigne INDEPENDENT e GLIDE aos interruptores de reserva</li>
+  <li>Configure BEEPER para a localización de modelos perdidos</li>
+</ol>
+
+<h3 id="primeiro-voo">6. Primeiro Voo</h3>
+
+<ol>
+  <li><strong>Desconecte a conexión de á para probas en banco</strong></li>
+  <li>Arme e verifique a dirección do movemento do servo</li>
+  <li>Comprobe a resposta do acelerador</li>
+  <li>Para o primeiro voo real: utiliza o modo ANGLE, tarifas baixas</li>
+  <li>Pasa o rato á altura dos ollos, recorta segundo sexa necesario</li>
+</ol>
+
+<h2 id="seguintes-pasos">Seguintes pasos</h2>
+
+<ul>
+  <li><a href="basic_setup.html">Configuración básica</a> — guía de configuración detallada</li>
+  <li><a href="../../tutorials/ondas_tuning.html">ONDAS Tuning</a> — tune dinámica de aleteo</li>
+  <li><a href="../../tutorials/tuning.html">PID Tuning</a> — axustar as características de voo</li>
+</ul>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<strong>Galego</strong>
+&nbsp;◇&nbsp;
+<a href='../../hr/'>Hrvatski</a>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<a href='../../ko/'>한국어</a>
+&nbsp;◇&nbsp;
+<a href='../../lv/'>Latviešu</a>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<a href='../../zh_CN/'>中文</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

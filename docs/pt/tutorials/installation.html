@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='pt'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>Instalação — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Tutorials</p>
+<h1>Instalação</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="instalao">Instalação</h1>
+
+<p>Como instalar o firmware OrniFlight em seu controlador de vôo.</p>
+
+<h2 id="pr-requisitos">Pré-requisitos</h2>
+
+<ul>
+  <li><strong>Configurador OrniFlight</strong> (versão mais recente)</li>
+  <li>cabo de dados USB (não apenas para carga)</li>
+  <li>Placa controladora de vôo suportada</li>
+</ul>
+
+<h2 id="placas-suportadas">Placas suportadas</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Conselho</th>
+      <th>Alvo</th>
+      <th>Flash</th>
+      <th>Notas</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>OMNIBUSF4</td>
+      <td><code>OMNIBUSF4</code></td>
+      <td>16 MB</td>
+      <td>STM32F405, MPU6000, OSD</td>
+    </tr>
+    <tr>
+      <td>TINYFISH</td>
+      <td><code>TINYFISH</code></td>
+      <td>256 KB</td>
+      <td>STM32F411, MPU6000</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="etapas-intermitentes">Etapas intermitentes</h2>
+
+<h3 id="entre-no-modo-dfubootloader">1. Entre no modo DFU/Bootloader</h3>
+
+<p><strong>OMNIBUSF4</strong>: Segure o botão BOOT enquanto conecta o USB. Vermelho LED permanece sólido — você está no modo DFU.</p>
+
+<p><strong>TINYFISH</strong>: Segure o botão BOOT enquanto conecta o USB.</p>
+
+<h3 id="flash-via-configurador">2. Flash via configurador</h3>
+
+<ol>
+  <li>Abra o configurador OrniFlight</li>
+  <li>Vá para a guia <strong>Firmware Flasher</strong></li>
+  <li>Selecione seu alvo no menu suspenso</li>
+  <li>Escolha a versão do firmware (recomendado o último estável)</li>
+  <li>Clique em <strong>Carregar Firmware (Online)</strong> ou selecione um arquivo hexadecimal local</li>
+  <li>Clique em <strong>Firmware Flash</strong></li>
+  <li>Aguarde “Programação: SUCESSO”</li>
+</ol>
+
+<h3 id="primeira-conexo">3. Primeira conexão</h3>
+
+<p>Depois de piscar:
+1. Desconecte e reconecte USB (sem botão BOOT)
+2. O configurador deve se conectar automaticamente
+3. Aceite o prompt “Aplicar padrões personalizados”
+4. Verifique as informações da placa na guia Configuração</p>
+
+<h2 id="soluo-de-problemas">Solução de problemas</h2>
+
+<h3 id="sem-porta-dfu">Sem porta DFU</h3>
+
+<p><strong>macOS/Linux</strong>: DFU deve aparecer automaticamente. Se não:
+<code>bash
+# Check for DFU device
+system_profiler SPUSBDataType | grep -A 10 STM
+</code></p>
+
+<p><strong>Windows</strong>: Instale <a href="https://zadig.akeo.ie/">Zadig</a> para substituir o driver STM32 DFU:
+1. Execute o Zadig
+2. Opções → Listar todos os dispositivos
+3. Selecione “STM32 BOOTLOADER”
+4. Substitua o driver por “WinUSB”</p>
+
+<h3 id="flash-falha">Flash falha</h3>
+
+<ul>
+  <li>Experimente um cabo USB diferente (com capacidade de dados, não apenas para carga)</li>
+  <li>Experimente uma porta USB diferente (direta, não hub)</li>
+  <li>Segure o botão BOOT durante todo o processo de flash</li>
+  <li><strong>OMNIBUSF4</strong>: Pode ser necessário apagar completamente o chip — marque a opção “Apagar completamente o chip”</li>
+</ul>
+
+<h3 id="o-configurador-no-conecta">O configurador não conecta</h3>
+
+<ul>
+  <li>Verifique se o cabo USB é compatível com dados</li>
+  <li>Verifique se a placa não está no modo DFU (LED piscando = modo normal)</li>
+  <li>Reinicie o configurador</li>
+  <li>Experimente uma porta USB diferente</li>
+</ul>
+
+<h2 id="cli-flash-avanado">CLI Flash (Avançado)</h2>
+
+<p>Para usuários avançados, atualize via STM32CubeProgrammer ou st-flash:</p>
+
+<p><code>bash
+st-flash write orniflight_0.4.6_OMNIBUSF4.hex 0x08000000
+</code></p>
+
+<p>Depois de piscar, verifique com:</p>
+
+<p><code>bash
+st-flash verify orniflight_0.4.6_OMNIBUSF4.hex 0x08000000
+</code></p>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<a href='../../hr/'>Hrvatski</a>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<a href='../../ko/'>한국어</a>
+&nbsp;◇&nbsp;
+<a href='../../lv/'>Latviešu</a>
+&nbsp;◇&nbsp;
+<strong>Português</strong>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<a href='../../zh_CN/'>中文</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='id'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>Kontrol — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Docs</p>
+<h1>Kontrol</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="kontrol">Kontrol</h1>
+
+<p>OrniFlight menggunakan pemetaan tongkat RC standar dengan ekstensi khusus ornithopter.</p>
+
+<h2 id="pemetaan-tongkat">Pemetaan Tongkat</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Tongkat</th>
+      <th>Sumbu</th>
+      <th>Efek Utama</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Throttle (Kiri, vertikal)</td>
+      <td>Throttle</td>
+      <td>Amplitudo / gaya dorong yang mengepak</td>
+    </tr>
+    <tr>
+      <td>Yaw (Kiri, horizontal)</td>
+      <td>Yaw</td>
+      <td>Dorongan sayap diferensial untuk berputar</td>
+    </tr>
+    <tr>
+      <td>Pitch (Kanan, vertikal)</td>
+      <td>Nada</td>
+      <td>Kemiringan maju/mundur</td>
+    </tr>
+    <tr>
+      <td>Gulung (Kanan, horizontal)</td>
+      <td>Gulung</td>
+      <td>Perbankan kiri/kanan</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="mode-penerbangan">Mode Penerbangan</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Modus</th>
+      <th>Perilaku Tongkat</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>ACRO</strong></td>
+      <td>Tongkat mengontrol kecepatan sudut — tanpa level otomatis</td>
+    </tr>
+    <tr>
+      <td><strong>ANGLE</strong></td>
+      <td>Sudut kontrol tongkat — level otomatis saat dilepaskan</td>
+    </tr>
+    <tr>
+      <td><strong>HORIZON</strong></td>
+      <td>ANGLE dekat pusat, ACRO pada defleksi penuh</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>ACRO direkomendasikan untuk pilot berpengalaman. ANGLE bagus untuk penerbangan pertama dan lonjakan panas.</p>
+
+<h2 id="kontrol-khusus-ornithopter">Kontrol Khusus Ornithopter</h2>
+
+<h3 id="modus-independent">modus INDEPENDENT</h3>
+
+<p>Saat mode INDEPENDENT aktif, setiap servo sayap merespons secara independen:
+- <strong>Tongkat kiri</strong> → servo sayap kiri
+- <strong>Tongkat kanan</strong> → servo sayap kanan
+- Memungkinkan kepakan asimetris untuk manuver agresif</p>
+
+<h3 id="modus-glide">modus GLIDE</h3>
+
+<p>mode GLIDE mengunci kedua sayap dalam posisi horizontal. Ornithopter menjadi pesawat layang:
+- <strong>Throttle</strong> tidak berpengaruh pada posisi sayap
+- <strong>Pitch/Roll/Yaw</strong> masih mempengaruhi permukaan kontrol ekor (jika dilengkapi)</p>
+
+<h3 id="peralihan-profil">Peralihan Profil</h3>
+
+<p>Peralihan profil dalam penerbangan melalui saluran AUX memungkinkan perubahan parameter PID/ONDAS di tengah penerbangan:
+- <strong>Profil 1</strong>: Pengaturan pelayaran standar
+- <strong>Profil 2</strong>: Pengaturan ketangkasan tinggi
+- <strong>Profil 3</strong>: Pengaturan efisiensi/luncuran</p>
+
+<h2 id="tarif">Tarif</h2>
+
+<p>Konfigurasikan tarif di tab <strong>PID Tuning</strong>. Untuk ornithopter, mulailah dengan laju konservatif — dinamika kepakan yang memperkuat masukan kontrol:
+- RC Nilai: 0,80–1,00
+- Tarif Super: 0,60–0,70
+- Ekspo: 0,20–0,40</p>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<a href='../../hr/'>Hrvatski</a>
+&nbsp;◇&nbsp;
+<strong>Bahasa Indonesia</strong>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<a href='../../ko/'>한국어</a>
+&nbsp;◇&nbsp;
+<a href='../../lv/'>Latviešu</a>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<a href='../../zh_CN/'>中文</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='zh_CN'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>故障保护 — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Docs</p>
+<h1>故障保护</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="section">故障保护</h1>
+
+<p>OrniFlight 具有两级故障安全系统，可在接收器信号丢失时保护您的扑翼机。</p>
+
+<h2 id="section-1">两级系统</h2>
+
+<h3 id="section-2">第 1 阶段 — 检测到信号丢失</h3>
+
+<p>触发时间：
+- 任何飞行通道的脉冲长度无效
+- 接收器报告故障安全模式
+- 在配置的时间内没有来自接收器的信号</p>
+
+<p><strong>操作</strong>：所有通道切换到后备值（通过 <code>rxfail</code> 配置）。如果信号返回，则短暂的恢复窗口将开始 —，恢复正常飞行。</p>
+
+<h3 id="section-3">第 2 阶段 — 守卫时间已结束</h3>
+
+<p>当阶段 1 持续时间超过 <code>failsafe_delay</code>（默认值：400 毫秒）并且飞行器已布防时进入。</p>
+
+<p><strong>程序</strong>（可通过 <code>failsafe_procedure</code> 配置）：</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>程序</th>
+      <th>行为</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>DROP</strong></td>
+      <td>立即解除武装 — 机翼停止，飞机下降</td>
+    </tr>
+    <tr>
+      <td><strong>LAND</strong></td>
+      <td>滑翔模式 — 机翼锁定水平，受控下降</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><strong>LAND</strong> 是扑翼机的推荐程序 — 它将机翼保持在中立位置以进行滑翔下降，为信号恢复提供时间。</p>
+
+<h2 id="cli-">CLI 设置</h2>
+
+<p>呜呜呜</p>
+
+<h2 id="section-4">接收器故障保护</h2>
+
+<p>还可以将接收器的故障保护配置为在信号丢失时<strong>不输出脉冲</strong>。这使得飞行控制器能够检测到丢失并激活第 1 阶段。</p>
+
+<h2 id="section-5">测试</h2>
+
+<p>在工作台上测试故障安全<strong>机翼连杆断开</strong>：
+1. 将 FAILSAFE 模式分配给交换机
+2. 武装飞船
+3. 切换开关 → 遵守故障安全程序
+4. 验证伺服行为是否符合预期</p>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<a href='../../hr/'>Hrvatski</a>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<a href='../../ko/'>한국어</a>
+&nbsp;◇&nbsp;
+<a href='../../lv/'>Latviešu</a>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<strong>中文</strong>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

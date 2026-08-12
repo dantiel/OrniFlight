@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='hr'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>PID Ugađanje — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Tutorials</p>
+<h1>PID Ugađanje</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="pid-ugaanje">PID Ugađanje</h1>
+
+<p>OrniFlight koristi PID (Proportional-Integral-Derivative) kontroler prilagođen za let s mahanjem krila. Ugađanje se značajno razlikuje od konvencionalnih zrakoplova zbog periodične prirode flapping potiska.</p>
+
+<h2 id="ornitopter-pid-osnove">Ornitopter PID Osnove</h2>
+
+<p>Za razliku od konvencionalnih zrakoplova kod kojih je potisak gotovo kontinuiran, potisak ornitoptera oscilira sa svakim zamahom krila. Ovo stvara:</p>
+
+<ul>
+  <li><strong>Mreškanje potiska</strong> pri frekvenciji flappinga (obično 5–15 Hz)</li>
+  <li><strong>Ovlaštenje kontrole ovisno o fazi</strong> — isti izlaz PID ima različit učinak ovisno o tome gdje se u ciklusu takta primjenjuje</li>
+  <li><strong>Uparena dinamika roll-yaw</strong> — asimetrični potisak krila utječe na obje osi istovremeno</li>
+</ul>
+
+<h2 id="pid-uvjeti">PID Uvjeti</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Pojam</th>
+      <th>Učinak</th>
+      <th>Ornitopter Napomena</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>P</strong></td>
+      <td>Proporcionalna — trenutna korekcija</td>
+      <td>Koristite konzervativne vrijednosti; titranje je klapno-sinkrono</td>
+    </tr>
+    <tr>
+      <td><strong>Ja</strong></td>
+      <td>Integralno — trajno ispravljanje pogrešaka</td>
+      <td>Neophodno za održavanje stava tijekom klizanja</td>
+    </tr>
+    <tr>
+      <td><strong>D</strong></td>
+      <td>Derivacija — prigušuje oscilacije</td>
+      <td>Podešen na brzinu zamaha krila, ne na oscilacije okvira</td>
+    </tr>
+    <tr>
+      <td><strong>F</strong></td>
+      <td>Feed-forward — izravni stick-to-output</td>
+      <td>Korisno za oštar odgovor na osi kotrljanja</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="poetne-vrijednosti">Početne vrijednosti</h2>
+
+<p>Za ornitopter srednje veličine (1–1,5m raspon krila):</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Os</th>
+      <th>P</th>
+      <th>ja</th>
+      <th>D</th>
+      <th>F</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Roll</td>
+      <td>25</td>
+      <td>30</td>
+      <td>15</td>
+      <td>30</td>
+    </tr>
+    <tr>
+      <td>Pitch</td>
+      <td>30</td>
+      <td>35</td>
+      <td>20</td>
+      <td>35</td>
+    </tr>
+    <tr>
+      <td>Yaw</td>
+      <td>40</td>
+      <td>35</td>
+      <td>10</td>
+      <td>20</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="postupak-podeavanja">Postupak podešavanja</h2>
+
+<h3 id="prvo-ocijenite-podeavanje">1. Prvo ocijenite podešavanje</h3>
+
+<p>Prije podešavanja PID, postavite stope koje vam odgovaraju:
+- Počnite sa RC Rate 0,90, Super Rate 0,65, Expo 0,30
+- Prilagodite svom stilu letenja i veličini ornitoptera</p>
+
+<h3 id="p-dobitak">2. P Dobitak</h3>
+
+<p>Povećajte P dok ne vidite oscilaciju na frekvenciji treptanja, a zatim smanjite za 20%:
+- Oscilacija kotrljanja: njihanje krila pri brzini zamaha
+- Oscilacija visine: naprijed-natrag bobbing
+- Oscilacija skretanja: mahanje repom sinkronizirano s udarcima</p>
+
+<h3 id="d-dobitak">3. D Dobitak</h3>
+
+<p>Povećajte D da ublažite odskok nakon oštrih udaraca palicom:
+- Previše: servo podrhtavanje, pregrijavanje
+- Premalo: zvoni nakon prestanka okretanja/nagiba</p>
+
+<h3 id="ja-dobivam">4. Ja dobivam</h3>
+
+<p>Dobivam brojače ustrajnog zanošenja:
+- Povećavajte dok se ne eliminira zanošenje
+- Previše: spora oscilacija na 1–2 Hz (ispod stope mlatarenja)</p>
+
+<h2 id="ondas-integracija">ONDAS Integracija</h2>
+
+<p>ONDAS (Ornithopter nelinearni dinamički aerodinamički sustav) modulira izlaz PID unutar svakog zamaha krila. Nakon osnovnog PID podešavanja:</p>
+
+<ol>
+  <li>Postavite <strong>Cadence Gain</strong> — pomiče prozor modulacije u aerodinamički optimalnu fazu</li>
+  <li>Postavite <strong>Ferocity P</strong> — trenutno asimetrično pojačanje potiska</li>
+  <li>Postavite <strong>Ferocity D</strong> — anticipatory drag exploitation</li>
+  <li>Fino podesite <strong>Balance</strong> — simetriju lijevog/desnog krila</li>
+</ol>
+
+<p>Pogledajte <a href="ondas_tuning.html">ONDAS Vodič za podešavanje</a> za detaljan postupak.</p>
+
+<h2 id="analiza-crne-kutije">Analiza crne kutije</h2>
+
+<p>Omogućite bilježenje Blackboxa za vizualizaciju performansi PID. Potražite:
+- <strong>P-term oscilacije</strong> na frekvenciji flappinga → smanjuju P
+- <strong>I-term windup</strong> tijekom dugotrajnih okreta → smanjite I ili povećajte I-term opuštanje
+- <strong>D-term buka</strong> od vibracija → prvo provjerite mehaničku ravnotežu, a zatim smanjite D</p>
+
+<h2 id="profili-leta">Profili leta</h2>
+
+<p>OrniFlight podržava 3 profila leta koji se mogu mijenjati usred leta:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Profil</th>
+      <th>Slučaj upotrebe</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1</td>
+      <td>Standardno krstarenje</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>Visoka agilnost / agresivnost</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>Učinkovitost / toplinska visočina</td>
+    </tr>
+  </tbody>
+</table>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<strong>Hrvatski</strong>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<a href='../../ko/'>한국어</a>
+&nbsp;◇&nbsp;
+<a href='../../lv/'>Latviešu</a>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<a href='../../zh_CN/'>中文</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='ca'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>Primers passos — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Tutorials</p>
+<h1>Primers passos</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="primers-passos">Primers passos</h1>
+
+<p>Benvingut a OrniFlight! Aquesta guia us guiarà per la configuració inicial del vostre controlador de vol ornitòpter.</p>
+
+<h2 id="el-que-necessites">El que necessites</h2>
+
+<ul>
+  <li><strong>OrniFlight Configurator</strong> baixada de — des de <a href="https://orniflight.org">orniflight.org</a></li>
+  <li><strong>cable USB</strong> — per connectar el controlador de vol a l’ordinador</li>
+  <li><strong>Ornitòpter</strong> amb:
+    <ul>
+      <li>Controlador de vol compatible (OMNIBUSF4, TINYFISH)</li>
+      <li>Servos per a l’accionament de les ales</li>
+      <li>Receptor vinculat al vostre transmissor</li>
+      <li>Bateria (2S–4S LiPo)</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="inici-rpid">Inici ràpid</h2>
+
+<h3 id="firmware-flash">1. Firmware Flash</h3>
+
+<ol>
+  <li>Obriu <strong>OrniFlight Configurator</strong></li>
+  <li>Aneu a la pestanya <strong>Firmware Flasher</strong></li>
+  <li>Seleccioneu l’objectiu del vostre tauler (OMNIBUSF4 o TINYFISH)</li>
+  <li>Trieu la darrera versió estable</li>
+  <li>Feu clic a <strong>Carga firmware</strong> i després a <strong>Firmware Flash</strong></li>
+</ol>
+
+<h3 id="configuraci-inicial">2. Configuració inicial</h3>
+
+<p>Després de parpellejar, el configurador us demanarà que apliqueu els valors predeterminats personalitzats. <strong>Accepteu sempre.</strong></p>
+
+<h3 id="configuraci-del-receptor">3. Configuració del receptor</h3>
+
+<ol>
+  <li>Aneu a la pestanya <strong>Ports</strong> → establiu el UART correcte a <code>Serial RX</code></li>
+  <li>Aneu a la pestanya <strong>Configuració</strong> → seleccioneu el vostre protocol de receptor (CRSF, SBUS, etc.)</li>
+  <li>Aneu a la pestanya <strong>Receptor</strong> → comprova que els moviments de la palanca coincideixen amb els canals esperats</li>
+  <li>Establiu els punts finals del canal: 1000–2000 amb 1500 centre</li>
+</ol>
+
+<h3 id="configuraci-del-servo">4. Configuració del servo</h3>
+
+<ol>
+  <li>Aneu a la pestanya <strong>Servos</strong></li>
+  <li>Verifiqueu que el mapa del servo coincideixi amb la configuració de l’ala del vostre ornitòpter</li>
+  <li>Proveu la direcció del servo — inversa si cal</li>
+  <li>Estableix la posició central (ales horitzontals = 1500)</li>
+</ol>
+
+<h3 id="configuraci-de-modes">5. Configuració de modes</h3>
+
+<ol>
+  <li>Aneu a la pestanya <strong>Modes</strong></li>
+  <li>Assigna ARM a un interruptor AUX</li>
+  <li>Assigna els modes de vol (ANGLE / ACRO / HORIZON) com vulguis</li>
+  <li>Assigna INDEPENDENT i GLIDE als interruptors de recanvi</li>
+  <li>Configura BEEPER per localitzar el model perdut</li>
+</ol>
+
+<h3 id="primer-vol">6. Primer vol</h3>
+
+<ol>
+  <li><strong>Desconnecteu l’enllaç de l’ala per a proves de banc</strong></li>
+  <li>Armeu i verifiqueu la direcció del moviment del servo</li>
+  <li>Comproveu la resposta de l’accelerador</li>
+  <li>Per al primer vol real: utilitzeu el mode ANGLE, tarifes baixes</li>
+  <li>Passeu el cursor a l’alçada dels ulls, retalleu-lo segons sigui necessari</li>
+</ol>
+
+<h2 id="segents-passos">Següents passos</h2>
+
+<ul>
+  <li><a href="basic_setup.html">Configuració bàsica</a> — explicació detallada de la configuració</li>
+  <li><a href="../../tutorials/ondas_tuning.html">ONDAS Tuning</a> — dinàmica de bateig de la melodia</li>
+  <li><a href="../../tutorials/tuning.html">PID Tuning</a> — ajustar les característiques de vol</li>
+</ul>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<strong>Català</strong>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<a href='../../hr/'>Hrvatski</a>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<a href='../../ko/'>한국어</a>
+&nbsp;◇&nbsp;
+<a href='../../lv/'>Latviešu</a>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<a href='../../zh_CN/'>中文</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

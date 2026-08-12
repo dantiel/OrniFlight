@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='ca'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>Modes de vol — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Docs</p>
+<h1>Modes de vol</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="modes-de-vol">Modes de vol</h1>
+
+<p>Els modes es canvien mitjançant els interruptors AUX del vostre transmissor. Cada mode es pot assignar a un interval de canals AUX específic a la pestanya <strong>Modes</strong> del Configurador OrniFlight.</p>
+
+<h2 id="modes-estndard">Modes estàndard</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Mode</th>
+      <th>Funció</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>ARM</strong></td>
+      <td>Habilita el control de vol (motors/servos actius)</td>
+    </tr>
+    <tr>
+      <td><strong>ANGLE</strong></td>
+      <td>El nivell automàtic — craft torna al nivell quan els pals estan centrats</td>
+    </tr>
+    <tr>
+      <td><strong>HORIZON</strong></td>
+      <td>Mode d’angle híbrid — prop del centre, acro a tot el pal</td>
+    </tr>
+    <tr>
+      <td><strong>ACRO</strong></td>
+      <td>Per defecte — sense nivell automàtic, control de velocitat pur</td>
+    </tr>
+    <tr>
+      <td><strong>AIRMODE</strong></td>
+      <td>Manté el bucle PID actiu a l’acceleració zero per a tota l’autoritat</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="orniflight-modes-especfics">OrniFlight-Modes específics</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Mode</th>
+      <th>Funció</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>50</td>
+      <td><strong>INDEPENDENT</strong></td>
+      <td>Control d’ala independent — cada ala respon al seu propi canal de servo</td>
+    </tr>
+    <tr>
+      <td>51</td>
+      <td><strong>GLIDE</strong></td>
+      <td>Mode de lliscament — ales bloquejades en posició horitzontal per volar</td>
+    </tr>
+    <tr>
+      <td>52</td>
+      <td><strong>PROFILE</strong></td>
+      <td>Selecció de perfils de vol — canviar entre 3 perfils PID/ONDAS</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="modes-dutilitat">Modes d’utilitat</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Mode</th>
+      <th>Funció</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>BEEPER</strong></td>
+      <td>Activa el timbre per localitzar avions perduts</td>
+    </tr>
+    <tr>
+      <td><strong>BLACKBOX</strong></td>
+      <td>Inicia/atura el registre de Blackbox</td>
+    </tr>
+    <tr>
+      <td><strong>FAILSAFE</strong></td>
+      <td>Activar manualment l’etapa de seguretat 2 (interruptor de pànic)</td>
+    </tr>
+    <tr>
+      <td><strong>OSD</strong></td>
+      <td>Commuta la visualització OSD</td>
+    </tr>
+    <tr>
+      <td><strong>TELEMETRY</strong></td>
+      <td>Activa/desactiva la sortida de telemetria</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="notes-dornitpters">Notes d’ornitòpters</h2>
+
+<ul>
+  <li>El mode <strong>INDEPENDENT</strong> és exclusiu de OrniFlight —, permet el mapeig de servo per ala per a l’empenta asimètrica i el control de l’ala diferencial</li>
+  <li>El mode <strong>GLIDE</strong> manté les ales en posició neutra, útil per a l’elevació tèrmica i el descens energèticament eficient</li>
+  <li>La commutació <strong>PROFILE</strong> permet canviar els paràmetres ONDAS durant el vol per a diferents condicions de vol (p. ex., creuer i maniobres agressives)</li>
+</ul>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<strong>Català</strong>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<a href='../../hr/'>Hrvatski</a>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<a href='../../ko/'>한국어</a>
+&nbsp;◇&nbsp;
+<a href='../../lv/'>Latviešu</a>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<a href='../../zh_CN/'>中文</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

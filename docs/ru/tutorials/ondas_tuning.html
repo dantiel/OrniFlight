@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='ru'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>ONDAS Руководство по настройке — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Tutorials</p>
+<h1>ONDAS Руководство по настройке</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="ondas---">ONDAS Руководство по настройке</h1>
+
+<blockquote>
+  <p><em>Практическое дополнение к ONDAS Теория —, как настроить каждый параметр на ощупь.</em></p>
+</blockquote>
+
+<h2 id="section">Порядок настройки</h2>
+
+<p>Параметры ONDAS взаимозависимы. Настройте их в такой последовательности:</p>
+
+<p><code>
+1. Cadence    →  timing
+2. Ferocity D →  primary stabilization
+3. Ferocity P →  response crispness
+4. Balance    →  upstroke/downstroke bias
+5. Warp       →  modulation width
+6. Anchor     →  dry/wet mix
+7. Resonance  →  cycle-to-cycle memory
+8. Phase 2    →  advanced (prescience, espelho, saudade, SSFF)
+</code></p>
+
+<h2 id="section-1">Шаг за шагом</h2>
+
+<h3 id="cadence-----">1. Cadence — Найдите свое фазовое окно</h3>
+
+<p><strong>Цель</strong>: разместите модуляцию там, где ваше крыло будет сильнее всего цепляться.</p>
+
+<p><strong>Метод</strong>: 
+- Начать с 50
+- При увеличении до 70 — реакция крена становится слабее?
+- Уменьшение до 30 — усиливает реакцию крена?
+- Самая «сильная» точка — это точка максимальной мощности вашего крыла.</p>
+
+<p><strong>Признаки слишком высокого уровня</strong>: Мягкая реакция, ощущение, что корабль «задерживается».
+<strong>Признаки слишком низкой мощности</strong>: прерывистая реакция, промах при крене.</p>
+
+<h3 id="ferocity-d---">2. Ferocity D — Укрепи ремесло</h3>
+
+<p><strong>Цель</strong>: первичная стабилизация без колебаний.</p>
+
+<p><strong>Метод</strong>:
+- Начало в 20
+- Парение или устойчивый полет вперед
+- Увеличивайте, пока не почувствуете, что поделка «затвердела».
+- Отступите на 5 точек от того места, где вы впервые заметили колебания.</p>
+
+<p><strong>Признаки слишком высокого уровня</strong>: мелкая вибрация, моторный гул в сервоприводах.
+<strong>Признаки слишком низкой высоты</strong>: Судно смещается, кажется, что оно расшатано.</p>
+
+<h3 id="ferocity-p--">3. Ferocity P — Хрусткость</h3>
+
+<p><strong>Цель</strong>: отзывчивый, но не нервный.</p>
+
+<p><strong>Метод</strong>:
+- Начало в 15
+- Нажми на ролл-стик —, поделка сразу клюнет?
+- Увеличивайте, пока реакция стика не станет четкой.
+- Отступите, если увидите превышение</p>
+
+<p><strong>Признаки слишком высокого уровня</strong>: звон после нажатия джойстика, возвратный сигнал.
+<strong>Признаки слишком низкого уровня</strong>: Мягкая, запоздалая реакция.</p>
+
+<h3 id="balance---">4. Balance — Настройка асимметрии</h3>
+
+<p><strong>Цель</strong>: равные полномочия в обоих направлениях.</p>
+
+<p><strong>Метод</strong>:
+- Летите прямо и ровно.
+- Поверните влево, обратите внимание на скорость реакции.
+- Прокатитесь вправо, обратите внимание на скорость реакции.
+- Отрегулируйте баланс, чтобы выровнять их.</p>
+
+<h3 id="warp-anchor-resonance">5–7. Warp, Anchor, Resonance</h3>
+
+<p>Точная настройка параметров. Регулируйте только после того, как 1-4 станут твердыми.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Парам</th>
+      <th>Начало</th>
+      <th>Отрегулировать, когда</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Warp</td>
+      <td>50</td>
+      <td>Модуляция кажется слишком разбросанной или слишком пиковой</td>
+    </tr>
+    <tr>
+      <td>Anchor</td>
+      <td>70</td>
+      <td>Хотите больше/меньше сырого PID</td>
+    </tr>
+    <tr>
+      <td>Resonance</td>
+      <td>30</td>
+      <td>Неустойчивое зависание или полет вперед вызывают ощущение звонка</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="phase-2---">8. Phase 2 — Продвинутый уровень</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>Парам</th>
+      <th>Эффект</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Prescience</td>
+      <td>Опережение синхронизации — выше = модуляция опережает фазу больше</td>
+    </tr>
+    <tr>
+      <td>Espelho</td>
+      <td>Дифференциальная муфта — более плотный рулон, может снизить эффективность</td>
+    </tr>
+    <tr>
+      <td>Saudade</td>
+      <td>Память ударов — стала более плавной, но менее отзывчивой</td>
+    </tr>
+    <tr>
+      <td>SSFF</td>
+      <td>Прямой впрыск gyro→wave —, начало с 10</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<p><em>Цель — корабль, который летает так, как ему хочется. Если вы боретесь с этим, отступите и перенастройтесь с Cadence вверх.</em></p>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<a href='../../hr/'>Hrvatski</a>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<a href='../../ko/'>한국어</a>
+&nbsp;◇&nbsp;
+<a href='../../lv/'>Latviešu</a>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<strong>Русский</strong>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<a href='../../zh_CN/'>中文</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

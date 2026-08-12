@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='ca'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>Configuració bàsica — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Tutorials</p>
+<h1>Configuració bàsica</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="configuraci-bsica">Configuració bàsica</h1>
+
+<blockquote>
+  <p><em>Configura el teu ornitòpter per al primer vol.</em></p>
+</blockquote>
+
+<h2 id="llista-de-comprovaci-prvia-al-vol">Llista de comprovació prèvia al vol</h2>
+
+<p>Abans de res:</p>
+
+<ul>
+  <li>[ ] El controlador de vol va parpellejar amb OrniFlight</li>
+  <li>[ ] Receptor vinculat al transmissor</li>
+  <li>[ ] Servos connectats per corregir les sortides PWM</li>
+  <li>[ ] Bateria connectada (ales assegurades!)</li>
+</ul>
+
+<h2 id="configuraci-del-receptor">Configuració del receptor</h2>
+
+<h3 id="crsf-recomanat">CRSF (recomanat)</h3>
+
+<ol>
+  <li><strong>Pestaña Ports</strong>: defineix UART (p. ex., UART1) a “Serial RX”</li>
+  <li><strong>Pestanya de configuració</strong>: Mode receptor = “Receptor basat en sèrie”, Proveïdor = “CRSF”</li>
+  <li>Cicle d’engegada, comproveu que les entrades del canal es mouen a la pestanya Receptor</li>
+</ol>
+
+<h3 id="sbus--altres">SBUS / Altres</h3>
+
+<p>El mateix procés — seleccioneu el protocol adequat a la pestanya Configuració.</p>
+
+<h2 id="mapes-de-servo">Mapes de servo</h2>
+
+<p>A la pestanya <strong>Servos</strong>:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Servo</th>
+      <th>Funció</th>
+      <th>Tarifa predeterminada</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Servo 0</td>
+      <td>Ala esquerra</td>
+      <td>250 Hz</td>
+    </tr>
+    <tr>
+      <td>Servo 1</td>
+      <td>Ala dreta</td>
+      <td>250 Hz</td>
+    </tr>
+    <tr>
+      <td>Servo 2</td>
+      <td>Cresta/Timón</td>
+      <td>50 Hz</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>Ajusteu el mínim/màx/mig perquè coincideixi amb el rang del vostre servo. Prova amb “Anul·lació” per verificar la direcció.</p>
+
+<h2 id="selecci-del-mode-de-vol">Selecció del mode de vol</h2>
+
+<p>A la pestanya <strong>Modes</strong>:</p>
+
+<ol>
+  <li><strong>ARM</strong>: assigna a un interruptor (seguretat!)</li>
+  <li><strong>ORNITHOPTER INDEPENDENT</strong> o <strong>ORNITHOPTER GLIDE</strong>: trieu el vostre mode de vol principal</li>
+  <li><strong>ORNITHOPTER PROFILE</strong>: assignació de — opcional per al canvi de perfil durant el vol</li>
+</ol>
+
+<h2 id="ondas-primera-sintonia">ONDAS Primera sintonia</h2>
+
+<p>Aneu a la <strong>subpestanya → ONDAS avançada</strong>:</p>
+
+<ol>
+  <li><strong>Zzz10zzz Guany</strong>: Comença a 50 (mitjans). Aquest és el paràmetre més important.</li>
+  <li><strong>Guany Ferocity D</strong>: comença a les 30. Aquesta és la teva estabilització principal.</li>
+  <li><strong>Zzz9zzz Guany</strong>: Comenceu a les 20 per al rodet/cau, 0 per a la guiada.</li>
+  <li><strong>Balance Guany</strong>: 0 (centrat).</li>
+</ol>
+
+<p>Connecteu una bateria, <strong>fixeu l’ornitòpter fermament</strong> i ARM. Observeu el moviment del servo —, ha de ser un aleteig suau i sinusoïdal.</p>
+
+<h2 id="primer-vol">Primer vol</h2>
+
+<ol>
+  <li>Comença amb un suau llançament al vent</li>
+  <li>Utilitzeu el mode GLIDE per a una sensació d’elevació natural</li>
+  <li>Utilitzeu el mode INDEPENDENT quan vulgueu un control directe de freqüència</li>
+  <li>Aterrar, ajustar ONDAS, repetir</li>
+</ol>
+
+<hr />
+
+<p><em>Següent: <a href="ondas_tuning.html">ONDAS Guia d’afinació</a> →</em></p>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<strong>Català</strong>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<a href='../../hr/'>Hrvatski</a>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<a href='../../ko/'>한국어</a>
+&nbsp;◇&nbsp;
+<a href='../../lv/'>Latviešu</a>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<a href='../../zh_CN/'>中文</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='hr'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>Instalacija — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Tutorials</p>
+<h1>Instalacija</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="instalacija">Instalacija</h1>
+
+<p>Kako instalirati firmware OrniFlight na vaš kontroler leta.</p>
+
+<h2 id="preduvjeti">Preduvjeti</h2>
+
+<ul>
+  <li><strong>OrniFlight Configurator</strong> (latest version)</li>
+  <li>USB data cable (not charge-only)</li>
+  <li>Supported flight controller board</li>
+</ul>
+
+<h2 id="podrane-ploe">Podržane ploče</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Odbor</th>
+      <th>Cilj</th>
+      <th>Bljesak</th>
+      <th>Bilješke</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>OMNIBUSF4</td>
+      <td><code>OMNIBUSF4</code></td>
+      <td>16 MB</td>
+      <td>STM32F405, MPU6000, OSD</td>
+    </tr>
+    <tr>
+      <td>TINYFISH</td>
+      <td><code>TINYFISH</code></td>
+      <td>256KB</td>
+      <td>STM32F411, MPU6000</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="koraci-koji-trepu">Koraci koji trepću</h2>
+
+<h3 id="enter-dfubootloader-mode">1. Enter DFU/Bootloader Mode</h3>
+
+<p><strong>OMNIBUSF4</strong>: Držite gumb BOOT dok povezujete USB. Crveno LED ostaje čvrsto — u načinu ste DFU.</p>
+
+<p><strong>TINYFISH</strong>: Držite gumb BOOT dok povezujete USB.</p>
+
+<h3 id="flash-via-configurator">2. Flash via Configurator</h3>
+
+<ol>
+  <li>Open OrniFlight Configurator</li>
+  <li>Idite na karticu <strong>Firmware Flasher</strong></li>
+  <li>Odaberite cilj s padajućeg izbornika</li>
+  <li>Odaberite verziju firmvera (preporučuje se najnovija stabilna)</li>
+  <li>Kliknite <strong>Učitaj firmver (online)</strong> ili odaberite lokalnu hex datoteku</li>
+  <li>Kliknite <strong>Flash Firmware</strong></li>
+  <li>Wait for “Programming: SUCCESSFUL”</li>
+</ol>
+
+<h3 id="prva-veza">3. Prva veza</h3>
+
+<p>Nakon treptanja:
+1. Odspojite i ponovno spojite USB (bez gumba BOOT)
+2. Configurator should auto-connect
+3. Prihvatite upit “Primijeni prilagođene zadane postavke”.
+4. Verify board info on Setup tab</p>
+
+<h2 id="rjeavanje-problema">Rješavanje problema</h2>
+
+<h3 id="nema-prikljuka-dfu">Nema priključka DFU</h3>
+
+<p><strong>macOS/Linux</strong>: DFU bi se trebao pojaviti automatski. Ako ne:
+<code>bash
+# Check for DFU device
+system_profiler SPUSBDataType | grep -A 10 STM
+</code></p>
+
+<p><strong>Windows</strong>: Instalirajte <a href="https://zadig.akeo.ie/">Zadig</a> da biste zamijenili upravljački program STM32 DFU:
+1. Pokrenite Zadig
+2. Opcije → Popis svih uređaja
+3. Odaberite “STM32 BOOTLOADER”
+4. Zamijenite upravljački program sa “WinUSB”</p>
+
+<h3 id="flash-ne-uspijeva">Flash ne uspijeva</h3>
+
+<ul>
+  <li>Pokušajte s drugim USB kabelom (podatkovnim, ne samo punim)</li>
+  <li>Pokušajte s drugim USB priključkom (izravnim, ne čvorištem)</li>
+  <li>Držite gumb BOOT tijekom cijelog procesa bljeskanja</li>
+  <li><strong>OMNIBUSF4</strong>: Možda će biti potrebno potpuno brisanje čipa — provjerite opciju “Potpuno brisanje čipa”</li>
+</ul>
+
+<h3 id="konfigurator-se-ne-povezuje">Konfigurator se ne povezuje</h3>
+
+<ul>
+  <li>Provjerite je li USB kabel sposoban za prijenos podataka</li>
+  <li>Provjerite nije li ploča u načinu DFU (LED treperi = normalan način)</li>
+  <li>Ponovno pokrenite konfigurator</li>
+  <li>Pokušajte s drugim USB portom</li>
+</ul>
+
+<h2 id="cli-flash-napredno">CLI Flash (napredno)</h2>
+
+<p>Za napredne korisnike, flash preko STM32CubeProgrammera ili st-flash:</p>
+
+<p><code>bash
+st-flash write orniflight_0.4.6_OMNIBUSF4.hex 0x08000000
+</code></p>
+
+<p>Nakon treptanja potvrdite pomoću:</p>
+
+<p><code>bash
+st-flash verify orniflight_0.4.6_OMNIBUSF4.hex 0x08000000
+</code></p>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<strong>Hrvatski</strong>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<a href='../../ko/'>한국어</a>
+&nbsp;◇&nbsp;
+<a href='../../lv/'>Latviešu</a>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<a href='../../zh_CN/'>中文</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

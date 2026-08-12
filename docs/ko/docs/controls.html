@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='ko'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>컨트롤 — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Docs</p>
+<h1>컨트롤</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="section">컨트롤</h1>
+
+<p>OrniFlight는 ornithopter 특정 확장과 함께 표준 RC 스틱 매핑을 사용합니다.</p>
+
+<h2 id="section-1">스틱 매핑</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>스틱</th>
+      <th>축</th>
+      <th>1차 효과</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>스로틀(왼쪽, 수직)</td>
+      <td>스로틀</td>
+      <td>펄럭이는 진폭 / 추력</td>
+    </tr>
+    <tr>
+      <td>요(왼쪽, 수평)</td>
+      <td>요</td>
+      <td>터닝을 위한 차동 날개 추력</td>
+    </tr>
+    <tr>
+      <td>피치(오른쪽, 수직)</td>
+      <td>피치</td>
+      <td>앞으로/뒤로 기울이기</td>
+    </tr>
+    <tr>
+      <td>롤(오른쪽, 가로)</td>
+      <td>롤</td>
+      <td>좌/우 뱅킹</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="section-2">비행 모드</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>모드</th>
+      <th>스틱 동작</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>ACRO</strong></td>
+      <td>스틱 제어 각도 속도 — 자동 레벨 없음</td>
+    </tr>
+    <tr>
+      <td><strong>ANGLE</strong></td>
+      <td>놓을 때 스틱 제어 각도 — 자동 레벨</td>
+    </tr>
+    <tr>
+      <td><strong>HORIZON</strong></td>
+      <td>중앙 근처 ANGLE, 완전 편향 시 ACRO</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>ACRO는 숙련된 조종사에게 권장됩니다. ANGLE는 첫 비행과 열폭등에 좋습니다.</p>
+
+<h2 id="ornithopter--">Ornithopter 전용 컨트롤</h2>
+
+<h3 id="independent-">INDEPENDENT 모드</h3>
+
+<p>INDEPENDENT 모드가 활성화되면 각 날개 서보가 독립적으로 반응합니다.
+- <strong>왼쪽 스틱</strong> → 왼쪽 날개 서보
+- <strong>오른쪽 스틱</strong> → 오른쪽 날개 서보
+- 공격적인 기동을 위한 비대칭 플랩핑 가능</p>
+
+<h3 id="glide-">GLIDE 모드</h3>
+
+<p>GLIDE 모드는 양쪽 날개를 수평 위치로 고정합니다. 오니톱터가 글라이더로 변합니다.
+- <strong>스로틀</strong>은 날개 위치에 영향을 주지 않습니다.
+- <strong>피치/롤/요</strong>는 여전히 테일 제어 표면에 영향을 미칩니다(장착된 경우).</p>
+
+<h3 id="section-3">프로필 전환</h3>
+
+<p>AUX 채널을 통한 기내 프로필 전환을 통해 비행 중에 PID/ONDAS 매개변수를 변경할 수 있습니다.
+- <strong>프로필 1</strong>: 표준 크루즈 설정
+- <strong>프로필 2</strong>: 높은 민첩성 설정
+- <strong>프로필 3</strong>: 효율성/글라이드 설정</p>
+
+<h2 id="section-4">요금</h2>
+
+<p><strong>PID Tuning</strong> 탭에서 속도를 구성합니다. ornithopter의 경우 보수적인 속도 — 플래핑 역학으로 시작하여 제어 입력을 증폭시킵니다.
+- RC 비율: 0.80–1.00
+- 슈퍼레이트: 0.60–0.70
+- 엑스포: 0.20–0.40</p>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<a href='../../hr/'>Hrvatski</a>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<strong>한국어</strong>
+&nbsp;◇&nbsp;
+<a href='../../lv/'>Latviešu</a>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<a href='../../zh_CN/'>中文</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

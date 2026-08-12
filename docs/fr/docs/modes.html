@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='fr'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>Modes de vol — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Docs</p>
+<h1>Modes de vol</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="modes-de-vol">Modes de vol</h1>
+
+<p>Les modes sont commutés via les commutateurs AUX de votre émetteur. Chaque mode peut être attribué à une plage de canaux AUX spécifique dans l’onglet <strong>Modes</strong> du configurateur OrniFlight.</p>
+
+<h2 id="modes-standards">Modes standards</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Mode</th>
+      <th>Fonction</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>ARM</strong></td>
+      <td>Activer le contrôle de vol (moteurs/servos actifs)</td>
+    </tr>
+    <tr>
+      <td><strong>ANGLE</strong></td>
+      <td>L’engin — à niveau automatique revient au niveau lorsque les bâtons sont centrés</td>
+    </tr>
+    <tr>
+      <td><strong>HORIZON</strong></td>
+      <td>Mode angle hybride — près du centre, acro au stick complet</td>
+    </tr>
+    <tr>
+      <td><strong>ACRO</strong></td>
+      <td>Zzz2zzz par défaut pas de niveau automatique, contrôle pur du taux</td>
+    </tr>
+    <tr>
+      <td><strong>AIRMODE</strong></td>
+      <td>Maintient la boucle PID active à zéro gaz pour une autorité totale</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="modes-spcifiques--orniflight">Modes spécifiques à OrniFlight</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Mode</th>
+      <th>Fonction</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>50</td>
+      <td><strong>INDEPENDENT</strong></td>
+      <td>Contrôle indépendant des ailes — chaque aile répond à son propre canal servo</td>
+    </tr>
+    <tr>
+      <td>51</td>
+      <td><strong>GLIDE</strong></td>
+      <td>Mode plané Ailes — verrouillées en position horizontale pour le vol à voile</td>
+    </tr>
+    <tr>
+      <td>52</td>
+      <td><strong>PROFILE</strong></td>
+      <td>Sélection du profil de vol — basculer entre 3 profils PID/ONDAS</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="modes-utilitaires">Modes utilitaires</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Mode</th>
+      <th>Fonction</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>BEEPER</strong></td>
+      <td>Activer le buzzer pour localiser les avions perdus</td>
+    </tr>
+    <tr>
+      <td><strong>BLACKBOX</strong></td>
+      <td>Démarrer/arrêter la journalisation Blackbox</td>
+    </tr>
+    <tr>
+      <td><strong>FAILSAFE</strong></td>
+      <td>Déclencher manuellement le niveau de sécurité 2 (interrupteur anti-panique)</td>
+    </tr>
+    <tr>
+      <td><strong>OSD</strong></td>
+      <td>Basculer l’affichage de OSD</td>
+    </tr>
+    <tr>
+      <td><strong>TELEMETRY</strong></td>
+      <td>Activer/désactiver la sortie de télémétrie</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="notes-sur-les-ornithoptres">Notes sur les ornithoptères</h2>
+
+<ul>
+  <li>Le mode <strong>INDEPENDENT</strong> est unique au OrniFlight —, il permet le mappage des servos par aile pour la poussée asymétrique et le contrôle différentiel des ailes.</li>
+  <li>Le mode <strong>GLIDE</strong> maintient les ailes en position neutre, utile pour le vol thermique et la descente économe en énergie</li>
+  <li>La commutation <strong>PROFILE</strong> permet de modifier les paramètres ONDAS en vol pour différentes conditions de vol (par exemple, croisière ou manœuvres agressives)</li>
+</ul>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<strong>Français</strong>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<a href='../../hr/'>Hrvatski</a>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<a href='../../ko/'>한국어</a>
+&nbsp;◇&nbsp;
+<a href='../../lv/'>Latviešu</a>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<a href='../../zh_CN/'>中文</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

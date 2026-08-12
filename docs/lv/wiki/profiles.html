@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='lv'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>Lidojuma profili — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Wiki</p>
+<h1>Lidojuma profili</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="lidojuma-profili">Lidojuma profili</h1>
+
+<blockquote>
+  <p><em>4 neatkarīgi noregulēšanas sloti, pārslēdzami lidojuma laikā.</em></p>
+</blockquote>
+
+<h2 id="koncepcija">Koncepcija</h2>
+
+<p>OrniFlight uzglabā 4 pilnīgas <code>ornithopterProfile_t</code> struktūras —, katra satur visus 19 ONDAS un spārnu dinamikas parametrus. Režīms BOX (<code>BOXORNITHOPTERPROFILE</code>, permanentId 52) atlasa aktīvo profilu, izmantojot 2 pozīciju RC slēdzi, kas piesaistīts 4 slotiem (0–3).</p>
+
+<h2 id="kpc-profili">Kāpēc profili?</h2>
+
+<p>Dažādiem lidojumu režīmiem ir nepieciešama atšķirīga regulēšana:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Profils</th>
+      <th>Lietošanas gadījums</th>
+      <th>Cadence</th>
+      <th>Ferocity</th>
+      <th>Piezīmes</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>0</td>
+      <td><strong>Kruīzs</strong></td>
+      <td>Vidēja (50)</td>
+      <td>Zems (30)</td>
+      <td>Efektīvs lidojums uz priekšu</td>
+    </tr>
+    <tr>
+      <td>1</td>
+      <td><strong>Aerobatic</strong></td>
+      <td>Zems (20)</td>
+      <td>Augsts (80)</td>
+      <td>Maksimālā pilnvara</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td><strong>Hover/Loiter</strong></td>
+      <td>Augsts (70)</td>
+      <td>Vidēja (50)</td>
+      <td>Stabilitāte pār ātrumu</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td><strong>Glide</strong></td>
+      <td>Vidēja (50)</td>
+      <td>Zems (10)</td>
+      <td>Minimāla iejaukšanās</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="kas-atrodas-profil">Kas atrodas profilā</h2>
+
+<p>Visi 19 <code>ornithopterProfile_t</code> lauki:</p>
+
+<ul>
+  <li><strong>Slīdēšanas ģeometrija</strong>: slīdēšanas_leņķis</li>
+  <li><strong>ONDAS v2 (10)</strong>: ritms, niknums_d/p/roll/yaw, līdzsvars, deformācija, deformācijas_virze, enkurs, rezonanse</li>
+  <li><strong>Phase 2 (4)</strong>: zināšanās, espelho, saudade, ssff</li>
+  <li><strong>Viļņa forma (2)</strong>: mežonība_uz leju, mežonība_augšup</li>
+  <li><strong>Aeroelastība (2)</strong>: aeroelastības_slīdēšanas_koeficients, aeroelastības_atloka_koeficients</li>
+</ul>
+
+<h2 id="kas-ir-globls-nevis-profilam">Kas ir globāls (nevis profilam)</h2>
+
+<ul>
+  <li>Frekvences kanāls (viens RC kanāls, darbojas gan INDEPENDENT, gan GLIDE)</li>
+  <li>Servo stiprinājuma leņķi</li>
+  <li>Fāžu nobīdes</li>
+  <li>GralhaAzul ģeometrija (servo_speed, max_amplitude, flap_magnitude, wing_origin)</li>
+</ul>
+
+<p>Tās ir lidmašīnas korpusa fiziskās konstantes —, tās nemainās atkarībā no lidojuma režīma.</p>
+
+<h2 id="prslgans-lidojuma-laik">Pārslēgšanās lidojuma laikā</h2>
+
+<ol>
+  <li>Rezerves kanālam piešķiriet 2 vai 3 pozīciju slēdzi</li>
+  <li>Cilnē Konfiguratora režīmi kartējiet šo diapazonu uz <code>ORNITHOPTER PROFILE</code></li>
+  <li>Katra slēdža pozīcija izvēlas vienu no 4 slotiem
+4. Konfiguratora profila nolaižamā izvēlne rediģē <em>pašlaik atlasīto</em> slotu, izmantojot MSP</li>
+</ol>
+
+<hr />
+
+<p><em>Struktūras definīciju skatiet sadaļā <code>src/main/flight/ornithopter_profile.h</code>.</em></p>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<a href='../../hr/'>Hrvatski</a>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<a href='../../ko/'>한국어</a>
+&nbsp;◇&nbsp;
+<strong>Latviešu</strong>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<a href='../../zh_CN/'>中文</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

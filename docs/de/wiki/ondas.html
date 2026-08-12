@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='de'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>ONDAS — Oszillierende normalisierte dynamische adaptive Stabilisierung — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Wiki</p>
+<h1>ONDAS — Oszillierende normalisierte dynamische adaptive Stabilisierung</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="ondas--oszillierende-normalisierte-dynamische-adaptive-stabilisierung">ONDAS — Oszillierende normalisierte dynamische adaptive Stabilisierung</h1>
+
+<h2 id="das-grundprinzip">Das Grundprinzip</h2>
+
+<p>Ein Starrflügler oder ein konventionelles Flugzeug erzeugt Steuerkräfte <strong>kontinuierlich</strong> —, eine Steuerflächenauslenkung oder RPM-Änderung erzeugt ein stationäres Moment. Ein Ornithopter tut das nicht. Jedes Gramm Schub, jedes Newton Drehmoment ist innerhalb des Flügelschlagzyklus <strong>phasengebunden</strong>. Der gleiche Kraftimpuls, der an verschiedenen Punkten des Hubs angewendet wird, führt zu grundlegend unterschiedlichen Ergebnissen.</p>
+
+<p>ONDAS erkennt diese Realität an und moduliert die Stabilisierungsbemühungen synchron mit dem Schlagzyklus.</p>
+
+<hr />
+
+<h2 id="cadence--das-timing-gehirn">Cadence — Das Timing-Gehirn</h2>
+
+<p>Cadence ist der kritischste ONDAS-Filter, da er bestimmt, <strong>wann</strong> die Korrektur innerhalb jedes Flügelschlags erfolgt.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Schlaganfallphase</th>
+      <th>Wirkung der Kraftanwendung</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Abschlagmitte</td>
+      <td>Maximale Hub- und Rollautorität</td>
+    </tr>
+    <tr>
+      <td>Abwärtshubende (Bremsen)</td>
+      <td>Induzierter Widerstand → Giermoment</td>
+    </tr>
+    <tr>
+      <td>Aufwärtshubzentrum</td>
+      <td>Nach hinten stoßen, aufrichten</td>
+    </tr>
+    <tr>
+      <td>Aufwärtshub Ende</td>
+      <td>Flügelumkehr, minimaler Effekt</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><strong>Cadence verschiebt das Modulationsfenster</strong>, um es an die Phase anzupassen, in der der aerodynamische Hebelarm am längsten ist. Falsche Trittfrequenz = Kampfflügelphysik. Richtige Trittfrequenz = jedes Milliwatt wird zur Kontrollinstanz.</p>
+
+<h3 id="parameter">Parameter</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>Parameter</th>
+      <th>Wert</th>
+      <th>Funktion</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>ONDAS_K0</code></td>
+      <td>1,0</td>
+      <td>Basisphasenversatz</td>
+    </tr>
+    <tr>
+      <td><code>ONDAS_K2</code></td>
+      <td>10,0</td>
+      <td>Phasenspreizung / Schärfe</td>
+    </tr>
+    <tr>
+      <td><code>ONDAS_PHASE_SCALE</code></td>
+      <td>0,00005</td>
+      <td>Kleiner Faktor, große Hebelwirkung</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h2 id="ferocity-p--sofortiger-asymmetrischer-schub">Ferocity P — Sofortiger asymmetrischer Schub</h2>
+
+<p>Ferocity P erhöht die <strong>Rechteckigkeit der Wellenform</strong> (Trapezform: Verweildauer bei ±1, Kosinusrampe dazwischen) proportional zum aktuellen PID-Fehler.</p>
+
+<ul>
+  <li>Mehr Schub auf einer Seite → sofort</li>
+  <li>Der gebremste Flügel erfährt am Ende des Hubs einen <strong>induzierten Widerstand</strong> —, das ist das Gegenmoment</li>
+  <li>Wirkung: direkt, proportional, unmittelbar</li>
+</ul>
+
+<hr />
+
+<h2 id="ferocity-d--vorwegnehmende-drag-ausbeutung">Ferocity D — Vorwegnehmende Drag-Ausbeutung</h2>
+
+<p>Ferocity D rundet das Bild ab. Wo P für Schubasymmetrie sorgt, nutzt D den <strong>Widerstand des kontralateralen Flügels</strong> als Bremse.</p>
+
+<ul>
+  <li>Liest die Fehleränderungsrate und <strong>antizipiert</strong></li>
+  <li>Kann den Widerstand eines verlangsamten Flügels gezielt für Gier-/Nickmomente ausnutzen</li>
+  <li>P+D erzeugen zusammen ein <strong>Differenzmomentpaar</strong> — Schub auf Seite A, Widerstand auf Seite B — effizienter als reiner Schub</li>
+</ul>
+
+<hr />
+
+<h2 id="drei-mglichkeiten-cadenceferocity-d-erhht-ferocity">Drei Möglichkeiten Cadence/Ferocity D erhöht Ferocity</h2>
+
+<h3 id="direct--d-erhht-p-bei-schneller-fehlernderung">1. Direct — D erhöht P bei schneller Fehleränderung</h3>
+
+<p>Bei Böen oder aggressiven Manövern ist <code>error_rate</code> groß. D multipliziert dies und erhöht die Basiswildheit. Der Flügel wird <em>schärfer</em> (trapezförmiger), weil P+D zusammen mehr Rechtwinkligkeit erfordern als P allein. Ergebnis: maximale Autorität genau dann, wenn es kritisch ist.</p>
+
+<h3 id="indirekt--cadence-verschiebt-den-hebelpunkt">2. Indirekt — Cadence verschiebt den Hebelpunkt</h3>
+
+<p>Cadence moduliert, <em>wenn</em> im Zyklus Wildheit wirkt. Das Verschieben des Fensters in eine aerodynamisch empfindlichere Phase (z. B. Abwärtshub-Mitte vs. Aufwärtshub-Ende) bedeutet, dass der <strong>gleiche Wildheitswert</strong> mehr Effekt — effektive Verstärkung ohne numerische Änderung erzeugt.</p>
+
+<h3 id="kombinatorisches--d--cadence-whrend-der-stall-erholung">3. Kombinatorisches — D × Cadence während der Stall-Erholung</h3>
+
+<p>Im Stall: hohe Sinkrate → D erkennt die Geschwindigkeit → erhöht die Wildheit. Gleichzeitig verschiebt die Trittfrequenz die Modulation in die Abschlagphase, in der der Flügel den maximalen Biss hat. Das Zusammenspiel: D sorgt für die Kraft, Kadenz für den richtigen Moment. Ohne Trittfrequenz erreicht die D-Kraft die falsche Phase und verflüchtigt sich nutzlos.</p>
+
+<hr />
+
+<h2 id="zustzliche-ondas-parameter">Zusätzliche ONDAS-Parameter</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Parameter</th>
+      <th>Funktion</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Balance</strong></td>
+      <td>Auf-/Ab-Schubsymmetrie — I-Term-Vorspannung zwischen Auf- und Abschlag. Kompensiert Flügelasymmetrie, Fertigungstoleranzen und Verschleiß</td>
+    </tr>
+    <tr>
+      <td><strong>Warp</strong></td>
+      <td>Roll-/Gier-P → L/R-Wildheitsdifferenzial — rechter und linker Flügel schlagen unabhängig voneinander auf der Rollachse für Quer- und Wendemanöver</td>
+    </tr>
+    <tr>
+      <td><strong>Anchor</strong></td>
+      <td>Die Phasenverankerung — sperrt die Modulation an eine bestimmte Phasenreferenz und verhindert Drift</td>
+    </tr>
+    <tr>
+      <td><strong>Resonance</strong></td>
+      <td>Die Resonanzkompensation der Flugzeugzelle — vermeidet aufregende Strukturmoden der Flugzeugzelle</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h2 id="analogie">Analogie</h2>
+
+<p><strong>Cadence ist der Dirigent. Ferocity P und D sind die Instrumente.</strong></p>
+
+<p>Ohne Dirigenten spielen sie —, aber nicht zusammen. Mit einem wird Lärm zur Musik.</p>
+
+<hr />
+
+<h2 id="siehe-auch">Siehe auch</h2>
+
+<ul>
+  <li><a href="../../tutorials/ondas_tuning.html">ONDAS Tuning Guide</a> — praktisches Tuning-Verfahren</li>
+  <li><a href="msp.html">MSP-Protokoll</a> —-Drahtformat für ONDAS-Parameter</li>
+  <li><a href="profiles.html">Flugprofile</a> — profilbewusste ONDAS-Konfiguration</li>
+</ul>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<strong>Deutsch</strong>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<a href='../../hr/'>Hrvatski</a>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<a href='../../ko/'>한국어</a>
+&nbsp;◇&nbsp;
+<a href='../../lv/'>Latviešu</a>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<a href='../../zh_CN/'>中文</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

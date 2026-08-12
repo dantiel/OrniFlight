@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='sv'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>Flygprofiler — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Wiki</p>
+<h1>Flygprofiler</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="flygprofiler">Flygprofiler</h1>
+
+<blockquote>
+  <p><em>4 oberoende inställningsplatser, omkopplingsbar under flygning.</em></p>
+</blockquote>
+
+<h2 id="koncept">Koncept</h2>
+
+<p>OrniFlight lagrar 4 kompletta <code>ornithopterProfile_t</code>-strukturer — som var och en innehåller alla 19 ONDAS och vingdynamikparametrar. Ett BOX-läge (<code>BOXORNITHOPTERPROFILE</code>, permanentId 52) väljer den aktiva profilen via en 2-positions RC-omkopplare mappad till 4 platser (0–3).</p>
+
+<h2 id="varfr-profiler">Varför profiler?</h2>
+
+<p>Olika flygregimer kräver olika inställning:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Profil</th>
+      <th>Användningsfall</th>
+      <th>Cadence</th>
+      <th>Ferocity</th>
+      <th>Anteckningar</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>0</td>
+      <td><strong>Cruising</strong></td>
+      <td>Mitt (50)</td>
+      <td>Låg (30)</td>
+      <td>Effektiv flygning framåt</td>
+    </tr>
+    <tr>
+      <td>1</td>
+      <td><strong>Aerobatic</strong></td>
+      <td>Låg (20)</td>
+      <td>Hög (80)</td>
+      <td>Maximal behörighet</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td><strong>Hover/Loiter</strong></td>
+      <td>Hög (70)</td>
+      <td>Mitt (50)</td>
+      <td>Stabilitet över hastighet</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td><strong>Glid</strong></td>
+      <td>Mitt (50)</td>
+      <td>Låg (10)</td>
+      <td>Minimalt ingripande</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="vad-finns-i-en-profil">Vad finns i en profil</h2>
+
+<p>Alla 19 fält av <code>ornithopterProfile_t</code>:</p>
+
+<ul>
+  <li><strong>Glidgeometri</strong>: glidvinkel</li>
+  <li><strong>ONDAS v2 (10)</strong>: kadens, vildhet_d/p/roll/yaw, balans, warp, warp_yaw, ankare, resonans</li>
+  <li><strong>Phase 2 (4)</strong>: förutseende, espelho, saudade, ssff</li>
+  <li><strong>Vågform (2)</strong>: vildhet_nedåt, vildhet_uppåt</li>
+  <li><strong>Aeroelastic (2)</strong>: aeroelastic_glide_coefficient, aeroelastic_flap_coefficient</li>
+</ul>
+
+<h2 id="vad-r-globalt-inte-per-profil">Vad är globalt (inte per profil)</h2>
+
+<ul>
+  <li>Frekvenskanal (en RC-kanal, fungerar i både INDEPENDENT och GLIDE)</li>
+  <li>Servomonteringsvinklar</li>
+  <li>Klaffande fasförskjutningar</li>
+  <li>GralhaAzul geometri (servo_speed, max_amplitude, flap_magnitude, wing_origin)</li>
+</ul>
+
+<p>Dessa är fysiska konstanter för flygplanet — de ändras inte med flygregimen.</p>
+
+<h2 id="byter-under-flygning">Byter under flygning</h2>
+
+<ol>
+  <li>Tilldela en 2-läges- eller 3-lägesbrytare till en reservkanal</li>
+  <li>På fliken Konfiguratorlägen mappar du det intervallet till <code>ORNITHOPTER PROFILE</code></li>
+  <li>Varje omkopplarläge väljer en av de 4 kortplatserna</li>
+  <li>Konfiguratorns profilrullgardinsmeny redigerar den <em>för närvarande valda</em> luckan via MSP</li>
+</ol>
+
+<hr />
+
+<p><em>Se <code>src/main/flight/ornithopter_profile.h</code> för strukturdefinitionen.</em></p>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<a href='../../hr/'>Hrvatski</a>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<a href='../../ko/'>한국어</a>
+&nbsp;◇&nbsp;
+<a href='../../lv/'>Latviešu</a>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<strong>Svenska</strong>
+&nbsp;◇&nbsp;
+<a href='../../zh_CN/'>中文</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

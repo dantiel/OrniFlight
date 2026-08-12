@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='ru'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>последовательные порты — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Docs</p>
+<h1>последовательные порты</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="section">последовательные порты</h1>
+
+<p>OrniFlight использует последовательные порты для связи с периферийными устройствами: приемниками, GPS, телеметрией, управлением VTX, ведением журнала Blackbox и MSP (подключение к конфигуратору).</p>
+
+<h2 id="section-1">Типы последовательных портов</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Тип</th>
+      <th>Описание</th>
+      <th>Лучшее для</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>VCP</strong></td>
+      <td>USB Виртуальный COM Порт — прямое соединение USB с процессором</td>
+      <td>Конфигуратор (MSP)</td>
+    </tr>
+    <tr>
+      <td><strong>UART</strong></td>
+      <td>Аппаратные контакты TX/RX с аппаратным обнаружением сигнала</td>
+      <td>RX, GPS, Телеметрия, VTX, Черный ящик</td>
+    </tr>
+    <tr>
+      <td><strong>SoftSerial</strong></td>
+      <td>Программно-управляемый последовательный порт на любой паре контактов</td>
+      <td>Низкая пропускная способность: только телеметрия</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>VCP не использует физический UART —, он всегда доступен для Конфигуратора.</p>
+
+<h2 id="section-2">Назначение порта</h2>
+
+<p>В конфигураторе OrniFlight перейдите на вкладку <strong>Порты</strong> для назначения функций:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Функция</th>
+      <th>Типичный UART</th>
+      <th>Заметки</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Серийный RX</td>
+      <td>UART1 или UART3</td>
+      <td>SBUS, CRSF, IBUS и т. д.</td>
+    </tr>
+    <tr>
+      <td>GPS</td>
+      <td>UART3 или UART6</td>
+      <td>57600 или 115200 бод</td>
+    </tr>
+    <tr>
+      <td>Телеметрия</td>
+      <td>Любой значок TX</td>
+      <td>SmartPort, HoTT, IBUS</td>
+    </tr>
+    <tr>
+      <td>VTX (Бродяга/SmartAudio)</td>
+      <td>Любой значок TX</td>
+      <td>Однопроводной</td>
+    </tr>
+    <tr>
+      <td>Черный ящик</td>
+      <td>Любой значок TX</td>
+      <td>OpenLog или встроенная вспышка</td>
+    </tr>
+    <tr>
+      <td>MSP</td>
+      <td>ззз45ззз (ззз46ззз)</td>
+      <td>Подключение конфигуратора</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="omnibusf4--">OMNIBUSF4 Сопоставление портов</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>UART</th>
+      <th>Булавки</th>
+      <th>Типичное использование</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>VCP</td>
+      <td>USB</td>
+      <td>MSP (Конфигуратор)</td>
+    </tr>
+    <tr>
+      <td>UART1</td>
+      <td>TX1/RX1</td>
+      <td>Серийный RX</td>
+    </tr>
+    <tr>
+      <td>UART3</td>
+      <td>TX3/RX3</td>
+      <td>GPS или Телеметрия</td>
+    </tr>
+    <tr>
+      <td>UART6</td>
+      <td>TX6/RX6</td>
+      <td>Бесплатно / Черный ящик / VTX</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="softserial">SoftSerial</h2>
+
+<p>SoftSerial доступен, но имеет ограниченную пропускную способность. Подходит только для низкоскоростной телеметрии (например, 9600 бод SmartPort). Не рекомендуется для серийных RX или GPS.</p>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<a href='../../hr/'>Hrvatski</a>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<a href='../../ko/'>한국어</a>
+&nbsp;◇&nbsp;
+<a href='../../lv/'>Latviešu</a>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<strong>Русский</strong>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<a href='../../zh_CN/'>中文</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

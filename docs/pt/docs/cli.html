@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='pt'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>Referência CLI — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Docs</p>
+<h1>Referência CLI</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="referncia-cli">Referência CLI</h1>
+
+<p>A interface de linha de comando do OrniFlight (CLI) fornece acesso total a todas as configurações. Acesso através da aba <strong>CLI</strong> no configurador OrniFlight, ou via terminal serial a 115200 baud.</p>
+
+<h2 id="comandos-bsicos">Comandos Básicos</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Comando</th>
+      <th>Descrição</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>help</code></td>
+      <td>Mostrar todos os comandos</td>
+    </tr>
+    <tr>
+      <td><code>status</code></td>
+      <td>Mostrar status do sistema</td>
+    </tr>
+    <tr>
+      <td><code>version</code></td>
+      <td>Mostrar versão do firmware</td>
+    </tr>
+    <tr>
+      <td><code>defaults</code></td>
+      <td>Redefinir todas as configurações para os padrões</td>
+    </tr>
+    <tr>
+      <td><code>save</code></td>
+      <td>Salve as configurações e reinicie</td>
+    </tr>
+    <tr>
+      <td><code>exit</code></td>
+      <td>Saia do CLI (reinicialize sem salvar)</td>
+    </tr>
+    <tr>
+      <td><code>diff</code></td>
+      <td>Mostrar configurações alteradas (útil para compartilhar configurações)</td>
+    </tr>
+    <tr>
+      <td><code>dump</code></td>
+      <td>Mostrar todas as configurações</td>
+    </tr>
+    <tr>
+      <td><code>dump all</code></td>
+      <td>Mostrar todas as configurações, incluindo padrões de hardware</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="configuraes-essenciais">Configurações essenciais</h2>
+
+<h3 id="placa-e-recursos">Placa e recursos</h3>
+
+<p>```
+# List available features
+feature list</p>
+
+<h1 id="enabledisable-features">Enable/disable features</h1>
+<p>feature GPS
+feature TELEMETRY
+feature LED_STRIP</p>
+
+<h1 id="set-mixer-type">Set mixer type</h1>
+<p>mixer = ORNITHOPTER
+```</p>
+
+<h3 id="receptor">Receptor</h3>
+
+<p><code>
+set serialrx_provider = CRSF
+set serialrx_inverted = OFF
+set serialrx_halfduplex = OFF
+set rssi_channel = 0
+</code></p>
+
+<h3 id="bateria">Bateria</h3>
+
+<p><code>
+set vbat_min_cell_voltage = 330
+set vbat_max_cell_voltage = 430
+set vbat_warning_cell_voltage = 350
+</code></p>
+
+<h3 id="servos">Servos</h3>
+
+<p><code>
+set servo_pwm_rate = 330
+set servo_center_pulse = 1500
+set flap_spread = 20
+</code></p>
+
+<h2 id="configuraes-ondas-apiverso-146">Configurações ONDAS (apiVersão 1.46+)</h2>
+
+<p>```
+# Cadence — timing modulation
+set ondas_cadence_gain = 50       # 0-100, timing brain
+set ondas_cadence_phase = 0       # -180° to +180°</p>
+
+<h1 id="ferocity--asymmetric-thrust">Ferocity — asymmetric thrust</h1>
+<p>set ondas_ferocity_p_gain = 40    # Immediate thrust asymmetry
+set ondas_ferocity_d_gain = 30    # Anticipatory drag exploitation
+set ondas_ferocity_roll_gain = 50 # Roll-axis ferocity scaling
+set ondas_ferocity_yaw_gain = 40  # Yaw-axis ferocity scaling</p>
+
+<h1 id="balance--wing-symmetry">Balance — wing symmetry</h1>
+<p>set ondas_balance_gain = 50       # Left/right wing balance</p>
+
+<h1 id="advanced">Advanced</h1>
+<p>set ondas_warp_gain = 0           # Stroke waveform warping
+set ondas_warp_yaw_gain = 0       # Yaw-specific warping
+set ondas_anchor_gain = 0         # Phase anchoring strength
+set ondas_resonance_gain = 0      # Airframe resonance compensation
+```</p>
+
+<h2 id="perfis-de-voo">Perfis de voo</h2>
+
+<p>```
+# Switch between profiles
+profile 0  # Profile 1 (default)
+profile 1  # Profile 2
+profile 2  # Profile 3</p>
+
+<h1 id="profile-aware-settings-use-index">Profile-aware settings use index:</h1>
+<p>set ondas_cadence_gain = 50       # Current profile only
+```</p>
+
+<h2 id="ngulo-de-montagem-do-servo-apiverso-146">Ângulo de montagem do servo (apiversão 1.46+)</h2>
+
+<p><code>
+set servo_mount_angle_0 = 0       # Wing servo 0 mounting offset (±30°)
+set servo_mount_angle_1 = 0       # Wing servo 1 mounting offset (±30°)
+set servo_mount_angle_2 = 0
+set servo_mount_angle_3 = 0
+</code></p>
+
+<h2 id="configuraes-de-taxa">Configurações de taxa</h2>
+
+<p>```
+set roll_rc_rate = 90
+set roll_srate = 65
+set roll_expo = 30</p>
+
+<p>set pitch_rc_rate = 90
+set pitch_srate = 65
+set pitch_expo = 30</p>
+
+<p>set yaw_rc_rate = 90
+set yaw_srate = 50
+set yaw_expo = 20
+```</p>
+
+<h2 id="prova-de-falhas">À prova de falhas</h2>
+
+<p><code>
+set failsafe_delay = 4
+set failsafe_procedure = LAND
+set failsafe_throttle = 1000
+</code></p>
+
+<h2 id="compartilhando-sua-configurao">Compartilhando sua configuração</h2>
+
+<p>Use <code>diff</code> para exportar apenas configurações não padrão:</p>
+
+<p>```
+# In CLI:
+diff</p>
+
+<h1 id="copy-the-output--this-is-your-complete-configuration">Copy the output — this is your complete configuration</h1>
+<p># To restore, paste the diff output into CLI and type ‘save’
+```</p>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<a href='../../hr/'>Hrvatski</a>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<a href='../../ko/'>한국어</a>
+&nbsp;◇&nbsp;
+<a href='../../lv/'>Latviešu</a>
+&nbsp;◇&nbsp;
+<strong>Português</strong>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<a href='../../zh_CN/'>中文</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

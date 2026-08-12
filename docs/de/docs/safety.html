@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='de'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>Sicherheit — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Docs</p>
+<h1>Sicherheit</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="sicherheit">Sicherheit</h1>
+
+<h2 id="checkliste-vor-dem-flug">Checkliste vor dem Flug</h2>
+
+<ol>
+  <li><strong>Flügel</strong>: Stellen Sie sicher, dass die Flügel sicher montiert sind und die Verbindung intakt ist</li>
+  <li><strong>Akku</strong>: Vollständig geladen, ordnungsgemäß gesichert, korrekte Zellenzahl</li>
+  <li><strong>Kontrollen</strong>: Überprüfen Sie die Reaktionen des Sticks auf der Registerkarte „Empfänger“ im Konfigurator</li>
+  <li><strong>Failsafe</strong>: Test auf dem Prüfstand vor dem Flug (siehe <a href="failsafe.html">Failsafe</a>)</li>
+  <li><strong>Scharfschalten</strong>: Konfigurieren und testen Sie —, verlassen Sie sich niemals nur auf die Knüppel-Scharfschaltung</li>
+  <li><strong>Startbereich</strong>: Frei von Personen, Hindernissen und Hindernissen über der Decke</li>
+</ol>
+
+<h2 id="armsicherheit">Armsicherheit</h2>
+
+<p>OrniFlight nutzt mehrere Sicherheitsmaßnahmen vor dem Scharfschalten:</p>
+
+<ul>
+  <li><strong>Gas niedrig</strong>: Der Gashebel muss auf Minimum stehen</li>
+  <li><strong>Niveau</strong>: Das Fahrzeug muss einigermaßen eben sein</li>
+  <li><strong>RX Signal</strong>: Gültiges Empfängersignal erforderlich</li>
+  <li><strong>CPU Load</strong>: System darf nicht überlastet sein</li>
+  <li><strong>Kalibrierung</strong>: Beschleunigungsmesser und Kreisel müssen kalibriert werden</li>
+</ul>
+
+<h2 id="sicherheit-whrend-des-fluges">Sicherheit während des Fluges</h2>
+
+<ul>
+  <li><strong>In Sichtweite fliegen</strong></li>
+  <li>Halten Sie einen Sicherheitsabstand zu Menschen und Tieren ein</li>
+  <li>Überwachen Sie die Batteriespannung — Land vor der Warnschwelle</li>
+  <li>In FPV: Fliegen Sie immer mit einem Spotter</li>
+  <li>Wind: Ornithopter können windempfindlich sein — kennen Ihre Grenzen</li>
+</ul>
+
+<h2 id="notfallverfahren">Notfallverfahren</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Situation</th>
+      <th>Aktion</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Orientierungsverlust</td>
+      <td>Wechseln Sie in den INDEPENDENT-Modus, mittlere Sticks</td>
+    </tr>
+    <tr>
+      <td>Signalverlust</td>
+      <td>Failsafe wird automatisch gelandet (wenn die LAND-Prozedur konfiguriert ist)</td>
+    </tr>
+    <tr>
+      <td>Flügelschaden</td>
+      <td>Sofort entwaffnen — Flügel stoppen</td>
+    </tr>
+    <tr>
+      <td>Vogelschlag</td>
+      <td>Vor dem erneuten Scharfschalten entschärfen, den Schaden beurteilen</td>
+    </tr>
+    <tr>
+      <td>Batterie schwach</td>
+      <td>Sofort landen — Ornithopter haben keine Autorotation</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="ornithopter-spezifische-risiken">Ornithopter-spezifische Risiken</h2>
+
+<ul>
+  <li><strong>Quetschgefahr</strong>: Flügelschlagen kann zu Verletzungen führen — Halten Sie die Hände fern, wenn Sie bewaffnet sind</li>
+  <li><strong>Verbindungsfehler</strong>: Überprüfen Sie vor dem Flug alle Stößelstangen und Kugelgelenke</li>
+  <li><strong>Resonance</strong>: Bestimmte Schlagfrequenzen können Flugzeugzellenresonanzen hervorrufen. — tunen ONDAS Sweep, um dies zu vermeiden</li>
+  <li><strong>Gleitsperre</strong>: Wenn die Flügelservos in nicht neutraler Position ausfallen, ist eine kontrollierte Landung nicht möglich. — Testen Sie die Failsafe-Positionen der Servos</li>
+</ul>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<strong>Deutsch</strong>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<a href='../../hr/'>Hrvatski</a>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<a href='../../ko/'>한국어</a>
+&nbsp;◇&nbsp;
+<a href='../../lv/'>Latviešu</a>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<a href='../../zh_CN/'>中文</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='de'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>Empfänger (RX) — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Docs</p>
+<h1>Empfänger (RX)</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="empfnger-rx">Empfänger (RX)</h1>
+
+<p>OrniFlight unterstützt mehrere Empfängerprotokolle zur Funksteuerung Ihres Ornithopters.</p>
+
+<h2 id="untersttzte-protokolle">Unterstützte Protokolle</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Protokoll</th>
+      <th>Geben Sie</th>
+      <th>ein Notizen</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>CRSF</strong> (Kreuzfeuer)</td>
+      <td>Seriell</td>
+      <td>Geringe Latenz, Telemetrie, empfohlen</td>
+    </tr>
+    <tr>
+      <td><strong>SBUS</strong></td>
+      <td>Seriell</td>
+      <td>Invertiert, benötigt Wechselrichter an F4</td>
+    </tr>
+    <tr>
+      <td><strong>IBUS</strong> (FlySky)</td>
+      <td>Seriell</td>
+      <td>Nicht invertiert, direkt UART</td>
+    </tr>
+    <tr>
+      <td><strong>PPM</strong></td>
+      <td>Single-Wire-Analog</td>
+      <td>8ch, Legacy, nicht empfohlen</td>
+    </tr>
+    <tr>
+      <td><strong>SPEKTRUM</strong></td>
+      <td>Seriell</td>
+      <td>1024/2048, binden über CLI</td>
+    </tr>
+    <tr>
+      <td><strong>FPORT</strong></td>
+      <td>Seriell</td>
+      <td>FrSky, kombiniert RX+Telemetrie</td>
+    </tr>
+    <tr>
+      <td><strong>GHST</strong> (Geist)</td>
+      <td>Seriell</td>
+      <td>ImmersionRC, niedrige Latenz</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="serielle-rx-konfiguration">Serielle RX-Konfiguration</h2>
+
+<ol>
+  <li>Empfänger an einen freien UART RX Pin anschließen</li>
+  <li>Im Konfigurator → <strong>Ports</strong>: Setzen Sie UART auf <code>Serial RX</code></li>
+  <li>Im Konfigurator → <strong>Konfiguration</strong>: Protokoll auswählen</li>
+  <li>Für SBUS auf F4: <code>set sbus_inversion = ON</code> aktivieren</li>
+</ol>
+
+<h2 id="cli-schnelleinrichtung">CLI Schnelleinrichtung</h2>
+
+<p><code>
+feature RX_SERIAL
+set serialrx_provider = CRSF
+set serialrx_inverted = OFF
+set serialrx_halfduplex = OFF
+save
+</code></p>
+
+<h2 id="ausfallsicher">Ausfallsicher</h2>
+
+<p>Konfigurieren Sie die Ausfallsicherheit des Empfängers so, dass der Empfänger bei Signalverlust <strong>keine Impulse</strong> ausgibt. Der Fluglotse erkennt dies dann und aktiviert sein eigenes Failsafe-Verfahren. Siehe <a href="failsafe.html">Failsafe</a> für die Konfiguration auf FC-Ebene.</p>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<strong>Deutsch</strong>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<a href='../../hr/'>Hrvatski</a>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<a href='../../ko/'>한국어</a>
+&nbsp;◇&nbsp;
+<a href='../../lv/'>Latviešu</a>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<a href='../../zh_CN/'>中文</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

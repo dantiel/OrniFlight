@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='ko'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>기본 설정 — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Tutorials</p>
+<h1>기본 설정</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="section">기본 설정</h1>
+
+<blockquote>
+  <p><em>첫 번째 비행을 위해 오니홉터를 구성하세요.</em></p>
+</blockquote>
+
+<h2 id="section-1">비행 전 체크리스트</h2>
+
+<p>다른 것보다 먼저:</p>
+
+<ul>
+  <li>[ ] 비행 컨트롤러가 OrniFlight로 깜박임</li>
+  <li>[ ] 송신기에 바인딩된 수신기</li>
+  <li>[ ] PWM 출력을 수정하기 위해 연결된 서보</li>
+  <li>[ ] 배터리 연결됨(날개가 고정됨!)</li>
+</ul>
+
+<h2 id="section-2">수신기 설정</h2>
+
+<h3 id="crsf-">CRSF (권장)</h3>
+
+<ol>
+  <li><strong>포트 탭</strong>: UART(예: UART1)를 “직렬 RX”로 설정합니다.</li>
+  <li><strong>구성 탭</strong>: 수신기 모드 = “직렬 기반 수신기”, 공급자 = “CRSF”</li>
+  <li>전원을 껐다 켜고 채널 입력이 수신기 탭에서 이동하는지 확인합니다.</li>
+</ol>
+
+<h3 id="sbus--">SBUS / 기타</h3>
+
+<p>동일한 프로세스 —는 구성 탭에서 적절한 프로토콜을 선택합니다.</p>
+
+<h2 id="section-3">서보 매핑</h2>
+
+<p><strong>서보 탭</strong>에서:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>서보</th>
+      <th>기능</th>
+      <th>기본율</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>서보 0</td>
+      <td>좌익</td>
+      <td>250Hz</td>
+    </tr>
+    <tr>
+      <td>서보 1</td>
+      <td>우익</td>
+      <td>250Hz</td>
+    </tr>
+    <tr>
+      <td>서보 2</td>
+      <td>문장/방향타</td>
+      <td>50Hz</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>서보의 범위에 맞게 최소/최대/중간을 조정하세요. “재정의”로 테스트하여 방향을 확인하세요.</p>
+
+<h2 id="section-4">비행 모드 선택</h2>
+
+<p><strong>모드 탭</strong>에서:</p>
+
+<ol>
+  <li><strong>ARM</strong>: 스위치에 할당(안전!)</li>
+  <li><strong>ORNITHOPTER INDEPENDENT</strong> 또는 <strong>ORNITHOPTER GLIDE</strong>: 기본 비행 모드를 선택하세요.</li>
+  <li><strong>ORNITHOPTER PROFILE</strong>: 기내 프로필 전환을 위한 — 할당 옵션</li>
+</ol>
+
+<h2 id="ondas---">ONDAS 첫 번째 튜닝</h2>
+
+<p><strong>고급 → ONDAS 하위 탭</strong>으로 이동하세요.</p>
+
+<ol>
+  <li><strong>Cadence 게인</strong>: 50(중간)에서 시작합니다. 이것이 가장 중요한 매개 변수입니다.</li>
+  <li><strong>Ferocity D 게인</strong>: 30에서 시작합니다. 이것이 기본 안정화입니다.</li>
+  <li><strong>Ferocity P 게인</strong>: 롤/피치의 경우 20, 요의 경우 0에서 시작합니다.</li>
+  <li><strong>Balance 게인</strong>: 0(중앙).</li>
+</ol>
+
+<p>배터리를 연결하고 <strong>오니톱터를 단단히 고정</strong>하고 ARM를 수행합니다. 서보 움직임 —를 관찰하면 부드럽고 사인파형으로 펄럭이는 것이어야 합니다.</p>
+
+<h2 id="section-5">첫 비행</h2>
+
+<ol>
+  <li>바람에 가볍게 던지면서 시작하세요.</li>
+  <li>자연스러운 솟아오르는 느낌을 원하시면 GLIDE 모드를 사용하세요</li>
+  <li>직접 주파수 제어를 원할 경우 INDEPENDENT 모드를 사용하십시오.</li>
+  <li>착륙하고, ONDAS를 조정하고, 반복하세요.</li>
+</ol>
+
+<hr />
+
+<p><em>다음: <a href="ondas_tuning.html">ONDAS 튜닝 가이드</a> →</em></p>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<a href='../../hr/'>Hrvatski</a>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<strong>한국어</strong>
+&nbsp;◇&nbsp;
+<a href='../../lv/'>Latviešu</a>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<a href='../../zh_CN/'>中文</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

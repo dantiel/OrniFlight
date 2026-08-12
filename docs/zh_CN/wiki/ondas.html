@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='zh_CN'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>ONDAS — 振荡归一化动态自适应稳定 — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Wiki</p>
+<h1>ONDAS — 振荡归一化动态自适应稳定</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="ondas--">ONDAS — 振荡归一化动态自适应稳定</h1>
+
+<h2 id="section">核心原则</h2>
+
+<p>固定翼或传统飞机<strong>连续</strong> — 产生控制力，控制面偏转或 RPM 变化会产生稳态力矩。扑翼机则不然。每克推力，每牛顿扭矩，在翼拍周期内都是<strong>相限</strong>的。在行程中的不同点施加相同的力脉冲会产生根本不同的结果。</p>
+
+<p>ONDAS 承认这一现实，并与扑动周期同步调节稳定作用。</p>
+
+<hr />
+
+<h2 id="cadence--">Cadence — 计时大脑</h2>
+
+<p>Cadence 是最关键的 ONDAS 过滤器，因为它决定每次翅膀拍动中何时发生校正。</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>中风阶段</th>
+      <th>施加力的效果</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>下划线中心</td>
+      <td>最大升力、横滚权限</td>
+    </tr>
+    <tr>
+      <td>下冲程结束（制动）</td>
+      <td>诱导阻力 → 偏航力矩</td>
+    </tr>
+    <tr>
+      <td>上冲中心</td>
+      <td>向后推力，向上倾斜</td>
+    </tr>
+    <tr>
+      <td>上冲程结束</td>
+      <td>机翼反转，影响最小</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><strong>Cadence 移动调制窗口</strong>，以与空气动力学杠杆臂最长的相位对齐。错误的节奏=战斗机翼物理。正确的节奏=每一毫瓦都成为控制权。</p>
+
+<h3 id="section-1">参数</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>参数</th>
+      <th>价值</th>
+      <th>功能</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>ONDAS_K0</code></td>
+      <td>1.0</td>
+      <td>基相偏移</td>
+    </tr>
+    <tr>
+      <td><code>ONDAS_K2</code></td>
+      <td>10.0</td>
+      <td>相位扩展/锐度</td>
+    </tr>
+    <tr>
+      <td><code>ONDAS_PHASE_SCALE</code></td>
+      <td>0.00005</td>
+      <td>0.00005小因子，大杠杆</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h2 id="ferocity-p--">Ferocity P — 立即非对称推力</h2>
+
+<p>Ferocity P 与当前 PID 误差成比例地增加<strong>波形方形度</strong>（梯形整形：驻留在 ±1 之间的余弦斜坡）。</p>
+
+<ul>
+  <li>一侧有更多推力 → 立即</li>
+  <li>行程末端的制动机翼经历<strong>诱导阻力</strong> — 这是反力矩</li>
+  <li>效果：直接、成比例、即时</li>
+</ul>
+
+<hr />
+
+<h2 id="ferocity-d--">Ferocity D — 预期阻力利用</h2>
+
+<p>Ferocity D 完成了图片。 P 提供推力不对称性，D 利用对侧机翼的<strong>阻力</strong>作为制动器。</p>
+
+<ul>
+  <li>读取变化的错误率并<strong>预期</strong></li>
+  <li>可以故意利用减速机翼的阻力来获得偏航/俯仰时刻</li>
+  <li>P+D 共同创建<strong>差动力矩对</strong> — A 侧推力，B 侧阻力 — 比仅推力更有效</li>
+</ul>
+
+<hr />
+
+<h2 id="cadenceferocity-d--ferocity-">Cadence/Ferocity D 增加 Ferocity 的三种方式</h2>
+
+<h3 id="d--p">1. 误差快速变化时直接 — D 提升 P</h3>
+
+<p>在阵风或攻击性机动中，<code>error_rate</code> 很大。 D 乘以该值并增加基础凶猛度。机翼变得“更锋利”（更呈梯形），因为 P+D 一起比单独的 P 需要更多的方形度。结果：在关键时刻发挥最大权威。</p>
+
+<h3 id="cadence">2.间接— Cadence转移杠杆点</h3>
+
+<p>Cadence 在循环中<em>何时</em>调节凶猛行为。将窗口移动到空气动力学更敏感的阶段（例如，下冲程中心与上冲程末端）意味着<strong>相同的猛烈值</strong>会产生更多效果 — 有效放大，而无需数值变化。</p>
+
+<h3 id="d--cadence">3. 失速恢复期间的组合 — D × Cadence</h3>
+
+<p>在失速中：高下沉速率 → D 检测到速率 → 增加凶猛。同时，节奏将调制转移到机翼具有最大咬合力的下冲程阶段。相互作用：D提供了正确时刻的力量和节奏。如果没有节奏，D 力就会到达错误的阶段并无用地消散。</p>
+
+<hr />
+
+<h2 id="ondas-">附加 ONDAS 参数</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>参数</th>
+      <th>功能</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Balance</strong></td>
+      <td>上/下推力对称 — 上行程和下行程之间的 I 项偏差。补偿机翼不对称、制造公差和磨损</td>
+    </tr>
+    <tr>
+      <td><strong>Warp</strong></td>
+      <td>滚转/偏航 P → L/R 猛烈差值 — 右翼和左翼在滚转轴上独立拍动，以进行倾斜和转弯机动</td>
+    </tr>
+    <tr>
+      <td><strong>Anchor</strong></td>
+      <td>相位锚定 — 将调制锁定到特定相位参考，防止漂移</td>
+    </tr>
+    <tr>
+      <td><strong>Resonance</strong></td>
+      <td>机身共振补偿—避免了机身的令人兴奋的结构模式</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h2 id="section-2">类比</h2>
+
+<p><strong>Cadence 是指挥。 Ferocity P 和 D 是乐器。</strong></p>
+
+<p>没有指挥，他们会演奏 —，但不能一起演奏。有了它，噪音就变成了音乐。</p>
+
+<hr />
+
+<h2 id="section-3">另请参阅</h2>
+
+<ul>
+  <li><a href="../../tutorials/ondas_tuning.html">ONDAS调音指南</a> —实用调音程序</li>
+  <li><a href="msp.html">MSP 协议</a> ONDAS 参数的 — 线路格式</li>
+  <li><a href="profiles.html">飞行配置文件</a> — 配置文件感知 ONDAS 配置</li>
+</ul>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<a href='../../hr/'>Hrvatski</a>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<a href='../../ko/'>한국어</a>
+&nbsp;◇&nbsp;
+<a href='../../lv/'>Latviešu</a>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<strong>中文</strong>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

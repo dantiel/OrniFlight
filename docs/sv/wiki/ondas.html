@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='sv'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>ONDAS — Oscillerande normaliserad dynamisk adaptiv stabilisering — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Wiki</p>
+<h1>ONDAS — Oscillerande normaliserad dynamisk adaptiv stabilisering</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="ondas--oscillerande-normaliserad-dynamisk-adaptiv-stabilisering">ONDAS — Oscillerande normaliserad dynamisk adaptiv stabilisering</h1>
+
+<h2 id="krnprincipen">Kärnprincipen</h2>
+
+<p>Ett flygplan med fast vingar eller ett konventionellt flygplan genererar kontrollkrafter <strong>kontinuerligt</strong> — en kontrollyteavböjning eller RPM förändring producerar ett steady-state moment. En ornithopter gör det inte. Varje gram dragkraft, varje Newtons vridmoment, är <strong>fasbunden</strong> inom vingslagscykeln. Samma kraftimpuls som appliceras vid olika punkter i slaget ger fundamentalt olika resultat.</p>
+
+<p>ONDAS erkänner denna verklighet och modulerar stabiliseringsansträngning synkront med flaxningscykeln.</p>
+
+<hr />
+
+<h2 id="cadence--timing-brain">Cadence — Timing Brain</h2>
+
+<p>Cadence är det mest kritiska ONDAS-filtret eftersom det bestämmer <strong>när</strong> korrigering sker inom varje vingslag.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Strokefas</th>
+      <th>Effekt av tvångsanvändning</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Downstroke center</td>
+      <td>Maximalt lyft, rullbehörighet</td>
+    </tr>
+    <tr>
+      <td>Nedåtgående slut (bromsning)</td>
+      <td>Inducerad drag → girmoment</td>
+    </tr>
+    <tr>
+      <td>Uppåtgående mitt</td>
+      <td>Drag bakåt, uppåt</td>
+    </tr>
+    <tr>
+      <td>Uppåtslag slut</td>
+      <td>Vingvändning, minimal effekt</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><strong>Cadence ändrar moduleringsfönstret</strong> för att passa in i fasen där den aerodynamiska spakarmen är längst. Fel kadens = kampvingsfysik. Korrekt kadens = varje milliwatt blir kontrollauktoritet.</p>
+
+<h3 id="parametrar">Parametrar</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>Parameter</th>
+      <th>Värde</th>
+      <th>Funktion</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>ONDAS_K0</code></td>
+      <td>1.0</td>
+      <td>Basfasoffset</td>
+    </tr>
+    <tr>
+      <td><code>ONDAS_K2</code></td>
+      <td>10,0</td>
+      <td>Fasspridning / skärpa</td>
+    </tr>
+    <tr>
+      <td><code>ONDAS_PHASE_SCALE</code></td>
+      <td>0,00005</td>
+      <td>Liten faktor, stor hävstång</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h2 id="ferocity-p--omedelbar-asymmetrisk-dragkraft">Ferocity P — Omedelbar asymmetrisk dragkraft</h2>
+
+<p>Ferocity P ökar <strong>vågformens fyrkantighet</strong> (trapetsformning: uppehåll vid ±1, cosinusramp mellan) proportionellt mot det aktuella PID-felet.</p>
+
+<ul>
+  <li>Mer dragkraft på ena sidan → omedelbart</li>
+  <li>Den bromsade vingen vid slagänden upplever <strong>inducerat motstånd</strong> — detta är motögonblicket</li>
+  <li>Effekt: direkt, proportionell, omedelbar</li>
+</ul>
+
+<hr />
+
+<h2 id="ferocity-d--fregripande-drag-exploitation">Ferocity D — Föregripande Drag Exploitation</h2>
+
+<p>Ferocity D fullbordar bilden. Där P ger dragkraftsasymmetri, utnyttjar D <strong>draget från den kontralaterala vingen</strong> som en broms.</p>
+
+<ul>
+  <li>Läser felfrekvensen för förändring och <strong>förutser</strong></li>
+  <li>Kan medvetet utnyttja draget från en saktad vinge för gir/pitch-ögonblick</li>
+  <li>P+D skapar tillsammans ett <strong>differentiellt momentpar</strong> — dragkraft på sida A, dra på sida B — mer effektivt än dragkraft endast</li>
+</ul>
+
+<hr />
+
+<h2 id="three-ways-cadenceferocity-d-kar-ferocity">Three Ways Cadence/Ferocity D Ökar Ferocity</h2>
+
+<h3 id="direkt--d-kar-p-under-snabb-felndring">1. Direkt — D ökar P under snabb feländring</h3>
+
+<p>I vindbyar eller aggressiva manövrar är <code>error_rate</code> stor. D multiplicerar detta och ökar basens grymhet. Vingen blir <em>skarpare</em> (mer trapetsformad) eftersom P+D tillsammans kräver mer kvadratisk än P ensam. Resultat: maximal auktoritet just när det är kritiskt.</p>
+
+<h3 id="indirekt--cadence-flyttar-hvstngspunkten">2. Indirekt — Cadence flyttar hävstångspunkten</h3>
+
+<p>Cadence modulerar <em>när</em> i cykeln grymhet verkar. Att flytta fönstret till en mer aerodynamiskt känslig fas (t.ex. nedåtgående mitt mot uppåtgående slutet) innebär att <strong>samma grymhetsvärde</strong> ger mer effekt — effektiv förstärkning utan numerisk förändring.</p>
+
+<h3 id="kombinatorisk--d--cadence-under-terstllning-av-stall">3. Kombinatorisk — D × Cadence under återställning av stall</h3>
+
+<p>I ett stall: hög sjunkhastighet → D känner av hastigheten → ökar grymheten. Samtidigt skiftar kadens modulering till nedåtslagsfasen där vingen har maximalt bett. Samspelet: D ger kraften, kadens i rätt ögonblick. Utan kadens kommer D-kraft till fel fas och försvinner värdelöst.</p>
+
+<hr />
+
+<h2 id="ytterligare-ondas-parametrar">Ytterligare ONDAS parametrar</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Parameter</th>
+      <th>Funktion</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Balance</strong></td>
+      <td>Upp/ned dragkraftssymmetri — I-term bias mellan uppåtslag och nedåtslag. Kompenserar för vingasymmetri, tillverkningstoleranser och slitage</td>
+    </tr>
+    <tr>
+      <td><strong>Warp</strong></td>
+      <td>Roll/Yaw P → L/R grymhetsdifferential — höger och vänster vingar klappar oberoende på rullningsaxeln för bank- och svängmanövrar</td>
+    </tr>
+    <tr>
+      <td><strong>Anchor</strong></td>
+      <td>Fasförankring — låser modulering till en specifik fasreferens, motstår drift</td>
+    </tr>
+    <tr>
+      <td><strong>Resonance</strong></td>
+      <td>Flygplansresonanskompensation — undviker spännande strukturella lägen för flygplanet</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h2 id="analogi">Analogi</h2>
+
+<p><strong>Cadence är ledaren. Ferocity P och D är instrumenten.</strong></p>
+
+<p>Utan dirigent spelar de — men inte tillsammans. Med en blir brus till musik.</p>
+
+<hr />
+
+<h2 id="se-ven">Se även</h2>
+
+<ul>
+  <li><a href="../../tutorials/ondas_tuning.html">ONDAS Tuning Guide</a> — praktisk stämningsprocedur</li>
+  <li><a href="msp.html">MSP Protocol</a> — trådformat för ONDAS parametrar</li>
+  <li><a href="profiles.html">Flygprofiler</a> — profilmedveten ONDAS-konfiguration</li>
+</ul>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<a href='../../hr/'>Hrvatski</a>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<a href='../../ko/'>한국어</a>
+&nbsp;◇&nbsp;
+<a href='../../lv/'>Latviešu</a>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<strong>Svenska</strong>
+&nbsp;◇&nbsp;
+<a href='../../zh_CN/'>中文</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

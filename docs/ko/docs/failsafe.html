@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='ko'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>안전 장치 — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Docs</p>
+<h1>안전 장치</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="section">안전 장치</h1>
+
+<p>OrniFlight에는 수신기 신호 손실 시 ornithopter를 보호하는 2단계 안전 시스템이 있습니다.</p>
+
+<h2 id="section-1">2단계 시스템</h2>
+
+<h3 id="section-2">1단계 — 신호 손실 감지됨</h3>
+
+<p>다음과 같은 경우에 트리거됩니다.
+- 모든 비행 채널의 펄스 길이가 유효하지 않습니다.
+- 수신기가 안전 모드를 보고합니다.
+- 구성된 기간 동안 수신기로부터 신호가 없습니다.</p>
+
+<p><strong>조치</strong>: 모든 채널이 대체 값으로 전환됩니다(<code>rxfail</code>를 통해 구성됨). 신호가 반환되면 짧은 복구 기간이 —로 시작되고 정상적인 비행이 재개됩니다.</p>
+
+<h3 id="section-3">2단계 — 가드 시간 만료</h3>
+
+<p>1단계가 <code>failsafe_delay</code>(기본값: 400ms)보다 오래 지속되고 기체가 무장된 경우 입력됩니다.</p>
+
+<p><strong>절차</strong>(<code>failsafe_procedure</code>를 통해 구성 가능):</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>절차</th>
+      <th>행동</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>DROP</strong></td>
+      <td>즉시 무장 해제 — 날개가 멈추고 항공기가 하강합니다</td>
+    </tr>
+    <tr>
+      <td><strong>LAND</strong></td>
+      <td>활공 모드 — 날개가 수평으로 고정되고 하강 제어됨</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><strong>LAND</strong>는 오니톱터 —에 권장되는 절차입니다. 활공 하강을 위해 날개를 중립 위치에 유지하여 신호 복구 시간을 제공합니다.</p>
+
+<h2 id="cli-">CLI 설정</h2>
+
+<p><code>
+set failsafe_delay = 4         # Guard time in 0.1s (4 = 400ms)
+set failsafe_procedure = LAND  # DROP or LAND
+set failsafe_throttle = 1000   # Fallback throttle (low)
+set failsafe_switch_mode = STAGE1  # Transmitter switch behavior
+</code></p>
+
+<h2 id="section-4">수신기 안전 장치</h2>
+
+<p>또한 신호 손실 시 <strong>펄스 없음</strong>을 출력하도록 수신기의 안전 장치를 구성하세요. 이를 통해 비행 컨트롤러는 손실을 감지하고 1단계를 활성화할 수 있습니다.</p>
+
+<h2 id="section-5">테스트</h2>
+
+<p>벤치에서 <strong>날개 연결 장치가 분리된</strong> 안전 장치를 테스트합니다.
+1. 스위치에 FAILSAFE 모드 할당
+2. 우주선을 무장시키세요
+3. → 스위치를 토글하고 안전 장치 절차를 준수하십시오.
+4. 서보 동작이 예상과 일치하는지 확인</p>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<a href='../../hr/'>Hrvatski</a>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<strong>한국어</strong>
+&nbsp;◇&nbsp;
+<a href='../../lv/'>Latviešu</a>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<a href='../../zh_CN/'>中文</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

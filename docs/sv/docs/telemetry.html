@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='sv'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>Telemetri — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Docs</p>
+<h1>Telemetri</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="telemetri">Telemetri</h1>
+
+<p>Telemetri skickar flygdata från OrniFlight till din radiosändare — batterispänning, ström, RSSI, GPS koordinater, höjd och mer.</p>
+
+<h2 id="protokoll-som-stds">Protokoll som stöds</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Protokoll</th>
+      <th>Radiosystem</th>
+      <th>Trådräkning</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>CRSF</strong></td>
+      <td>Crossfire / Tracer / ELRS</td>
+      <td>Integrerad med RX (dubbelriktad)</td>
+    </tr>
+    <tr>
+      <td><strong>SmartPort</strong></td>
+      <td>FrSky</td>
+      <td>1 tråd (TX stift)</td>
+    </tr>
+    <tr>
+      <td><strong>HoTT</strong></td>
+      <td>Graupner</td>
+      <td>1 tråd (TX+TZ)</td>
+    </tr>
+    <tr>
+      <td><strong>IBUS</strong></td>
+      <td>FlySky</td>
+      <td>1 tråd (sensor TX)</td>
+    </tr>
+    <tr>
+      <td><strong>LTM</strong></td>
+      <td>Ljus telemetri (MWP)</td>
+      <td>1 tråd (TX)</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="konfiguration">Konfiguration</h2>
+
+<ol>
+  <li>I Configurator → <strong>Portar</strong>: ställ in UART TX pin till lämpligt telemetriprotokoll</li>
+  <li>Aktivera telemetrifunktion: <code>feature TELEMETRY</code></li>
+  <li>Konfigurera telemetriinversion om det behövs</li>
+</ol>
+
+<p>För <strong>CRSF</strong> hanteras telemetri automatiskt — ingen separat port behövs.</p>
+
+<h2 id="smartport-frsky">SmartPort (FrSky)</h2>
+
+<p>SmartPort kräver signalinversion på F4-processorer. Antingen:
+- Använd en flygkontroll med inbyggd växelriktare
+- Använd SoftSerial med <code>set tlm_inversion = ON</code></p>
+
+<p><code>
+feature TELEMETRY
+set tlm_inverted = ON
+set tlm_halfduplex = ON
+</code></p>
+
+<h2 id="telemetridata">Telemetridata</h2>
+
+<p>OrniFlight sänder:
+- VBAT spänning (huvudbatteri)
+- Strömdragning / mAh förbrukad
+- RSSI (signalstyrka)
+- Flygläge / armstatus
+- GPS-koordinater (om utrustad)
+- Höjd/vario (om barometer)
+- ONDAS flygprofil aktiv</p>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<a href='../../hr/'>Hrvatski</a>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<a href='../../ko/'>한국어</a>
+&nbsp;◇&nbsp;
+<a href='../../lv/'>Latviešu</a>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<strong>Svenska</strong>
+&nbsp;◇&nbsp;
+<a href='../../zh_CN/'>中文</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

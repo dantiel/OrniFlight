@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='ja'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>オンスクリーン表示 (OSD) — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Docs</p>
+<h1>オンスクリーン表示 (OSD)</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="osd">オンスクリーン表示 (OSD)</h1>
+
+<p>OrniFlight には、MAX7456 または AT7456E チップを使用した組み込み OSD (オンスクリーン ディスプレイ) が含まれています。 OSD は、FPV ビデオ フィードにフライト データをオーバーレイします。</p>
+
+<h2 id="section">サポートされている要素</h2>
+
+<p>OrniFlight コンフィギュレーターの <strong>OSD</strong> タブで要素を構成します。要素をドラッグ アンド ドロップして画面上に配置します。</p>
+
+<h3 id="section-1">フライトデータ</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>要素</th>
+      <th>ディスプレイ</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>バッテリー電圧</td>
+      <td>メインバッテリー電圧 (例: 14.8V)</td>
+    </tr>
+    <tr>
+      <td>平均セル電圧</td>
+      <td>セルごとの電圧 (例: 3.7V)</td>
+    </tr>
+    <tr>
+      <td>消費電流</td>
+      <td>瞬時アンプ</td>
+    </tr>
+    <tr>
+      <td>mAh 描画</td>
+      <td>消費された累積容量</td>
+    </tr>
+    <tr>
+      <td>RSSI</td>
+      <td>受信機からの信号強度</td>
+    </tr>
+    <tr>
+      <td>フライトモード</td>
+      <td>現在のモード (INDEPENDENT、GLIDE など)</td>
+    </tr>
+    <tr>
+      <td>スロットル位置</td>
+      <td>現在のスロットルパーセンテージ</td>
+    </tr>
+    <tr>
+      <td>タイマー</td>
+      <td>飛行時間 / 武装時間</td>
+    </tr>
+    <tr>
+      <td>クラフト名</td>
+      <td>OrniFlight クラフト名</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="section-2">羽ばたき飛行装置固有</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>要素</th>
+      <th>ディスプレイ</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>羽ばたき周波数</td>
+      <td>現在の翼のストローク レート (Hz)</td>
+    </tr>
+    <tr>
+      <td>ONDAS プロフィール</td>
+      <td>アクティブなフライト プロファイル番号 (1-3)</td>
+    </tr>
+    <tr>
+      <td>Cadence フェーズ</td>
+      <td>電流変調位相オフセット</td>
+    </tr>
+    <tr>
+      <td>サーボ角度</td>
+      <td>ウイングサーボの位置</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="section-3">フォント管理</h2>
+
+<p>OSD は文字ベースの表示システムを使用します。 OrniFlight Configurator の <strong>OSD</strong> タブには、カスタム フォントとグリフをアップロードするための <strong>フォント マネージャー</strong> が含まれています。</p>
+
+<h2 id="cli-">CLI 設定</h2>
+
+<p><code>
+set osd_units = METRIC
+set osd_warn_bitmask = 270335  # Warning flag bitmask
+set osd_tim1 = 2560            # Timer 1 source
+set osd_tim2 = 2561            # Timer 2 source
+</code></p>
+
+<h2 id="section-4">ハードウェア</h2>
+
+<p>現在サポートされている OSD チップ: <strong>AT7456E</strong> (OMNIBUSF4 および互換ボードにあります)。 MAX7456 は互換性があり、自動検出されます。</p>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<a href='../../hr/'>Hrvatski</a>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<strong>日本語</strong>
+&nbsp;◇&nbsp;
+<a href='../../ko/'>한국어</a>
+&nbsp;◇&nbsp;
+<a href='../../lv/'>Latviešu</a>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<a href='../../zh_CN/'>中文</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

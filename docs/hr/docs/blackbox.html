@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='hr'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>Zapisivanje u Blackbox — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Docs</p>
+<h1>Zapisivanje u Blackbox</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="zapisivanje-u-blackbox">Zapisivanje u Blackbox</h1>
+
+<p>Blackbox bilježi podatke o letu za analizu nakon leta, podešavanje i otklanjanje pogrešaka. OrniFlight podržava bilježenje na ugrađeni flash čip ili vanjski OpenLog uređaj.</p>
+
+<h2 id="to-se-biljei">Što se bilježi</h2>
+
+<ul>
+  <li><strong>Žiroskop</strong> — neobrađena i filtrirana kutna brzina po 3 osi</li>
+  <li><strong>Akcelerometar</strong> — 3-osno ubrzanje</li>
+  <li><strong>PID Izlaz</strong> — P, I, D, F doprinosi po osi</li>
+  <li><strong>ONDAS</strong> — Cadence, Ferocity P/D i drugi parametri specifični za lepršanje</li>
+  <li><strong>RC naredbe</strong> — drže pozicije nakon tečaja/izložbe</li>
+  <li><strong>Servo izlaz</strong> — konačni izlaz za svaki servo kanal</li>
+  <li><strong>Baterija</strong> — napon i struja po iteraciji</li>
+  <li><strong>GPS</strong> — položaj, brzina, visina (ako je dostupno)</li>
+</ul>
+
+<h2 id="postavljanje">Postavljanje</h2>
+
+<h3 id="ugraena-bljeskalica-omnibusf4">Ugrađena bljeskalica (OMNIBUSF4)</h3>
+
+<p>Zzz34zzz uključuje ugrađenu flash memoriju od 16 MB za Blackbox evidentiranje. Omogući u konfiguratoru:</p>
+
+<ol>
+  <li>Kartica <strong>Crna kutija</strong> → Postavite <code>Blackbox logging device</code> na <code>Onboard flash</code></li>
+  <li>Postavite stopu zapisivanja (preporučeno: <code>1/N</code> s N=2-4 za F4 ciljeve)</li>
+  <li>Dodijelite prekidač za početak/zaustavljanje zapisivanja</li>
+</ol>
+
+<h3 id="vanjski-openlog">Vanjski OpenLog</h3>
+
+<p>Spojite OpenLog na besplatni UART TX pin:</p>
+
+<ol>
+  <li>Kartica <strong>Portovi</strong> → Postavite UART na <code>Blackbox logging</code> na 115200 bauda</li>
+  <li>Spojite OpenLog: FC TX → OpenLog RX, plus 5V/GND</li>
+</ol>
+
+<h2 id="alati-za-analizu">Alati za analizu</h2>
+
+<ul>
+  <li><a href="https://github.com/betaflight/blackbox-log-viewer">Blackbox Explorer</a> — preglednik zapisa na webu</li>
+  <li><code>blackbox_decode</code> — pretvoriti u CSV za prilagođenu analizu</li>
+</ul>
+
+<h2 id="ondas-specifino">ONDAS-specifično</h2>
+
+<p>Blackbox je bitan za podešavanje ONDAS parametara. Zabilježeni ONDAS podaci uključuju:
+- <code>ondas_cadence_phase</code> — vrijeme prozora modulacije
+- <code>ondas_ferocity_p</code> / <code>ondas_ferocity_d</code> — asimetrične komponente potiska
+- <code>ondas_balance</code> — ravnoteža lijevo/desno krilo
+- Izlaz po servu pri svakoj iteraciji</p>
+
+<p>To omogućuje preciznu analizu mehanike flapsanja i korekcije asimetrije krila.</p>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<strong>Hrvatski</strong>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<a href='../../ko/'>한국어</a>
+&nbsp;◇&nbsp;
+<a href='../../lv/'>Latviešu</a>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<a href='../../zh_CN/'>中文</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

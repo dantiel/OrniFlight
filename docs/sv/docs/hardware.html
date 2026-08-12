@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='sv'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>Hårdvara som stöds — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Docs</p>
+<h1>Hårdvara som stöds</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="hrdvara-som-stds">Hårdvara som stöds</h1>
+
+<p>OrniFlight körs på commodity STM32F3/F4/F7 flygkontroller. Baslinjen är <strong>STM32F3</strong> — alla F3-mål med servo-kapabla timerstift kommer att flyga.</p>
+
+<h2 id="flygkontroller">Flygkontroller</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Styrelse</th>
+      <th>MCU</th>
+      <th>IMU</th>
+      <th>Flash</th>
+      <th>Mottagare</th>
+      <th>Status</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>TINYFISH</strong></td>
+      <td>STM32F303</td>
+      <td>MPU6000 (SPI)</td>
+      <td>256 KB</td>
+      <td>FrSky D8 (integrerad)</td>
+      <td>✅ Primär</td>
+    </tr>
+    <tr>
+      <td><strong>OMNIBUSF4</strong></td>
+      <td>STM32F405</td>
+      <td>MPU6000 (SPI)</td>
+      <td>1 MB + 16 MB SPI</td>
+      <td>—</td>
+      <td>✅ stöds</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="tinyfish--det-lttaste-mlet-fr-orniflight">TINYFISH — Det lättaste målet för OrniFlight</h3>
+
+<p>Designad av fishpepper är TINYFISH den idealiska ornithopterflygkontrollen: fjäderlätt, F3-baserad och bär en <strong>integrerad FrSky D8-mottagare</strong> ombord. Inga externa RX, inga extra kablar — bara ström, servon och flyg.</p>
+
+<ul>
+  <li><strong>MCU</strong>: STM32F303CCT6 @ 72 MHz</li>
+  <li><strong>Gyro</strong>: MPU6000 (SPI, 8 kHz-kompatibel)</li>
+  <li><strong>Flash</strong>: 256 KB på chipet</li>
+  <li><strong>RAM</strong>: 40 KB</li>
+  <li><strong>Mottagare</strong>: Integrerad FrSky D8 (SBUS internt dirigerad till UART2)</li>
+  <li><strong>UARTs</strong>: VCP + 2 hårdvaru-UARTs (UART1 gratis för GPS/CRSF-tillägg)</li>
+  <li><strong>Ingång</strong>: 2-4S LiPo (direkt servokraft)</li>
+  <li><strong>Vikt</strong>: ~2,5 g</li>
+</ul>
+
+<p>TINYFISH bevisar att transcendent flaxande kontroll inte behöver en F7. Zzz73zzz kör hela ONDAS pipeline — 10 moduleringskanaler, trapetsformade vingar ODE, 4 flygprofiler — inom 256 KB.</p>
+
+<h3 id="omnibusf4--den-lttillgngliga-arbetshsten">OMNIBUSF4 — Den lättillgängliga arbetshästen</h3>
+
+<p>Det klassiska målet F4. Billigt, allmänt förekommande, fullfjädrat med OSD och gott om SPI-blixt för Blackbox-loggning. Go-to för utveckling och större byggen.</p>
+
+<ul>
+  <li><strong>MCU</strong>: STM32F405RGT6 @ 168 MHz</li>
+  <li><strong>Gyro</strong>: MPU6000 (SPI, 8 kHz-kompatibel)</li>
+  <li><strong>Flash</strong>: 1 MB on-chip + 16 MB SPI (Blackbox)</li>
+  <li><strong>RAM</strong>: 192 KB</li>
+  <li><strong>OSD</strong>: AT7456E (kompatibel med MAX7456)</li>
+  <li><strong>UARTs</strong>: VCP + 5 hårdvaru-UARTs</li>
+  <li><strong>Barometer</strong>: BMP280 (vissa varianter)</li>
+  <li><strong>Ingång</strong>: 2-6S LiPo</li>
+</ul>
+
+<hr />
+
+<h2 id="ornithopter-anatomy">Ornithopter Anatomy</h2>
+
+<h3 id="wing-servos">Wing Servos</h3>
+
+<p>OrniFlight kontroller flaxande genom PWM servon. Viktiga specifikationer:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Parameter</th>
+      <th>Typiskt intervall</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Pulsbredd</td>
+      <td>500–2500 µs</td>
+    </tr>
+    <tr>
+      <td>Center</td>
+      <td>1500 µs</td>
+    </tr>
+    <tr>
+      <td>Frekvens</td>
+      <td>50–330 Hz</td>
+    </tr>
+    <tr>
+      <td>Slagvinkel</td>
+      <td>±15–45°</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>För högpresterande ornithoptrar rekommenderas digitala servon med 330 Hz uppdateringshastighet. Analoga servon arbetar vid 50 Hz men har lägre precision.</p>
+
+<h3 id="mottagare">Mottagare</h3>
+
+<p>Alla seriella mottagarprotokoll stöds. CRSF (TBS Crossfire / ExpressLRS) rekommenderas för:
+- Låg latens (kritiskt för flaxande kontroll)
+- Inbyggd telemetri
+- RSSI överprotokoll (inga extra kablar)</p>
+
+<h3 id="batteri">Batteri</h3>
+
+<ul>
+  <li><strong>2S (7,4V)</strong>: Små ornithoptrar, servodrivna direkt</li>
+  <li><strong>3S (11,1V)</strong>: Medium ornithoptrar, BEC krävs för servon</li>
+  <li><strong>4S (14,8V)</strong>: Stora ornithoptrar, externa BEC rekommenderas</li>
+</ul>
+
+<hr />
+
+<h2 id="kringutrustning-som-stds">Kringutrustning som stöds</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Perifer</th>
+      <th>Via</th>
+      <th>Anteckningar</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>GPS</td>
+      <td>UART</td>
+      <td>UBlox M8N eller kompatibel</td>
+    </tr>
+    <tr>
+      <td>VTX</td>
+      <td>UART TX</td>
+      <td>Luffare, SmartAudio</td>
+    </tr>
+    <tr>
+      <td>Kamera</td>
+      <td>—</td>
+      <td>Vilken analog FPV kamera som helst</td>
+    </tr>
+    <tr>
+      <td>Summer</td>
+      <td>BUZZ pad</td>
+      <td>Aktiv 5V summer</td>
+    </tr>
+    <tr>
+      <td>LED Strip</td>
+      <td>LED pad</td>
+      <td>WS2812 / SK6812</td>
+    </tr>
+    <tr>
+      <td>OpenLog</td>
+      <td>UART TX</td>
+      <td>Blackbox-loggning</td>
+    </tr>
+    <tr>
+      <td>Bluetooth</td>
+      <td>UART</td>
+      <td>MSP passthrough för mobil tuning</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h2 id="framtida-ml">Framtida mål</h2>
+
+<p>OrniFlight syftar till att stödja ytterligare STM32F4/F7-mål där tillräckligt med UART och timerresurser finns tillgängliga för flaxande servokontroll. Bidrag välkomna.</p>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<a href='../../hr/'>Hrvatski</a>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<a href='../../ko/'>한국어</a>
+&nbsp;◇&nbsp;
+<a href='../../lv/'>Latviešu</a>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<strong>Svenska</strong>
+&nbsp;◇&nbsp;
+<a href='../../zh_CN/'>中文</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

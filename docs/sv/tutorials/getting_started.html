@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='sv'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>Komma igång — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Tutorials</p>
+<h1>Komma igång</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="komma-igng">Komma igång</h1>
+
+<p>Välkommen till OrniFlight! Den här guiden leder dig genom den första installationen av din ornithopterflygkontroll.</p>
+
+<h2 id="vad-du-behver">Vad du behöver</h2>
+
+<ul>
+  <li><strong>OrniFlight Configurator</strong> — nedladdning från <a href="https://orniflight.org">orniflight.org</a></li>
+  <li><strong>USB-kabel</strong> — för att ansluta flygkontrollen till datorn</li>
+  <li><strong>Ornithopter</strong> med:
+    <ul>
+      <li>Flygkontroller som stöds (OMNIBUSF4, TINYFISH)</li>
+      <li>Servon för vingmanövrering</li>
+      <li>Mottagare bunden till din sändare</li>
+      <li>Batteri (2S–4S LiPo)</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="snabbstart">Snabbstart</h2>
+
+<h3 id="flash-firmware">1. Flash-firmware</h3>
+
+<ol>
+  <li>Öppna <strong>OrniFlight Configurator</strong></li>
+  <li>Gå till fliken <strong>Firmware Flasher</strong></li>
+  <li>Välj ditt brädmål (OMNIBUSF4 eller TINYFISH)</li>
+  <li>Välj den senaste stabila versionen</li>
+  <li>Klicka på <strong>Load Firmware</strong> och sedan på <strong>Flash Firmware</strong></li>
+</ol>
+
+<h3 id="initial-konfiguration">2. Initial konfiguration</h3>
+
+<p>Efter att ha blinkat kommer konfiguratorn att uppmana dig att tillämpa anpassade standardinställningar. <strong>Acceptera alltid.</strong></p>
+
+<h3 id="mottagarinstllningar">3. Mottagarinställningar</h3>
+
+<ol>
+  <li>Gå till fliken <strong>Portar</strong> → ställ in rätt UART till <code>Serial RX</code></li>
+  <li>Gå till fliken <strong>Konfiguration</strong> → välj ditt mottagarprotokoll (CRSF, SBUS, etc.)</li>
+  <li>Gå till fliken <strong>Receiver</strong> → verifiera att stickrörelserna matchar förväntade kanaler</li>
+  <li>Ställ in kanalslutpunkter: 1000–2000 med 1500 center</li>
+</ol>
+
+<h3 id="servoinstallation">4. Servoinstallation</h3>
+
+<ol>
+  <li>Gå till fliken <strong>Servos</strong></li>
+  <li>Kontrollera att servomappningen matchar din ornithopters vingkonfiguration</li>
+  <li>Testa servoriktningen — back om det behövs</li>
+  <li>Ställ in mittposition (vingarna horisontellt = 1500)</li>
+</ol>
+
+<h3 id="lgesinstllningar">5. Lägesinställningar</h3>
+
+<ol>
+  <li>Gå till fliken <strong>Lägen</strong></li>
+  <li>Tilldela ARM till en AUX switch</li>
+  <li>Tilldela flyglägen (ANGLE / ACRO / HORIZON) efter önskemål</li>
+  <li>Tilldela INDEPENDENT och GLIDE till reservomkopplare</li>
+  <li>Konfigurera BEEPER för att hitta förlorad modell</li>
+</ol>
+
+<h3 id="frsta-flygningen">6. Första flygningen</h3>
+
+<ol>
+  <li><strong>Koppla bort vinglänkaget för bänktestning</strong></li>
+  <li>Aktivera och kontrollera servorörelseriktning</li>
+  <li>Kontrollera gasresponsen</li>
+  <li>För första faktiska flygningen: använd ANGLE-läget, låga priser</li>
+  <li>Håll muspekaren i ögonhöjd, trimma efter behov</li>
+</ol>
+
+<h2 id="nsta-steg">Nästa steg</h2>
+
+<ul>
+  <li><a href="basic_setup.html">Basic Setup</a> — detaljerad konfigurationsgenomgång</li>
+  <li><a href="../../tutorials/ondas_tuning.html">ONDAS Tuning</a> — låt flaxande dynamik</li>
+  <li><a href="../../tutorials/tuning.html">PID Tuning</a> — justera flygegenskaper</li>
+</ul>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<a href='../../hr/'>Hrvatski</a>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<a href='../../ko/'>한국어</a>
+&nbsp;◇&nbsp;
+<a href='../../lv/'>Latviešu</a>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<strong>Svenska</strong>
+&nbsp;◇&nbsp;
+<a href='../../zh_CN/'>中文</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='id'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>PID Penyetelan — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Tutorials</p>
+<h1>PID Penyetelan</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="pid-penyetelan">PID Penyetelan</h1>
+
+<p>OrniFlight menggunakan pengontrol PID (Proportional-Integral-Derivative) yang disesuaikan untuk penerbangan sayap mengepak. Tuning berbeda secara signifikan dari pesawat konvensional karena sifat dorong mengepakkan yang periodik.</p>
+
+<h2 id="dasar-dasar-ornithopter-pid">Dasar-dasar Ornithopter PID</h2>
+
+<p>Tidak seperti pesawat konvensional yang daya dorongnya hampir terus menerus, daya dorong ornithopter berosilasi dengan setiap gerakan sayap. Hal ini menciptakan:</p>
+
+<ul>
+  <li><strong>Dorongan riak</strong> pada frekuensi kepakan (biasanya 5–15 Hz)</li>
+  <li><strong>Otoritas kontrol yang bergantung pada fase</strong> — keluaran PID yang sama memiliki efek yang berbeda tergantung di mana dalam siklus kayuhan itu diterapkan</li>
+  <li><strong>Dinamika roll-yaw yang digabungkan</strong> — daya dorong sayap asimetris memengaruhi kedua sumbu secara bersamaan</li>
+</ul>
+
+<h2 id="pid-ketentuan">PID Ketentuan</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Istilah</th>
+      <th>Efek</th>
+      <th>Catatan Ornitopter</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>P</strong></td>
+      <td>Koreksi segera — proporsional</td>
+      <td>Gunakan nilai-nilai konservatif; osilasi mengepak-sinkron</td>
+    </tr>
+    <tr>
+      <td><strong>Saya</strong></td>
+      <td>Koreksi kesalahan persisten — integral</td>
+      <td>Penting untuk menjaga sikap selama meluncur</td>
+    </tr>
+    <tr>
+      <td><strong>D</strong></td>
+      <td>Turunan — meredam osilasi</td>
+      <td>Disetel berdasarkan kecepatan kayuhan sayap, bukan osilasi bingkai</td>
+    </tr>
+    <tr>
+      <td><strong>Sial</strong></td>
+      <td>Umpan maju — langsung menempel ke keluaran</td>
+      <td>Berguna untuk respon tajam pada sumbu roll</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="nilai-awal">Nilai Awal</h2>
+
+<p>Untuk ornithopter berukuran sedang (lebar sayap 1–1,5m):</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Sumbu</th>
+      <th>P</th>
+      <th>saya</th>
+      <th>D</th>
+      <th>F</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Gulung</td>
+      <td>25</td>
+      <td>30</td>
+      <td>15</td>
+      <td>30</td>
+    </tr>
+    <tr>
+      <td>Nada</td>
+      <td>30</td>
+      <td>35</td>
+      <td>20</td>
+      <td>35</td>
+    </tr>
+    <tr>
+      <td>Yaw</td>
+      <td>40</td>
+      <td>35</td>
+      <td>10</td>
+      <td>20</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="prosedur-penyetelan">Prosedur Penyetelan</h2>
+
+<h3 id="nilai-tuning-terlebih-dahulu">1. Nilai Tuning Terlebih Dahulu</h3>
+
+<p>Sebelum penyetelan PID, tetapkan tarif yang terasa nyaman:
+- Mulai dengan RC Tarif 0,90, Tarif Super 0,65, Expo 0,30
+- Sesuaikan dengan gaya terbang dan ukuran ornithopter Anda</p>
+
+<h3 id="p-keuntungan">2. P Keuntungan</h3>
+
+<p>Tingkatkan P hingga Anda melihat osilasi pada frekuensi mengepak, lalu turunkan 20%:
+- Osilasi gulungan: goyangan sayap sesuai kecepatan pukulan
+- Osilasi nada: terayun-ayun dari depan ke belakang
+- Osilasi yaw: kibasan ekor disinkronkan dengan guratan</p>
+
+<h3 id="d-keuntungan">3. D Keuntungan</h3>
+
+<p>Tingkatkan D untuk meredam pantulan kembali setelah input tongkat tajam:
+- Terlalu banyak: servo jitter, panas berlebih
+- Terlalu sedikit: berdering setelah roll/pitch stop</p>
+
+<h3 id="saya-mendapatkan">4. Saya Mendapatkan</h3>
+
+<p>Saya mendapatkan counter drift yang persisten:
+- Tingkatkan hingga penyimpangan dihilangkan
+- Terlalu banyak: osilasi lambat pada 1–2 Hz (di bawah tingkat kepakan)</p>
+
+<h2 id="ondas-integrasi">ONDAS Integrasi</h2>
+
+<p>ONDAS (Ornithopter Nonlinear Dynamic Aerodynamic System) memodulasi output PID dalam setiap langkah sayap. Setelah penyetelan PID dasar:</p>
+
+<ol>
+  <li>Atur <strong>Cadence Gain</strong> — menggeser jendela modulasi ke fase aerodinamis optimal</li>
+  <li>Atur <strong>Ferocity P</strong> — dorongan asimetris langsung</li>
+  <li>Atur <strong>Ferocity D</strong> — eksploitasi drag antisipatif</li>
+  <li>Sempurnakan <strong>Balance</strong> — simetri sayap kiri/kanan</li>
+</ol>
+
+<p>Lihat <a href="ondas_tuning.html">ONDAS Tuning Guide</a> untuk prosedur detailnya.</p>
+
+<h2 id="analisis-kotak-hitam">Analisis Kotak Hitam</h2>
+
+<p>Aktifkan Blackbox logging untuk memvisualisasikan kinerja PID. Carilah:
+- <strong>Osilasi suku-P</strong> pada frekuensi flapping → mengurangi P
+- <strong>penghentian jangka I</strong> selama belokan berkelanjutan → mengurangi I atau meningkatkan relaksasi jangka I
+- <strong>Suara jangka D</strong> dari getaran → periksa keseimbangan mekanis terlebih dahulu, lalu kurangi D</p>
+
+<h2 id="profil-penerbangan">Profil Penerbangan</h2>
+
+<p>OrniFlight mendukung 3 profil penerbangan yang dapat dialihkan di tengah penerbangan:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Profil</th>
+      <th>Kasus Penggunaan</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1</td>
+      <td>Pelayaran standar</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>Kelincahan tinggi/agresif</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>Efisiensi/termal melonjak</td>
+    </tr>
+  </tbody>
+</table>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<a href='../../hr/'>Hrvatski</a>
+&nbsp;◇&nbsp;
+<strong>Bahasa Indonesia</strong>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<a href='../../ko/'>한국어</a>
+&nbsp;◇&nbsp;
+<a href='../../lv/'>Latviešu</a>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<a href='../../zh_CN/'>中文</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

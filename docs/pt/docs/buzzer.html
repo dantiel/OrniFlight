@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='pt'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>Campainha — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Docs</p>
+<h1>Campainha</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="campainha">Campainha</h1>
+
+<p>OrniFlight suporta campainhas ativas para indicação sonora de status e localização de modelo perdido.</p>
+
+<h2 id="funes">Funções</h2>
+
+<ul>
+  <li><strong>Armar/Desarmar</strong> tons distintos —</li>
+  <li><strong>Bateria Fraca</strong> — repetindo bipes de aviso</li>
+  <li><strong>Failsafe</strong> padrão — SOS</li>
+  <li><strong>Modelo Perdido</strong> — bipe contínuo via switch</li>
+  <li><strong>GPS Fix</strong> tom de confirmação — no bloqueio do satélite</li>
+  <li><strong>Calibração</strong> padrões de bipe — durante a calibração do giroscópio/aceleração</li>
+  <li><strong>RX Sinal perdido</strong> aviso — quando a conexão do receptor cai</li>
+</ul>
+
+<h2 id="hardware">Hardware</h2>
+
+<ul>
+  <li>Conecte uma campainha ativa de 5 V (NÃO um piezo passivo) aos pads <strong>BUZZ-</strong> e <strong>BUZZ+</strong></li>
+  <li>A campainha é acionada por um transistor no FC —, nenhum driver externo é necessário para campainhas padrão</li>
+</ul>
+
+<h2 id="cli-configuraes">CLI Configurações</h2>
+
+<p><code>
+beeper -GYRO_CALIBRATED     # Disable gyro calibration beeps
+beeper -RX_LOST             # Enable receiver lost warning
+beeper -ON_USB              # Disable beeper when USB connected
+</code></p>
+
+<h2 id="segurana-de-ornitpteros">Segurança de ornitópteros</h2>
+
+<p>O sinal sonoro é especialmente útil para ornitópteros grandes que podem pousar em grama alta ou folhagem. Configure o modo BEEPER em um switch momentâneo para ativação rápida quando necessário.</p>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<a href='../../hr/'>Hrvatski</a>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<a href='../../ko/'>한국어</a>
+&nbsp;◇&nbsp;
+<a href='../../lv/'>Latviešu</a>
+&nbsp;◇&nbsp;
+<strong>Português</strong>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<a href='../../zh_CN/'>中文</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

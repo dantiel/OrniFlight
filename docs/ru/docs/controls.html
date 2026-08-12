@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='ru'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>Элементы управления — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Docs</p>
+<h1>Элементы управления</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="section">Элементы управления</h1>
+
+<p>OrniFlight использует стандартное картографирование RC с расширениями, специфичными для орнитоптеров.</p>
+
+<h2 id="section-1">Карты палочек</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Палка</th>
+      <th>Ось</th>
+      <th>Первичный эффект</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Дроссельная заслонка (слева, вертикально)</td>
+      <td>Дроссель</td>
+      <td>Амплитуда взмахов/тяга</td>
+    </tr>
+    <tr>
+      <td>Отклонение от курса (слева, горизонтально)</td>
+      <td>рыскание</td>
+      <td>Дифференциальная тяга крыла при повороте</td>
+    </tr>
+    <tr>
+      <td>Шаг (справа, вертикально)</td>
+      <td>Питч</td>
+      <td>Наклон вперед/назад</td>
+    </tr>
+    <tr>
+      <td>Ролл (правый, горизонтальный)</td>
+      <td>Ролл</td>
+      <td>Левый/правый берег</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="section-2">Режимы полета</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Режим</th>
+      <th>Поведение палки</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>ACRO</strong></td>
+      <td>Стики управления угловой скоростью — нет автоматического уровня</td>
+    </tr>
+    <tr>
+      <td><strong>ANGLE</strong></td>
+      <td>Угол управления стиками — автоматически выравнивается при отпускании</td>
+    </tr>
+    <tr>
+      <td><strong>HORIZON</strong></td>
+      <td>ANGLE около центра, ACRO при полном отклонении</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>ACRO рекомендуется опытным пилотам. ANGLE хорош для первых полетов и термического парения.</p>
+
+<h2 id="section-3">Элементы управления, специфичные для орнитоптеров</h2>
+
+<h3 id="independent">режим INDEPENDENT</h3>
+
+<p>Когда режим INDEPENDENT активен, каждый сервопривод крыла реагирует независимо:
+- <strong>Левый джойстик</strong> → сервоприводы левого крыла
+- <strong>Правый джойстик</strong> → сервоприводы правого крыла
+- Обеспечивает асимметричное взмахивание крыльями для агрессивных маневров.</p>
+
+<h3 id="glide">режим GLIDE</h3>
+
+<p>Режим GLIDE фиксирует обе створки в горизонтальном положении. Орнитоптер становится планером:
+- <strong>Дроссель</strong> не влияет на положение крыла.
+- <strong>Тангаж/крен/рыскание</strong> по-прежнему влияют на рулевые поверхности хвоста (если есть)</p>
+
+<h3 id="section-4">Переключение профиля</h3>
+
+<p>Переключение профиля в полете через канал AUX позволяет изменять параметры PID/ONDAS прямо в полете:
+- <strong>Профиль 1</strong>: стандартные настройки круиза.
+- <strong>Профиль 2</strong>: настройки высокой гибкости.
+- <strong>Профиль 3</strong>: настройки эффективности/скольжения.</p>
+
+<h2 id="section-5">Цены</h2>
+
+<p>Настройте тарифы на вкладке <strong>PID Tuning</strong>. Для орнитоптеров начните с консервативных скоростей —, динамика взмахов усиливается управляющими воздействиями:
+- RC Скорость: 0.80–1.00
+- Суперрейт: 0,60–0,70
+- Экспо: 0.20–0.40</p>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<a href='../../hr/'>Hrvatski</a>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<a href='../../ko/'>한국어</a>
+&nbsp;◇&nbsp;
+<a href='../../lv/'>Latviešu</a>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<strong>Русский</strong>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<a href='../../zh_CN/'>中文</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='zh_CN'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>串口 — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Docs</p>
+<h1>串口</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="section">串口</h1>
+
+<p>OrniFlight 使用串行端口与外围设备通信：接收器、GPS、遥测、VTX 控制、黑盒日志记录和 MSP（配置器连接）。</p>
+
+<h2 id="section-1">串口类型</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>类型</th>
+      <th>描述</th>
+      <th>最适合</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>VCP</strong></td>
+      <td>USB 虚拟 COM 端口 — 直接 USB 连接到处理器</td>
+      <td>配置器 (MSP)</td>
+    </tr>
+    <tr>
+      <td><strong>UART</strong></td>
+      <td>具有硬件信号检测功能的硬件 TX/RX 引脚</td>
+      <td>RX、GPS、遥测、VTX、黑盒</td>
+    </tr>
+    <tr>
+      <td><strong>SoftSerial</strong></td>
+      <td>任何引脚对上的软件驱动串行</td>
+      <td>低带宽：仅遥测</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>VCP 不消耗物理 UART — 它始终可用于配置器。</p>
+
+<h2 id="section-2">端口分配</h2>
+
+<p>在 OrniFlight 配置器中，转到 <strong>端口</strong> 选项卡来分配功能：</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>功能</th>
+      <th>典型的 UART</th>
+      <th>笔记</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>串行 RX</td>
+      <td>UART1 或 UART3</td>
+      <td>SBUS、CRSF、IBUS 等</td>
+    </tr>
+    <tr>
+      <td>GPS</td>
+      <td>UART3 或 UART6</td>
+      <td>57600 或 115200 波特率</td>
+    </tr>
+    <tr>
+      <td>遥测</td>
+      <td>任何 TX 引脚</td>
+      <td>SmartPort、HoTT、IBUS</td>
+    </tr>
+    <tr>
+      <td>VTX（流浪汉/SmartAudio）</td>
+      <td>任何 TX 引脚</td>
+      <td>单线</td>
+    </tr>
+    <tr>
+      <td>黑匣子</td>
+      <td>任何 TX 引脚</td>
+      <td>OpenLog 或板载闪光灯</td>
+    </tr>
+    <tr>
+      <td>MSP</td>
+      <td>VCP (USB)</td>
+      <td>配置器连接</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="omnibusf4-">OMNIBUSF4 端口映射</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>UART</th>
+      <th>针脚</th>
+      <th>典型用途</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>VCP</td>
+      <td>USB</td>
+      <td>MSP（配置器）</td>
+    </tr>
+    <tr>
+      <td>UART1</td>
+      <td>TX1/RX1</td>
+      <td>串行 RX</td>
+    </tr>
+    <tr>
+      <td>UART3</td>
+      <td>TX3/RX3</td>
+      <td>GPS 或遥测</td>
+    </tr>
+    <tr>
+      <td>UART6</td>
+      <td>TX6/RX6</td>
+      <td>免费 / 黑盒 / VTX</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="softserial">SoftSerial</h2>
+
+<p>SoftSerial 可用，但带宽有限。仅适用于低速率遥测（例如 9600 波特 SmartPort）。不建议使用串行 RX 或 GPS。</p>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<a href='../../hr/'>Hrvatski</a>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<a href='../../ko/'>한국어</a>
+&nbsp;◇&nbsp;
+<a href='../../lv/'>Latviešu</a>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<strong>中文</strong>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

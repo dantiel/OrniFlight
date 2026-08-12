@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='pt'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>Segurança — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Docs</p>
+<h1>Segurança</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="segurana">Segurança</h1>
+
+<h2 id="lista-de-verificao-pr-voo">Lista de verificação pré-voo</h2>
+
+<ol>
+  <li><strong>Asas</strong>: Certifique-se de que as asas estejam montadas com segurança e que a ligação esteja intacta</li>
+  <li><strong>Bateria</strong>: Totalmente carregada, devidamente protegida, contagem correta de células</li>
+  <li><strong>Controles</strong>: Verifique as respostas do stick na guia do receptor do Configurador</li>
+  <li><strong>Failsafe</strong>: teste em bancada antes do voo (consulte <a href="failsafe.html">Failsafe</a>)</li>
+  <li><strong>Arm Switch</strong>: Configure e teste — nunca confie apenas no armamento do stick</li>
+  <li><strong>Área de lançamento</strong>: Livre de pessoas, obstáculos e obstruções aéreas</li>
+</ol>
+
+<h2 id="segurana-do-brao">Segurança do braço</h2>
+
+<p>OrniFlight usa vários dispositivos de segurança antes de armar:</p>
+
+<ul>
+  <li><strong>Aceleração baixa</strong>: A aceleração deve estar no mínimo</li>
+  <li><strong>Nível</strong>: a embarcação deve estar razoavelmente nivelada</li>
+  <li><strong>RX Signal</strong>: É necessário um sinal de receptor válido</li>
+  <li><strong>CPU Load</strong>: O sistema não deve estar sobrecarregado</li>
+  <li><strong>Calibração</strong>: Acelerômetro e giroscópio devem ser calibrados</li>
+</ul>
+
+<h2 id="segurana-a-bordo">Segurança a bordo</h2>
+
+<ul>
+  <li><strong>Voe dentro da linha de visão visual</strong></li>
+  <li>Mantenha distância segura de pessoas e animais</li>
+  <li>Monitore a tensão da bateria — antes do limite de aviso</li>
+  <li>Em FPV: voe sempre com um spotter</li>
+  <li>Vento: ornitópteros podem ser sensíveis ao vento — conheça seus limites</li>
+</ul>
+
+<h2 id="procedimentos-de-emergncia">Procedimentos de Emergência</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Situação</th>
+      <th>Ação</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Perda de orientação</td>
+      <td>Mude para o modo INDEPENDENT, manípulos centrais</td>
+    </tr>
+    <tr>
+      <td>Perda de sinal</td>
+      <td>O Failsafe pousará automaticamente (se o procedimento LAND estiver configurado)</td>
+    </tr>
+    <tr>
+      <td>Danos nas asas</td>
+      <td>Desarme imediatamente — asas pare</td>
+    </tr>
+    <tr>
+      <td>Greve de pássaros</td>
+      <td>Desarme, avalie os danos antes de rearmar</td>
+    </tr>
+    <tr>
+      <td>Bateria fraca</td>
+      <td>Pouse imediatamente ornitópteros — não têm autorrotação</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="riscos-especficos-para-ornitpteros">Riscos Específicos para Ornitópteros</h2>
+
+<ul>
+  <li><strong>Perigo de beliscão</strong>: Bater asas pode causar ferimentos — mantenha as mãos afastadas quando armado</li>
+  <li><strong>Falha na ligação</strong>: Verifique antes do voo todas as hastes e juntas esféricas</li>
+  <li><strong>Resonance</strong>: Certas frequências de oscilação podem excitar ressonâncias da fuselagem — tune ONDAS varredura para evitar</li>
+  <li><strong>Bloqueio de planeio</strong>: Se os servos das asas falharem em posição não neutra, o pouso controlado será impossível. — teste as posições à prova de falhas dos servos</li>
+</ul>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<a href='../../hr/'>Hrvatski</a>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<a href='../../ko/'>한국어</a>
+&nbsp;◇&nbsp;
+<a href='../../lv/'>Latviešu</a>
+&nbsp;◇&nbsp;
+<strong>Português</strong>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<a href='../../zh_CN/'>中文</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

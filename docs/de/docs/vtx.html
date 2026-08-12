@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='de'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>Videosender (VTX) — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Docs</p>
+<h1>Videosender (VTX)</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="videosender-vtx">Videosender (VTX)</h1>
+
+<p>OrniFlight unterstützt die VTX-Steuerung für FPV-Ornithopter. VTX-Module können über den OrniFlight-Konfigurator, MSP oder CLI — konfiguriert werden, indem Band, Kanal, Leistungspegel und Pit-Modus eingestellt werden.</p>
+
+<h2 id="untersttzte-protokolle">Unterstützte Protokolle</h2>
+
+<ol>
+  <li><strong>IRC Tramp</strong> — Häufig bei kleinen VTX-Modulen, ideal für leichte FPV-Ornithopter</li>
+  <li><strong>TBS SmartAudio</strong> — Digitales Protokoll mit Pit-Modus-Unterstützung</li>
+  <li><strong>RTC6705</strong> — Direkte SPI-Steuerung auf Platinen mit integriertem VTX (z. B. SPRACINGF3NEO)</li>
+</ol>
+
+<h2 id="konfiguration">Konfiguration</h2>
+
+<p>Die Einstellungen von VTX werden über die Registerkarte <strong>VTX</strong> im OrniFlight-Konfigurator oder über CLI verwaltet:</p>
+
+<p><code>
+set vtx_band = 5           # Raceband
+set vtx_channel = 1        # 5658 MHz
+set vtx_power = 2          # 200mW
+set vtx_low_power_disarm = ON  # Lower power when disarmed
+set vtx_pit_mode_freq = 0  # Pit mode frequency (0 = disabled)
+</code></p>
+
+<h2 id="serieller-port">Serieller Port</h2>
+
+<p>Für die VTX-Steuerung ist ein dedizierter UART TX-Pin erforderlich. Konfigurieren Sie den Port auf der Registerkarte <strong>Ports</strong> mit dem Peripheriegerät <code>IRC Tramp</code> oder <code>TBS SmartAudio</code>.</p>
+
+<h2 id="fpv-berlegungen-zum-ornithopter">FPV Überlegungen zum Ornithopter</h2>
+
+<ul>
+  <li>Gewicht ist entscheidend — wählen Sie leichte VTX-Module (Tramp Nano, Eachine Nano)</li>
+  <li>Antennenmontage: Auf Abstand zu den Flügelschlägen achten</li>
+  <li>Leistungsfilterung: Schließen Sie die VTX-Stromversorgung nach dem LC-Filter an, um Servogeräusche im Video zu vermeiden</li>
+  <li>Für Prüfstandstests wird der Pit-Modus empfohlen, um eine Überhitzung kleiner VTX-Module zu vermeiden</li>
+</ul>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<strong>Deutsch</strong>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<a href='../../hr/'>Hrvatski</a>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<a href='../../ko/'>한국어</a>
+&nbsp;◇&nbsp;
+<a href='../../lv/'>Latviešu</a>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<a href='../../zh_CN/'>中文</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='fr'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>Matériel pris en charge — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Docs</p>
+<h1>Matériel pris en charge</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="matriel-pris-en-charge">Matériel pris en charge</h1>
+
+<p>OrniFlight fonctionne sur les contrôleurs de vol STM32F3/F4/F7. La ligne de base est <strong>STM32F3</strong> —, toute cible F3 dotée de broches de minuterie compatibles avec les servos volera.</p>
+
+<h2 id="contrleurs-de-vol">Contrôleurs de vol</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Conseil</th>
+      <th>MCU</th>
+      <th>IMU</th>
+      <th>Flash</th>
+      <th>Récepteur</th>
+      <th>Statut</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>TINYFISH</strong></td>
+      <td>STM32F303</td>
+      <td>MPU6000 (SPI)</td>
+      <td>256 KB</td>
+      <td>FrSky D8 (intégré)</td>
+      <td>✅ Primaire</td>
+    </tr>
+    <tr>
+      <td><strong>OMNIBUSF4</strong></td>
+      <td>STM32F405</td>
+      <td>MPU6000 (SPI)</td>
+      <td>1 MB + 16 MB SPI</td>
+      <td>—</td>
+      <td>✅ Pris en charge</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="tinyfish--la-cible-orniflight-la-plus-lgre">TINYFISH — La cible OrniFlight la plus légère</h3>
+
+<p>Conçu par fishpepper, le TINYFISH est le contrôleur de vol idéal pour un ornithoptère : poids plume, basé sur le F3 et transportant un <strong>récepteur FrSky D8</strong> intégré à bord. Pas de RX externe, pas de câblage supplémentaire —, juste de l’alimentation, des servos et du vol.</p>
+
+<ul>
+  <li><strong>MCU</strong> : STM32F303CCT6 à 72 MHz</li>
+  <li><strong>Gyro</strong> : MPU6000 (SPI, compatible 8 kHz)</li>
+  <li><strong>Flash</strong> : 256 KB sur la puce</li>
+  <li><strong>RAM</strong> : 40 KB</li>
+  <li><strong>Récepteur</strong> : FrSky D8 intégré (SBUS acheminé en interne vers UART2)</li>
+  <li><strong>UART</strong> : VCP + 2 UART matériels (UART1 gratuit pour le module complémentaire GPS/CRSF)</li>
+  <li><strong>Entrée</strong> : 2-4S LiPo (alimentation servo directe)</li>
+  <li><strong>Poids</strong> : ~2,5 g</li>
+</ul>
+
+<p>TINYFISH prouve que le contrôle transcendant des battements n’a pas besoin d’un F7. Le STM32F303 exécute le pipeline ONDAS complet — 10 canaux de modulation, aile trapézoïdale ODE, 4 profils de vol — dans 256 KB.</p>
+
+<h3 id="omnibusf4--le-bourreau-de-travail-accessible">OMNIBUSF4 — Le bourreau de travail accessible</h3>
+
+<p>La cible F4 classique. Bon marché, omniprésent, complet avec OSD et un grand flash SPI pour la journalisation Blackbox. La référence pour le développement et les constructions plus importantes.</p>
+
+<ul>
+  <li><strong>MCU</strong> : STM32F405RGT6 à 168 MHz</li>
+  <li><strong>Gyro</strong> : MPU6000 (SPI, compatible 8 kHz)</li>
+  <li><strong>Flash</strong> : 1 MB sur puce + 16 MB SPI (Blackbox)</li>
+  <li><strong>RAM</strong> : 192 KB</li>
+  <li><strong>OSD</strong> : AT7456E (compatible avec MAX7456)</li>
+  <li><strong>UART</strong> : VCP + 5 UART matériels</li>
+  <li><strong>Baromètre</strong> : BMP280 (certaines variantes)</li>
+  <li><strong>Entrée</strong> : 2-6S LiPo</li>
+</ul>
+
+<hr />
+
+<h2 id="anatomie-des-ornithoptres">Anatomie des ornithoptères</h2>
+
+<h3 id="servomoteurs-daile">Servomoteurs d’aile</h3>
+
+<p>Les commandes OrniFlight battent via les servos PWM. Spécifications clés :</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Paramètre</th>
+      <th>Gamme typique</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Largeur d’impulsion</td>
+      <td>500–2500 µs</td>
+    </tr>
+    <tr>
+      <td>Centre</td>
+      <td>1500 µ</td>
+    </tr>
+    <tr>
+      <td>Fréquence</td>
+      <td>50–330 Hz</td>
+    </tr>
+    <tr>
+      <td>Angle de course</td>
+      <td>±15–45°</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>Pour les ornithoptères hautes performances, des servos numériques avec un taux de mise à jour de 330 Hz sont recommandés. Les servos analogiques fonctionnent à 50 Hz mais ont une précision moindre.</p>
+
+<h3 id="rcepteur">Récepteur</h3>
+
+<p>Tout protocole de récepteur série est pris en charge. CRSF (TBS Crossfire / ExpressLRS) est recommandé pour :
+- Faible latence (critique pour le contrôle du battement)
+- Télémétrie intégrée
+- RSSI sur protocole (pas de câblage supplémentaire)</p>
+
+<h3 id="batterie">Batterie</h3>
+
+<ul>
+  <li><strong>2S (7,4 V)</strong> : Petits ornithoptères, directement servo-alimentés</li>
+  <li><strong>3S (11,1 V)</strong> : Ornithoptères moyens, BEC requis pour les servos</li>
+  <li><strong>4S (14,8 V)</strong> : Grands ornithoptères, BEC externe recommandé</li>
+</ul>
+
+<hr />
+
+<h2 id="priphriques-pris-en-charge">Périphériques pris en charge</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Périphérique</th>
+      <th>Par</th>
+      <th>Remarques</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>GPS</td>
+      <td>UART</td>
+      <td>UBlox M8N ou compatible</td>
+    </tr>
+    <tr>
+      <td>VTX</td>
+      <td>UART TX</td>
+      <td>Clochard, SmartAudio</td>
+    </tr>
+    <tr>
+      <td>Appareil photo</td>
+      <td>—</td>
+      <td>Toute caméra analogique FPV</td>
+    </tr>
+    <tr>
+      <td>Buzzer</td>
+      <td>tampon BUZZ</td>
+      <td>Buzzer actif 5V</td>
+    </tr>
+    <tr>
+      <td>LED Bande</td>
+      <td>bloc LED</td>
+      <td>WS2812 / SK6812</td>
+    </tr>
+    <tr>
+      <td>OpenLog</td>
+      <td>UART TX</td>
+      <td>Journalisation de la boîte noire</td>
+    </tr>
+    <tr>
+      <td>Bluetooth</td>
+      <td>UART</td>
+      <td>Passthrough MSP pour le réglage mobile</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h2 id="cibles-futures">Cibles futures</h2>
+
+<p>OrniFlight vise à prendre en charge des cibles STM32F4/F7 supplémentaires où suffisamment de ressources UART et de minuterie sont disponibles pour le contrôle d’asservissement du battement. Les contributions sont les bienvenues.</p>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<strong>Français</strong>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<a href='../../hr/'>Hrvatski</a>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<a href='../../ko/'>한국어</a>
+&nbsp;◇&nbsp;
+<a href='../../lv/'>Latviešu</a>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<a href='../../zh_CN/'>中文</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

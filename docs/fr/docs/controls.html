@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='fr'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>Contrôles — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Docs</p>
+<h1>Contrôles</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="contrles">Contrôles</h1>
+
+<p>OrniFlight utilise le mappage de bâtons RC standard avec des extensions spécifiques aux ornithoptères.</p>
+
+<h2 id="cartographie-des-btons">Cartographie des bâtons</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Bâton</th>
+      <th>Axe</th>
+      <th>Effet primaire</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Accélérateur (gauche, vertical)</td>
+      <td>Accélérateur</td>
+      <td>Amplitude / poussée de battement</td>
+    </tr>
+    <tr>
+      <td>Lacet (gauche, horizontal)</td>
+      <td>Lacet</td>
+      <td>Poussée différentielle des ailes pour tourner</td>
+    </tr>
+    <tr>
+      <td>Pas (droite, vertical)</td>
+      <td>Emplacement</td>
+      <td>Inclinaison avant/arrière</td>
+    </tr>
+    <tr>
+      <td>Rouleau (droite, horizontal)</td>
+      <td>Rouleau</td>
+      <td>Banque gauche/droite</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="modes-de-vol">Modes de vol</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Mode</th>
+      <th>Comportement du bâton</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>ACRO</strong></td>
+      <td>Les bâtons contrôlent la vitesse angulaire — pas de niveau automatique</td>
+    </tr>
+    <tr>
+      <td><strong>ANGLE</strong></td>
+      <td>Colle l’angle de contrôle — automatiquement au niveau lorsqu’il est relâché</td>
+    </tr>
+    <tr>
+      <td><strong>HORIZON</strong></td>
+      <td>ANGLE près du centre, ACRO en pleine déviation</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>ACRO est recommandé aux pilotes expérimentés. ANGLE est bon pour les premiers vols et le vol thermique.</p>
+
+<h2 id="contrles-spcifiques-aux-ornithoptres">Contrôles spécifiques aux ornithoptères</h2>
+
+<h3 id="mode-independent">Mode INDEPENDENT</h3>
+
+<p>Lorsque le mode INDEPENDENT est actif, chaque servo d’aile répond indépendamment :
+- <strong>stick gauche</strong> servos d’aile gauche →
+- <strong>stick droit</strong> servos de l’aile droite →
+- Permet un battement asymétrique pour des manœuvres agressives</p>
+
+<h3 id="mode-glide">Mode GLIDE</h3>
+
+<p>Le mode GLIDE verrouille les deux ailes en position horizontale. L’ornithoptère devient un planeur :
+- <strong>La manette des gaz</strong> n’a aucun effet sur la position de l’aile
+- <strong>Pitch/Roll/Yaw</strong> influence toujours les gouvernes de queue (si équipé)</p>
+
+<h3 id="changement-de-profil">Changement de profil</h3>
+
+<p>La commutation de profil en vol via le canal AUX permet de modifier les paramètres PID/ONDAS en cours de vol :
+- <strong>Profil 1</strong> : Paramètres de croisière standard
+- <strong>Profil 2</strong> : paramètres de haute agilité
+- <strong>Profil 3</strong> : Paramètres efficacité/glisse</p>
+
+<h2 id="tarifs">Tarifs</h2>
+
+<p>Configurez les tarifs dans l’onglet <strong>PID Tuning</strong>. Pour les ornithoptères, commencez par des taux conservateurs. La dynamique de battement — amplifie les entrées de contrôle :
+- Tarif RC : 0,80–1,00
+- Super tarif : 0,60–0,70
+- Expo : 0,20–0,40</p>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<strong>Français</strong>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<a href='../../hr/'>Hrvatski</a>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<a href='../../ko/'>한국어</a>
+&nbsp;◇&nbsp;
+<a href='../../lv/'>Latviešu</a>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<a href='../../zh_CN/'>中文</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

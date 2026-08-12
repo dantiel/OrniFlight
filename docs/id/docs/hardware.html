@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='id'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>Perangkat Keras yang Didukung — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Docs</p>
+<h1>Perangkat Keras yang Didukung</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="perangkat-keras-yang-didukung">Perangkat Keras yang Didukung</h1>
+
+<p>OrniFlight berjalan pada pengontrol penerbangan komoditas STM32F3/F4/F7. Garis dasarnya adalah <strong>STM32F3</strong> —, target F3 apa pun dengan pin pengatur waktu berkemampuan servo akan terbang.</p>
+
+<h2 id="pengendali-penerbangan">Pengendali Penerbangan</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Papan</th>
+      <th>MCU</th>
+      <th>IMU</th>
+      <th>Kilatan</th>
+      <th>Penerima</th>
+      <th>Status</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>TINYFISH</strong></td>
+      <td>STM32F303</td>
+      <td>MPU6000 (SPI)</td>
+      <td>256 KB</td>
+      <td>FrSky D8 (terintegrasi)</td>
+      <td>✅ Utama</td>
+    </tr>
+    <tr>
+      <td><strong>OMNIBUSF4</strong></td>
+      <td>STM32F405</td>
+      <td>MPU6000 (SPI)</td>
+      <td>1 MB + 16 MB SPI</td>
+      <td>—</td>
+      <td>✅ Didukung</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="tinyfish--target-orniflight-paling-ringan">TINYFISH — Target OrniFlight Paling Ringan</h3>
+
+<p>Didesain oleh fishpepper, TINYFISH adalah pengontrol penerbangan ornithopter yang ideal: kelas bulu, berbasis F3, dan membawa <strong>penerima FrSky D8 terintegrasi</strong> di dalam pesawat. Tidak ada RX eksternal, tidak ada kabel tambahan — hanya daya, servo, dan terbang.</p>
+
+<ul>
+  <li><strong>MCU</strong>: STM32F303CCT6 @ 72MHz</li>
+  <li><strong>Gyro</strong>: MPU6000 (SPI, berkemampuan 8 kHz)</li>
+  <li><strong>Flash</strong>: 256 KB pada chip</li>
+  <li><strong>RAM</strong>: 40 KB</li>
+  <li><strong>Penerima</strong>: Zzz36zzz D8 terintegrasi (SBUS dirutekan secara internal ke UART2)</li>
+  <li><strong>UART</strong>: VCP + 2 UART perangkat keras (UART1 gratis untuk add-on GPS/CRSF)</li>
+  <li><strong>Input</strong>: 2-4S LiPo (daya servo langsung)</li>
+  <li><strong>Berat</strong>: ~2,5 gram</li>
+</ul>
+
+<p>TINYFISH membuktikan bahwa kontrol mengepakkan transenden tidak memerlukan F7. Zzz73zzz menjalankan pipa ONDAS penuh — 10 saluran modulasi, sayap trapesium ODE, 4 profil penerbangan — dalam 256 KB.</p>
+
+<h3 id="omnibusf4--pekerja-keras-yang-dapat-diakses">OMNIBUSF4 — Pekerja keras yang Dapat Diakses</h3>
+
+<p>Target F4 klasik. Murah, ada di mana-mana, berfitur lengkap dengan OSD dan flash SPI yang cukup untuk logging Blackbox. Tujuan untuk pengembangan dan pembangunan yang lebih besar.</p>
+
+<ul>
+  <li><strong>MCU</strong>: STM32F405RGT6 @ 168 MHz</li>
+  <li><strong>Gyro</strong>: MPU6000 (SPI, berkemampuan 8 kHz)</li>
+  <li><strong>Flash</strong>: 1 MB pada chip + 16 MB SPI (Kotak Hitam)</li>
+  <li><strong>RAM</strong>: 192 KB</li>
+  <li><strong>OSD</strong>: AT7456E (kompatibel dengan MAX7456)</li>
+  <li><strong>UART</strong>: VCP + 5 UART perangkat keras</li>
+  <li><strong>Barometer</strong>: BMP280 (beberapa varian)</li>
+  <li><strong>Masukan</strong>: 2-6S LiPo</li>
+</ul>
+
+<hr />
+
+<h2 id="anatomi-ornitopter">Anatomi Ornitopter</h2>
+
+<h3 id="servo-sayap">Servo Sayap</h3>
+
+<p>kontrol OrniFlight mengepak melalui servo PWM. Spesifikasi utama:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Parameter</th>
+      <th>Rentang Khas</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Lebar Pulsa</td>
+      <td>500–2500 µs</td>
+    </tr>
+    <tr>
+      <td>Pusat</td>
+      <td>1500 µs</td>
+    </tr>
+    <tr>
+      <td>Frekuensi</td>
+      <td>50–330 Hz</td>
+    </tr>
+    <tr>
+      <td>Sudut Pukulan</td>
+      <td>±15–45°</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>Untuk ornithopter berperforma tinggi, disarankan menggunakan servo digital dengan kecepatan pembaruan 330 Hz. Servo analog bekerja pada 50 Hz tetapi memiliki presisi lebih rendah.</p>
+
+<h3 id="penerima">Penerima</h3>
+
+<p>Protokol penerima serial apa pun didukung. CRSF (TBS Crossfire / ExpressLRS) direkomendasikan untuk:
+- Latensi rendah (penting untuk kontrol mengepakkan)
+- Telemetri bawaan
+- RSSI melalui protokol (tidak ada kabel tambahan)</p>
+
+<h3 id="baterai">Baterai</h3>
+
+<ul>
+  <li><strong>2S (7.4V)</strong>: Ornithopter kecil, bertenaga servo secara langsung</li>
+  <li><strong>3S (11.1V)</strong>: Ornithopter sedang, BEC diperlukan untuk servo</li>
+  <li><strong>4S (14.8V)</strong>: Ornithopter besar, disarankan BEC eksternal</li>
+</ul>
+
+<hr />
+
+<h2 id="periferal-yang-didukung">Periferal yang Didukung</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Periferal</th>
+      <th>Melalui</th>
+      <th>Catatan</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>GPS</td>
+      <td>UART</td>
+      <td>UBlox M8N atau yang kompatibel</td>
+    </tr>
+    <tr>
+      <td>VTX</td>
+      <td>UART TX</td>
+      <td>Gelandangan, SmartAudio</td>
+    </tr>
+    <tr>
+      <td>Kamera</td>
+      <td>—</td>
+      <td>Kamera FPV analog apa saja</td>
+    </tr>
+    <tr>
+      <td>Bel</td>
+      <td>BUZZ pad</td>
+      <td>Bel 5V aktif</td>
+    </tr>
+    <tr>
+      <td>LED Strip</td>
+      <td>LED pad</td>
+      <td>WS2812 / SK6812</td>
+    </tr>
+    <tr>
+      <td>OpenLog</td>
+      <td>UART TX</td>
+      <td>Pencatatan kotak hitam</td>
+    </tr>
+    <tr>
+      <td>Bluetooth</td>
+      <td>UART</td>
+      <td>MSP passthrough untuk penyetelan seluler</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h2 id="target-masa-depan">Target Masa Depan</h2>
+
+<p>OrniFlight bertujuan untuk mendukung target STM32F4/F7 tambahan di mana sumber daya UART dan timer yang memadai tersedia untuk kontrol servo yang mengepakkan. Kontribusi diterima.</p>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<a href='../../hr/'>Hrvatski</a>
+&nbsp;◇&nbsp;
+<strong>Bahasa Indonesia</strong>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<a href='../../ko/'>한국어</a>
+&nbsp;◇&nbsp;
+<a href='../../lv/'>Latviešu</a>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<a href='../../zh_CN/'>中文</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

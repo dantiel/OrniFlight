@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='zh_CN'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>黑盒日志记录 — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Docs</p>
+<h1>黑盒日志记录</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="section">黑盒日志记录</h1>
+
+<p>Blackbox 记录飞行数据，用于飞行后分析、调整和调试。 OrniFlight 支持记录到板载闪存芯片或外部 OpenLog 设备。</p>
+
+<h2 id="section-1">记录什么</h2>
+
+<ul>
+  <li><strong>陀螺仪</strong> — 原始和过滤的 3 轴角速度</li>
+  <li><strong>加速度计</strong> — 3 轴加速度</li>
+  <li><strong>PID 输出</strong> — 每个轴的 P、I、D、F 贡献</li>
+  <li><strong>ONDAS</strong> — Cadence、Ferocity P/D 和其他特定于扑动的参数</li>
+  <li><strong>RC 命令</strong> — 在费率/博览会之后的位置</li>
+  <li><strong>伺服输出</strong> — 最终输出到每个伺服通道</li>
+  <li><strong>电池</strong> — 每次迭代的电压和电流</li>
+  <li><strong>GPS</strong> — 位置、速度、高度（如果有）</li>
+</ul>
+
+<h2 id="section-2">设置</h2>
+
+<h3 id="omnibusf4">板载闪存 (OMNIBUSF4)</h3>
+
+<p>OMNIBUSF4 包括用于 Blackbox 记录的 16MB 板载闪存。在配置器中启用：</p>
+
+<ol>
+  <li><strong>Blackbox</strong> 选项卡 → 将 <code>Blackbox logging device</code> 设置为 <code>Onboard flash</code></li>
+  <li>设置日志记录速率（建议：<code>1/N</code>，对于 F4 目标，N=2-4）</li>
+  <li>分配一个开关来启动/停止记录</li>
+</ol>
+
+<h3 id="openlog">外部 OpenLog</h3>
+
+<p>将 OpenLog 连接到空闲的 UART TX 引脚：</p>
+
+<ol>
+  <li><strong>端口</strong>选项卡 → 将 UART 设置为 115200 波特率的 <code>Blackbox logging</code>
+2、连接OpenLog：FC TX → OpenLog RX，加5V/GND</li>
+</ol>
+
+<h2 id="section-3">分析工具</h2>
+
+<ul>
+  <li><a href="https://github.com/betaflight/blackbox-log-viewer">Blackbox Explorer</a> — 基于网络的日志查看器</li>
+  <li><code>blackbox_decode</code> — 转换为 CSV 以进行自定义分析</li>
+</ul>
+
+<h2 id="ondas-">ONDAS-特定</h2>
+
+<p>Blackbox 对于调整 ONDAS 参数至关重要。记录的 ONDAS 数据包括：
+- <code>ondas_cadence_phase</code> — 调制窗口时序
+- <code>ondas_ferocity_p</code> / <code>ondas_ferocity_d</code> — 非对称推力组件
+- <code>ondas_balance</code> — 左/右翼平衡
+- 每次迭代的每个伺服输出</p>
+
+<p>这样可以精确分析扑动力学和机翼不对称校正。</p>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<a href='../../hr/'>Hrvatski</a>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<a href='../../ko/'>한국어</a>
+&nbsp;◇&nbsp;
+<a href='../../lv/'>Latviešu</a>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<strong>中文</strong>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

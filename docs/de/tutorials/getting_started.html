@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='de'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>Erste Schritte — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Tutorials</p>
+<h1>Erste Schritte</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="erste-schritte">Erste Schritte</h1>
+
+<p>Willkommen bei OrniFlight! Diese Anleitung führt Sie durch die Ersteinrichtung Ihres Ornithopter-Flugcontrollers.</p>
+
+<h2 id="was-sie-brauchen">Was Sie brauchen</h2>
+
+<ul>
+  <li><strong>OrniFlight Konfigurator</strong> — Download von <a href="https://orniflight.org">orniflight.org</a></li>
+  <li><strong>USB-Kabel</strong> — zum Anschluss des Flugcontrollers an den Computer</li>
+  <li><strong>Ornithopter</strong> mit:
+    <ul>
+      <li>Unterstützter Flugcontroller (OMNIBUSF4, TINYFISH)</li>
+      <li>Servos zur Flügelbetätigung</li>
+      <li>Empfänger an Ihren Sender gebunden</li>
+      <li>Batterie (2S–4S LiPo)</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="schnellstart">Schnellstart</h2>
+
+<h3 id="flash-firmware">1. Flash-Firmware</h3>
+
+<ol>
+  <li>Öffnen Sie den <strong>OrniFlight-Konfigurator</strong></li>
+  <li>Gehen Sie zur Registerkarte <strong>Firmware-Flasher</strong></li>
+  <li>Wählen Sie Ihr Board-Ziel (OMNIBUSF4 oder TINYFISH)</li>
+  <li>Wählen Sie die neueste stabile Version</li>
+  <li>Klicken Sie auf <strong>Firmware laden</strong> und dann auf <strong>Firmware flashen</strong></li>
+</ol>
+
+<h3 id="erstkonfiguration">2. Erstkonfiguration</h3>
+
+<p>Nach dem Flashen werden Sie vom Konfigurator aufgefordert, benutzerdefinierte Standardeinstellungen anzuwenden. <strong>Immer akzeptieren.</strong></p>
+
+<h3 id="empfnger-setup">3. Empfänger-Setup</h3>
+
+<ol>
+  <li>Gehen Sie zur Registerkarte <strong>Ports</strong> → und stellen Sie den richtigen UART auf <code>Serial RX</code> ein</li>
+  <li>Gehen Sie zur Registerkarte <strong>Konfiguration</strong> → und wählen Sie Ihr Empfängerprotokoll aus (CRSF, SBUS usw.).</li>
+  <li>Gehen Sie zur Registerkarte <strong>Empfänger</strong> → und überprüfen Sie, ob die Bewegungen des Steuerknüppels mit den erwarteten Kanälen übereinstimmen</li>
+  <li>Stellen Sie die Kanalendpunkte ein: 1000–2000 mit 1500 Mitte</li>
+</ol>
+
+<h3 id="servo-setup">4. Servo-Setup</h3>
+
+<ol>
+  <li>Gehen Sie zur Registerkarte <strong>Servos</strong></li>
+  <li>Überprüfen Sie, ob die Servozuordnung mit der Flügelkonfiguration Ihres Ornithopters übereinstimmt</li>
+  <li>Testen Sie bei Bedarf die Servorichtung — umgekehrt</li>
+  <li>Mittelstellung einstellen (Flügel horizontal = 1500)</li>
+</ol>
+
+<h3 id="modus-setup">5. Modus-Setup</h3>
+
+<ol>
+  <li>Gehen Sie zur Registerkarte <strong>Modi</strong></li>
+  <li>Weisen Sie ARM einem AUX-Switch zu</li>
+  <li>Flugmodi (ANGLE / ACRO / HORIZON) nach Wunsch zuweisen</li>
+  <li>Weisen Sie INDEPENDENT und GLIDE Ersatzschaltern zu</li>
+  <li>Konfigurieren Sie BEEPER für die Suche nach verlorenen Modellen</li>
+</ol>
+
+<h3 id="erster-flug">6. Erster Flug</h3>
+
+<ol>
+  <li><strong>Trennen Sie die Flügelverbindung zum Testen auf dem Prüfstand</strong></li>
+  <li>Aktivieren Sie die Servobewegungsrichtung und überprüfen Sie sie</li>
+  <li>Überprüfen Sie die Gasannahme</li>
+  <li>Für den ersten tatsächlichen Flug: ANGLE-Modus verwenden, niedrige Tarife</li>
+  <li>Bewegen Sie den Mauszeiger auf Augenhöhe und schneiden Sie ihn nach Bedarf</li>
+</ol>
+
+<h2 id="nchste-schritte">Nächste Schritte</h2>
+
+<ul>
+  <li><a href="basic_setup.html">Grundlegendes Setup</a> — detaillierte Konfigurationsanleitung</li>
+  <li><a href="../../tutorials/ondas_tuning.html">ONDAS Tuning</a> — Melodie der Schlagdynamik</li>
+  <li><a href="../../tutorials/tuning.html">PID Tuning</a> — Flugeigenschaften anpassen</li>
+</ul>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<strong>Deutsch</strong>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<a href='../../hr/'>Hrvatski</a>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<a href='../../ko/'>한국어</a>
+&nbsp;◇&nbsp;
+<a href='../../lv/'>Latviešu</a>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<a href='../../zh_CN/'>中文</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

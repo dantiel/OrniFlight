@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='it'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>Installazione — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Tutorials</p>
+<h1>Installazione</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="installazione">Installazione</h1>
+
+<p>Come installare il firmware OrniFlight sul tuo controller di volo.</p>
+
+<h2 id="prerequisiti">Prerequisiti</h2>
+
+<ul>
+  <li><strong>OrniFlight Configuratore</strong> (ultima versione)</li>
+  <li>Cavo dati USB (non solo per ricarica)</li>
+  <li>Scheda controller di volo supportata</li>
+</ul>
+
+<h2 id="schede-supportate">Schede supportate</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Consiglio</th>
+      <th>Obiettivo</th>
+      <th>Flash</th>
+      <th>Note</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>OMNIBUSF4</td>
+      <td><code>OMNIBUSF4</code></td>
+      <td>16MB</td>
+      <td>STM32F405, MPU6000, OSD</td>
+    </tr>
+    <tr>
+      <td>TINYFISH</td>
+      <td><code>TINYFISH</code></td>
+      <td>256KB</td>
+      <td>STM32F411, MPU6000</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="passaggi-lampeggianti">Passaggi lampeggianti</h2>
+
+<h3 id="accedere-alla-modalit-dfubootloader">1. Accedere alla modalità DFU/Bootloader</h3>
+
+<p><strong>OMNIBUSF4</strong>: tieni premuto il pulsante BOOT mentre colleghi USB. Il rosso LED rimane fisso — sei in modalità DFU.</p>
+
+<p><strong>TINYFISH</strong>: tieni premuto il pulsante BOOT mentre colleghi USB.</p>
+
+<h3 id="flash-tramite-configuratore">2. Flash tramite configuratore</h3>
+
+<ol>
+  <li>Apri il configuratore OrniFlight</li>
+  <li>Vai alla scheda <strong>Firmware Flasher</strong></li>
+  <li>Seleziona il tuo target dal menu a discesa</li>
+  <li>Scegli la versione del firmware (si consiglia l’ultima versione stabile)</li>
+  <li>Fare clic su <strong>Carica firmware (online)</strong> o selezionare un file esadecimale locale</li>
+  <li>Fare clic su <strong>Firmware Flash</strong></li>
+  <li>Attendere “Programmazione: SUCCESSFUL”</li>
+</ol>
+
+<h3 id="prima-connessione">3. Prima connessione</h3>
+
+<p>Dopo aver lampeggiato:
+1. Scollegare e ricollegare USB (senza pulsante BOOT)
+2. Il configuratore dovrebbe connettersi automaticamente
+3. Accettare il messaggio “Applica impostazioni predefinite personalizzate”.
+4. Verificare le informazioni sulla scheda nella scheda Configurazione</p>
+
+<h2 id="risoluzione-dei-problemi">Risoluzione dei problemi</h2>
+
+<h3 id="nessuna-porta-dfu">Nessuna porta DFU</h3>
+
+<p><strong>macOS/Linux</strong>: DFU dovrebbe apparire automaticamente. In caso contrario:
+<code>bash
+# Check for DFU device
+system_profiler SPUSBDataType | grep -A 10 STM
+</code></p>
+
+<p><strong>Windows</strong>: Installa <a href="https://zadig.akeo.ie/">Zadig</a> per sostituire il driver STM32 DFU:
+1. Esegui Zadig
+2. Opzioni → Elenca tutti i dispositivi
+3. Seleziona “STM32 BOOTLOADER”
+4. Sostituisci il driver con “WinUSB”</p>
+
+<h3 id="flash-non-funziona">Flash non funziona</h3>
+
+<ul>
+  <li>Prova un cavo USB diverso (con funzionalità dati, non di sola ricarica)</li>
+  <li>Prova una porta USB diversa (diretta, non hub)</li>
+  <li>Tieni premuto il pulsante BOOT durante il processo di flash</li>
+  <li><strong>OMNIBUSF4</strong>: Potrebbe essere necessaria la cancellazione completa del chip. — seleziona l’opzione “Cancellazione completa del chip”</li>
+</ul>
+
+<h3 id="il-configuratore-non-si-connette">Il configuratore non si connette</h3>
+
+<ul>
+  <li>Verificare che il cavo USB sia compatibile con i dati</li>
+  <li>La scheda di controllo non è in modalità DFU (LED lampeggiante = modalità normale)</li>
+  <li>Riavviare il configuratore</li>
+  <li>Prova una porta USB diversa</li>
+</ul>
+
+<h2 id="cli-flash-avanzato">CLI Flash (Avanzato)</h2>
+
+<p>Per gli utenti avanzati, esegui il flash tramite STM32CubeProgrammer o st-flash:</p>
+
+<p><code>bash
+st-flash write orniflight_0.4.6_OMNIBUSF4.hex 0x08000000
+</code></p>
+
+<p>Dopo il flashing verificare con:</p>
+
+<p><code>bash
+st-flash verify orniflight_0.4.6_OMNIBUSF4.hex 0x08000000
+</code></p>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<a href='../../hr/'>Hrvatski</a>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<strong>Italiano</strong>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<a href='../../ko/'>한국어</a>
+&nbsp;◇&nbsp;
+<a href='../../lv/'>Latviešu</a>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<a href='../../zh_CN/'>中文</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

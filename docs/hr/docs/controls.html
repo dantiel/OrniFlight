@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='hr'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>Kontrole — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Docs</p>
+<h1>Kontrole</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="kontrole">Kontrole</h1>
+
+<p>OrniFlight koristi standardno RC stick mapiranje s ekstenzijama specifičnim za ornitopter.</p>
+
+<h2 id="stick-mapping">Stick Mapping</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Štap</th>
+      <th>Os</th>
+      <th>Primarni učinak</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Prigušnica (lijevo, okomito)</td>
+      <td>leptir</td>
+      <td>Amplituda flappinga / potisak</td>
+    </tr>
+    <tr>
+      <td>Skretanje (lijevo, vodoravno)</td>
+      <td>Yaw</td>
+      <td>Diferencijalni potisak krila za okretanje</td>
+    </tr>
+    <tr>
+      <td>Uspon (desno, okomito)</td>
+      <td>Pitch</td>
+      <td>Nagib naprijed/natrag</td>
+    </tr>
+    <tr>
+      <td>Roll (desno, vodoravno)</td>
+      <td>Roll</td>
+      <td>Lijeva/desna obala</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="naini-leta">Načini leta</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Način</th>
+      <th>Ponašanje štapa</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>ACRO</strong></td>
+      <td>Palice kontroliraju kutnu brzinu — bez automatske razine</td>
+    </tr>
+    <tr>
+      <td><strong>ANGLE</strong></td>
+      <td>Kut upravljanja palicama — automatska razina kada se otpuste</td>
+    </tr>
+    <tr>
+      <td><strong>HORIZON</strong></td>
+      <td>ANGLE blizu središta, ACRO pri punom otklonu</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>ACRO preporučuje se iskusnim pilotima. ANGLE je dobar za prve letove i termalno uzdizanje.</p>
+
+<h2 id="kontrole-specifine-za-ornitopter">Kontrole specifične za ornitopter</h2>
+
+<h3 id="independent-nain">INDEPENDENT način</h3>
+
+<p>Kada je način rada INDEPENDENT aktivan, svaki servo krila reagira neovisno:
+- <strong>Lijeva palica</strong> → servo lijevo krilo
+- <strong>Desna palica</strong> → desni servo krilo
+- Omogućuje asimetrično flapiranje za agresivne manevre</p>
+
+<h3 id="nain-glide">način GLIDE</h3>
+
+<p>način rada GLIDE zaključava oba krila u vodoravnom položaju. Ornitopter postaje jedrilica:
+- <strong>Zaklopka za gas</strong> nema utjecaja na položaj krila
+- <strong>Pitch/Roll/Yaw</strong> i dalje utječe na kontrolne površine repa (ako je u opremi)</p>
+
+<h3 id="promjena-profila">Promjena profila</h3>
+
+<p>Prebacivanje profila tijekom leta putem kanala AUX omogućuje promjenu parametara PID/ONDAS tijekom leta:
+- <strong>Profil 1</strong>: Standardne postavke krstarenja
+- <strong>Profil 2</strong>: Postavke visoke agilnosti
+- <strong>Profil 3</strong>: Postavke učinkovitosti/klizanja</p>
+
+<h2 id="cijene">Cijene</h2>
+
+<p>Konfigurirajte cijene u kartici <strong>PID Tuning</strong>. Za ornitoptere, počnite s konzervativnim stopama — dinamika mlataranja pojačava upravljačke ulaze:
+- RC Tečaj: 0,80–1,00
+- Super cijena: 0,60–0,70
+- Ekspo: 0,20–0,40</p>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<strong>Hrvatski</strong>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<a href='../../ko/'>한국어</a>
+&nbsp;◇&nbsp;
+<a href='../../lv/'>Latviešu</a>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<a href='../../zh_CN/'>中文</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

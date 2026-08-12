@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='ja'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>PID チューニング — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Tutorials</p>
+<h1>PID チューニング</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="pid-">PID チューニング</h1>
+
+<p>OrniFlight は、翼の羽ばたき飛行に適した PID (比例・積分・微分) コントローラーを使用します。羽ばたき推力の周期的な性質により、調整は従来の航空機とは大きく異なります。</p>
+
+<h2 id="pid--1">鳥飛行装置 PID の基本</h2>
+
+<p>推力がほぼ連続的な従来の航空機とは異なり、羽ばたき飛行装置の推力は翼のストロークごとに振動します。これにより、以下が作成されます。</p>
+
+<ul>
+  <li><strong>推力リップル</strong> フラッピング周波数 (通常 5–15 Hz)</li>
+  <li><strong>位相依存の制御権限</strong> — 同じ PID 出力は、ストロークサイクルのどこに適用されるかによって異なる効果を発揮します。</li>
+  <li><strong>結合されたロールヨーダイナミクス</strong> — 非対称翼推力は両方の軸に同時に影響します</li>
+</ul>
+
+<h2 id="pid--2">PID 用語</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>用語</th>
+      <th>効果</th>
+      <th>羽ばたき台メモ</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>P</strong></td>
+      <td>比例—即時補正</td>
+      <td>保守的な値を使用してください。発振はフラッピング同期です。</td>
+    </tr>
+    <tr>
+      <td><strong>私</strong></td>
+      <td>統合 — 永続的エラー修正</td>
+      <td>滑空中の姿勢維持に不可欠</td>
+    </tr>
+    <tr>
+      <td><strong>D</strong></td>
+      <td>微分 — は振動を減衰します。フレームの振動ではなく、翼のストローク速度に合わせて調整</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><strong>F</strong></td>
+      <td>フィードフォワード — ダイレクト スティックトゥ出力</td>
+      <td>ロール軸でのキレのあるレスポンスに役立ちます</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="section">開始値</h2>
+
+<p>中型の羽ばたき飛行装置 (翼幅 1–1.5m) の場合:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>軸</th>
+      <th>P</th>
+      <th>私</th>
+      <th>D</th>
+      <th>ふ</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>ロール</td>
+      <td>25</td>
+      <td>30</td>
+      <td>15</td>
+      <td>30</td>
+    </tr>
+    <tr>
+      <td>ピッチ</td>
+      <td>30</td>
+      <td>35</td>
+      <td>20</td>
+      <td>35</td>
+    </tr>
+    <tr>
+      <td>ヨー</td>
+      <td>40</td>
+      <td>35</td>
+      <td>10</td>
+      <td>20</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="section-1">チューニング手順</h2>
+
+<h3 id="section-2">1. 最初にレート調整を行う</h3>
+
+<p>PID チューニングの前に、快適と感じるレートを設定します。
+- RC レート 0.90、スーパー レート 0.65、エキスポ 0.30 から開始
+- 飛行スタイルと羽ばたき飛行体のサイズに合わせて調整します</p>
+
+<h3 id="p-">2. P ゲイン</h3>
+
+<p>フラッピング周波数で発振が見られるまで P を増やし、その後 20% 戻します。
+- ロール振動: ストローク速度での翼のぐらつき
+- ピッチ振動: 前後ボビング
+- ヨー振動: ストロークと同期した尾の振り</p>
+
+<h3 id="d">3.Dゲイン</h3>
+
+<p>D を大きくすると、鋭いスティック入力後の跳ね返りが抑えられます。
+- 多すぎる：サーボジッター、過熱
+- 少なすぎる: ロール/ピッチ停止後のリンギング</p>
+
+<h3 id="section-3">4. 得するもの</h3>
+
+<p>カウンターの永続的なドリフトが得られます。
+- ドリフトが解消されるまで増加します
+- 多すぎる: 1–2 Hz での遅い発振 (フラッピング レート未満)</p>
+
+<h2 id="ondas-">ONDAS の統合</h2>
+
+<p>ONDAS (羽ばたき飛行装置非線形動的空気力学システム) は、各翼ストローク内で PID 出力を調整します。基本的な PID チューニング後:</p>
+
+<ol>
+  <li><strong>Cadence ゲイン</strong> を設定します。 — は、変調ウィンドウを空気力学的に最適な位相にシフトします。</li>
+  <li><strong>Ferocity P</strong> — 即時非対称推力ブーストを設定します</li>
+  <li><strong>Ferocity D</strong> — の予期ドラッグ利用を設定する</li>
+  <li><strong>Balance</strong> — の左右翼の対称性を微調整します</li>
+</ol>
+
+<p>詳しい手順は<a href="ondas_tuning.html">ONDASチューニングガイド</a>をご覧ください。</p>
+
+<h2 id="section-4">ブラックボックス分析</h2>
+
+<p>ブラックボックス ログを有効にして、PID のパフォーマンスを視覚化します。探してください:
+- <strong>P 項振動</strong> フラッピング周波数 → で P を低減
+- <strong>I ターム ワインドアップ</strong> 持続ターン中 → I を減らすか、I ターム リラックスを増やす
+- <strong>D ターム ノイズ</strong> 振動による → 最初に機械的バランスを確認してから、D を減らします。</p>
+
+<h2 id="section-5">フライトプロファイル</h2>
+
+<p>OrniFlight は、飛行中に切り替え可能な 3 つの飛行プロファイルをサポートします。</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>プロフィール</th>
+      <th>使用例</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1</td>
+      <td>スタンダードクルーズ</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>高い敏捷性 / アグレッシブ</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>効率・熱高騰</td>
+    </tr>
+  </tbody>
+</table>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<a href='../../hr/'>Hrvatski</a>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<strong>日本語</strong>
+&nbsp;◇&nbsp;
+<a href='../../ko/'>한국어</a>
+&nbsp;◇&nbsp;
+<a href='../../lv/'>Latviešu</a>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<a href='../../zh_CN/'>中文</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

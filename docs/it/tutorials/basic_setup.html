@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='it'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>Configurazione di base — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Tutorials</p>
+<h1>Configurazione di base</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="configurazione-di-base">Configurazione di base</h1>
+
+<blockquote>
+  <p><em>Configura il tuo ornitottero per il primo volo.</em></p>
+</blockquote>
+
+<h2 id="lista-di-controllo-pre-volo">Lista di controllo pre-volo</h2>
+
+<p>Prima di ogni altra cosa:</p>
+
+<ul>
+  <li>[] Il controllore di volo ha lampeggiato con OrniFlight</li>
+  <li>[ ] Ricevitore collegato al trasmettitore</li>
+  <li>[ ] Servi collegati alle uscite PWM corrette</li>
+  <li>[ ] Batteria collegata (ali protette!)</li>
+</ul>
+
+<h2 id="configurazione-del-ricevitore">Configurazione del ricevitore</h2>
+
+<h3 id="crsf-consigliato">CRSF (consigliato)</h3>
+
+<ol>
+  <li><strong>Scheda Porte</strong>: imposta UART (ad esempio UART1) su “Serial RX”</li>
+  <li><strong>Scheda Configurazione</strong>: Modalità ricevitore = “Ricevitore basato su seriale”, Provider = “CRSF”</li>
+  <li>Spegnere e riaccendere, verificare che gli ingressi dei canali si spostino nella scheda Ricevitore</li>
+</ol>
+
+<h3 id="sbus--altro">SBUS / Altro</h3>
+
+<p>Stesso processo — selezionare il protocollo appropriato nella scheda Configurazione.</p>
+
+<h2 id="mappatura-dei-servi">Mappatura dei servi</h2>
+
+<p>Nella <strong>scheda Servi</strong>:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Servo</th>
+      <th>Funzione</th>
+      <th>Tasso predefinito</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Servo 0</td>
+      <td>Ala sinistra</td>
+      <td>250 Hz</td>
+    </tr>
+    <tr>
+      <td>Servo1</td>
+      <td>Ala destra</td>
+      <td>250 Hz</td>
+    </tr>
+    <tr>
+      <td>Servo2</td>
+      <td>Cresta/Timone</td>
+      <td>50 Hz</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>Regola min/max/medio per adattarlo alla portata del tuo servo. Prova con “Override” per verificare la direzione.</p>
+
+<h2 id="selezione-della-modalit-di-volo">Selezione della modalità di volo</h2>
+
+<p>Nella <strong>scheda Modalità</strong>:</p>
+
+<ol>
+  <li><strong>ARM</strong>: Assegna a un interruttore (sicurezza!)</li>
+  <li><strong>ORNITHOPTER INDEPENDENT</strong> o <strong>ORNITHOPTER GLIDE</strong>: scegli la modalità di volo principale</li>
+  <li><strong>ORNITHOPTER PROFILE</strong>: assegnazione — opzionale per il cambio del profilo in volo</li>
+</ol>
+
+<h2 id="ondas-prima-accordatura">ONDAS Prima accordatura</h2>
+
+<p>Vai alla <strong>sottoscheda Avanzate → ONDAS</strong>:</p>
+
+<ol>
+  <li><strong>Cadence Guadagno</strong>: inizia da 50 (metà). Questo è il parametro più importante.</li>
+  <li><strong>Ferocity D Guadagno</strong>: inizia da 30. Questa è la tua stabilizzazione principale.</li>
+  <li><strong>Ferocity P Guadagno</strong>: Inizia da 20 per rollio/beccheggio, 0 per imbardata.</li>
+  <li><strong>Balance Guadagno</strong>: 0 (centrato).</li>
+</ol>
+
+<p>Collega una batteria, <strong>fissa saldamente l’ornitottero</strong> e ARM. Osservare il movimento del servo —: dovrebbe essere un battito regolare e sinusoidale.</p>
+
+<h2 id="primo-volo">Primo volo</h2>
+
+<ol>
+  <li>Inizia con un leggero lancio nel vento</li>
+  <li>Utilizza la modalità GLIDE per una sensazione di volo naturale</li>
+  <li>Utilizzare la modalità INDEPENDENT quando si desidera il controllo diretto della frequenza</li>
+  <li>Atterra, regola ONDAS, ripeti</li>
+</ol>
+
+<hr />
+
+<p><em>Successivo: <a href="ondas_tuning.html">ONDAS Guida alla sintonizzazione</a> →</em></p>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<a href='../../hr/'>Hrvatski</a>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<strong>Italiano</strong>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<a href='../../ko/'>한국어</a>
+&nbsp;◇&nbsp;
+<a href='../../lv/'>Latviešu</a>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<a href='../../zh_CN/'>中文</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='es'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>Seguridad — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Docs</p>
+<h1>Seguridad</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="seguridad">Seguridad</h1>
+
+<h2 id="lista-de-verificacin-previa-al-vuelo">Lista de verificación previa al vuelo</h2>
+
+<ol>
+  <li><strong>Alas</strong>: Asegúrese de que las alas estén montadas de forma segura y que el varillaje esté intacto.</li>
+  <li><strong>Batería</strong>: Totalmente cargada, correctamente asegurada, recuento de celdas correcto</li>
+  <li><strong>Controles</strong>: Verifique las respuestas del joystick en la pestaña del receptor del Configurador</li>
+  <li><strong>A prueba de fallos</strong>: prueba en banco antes del vuelo (consulte <a href="failsafe.html">A prueba de fallos</a>)</li>
+  <li><strong>Arm Switch</strong>: Configure y pruebe —, nunca confíe únicamente en el armado mediante palanca</li>
+  <li><strong>Área de lanzamiento</strong>: libre de personas, obstáculos y obstrucciones aéreas</li>
+</ol>
+
+<h2 id="seguridad-del-brazo">Seguridad del brazo</h2>
+
+<p>OrniFlight utiliza múltiples dispositivos de seguridad antes de armar:</p>
+
+<ul>
+  <li><strong>Acelerador bajo</strong>: el acelerador debe estar al mínimo</li>
+  <li><strong>Nivel</strong>: la embarcación debe estar razonablemente nivelada</li>
+  <li><strong>RX Signal</strong>: Se requiere una señal de receptor válida</li>
+  <li><strong>CPU Load</strong>: El sistema no debe estar sobrecargado</li>
+  <li><strong>Calibración</strong>: el acelerómetro y el giroscopio deben estar calibrados</li>
+</ul>
+
+<h2 id="seguridad-en-vuelo">Seguridad en vuelo</h2>
+
+<ul>
+  <li><strong>Vuela dentro del campo visual</strong></li>
+  <li>Mantener una distancia segura con personas y animales.</li>
+  <li>Monitorear el voltaje de la batería — aterrizar antes del umbral de advertencia</li>
+  <li>En FPV: vuela siempre con un observador.</li>
+  <li>Viento: los ornitópteros pueden ser sensibles al viento — conoce tus límites</li>
+</ul>
+
+<h2 id="procedimientos-de-emergencia">Procedimientos de emergencia</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Situación</th>
+      <th>Acción</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Pérdida de orientación</td>
+      <td>Cambiar al modo INDEPENDENT, palancas centrales</td>
+    </tr>
+    <tr>
+      <td>Pérdida de señal</td>
+      <td>Failsafe aterrizará automáticamente (si se configura el procedimiento LAND)</td>
+    </tr>
+    <tr>
+      <td>Daños en las alas</td>
+      <td>Desarmar inmediatamente — alas detener</td>
+    </tr>
+    <tr>
+      <td>Golpe de pájaro</td>
+      <td>Desarmar, evaluar daños antes de rearmar</td>
+    </tr>
+    <tr>
+      <td>Batería baja</td>
+      <td>Los ornitópteros aterrizan inmediatamente — no tienen autorrotación</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="riesgos-especficos-de-los-ornitpteros">Riesgos específicos de los ornitópteros</h2>
+
+<ul>
+  <li><strong>Peligro de pellizco</strong>: el aleteo de las alas puede causar lesiones — mantén las manos alejadas cuando estés armado</li>
+  <li><strong>Falla del varillaje</strong>: antes del vuelo verifique todas las varillas de empuje y las rótulas</li>
+  <li><strong>Resonance</strong>: Ciertas frecuencias de aleteo pueden excitar resonancias del fuselaje — sintoniza ONDAS barrido para evitar</li>
+  <li><strong>Bloqueo de planeo</strong>: Si los servos del ala fallan en una posición no neutral, el aterrizaje controlado es imposible — prueba las posiciones de seguridad de los servos</li>
+</ul>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<strong>Español</strong>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<a href='../../hr/'>Hrvatski</a>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<a href='../../ko/'>한국어</a>
+&nbsp;◇&nbsp;
+<a href='../../lv/'>Latviešu</a>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<a href='../../zh_CN/'>中文</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

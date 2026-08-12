@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='fr'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>Surveillance de la batterie — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Docs</p>
+<h1>Surveillance de la batterie</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="surveillance-de-la-batterie">Surveillance de la batterie</h1>
+
+<p>OrniFlight surveille la tension de la batterie principale via le ADC (convertisseur analogique-numérique). Cela permet des avertissements de batterie faible via le buzzer, les modèles de bande d’état LED et LED.</p>
+
+<h2 id="fonctionnalits">Fonctionnalités</h2>
+
+<ul>
+  <li>Détection automatique du nombre de cellules lors de la connexion (basée sur les tensions min/max des cellules)</li>
+  <li>Avertissement de batterie faible avec seuils configurables</li>
+  <li>Détection de courant pour la consommation mAh (si pris en charge par FC)</li>
+  <li>Tension affichée en OSD et transmise par télémétrie</li>
+</ul>
+
+<h2 id="cibles-prises-en-charge">Cibles prises en charge</h2>
+
+<p>Tous les contrôleurs de vol pris en charge (OMNIBUSF4, TINYFISH) incluent la surveillance VBAT via un diviseur de tension.</p>
+
+<h2 id="connexions">Connexions</h2>
+
+<p><strong>TOUJOURS VÉRIFIER LA POLARITÉ.</strong> Mesurez les tensions attendues avant de connecter. Une tension incorrecte ou une polarité inversée détruira votre contrôleur de vol.</p>
+
+<h3 id="omnibusf4">OMNIBUSF4</h3>
+
+<p>Connectez la batterie principale au pad VBAT. Le diviseur de tension intégré gère directement jusqu’à 6S.</p>
+
+<h3 id="tinyfish">TINYFISH</h3>
+
+<p>VBAT est acheminé via l’entrée d’alimentation de la carte —, aucune connexion séparée n’est nécessaire.</p>
+
+<h2 id="cli-paramtres">CLI Paramètres</h2>
+
+<p><code>
+set vbat_min_cell_voltage = 330       # Minimum per-cell voltage (3.3V)
+set vbat_max_cell_voltage = 430       # Maximum per-cell voltage (4.3V)
+set vbat_warning_cell_voltage = 350   # Warning threshold (3.5V)
+set battery_meter_type = ADC
+set current_meter_type = ADC          # If current sensor available
+</code></p>
+
+<h2 id="scurit">Sécurité</h2>
+
+<p>Les batteries LiPo ne doivent jamais être déchargées en dessous de 3,5 V par cellule sous charge. Les seuils configurables du OrniFlight contribuent à garantir un fonctionnement sûr et la longévité de la batterie.</p>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<strong>Français</strong>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<a href='../../hr/'>Hrvatski</a>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<a href='../../ko/'>한국어</a>
+&nbsp;◇&nbsp;
+<a href='../../lv/'>Latviešu</a>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<a href='../../zh_CN/'>中文</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='ko'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>ONDAS — 진동 정규화된 동적 적응 안정화 — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Wiki</p>
+<h1>ONDAS — 진동 정규화된 동적 적응 안정화</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="ondas------">ONDAS — 진동 정규화된 동적 적응 안정화</h1>
+
+<h2 id="section">핵심 원칙</h2>
+
+<p>고정익 또는 재래식 항공기는 조종력을 <strong>지속적으로</strong> 생성합니다. — 조종면 편향 또는 RPM 변화는 정상 상태 모멘트를 생성합니다. 오니톱터는 그렇지 않습니다. 추력 1g, 토크 1뉴턴은 윙비트 주기 내에서 <strong>위상 제한</strong>됩니다. 스트로크의 서로 다른 지점에 동일한 힘 충격이 가해지면 근본적으로 다른 결과가 생성됩니다.</p>
+
+<p>ONDAS는 이러한 현실을 인식하고 플래핑 주기와 동시에 안정화 노력을 조절합니다.</p>
+
+<hr />
+
+<h2 id="cadence---">Cadence — 타이밍 두뇌</h2>
+
+<p>Cadence는 각 윙비트 내에서 수정이 <strong>언제</strong> 발생하는지 결정하기 때문에 가장 중요한 ONDAS 필터입니다.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>뇌졸중 단계</th>
+      <th>강제 적용 효과</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>다운스트로크 센터</td>
+      <td>최대 리프트, 롤 권한</td>
+    </tr>
+    <tr>
+      <td>다운스트로크 종료(제동)</td>
+      <td>유도된 드래그 → 요 모멘트</td>
+    </tr>
+    <tr>
+      <td>업스트로크 센터</td>
+      <td>후방 추력, 피치업</td>
+    </tr>
+    <tr>
+      <td>업스트로크 종료</td>
+      <td>날개 반전, 최소 효과</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><strong>Cadence는 공기역학적 레버 암이 가장 긴 위상에 맞춰 변조 창을 이동</strong>합니다. 잘못된 케이던스 = 날개 물리학과의 싸움. 올바른 케이던스 = 모든 밀리와트가 제어 권한이 됩니다.</p>
+
+<h3 id="section-1">매개변수</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>매개변수</th>
+      <th>가치</th>
+      <th>기능</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>ONDAS_K0</code></td>
+      <td>1.0</td>
+      <td>기본 위상 오프셋</td>
+    </tr>
+    <tr>
+      <td><code>ONDAS_K2</code></td>
+      <td>10.0</td>
+      <td>위상 확산/선명도</td>
+    </tr>
+    <tr>
+      <td><code>ONDAS_PHASE_SCALE</code></td>
+      <td>0.00005</td>
+      <td>작은 요소, 큰 레버리지</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h2 id="ferocity-p----">Ferocity P — 즉시 비대칭 추력</h2>
+
+<p>Ferocity P는 현재 PID 오류에 비례하여 <strong>파형 직각도</strong>(사다리꼴 형상: ±1에 유지, 사이의 코사인 램프)를 증가시킵니다.</p>
+
+<ul>
+  <li>한쪽에 더 많은 추력 → 즉각적인 순간</li>
+  <li>스트로크 엔드에서 제동된 날개에 <strong>유도 항력</strong>이 발생합니다. — 이것이 반대 순간입니다.</li>
+  <li>효과: 직접, 비례, 즉시</li>
+</ul>
+
+<hr />
+
+<h2 id="ferocity-d----">Ferocity D — 예상 드래그 악용</h2>
+
+<p>Ferocity D가 그림을 완성합니다. P가 추력 비대칭성을 제공하는 경우 D는 <strong>반대쪽 날개의 항력</strong>을 브레이크로 활용합니다.</p>
+
+<ul>
+  <li>오류 변화율을 읽고 <strong>예상</strong></li>
+  <li>요/피치 순간에 느려진 날개의 항력을 의도적으로 활용할 수 있습니다.</li>
+  <li>P+D를 함께 사용하면 <strong>차동 모멘트 쌍</strong> — A면 추력, B면 끌기 — 추력 전용보다 더 효율적</li>
+</ul>
+
+<hr />
+
+<h2 id="cadenceferocity-d-ferocity-">세 가지 방법 Cadence/Ferocity D Ferocity 증가</h2>
+
+<h3 id="d-p-">1. 빠른 오류 변경 중에 직접 — D가 P를 높입니다.</h3>
+
+<p>돌풍이나 공격적인 기동에서는 <code>error_rate</code>가 큽니다. D는 이를 곱하여 기본 잔인성을 더합니다. P+D를 함께 사용하면 P만 사용할 때보다 더 많은 직각도가 요구되기 때문에 날개가 <em>더 날카로워</em>(더 사다리꼴 모양) 됩니다. 결과: 중요한 순간에 최대 권한을 부여합니다.</p>
+
+<h3 id="cadence----1">2. 간접 — Cadence는 레버리지 지점을 이동합니다.</h3>
+
+<p>Cadence는 <em>언제</em> 주기에서 격렬하게 행동하는지를 조절합니다. 창을 더 공기역학적으로 민감한 단계(예: 다운스트로크 중심 대 업스트로크 끝)로 이동한다는 것은 <strong>동일한 강성 값</strong>이 수치 변경 없이 — 효과적으로 증폭되는 더 많은 효과를 생성한다는 것을 의미합니다.</p>
+
+<h3 id="d--cadence">3. 스톨 복구 중 조합 — D × Cadence</h3>
+
+<p>실속 시: 높은 침하율 → D는 → 속도를 감지하여 잔인함을 증가시킵니다. 동시에 케이던스는 날개가 최대 바이트를 갖는 다운스트로크 단계로 조절을 전환합니다. 상호작용: D는 힘을 제공하고 적절한 순간에 케이던스를 제공합니다. 케이던스가 없으면 D-force는 잘못된 단계에 도달하여 쓸데없이 소멸됩니다.</p>
+
+<hr />
+
+<h2 id="ondas-">추가 ONDAS 매개변수</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>매개변수</th>
+      <th>기능</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Balance</strong></td>
+      <td>업/다운 추력 대칭 — 업 스트로크와 다운 스트로크 사이의 I 항 바이어스. 날개 비대칭, 제조 공차 및 마모를 보상합니다</td>
+    </tr>
+    <tr>
+      <td><strong>Warp</strong></td>
+      <td>Roll/Yaw P → L/R 맹렬한 차동 — 오른쪽 및 왼쪽 날개는 뱅크 및 회전 조작을 위해 롤 축에서 독립적으로 플랩합니다.</td>
+    </tr>
+    <tr>
+      <td><strong>Anchor</strong></td>
+      <td>위상 앵커링 —는 변조를 특정 위상 기준으로 고정하여 드리프트를 방지</td>
+    </tr>
+    <tr>
+      <td><strong>Resonance</strong></td>
+      <td>기체 공명 보상 —는 기체의 흥미진진한 구조 모드를 방지합니다</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h2 id="section-2">비유</h2>
+
+<p><strong>Cadence는 지휘자입니다. Ferocity P 및 D는 악기입니다.</strong></p>
+
+<p>지휘자가 없으면 그들은 —를 연주하지만 함께 연주하지는 않습니다. 하나를 사용하면 소음이 음악이 됩니다.</p>
+
+<hr />
+
+<h2 id="section-3">참고 항목</h2>
+
+<ul>
+  <li><a href="../../tutorials/ondas_tuning.html">ONDAS 튜닝 가이드</a> — 실제 튜닝 과정</li>
+  <li><a href="msp.html">MSP 프로토콜</a> ONDAS 매개변수에 대한 — 와이어 형식</li>
+  <li><a href="profiles.html">비행 프로필</a> — 프로필 인식 ONDAS 구성</li>
+</ul>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<a href='../../hr/'>Hrvatski</a>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<strong>한국어</strong>
+&nbsp;◇&nbsp;
+<a href='../../lv/'>Latviešu</a>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<a href='../../zh_CN/'>中文</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

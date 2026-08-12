@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='ru'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>Ведение журнала черного ящика — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Docs</p>
+<h1>Ведение журнала черного ящика</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="section">Ведение журнала черного ящика</h1>
+
+<p>Blackbox записывает данные полета для послеполетного анализа, настройки и отладки. OrniFlight поддерживает запись на встроенный флэш-чип или внешнее устройство OpenLog.</p>
+
+<h2 id="section-1">Что регистрируется</h2>
+
+<ul>
+  <li><strong>Гироскоп</strong> — необработанная и отфильтрованная угловая скорость по 3 осям</li>
+  <li><strong>Акселерометр</strong> — 3-осевое ускорение</li>
+  <li><strong>PID Выход</strong> — Вклад P, I, D, F на ось</li>
+  <li><strong>ONDAS</strong> — Cadence, Ferocity P/D и другие параметры, специфичные для взмахов</li>
+  <li><strong>Команды RC</strong> — позиции джойстика после ставок/экспонирования</li>
+  <li><strong>Сервовыход</strong> — окончательный выход на каждый сервоканал</li>
+  <li><strong>Батарея</strong> — напряжение и ток на итерацию</li>
+  <li><strong>GPS</strong> — положение, скорость, высота (если доступно)</li>
+</ul>
+
+<h2 id="section-2">Настройка</h2>
+
+<h3 id="omnibusf4">Встроенная вспышка (OMNIBUSF4)</h3>
+
+<p>OMNIBUSF4 включает в себя встроенную флэш-память емкостью 16 МБ для ведения журналов Blackbox. Включить в Конфигураторе:</p>
+
+<ol>
+  <li>Вкладка <strong>Черный ящик</strong> → Установите для <code>Blackbox logging device</code> значение <code>Onboard flash</code>.</li>
+  <li>Установите скорость регистрации (рекомендуется: <code>1/N</code> с N=2-4 для целей F4)</li>
+  <li>Назначьте переключатель для запуска/остановки регистрации.</li>
+</ol>
+
+<h3 id="openlog">Внешний OpenLog</h3>
+
+<p>Подключите OpenLog к бесплатному контакту UART TX:</p>
+
+<ol>
+  <li>Вкладка <strong>Порты</strong> → Установите для UART значение <code>Blackbox logging</code> на скорости 115200 бод.</li>
+  <li>Подключите OpenLog: FC TX → OpenLog RX, плюс 5 В/GND</li>
+</ol>
+
+<h2 id="section-3">Инструменты анализа</h2>
+
+<ul>
+  <li><a href="https://github.com/betaflight/blackbox-log-viewer">Blackbox Explorer</a> — веб-просмотрщик журналов</li>
+  <li><code>blackbox_decode</code> — конвертировать в CSV для пользовательского анализа</li>
+</ul>
+
+<h2 id="ondas-">ONDAS-специфично</h2>
+
+<p>Blackbox необходим для настройки параметров ONDAS. Зарегистрированные данные ONDAS включают в себя:
+- <code>ondas_cadence_phase</code> — синхронизация окна модуляции
+- <code>ondas_ferocity_p</code>/<code>ondas_ferocity_d</code> — асимметричные компоненты тяги
+- <code>ondas_balance</code> — баланс левого/правого крыла
+- Выход каждого сервопривода на каждой итерации</p>
+
+<p>Это позволяет точно анализировать механику взмахов и корректировать асимметрию крыла.</p>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<a href='../../hr/'>Hrvatski</a>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<a href='../../ko/'>한국어</a>
+&nbsp;◇&nbsp;
+<a href='../../lv/'>Latviešu</a>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<strong>Русский</strong>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<a href='../../zh_CN/'>中文</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

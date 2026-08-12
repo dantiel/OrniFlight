@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='ko'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>설치 — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Tutorials</p>
+<h1>설치</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="section">설치</h1>
+
+<p>비행 컨트롤러에 OrniFlight 펌웨어를 설치하는 방법.</p>
+
+<h2 id="section-1">전제 조건</h2>
+
+<ul>
+  <li><strong>OrniFlight 구성자</strong>(최신 버전)</li>
+  <li>USB 데이터 케이블(충전 전용 아님)</li>
+  <li>지원되는 비행 컨트롤러 보드</li>
+</ul>
+
+<h2 id="section-2">지원되는 보드</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>보드</th>
+      <th>대상</th>
+      <th>플래시</th>
+      <th>메모</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>OMNIBUSF4</td>
+      <td><code>OMNIBUSF4</code></td>
+      <td>16MB</td>
+      <td>STM32F405, MPU6000, OSD</td>
+    </tr>
+    <tr>
+      <td>TINYFISH</td>
+      <td><code>TINYFISH</code></td>
+      <td>256KB</td>
+      <td>STM32F411, MPU6000</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="section-3">깜박이는 단계</h2>
+
+<h3 id="dfu--">1. DFU/부트로더 모드로 들어갑니다.</h3>
+
+<p><strong>OMNIBUSF4</strong>: USB를 연결하는 동안 BOOT 버튼을 길게 누르세요. 빨간색 LED는 계속 켜져 있습니다. — DFU 모드에 있습니다.</p>
+
+<p><strong>TINYFISH</strong>: USB를 연결하는 동안 BOOT 버튼을 누르고 있습니다.</p>
+
+<h3 id="section-4">2. 구성기를 통한 플래시</h3>
+
+<ol>
+  <li>OrniFlight 구성 프로그램 열기</li>
+  <li><strong>펌웨어 플래셔</strong> 탭으로 이동합니다.</li>
+  <li>드롭다운에서 대상을 선택하세요.</li>
+  <li>펌웨어 버전을 선택하세요(안정적인 최신 버전 권장).</li>
+  <li><strong>펌웨어 로드(온라인)</strong>을 클릭하거나 로컬 16진수 파일을 선택합니다.</li>
+  <li><strong>플래시 펌웨어</strong>를 클릭합니다.</li>
+  <li>“프로그래밍: 성공”을 기다립니다.</li>
+</ol>
+
+<h3 id="section-5">3. 첫 번째 연결</h3>
+
+<p>깜박인 후:
+1. USB 연결을 끊었다가 다시 연결합니다(BOOT 버튼 없음).
+2. 구성자는 자동 연결되어야 합니다.
+3. “사용자 정의 기본값 적용” 프롬프트를 수락합니다.
+4. 설정 탭에서 보드 정보를 확인합니다.</p>
+
+<h2 id="section-6">문제 해결</h2>
+
+<h3 id="dfu---1">DFU 포트 없음</h3>
+
+<p><strong>macOS/Linux</strong>: DFU가 자동으로 나타납니다. 그렇지 않은 경우:
+<code>bash
+# Check for DFU device
+system_profiler SPUSBDataType | grep -A 10 STM
+</code></p>
+
+<p><strong>Windows</strong>: STM32 DFU 드라이버를 교체하려면 <a href="https://zadig.akeo.ie/">Zadig</a>를 설치하십시오.
+1. Zadig 실행
+2. 옵션 → 모든 장치 나열
+3. “STM32 BOOTLOADER”를 선택하세요
+4. 드라이버를 “WinUSB”로 교체합니다.</p>
+
+<h3 id="section-7">플래시 실패</h3>
+
+<ul>
+  <li>다른 USB 케이블을 사용해 보세요(충전 전용이 아닌 데이터 가능).</li>
+  <li>다른 USB 포트를 사용해 보십시오(허브가 아닌 직접).</li>
+  <li>플래시 프로세스 내내 BOOT 버튼을 누르고 있습니다.</li>
+  <li><strong>OMNIBUSF4</strong>: 전체 칩 삭제가 필요할 수 있습니다. — “전체 칩 삭제” 옵션을 확인하세요.</li>
+</ul>
+
+<h3 id="section-8">구성자가 연결되지 않습니다</h3>
+
+<ul>
+  <li>USB 케이블이 데이터를 지원하는지 확인하세요.</li>
+  <li>보드가 DFU 모드가 아닌지 확인하십시오(LED 깜박임 = 일반 모드).</li>
+  <li>구성자 다시 시작</li>
+  <li>다른 USB 포트를 사용해 보십시오.</li>
+</ul>
+
+<h2 id="cli-">CLI 플래시(고급)</h2>
+
+<p>고급 사용자의 경우 STM32CubeProgrammer 또는 st-flash를 통해 플래시합니다.</p>
+
+<p><code>bash
+st-flash write orniflight_0.4.6_OMNIBUSF4.hex 0x08000000
+</code></p>
+
+<p>깜박인 후 다음을 통해 확인하세요.</p>
+
+<p><code>bash
+st-flash verify orniflight_0.4.6_OMNIBUSF4.hex 0x08000000
+</code></p>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<a href='../../hr/'>Hrvatski</a>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<strong>한국어</strong>
+&nbsp;◇&nbsp;
+<a href='../../lv/'>Latviešu</a>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<a href='../../zh_CN/'>中文</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

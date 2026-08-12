@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='hr'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>Sigurno od kvara — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Docs</p>
+<h1>Sigurno od kvara</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="sigurno-od-kvara">Sigurno od kvara</h1>
+
+<p>OrniFlight ima dvostupanjski sustav koji štiti vaš ornitopter u slučaju gubitka signala prijemnika.</p>
+
+<h2 id="dvostupanjski-sustav">Dvostupanjski sustav</h2>
+
+<h3 id="faza-1--otkriven-gubitak-signala">Faza 1 — Otkriven gubitak signala</h3>
+
+<p>Pokreće se kada:
+- Svaki kanal leta ima nevažeću duljinu impulsa
+- Prijemnik izvještava o sigurnom načinu rada
+- Nema signala s prijemnika tijekom konfiguriranog trajanja</p>
+
+<p><strong>Akcija</strong>: Svi kanali se prebacuju na rezervne vrijednosti (konfigurirano putem <code>rxfail</code>). Kratki prozor za oporavak počinje — ako se signal vrati, normalan let se nastavlja.</p>
+
+<h3 id="faza-2--vrijeme-uvara-je-isteklo">Faza 2 — Vrijeme čuvara je isteklo</h3>
+
+<p>Unosi se kada stupanj 1 traje dulje od <code>failsafe_delay</code> (zadano: 400 ms) I letjelica je naoružana.</p>
+
+<p><strong>Procedure</strong> (konfigurirajuće putem <code>failsafe_procedure</code>):</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Postupak</th>
+      <th>Ponašanje</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>DROP</strong></td>
+      <td>Odmah razoružati — krila stati, zrakoplov se spušta</td>
+    </tr>
+    <tr>
+      <td><strong>LAND</strong></td>
+      <td>Način klizanja — krila zaključana vodoravno, kontrolirano spuštanje</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><strong>LAND</strong> je preporučeni postupak za ornitoptere — drži krila u neutralnom položaju za klizno spuštanje, dajući vremena za oporavak signala.</p>
+
+<h2 id="cli-postavke">CLI Postavke</h2>
+
+<p><code>
+set failsafe_delay = 4         # Guard time in 0.1s (4 = 400ms)
+set failsafe_procedure = LAND  # DROP or LAND
+set failsafe_throttle = 1000   # Fallback throttle (low)
+set failsafe_switch_mode = STAGE1  # Transmitter switch behavior
+</code></p>
+
+<h2 id="prijemnik-siguran">Prijemnik siguran</h2>
+
+<p>Također konfigurirajte fail-safe prijemnika za izlaz <strong>bez impulsa</strong> pri gubitku signala. To omogućuje kontroloru leta da otkrije gubitak i aktivira stupanj 1.</p>
+
+<h2 id="testiranje">Testiranje</h2>
+
+<p>Ispitajte bez greške <strong>s odspojenom krilnom polugom</strong> na stolu:
+1. Dodijelite način rada FAILSAFE prekidaču
+2. Naoružajte letjelicu
+3. Uključite prekidač →, pridržavajte se sigurnosnog postupka
+4. Provjerite odgovara li ponašanje servoa očekivanjima</p>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<strong>Hrvatski</strong>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<a href='../../ko/'>한국어</a>
+&nbsp;◇&nbsp;
+<a href='../../lv/'>Latviešu</a>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<a href='../../zh_CN/'>中文</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

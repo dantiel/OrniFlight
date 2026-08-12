@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='ru'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>Поддерживаемое оборудование — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Docs</p>
+<h1>Поддерживаемое оборудование</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="section">Поддерживаемое оборудование</h1>
+
+<p>OrniFlight работает на стандартных контроллерах полета STM32F3/F4/F7. Базовая линия: <strong>STM32F3</strong> —, любая цель F3 с таймерами, поддерживающими сервопривод, будет летать.</p>
+
+<h2 id="section-1">Контроллеры полета</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Совет</th>
+      <th>MCU</th>
+      <th>IMU</th>
+      <th>Флэш</th>
+      <th>Ресивер</th>
+      <th>Статус</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>TINYFISH</strong></td>
+      <td>STM32F303</td>
+      <td>MPU6000 (SPI)</td>
+      <td>256 KB</td>
+      <td>FrSky D8 (встроенный)</td>
+      <td>✅ Первичная</td>
+    </tr>
+    <tr>
+      <td><strong>OMNIBUSF4</strong></td>
+      <td>STM32F405</td>
+      <td>ззз52ззз (ззз53ззз)</td>
+      <td>1 MB + 16 MB SPI</td>
+      <td>—</td>
+      <td>✅ Поддерживается</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="tinyfish-----orniflight">TINYFISH — Самая легкая мишень OrniFlight</h3>
+
+<p>Zzz31zzz, разработанный Fishpepper, представляет собой идеальный контроллер полета для орнитоптера: легкий, на базе F3, оснащенный <strong>интегрированным приемником FrSky D8</strong> на борту. Никаких внешних RX, никакой дополнительной проводки —, только питание, сервоприводы и полет.</p>
+
+<ul>
+  <li><strong>MCU</strong>: STM32F303CCT6 @ 72 МГц</li>
+  <li><strong>Гироскоп</strong>: MPU6000 (SPI, поддерживает частоту 8 кГц)</li>
+  <li><strong>Вспышка</strong>: 256 KB встроенная</li>
+  <li><strong>RAM</strong>: 40 KB</li>
+  <li><strong>Приёмник</strong>: встроенный FrSky D8 (SBUS внутренне перенаправлен на UART2)</li>
+  <li><strong>UART</strong>: VCP + 2 аппаратных UART (UART1 бесплатно для дополнения GPS/CRSF)</li>
+  <li><strong>Вход</strong>: 2-4S LiPo (прямое питание сервопривода)</li>
+  <li><strong>Вес</strong>: ~2,5 г.</li>
+</ul>
+
+<p>TINYFISH доказывает, что превосходное управление взмахами не требует F7. Zzz73zzz управляет полным конвейером ONDAS —, 10 каналами модуляции, трапециевидным крылом ODE, 4 профилями полета — в пределах 256 KB.</p>
+
+<h3 id="omnibusf4----">OMNIBUSF4 — Доступная рабочая лошадка</h3>
+
+<p>Классическая мишень F4. Дешевый, вездесущий, полнофункциональный с OSD и обширной флэш-памятью SPI для ведения журналов Blackbox. Идеально подходит для разработки и более крупных сборок.</p>
+
+<ul>
+  <li><strong>MCU</strong>: STM32F405RGT6 @ 168 МГц</li>
+  <li><strong>Гироскоп</strong>: MPU6000 (SPI, поддерживает частоту 8 кГц)</li>
+  <li><strong>Флэш-память</strong>: 1 встроенная память MB + 16 MB SPI (Blackbox)</li>
+  <li><strong>RAM</strong>: 192 KB</li>
+  <li><strong>OSD</strong>: AT7456E (совместимо с MAX7456)</li>
+  <li><strong>UART</strong>: VCP + 5 аппаратных UART.</li>
+  <li><strong>Барометр</strong>: BMP280 (некоторые варианты)</li>
+  <li><strong>Вход</strong>: 2-6S LiPo</li>
+</ul>
+
+<hr />
+
+<h2 id="section-2">Анатомия орнитоптера</h2>
+
+<h3 id="section-3">Крыльевые сервоприводы</h3>
+
+<p>OrniFlight управляет взмахами с помощью сервоприводов PWM. Ключевые характеристики:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Параметр</th>
+      <th>Типичный диапазон</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Ширина импульса</td>
+      <td>500–2500 µs</td>
+    </tr>
+    <tr>
+      <td>Центр</td>
+      <td>1500 ззз11ззз</td>
+    </tr>
+    <tr>
+      <td>Частота</td>
+      <td>50–330 Гц</td>
+    </tr>
+    <tr>
+      <td>Угол хода</td>
+      <td>±15–45°</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>Для высокопроизводительных орнитоптеров рекомендуются цифровые сервоприводы с частотой обновления 330 Гц. Аналоговые сервоприводы работают на частоте 50 Гц, но имеют меньшую точность.</p>
+
+<h3 id="section-4">Приемник</h3>
+
+<p>Поддерживается любой протокол последовательного приемника. CRSF (TBS Crossfire / ExpressLRS) рекомендуется для:
+- Низкая задержка (критична для управления взмахами)
+- Встроенная телеметрия
+- RSSI по протоколу (без дополнительной проводки)</p>
+
+<h3 id="section-5">Батарея</h3>
+
+<ul>
+  <li><strong>2S (7,4 В)</strong>: Маленькие орнитоптеры с прямым сервоприводом.</li>
+  <li><strong>3S (11,1 В)</strong>: средние орнитоптеры, для сервоприводов требуется BEC.</li>
+  <li><strong>4S (14,8 В)</strong>: большие орнитоптеры, рекомендуется внешний BEC.</li>
+</ul>
+
+<hr />
+
+<h2 id="section-6">Поддерживаемые периферийные устройства</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Периферийное</th>
+      <th>Через</th>
+      <th>Заметки</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>GPS</td>
+      <td>UART</td>
+      <td>Ublox M8N или совместимый</td>
+    </tr>
+    <tr>
+      <td>VTX</td>
+      <td>UART TX</td>
+      <td>Бродяга, SmartAudio</td>
+    </tr>
+    <tr>
+      <td>Камера</td>
+      <td>—</td>
+      <td>Любая аналоговая камера FPV</td>
+    </tr>
+    <tr>
+      <td>Зуммер</td>
+      <td>BUZZ панель</td>
+      <td>Активный зуммер 5 В</td>
+    </tr>
+    <tr>
+      <td>LED Полоса</td>
+      <td>LED панель</td>
+      <td>WS2812 / SK6812</td>
+    </tr>
+    <tr>
+      <td>OpenLog</td>
+      <td>UART TX</td>
+      <td>Регистрация в «черном ящике»</td>
+    </tr>
+    <tr>
+      <td>Bluetooth</td>
+      <td>UART</td>
+      <td>MSP passthrough для мобильной настройки</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h2 id="section-7">Будущие цели</h2>
+
+<p>OrniFlight предназначен для поддержки дополнительных целей STM32F4/F7, где доступны достаточные ресурсы UART и таймера для управления сервоприводом. Вклады приветствуются.</p>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<a href='../../hr/'>Hrvatski</a>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<a href='../../ko/'>한국어</a>
+&nbsp;◇&nbsp;
+<a href='../../lv/'>Latviešu</a>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<strong>Русский</strong>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<a href='../../zh_CN/'>中文</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

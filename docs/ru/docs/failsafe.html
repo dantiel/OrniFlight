@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='ru'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>Отказоустойчивый — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Docs</p>
+<h1>Отказоустойчивый</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="section">Отказоустойчивый</h1>
+
+<p>OrniFlight имеет двухступенчатую отказоустойчивую систему для защиты вашего орнитоптера в случае потери сигнала приемника.</p>
+
+<h2 id="section-1">Двухступенчатая система</h2>
+
+<h3 id="section-2">Обнаружена потеря сигнала на этапе 1 —</h3>
+
+<p>Срабатывает, когда:
+- Любой канал полета имеет недопустимую длину импульса.
+- Приемник сообщает о отказоустойчивом режиме
+- Нет сигнала от приемника в течение заданного времени.</p>
+
+<p><strong>Действие</strong>: Все каналы переключаются на резервные значения (настраиваются через <code>rxfail</code>). Короткое окно восстановления начинается —. Если сигнал возвращается, возобновляется нормальный полет.</p>
+
+<h3 id="section-3">Этап 2 — Время охраны истекло</h3>
+
+<p>Вводится, когда стадия 1 продолжается дольше, чем <code>failsafe_delay</code> (по умолчанию: 400 мс), И корабль поставлен на охрану.</p>
+
+<p><strong>Процедуры</strong> (настраиваются через <code>failsafe_procedure</code>):</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Процедура</th>
+      <th>Поведение</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>DROP</strong></td>
+      <td>Немедленно обезвредить —, крылья останавливаются, самолет снижается</td>
+    </tr>
+    <tr>
+      <td><strong>LAND</strong></td>
+      <td>Режим планирования —, крылья зафиксированы в горизонтальном положении, контролируемое снижение</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><strong>LAND</strong> — рекомендуемая процедура для орнитоптеров. — — она удерживает крылья в нейтральном положении для планирующего снижения, давая время для восстановления сигнала.</p>
+
+<h2 id="cli-">CLI Настройки</h2>
+
+<p><code>
+set failsafe_delay = 4         # Guard time in 0.1s (4 = 400ms)
+set failsafe_procedure = LAND  # DROP or LAND
+set failsafe_throttle = 1000   # Fallback throttle (low)
+set failsafe_switch_mode = STAGE1  # Transmitter switch behavior
+</code></p>
+
+<h2 id="section-4">Отказоустойчивость приемника</h2>
+
+<p>Также настройте отказоустойчивость вашего приемника на вывод <strong>отсутствия импульсов</strong> при потере сигнала. Это позволяет диспетчеру полета обнаружить потерю и активировать этап 1.</p>
+
+<h2 id="section-5">Тестирование</h2>
+
+<p>Испытание отказоустойчивости <strong>с отсоединенным рычажным механизмом</strong> на стенде:
+1. Назначьте переключатель режиму FAILSAFE.
+2. Вооружить поделку
+3. Переключите переключатель →, соблюдая процедуру обеспечения безопасности.
+4. Убедитесь, что поведение сервопривода соответствует ожиданиям.</p>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<a href='../../hr/'>Hrvatski</a>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<a href='../../ko/'>한국어</a>
+&nbsp;◇&nbsp;
+<a href='../../lv/'>Latviešu</a>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<strong>Русский</strong>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<a href='../../zh_CN/'>中文</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

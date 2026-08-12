@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='zh_CN'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>遥测 — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Docs</p>
+<h1>遥测</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="section">遥测</h1>
+
+<p>遥测将飞行数据从 OrniFlight 发送到无线电发射器 — 电池电压、电流、RSSI、GPS 坐标、高度等。</p>
+
+<h2 id="section-1">支持的协议</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>协议</th>
+      <th>无线电系统</th>
+      <th>线数</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>CRSF</strong></td>
+      <td>穿越火线 / 猎空 / ELRS</td>
+      <td>与 RX 集成（双向）</td>
+    </tr>
+    <tr>
+      <td><strong>SmartPort</strong></td>
+      <td>FrSky</td>
+      <td>1 根线（TX 引脚）</td>
+    </tr>
+    <tr>
+      <td><strong>HoTT</strong></td>
+      <td>格劳普纳</td>
+      <td>1 线 (TX+TZ)</td>
+    </tr>
+    <tr>
+      <td><strong>IBUS</strong></td>
+      <td>FlySky</td>
+      <td>1 线（传感器 TX）</td>
+    </tr>
+    <tr>
+      <td><strong>LTM</strong></td>
+      <td>光遥测 (MWP)</td>
+      <td>1 线 (TX)</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="section-2">配置</h2>
+
+<ol>
+  <li>在配置器 → <strong>端口</strong> 中：将 UART TX 引脚设置为适当的遥测协议
+2.启用遥测功能：<code>feature TELEMETRY</code></li>
+  <li>如果需要，配置遥测反演</li>
+</ol>
+
+<p>对于 <strong>CRSF</strong>，自动处理遥测 —，无需单独的端口。</p>
+
+<h2 id="smartport-frsky">SmartPort (FrSky)</h2>
+
+<p>SmartPort 需要 F4 处理器上的信号反转。要么：
+- 使用内置逆变器的飞控
+- 将 SoftSerial 与 <code>set tlm_inversion = ON</code> 一起使用</p>
+
+<p>呜呜呜</p>
+
+<h2 id="section-3">遥测数据</h2>
+
+<p>OrniFlight 传输：
+- VBAT 电压（主电池）
+- 电流消耗/mAh消耗
+- RSSI（信号强度）
+- 飞行模式/手臂状态
+- GPS 坐标（如果配备）
+- 海拔高度/vario（如果是气压计）
+- ONDAS 飞行剖面已激活</p>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<a href='../../hr/'>Hrvatski</a>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<a href='../../ko/'>한국어</a>
+&nbsp;◇&nbsp;
+<a href='../../lv/'>Latviešu</a>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<strong>中文</strong>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

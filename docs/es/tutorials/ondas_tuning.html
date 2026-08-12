@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='es'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>ONDAS Guía de sintonización — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Tutorials</p>
+<h1>ONDAS Guía de sintonización</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="ondas-gua-de-sintonizacin">ONDAS Guía de sintonización</h1>
+
+<blockquote>
+  <p><em>El compañero práctico de ONDAS Theory — cómo ajustar cada parámetro según la sensación.</em></p>
+</blockquote>
+
+<h2 id="orden-de-sintonizacin">Orden de sintonización</h2>
+
+<p>Los parámetros ONDAS son interdependientes. Sintonízalos en esta secuencia:</p>
+
+<p><code>
+1. Cadence    →  timing
+2. Ferocity D →  primary stabilization
+3. Ferocity P →  response crispness
+4. Balance    →  upstroke/downstroke bias
+5. Warp       →  modulation width
+6. Anchor     →  dry/wet mix
+7. Resonance  →  cycle-to-cycle memory
+8. Phase 2    →  advanced (prescience, espelho, saudade, SSFF)
+</code>z</p>
+
+<h2 id="paso-a-paso">Paso a paso</h2>
+
+<h3 id="cadence--encuentra-tu-ventana-de-fase">1. Cadence — Encuentra tu ventana de fase</h3>
+
+<p><strong>Objetivo</strong>: Colocar la modulación donde tu ala tenga más mordida.</p>
+
+<p><strong>Método</strong>: 
+- Empezar a los 50
+- Aumente a 70 — ¿la respuesta al balanceo se vuelve más débil?
+- Disminución a 30 — ¿la respuesta al balanceo se vuelve más fuerte?
+- El punto “más fuerte” es donde la potencia de tu vela alcanza su punto máximo.</p>
+
+<p><strong>Señales de demasiado alto</strong>: respuesta blanda, la artesanía se siente “retrasada”
+<strong>Señales de demasiado bajo</strong>: respuesta entrecortada, sobrepaso en rollo</p>
+
+<h3 id="ferocity-d--estabiliza-el-oficio">2. Ferocity D — Estabiliza el oficio</h3>
+
+<p><strong>Objetivo</strong>: Estabilización primaria sin oscilación.</p>
+
+<p><strong>Método</strong>:
+- Empieza a las 20
+- Flotación o vuelo constante hacia adelante
+- Aumente hasta que sienta que la embarcación se “endurece”
+- Retroceda 5 puntos desde donde notó la oscilación por primera vez.</p>
+
+<p><strong>Signos de demasiado alto</strong>: vibración fina, zumbido similar al de un motor en los servos
+<strong>Señales de nivel demasiado bajo</strong>: la embarcación se desvía, se siente floja</p>
+
+<h3 id="ferocity-p--crujiente">3. Ferocity P — Crujiente</h3>
+
+<p><strong>Objetivo</strong>: receptivo pero no nervioso.</p>
+
+<p><strong>Método</strong>:
+- Empieza a las 15
+- Golpea el palo giratorio —, ¿la nave muerde inmediatamente?
+- Aumente hasta que la respuesta de la palanca sea nítida
+- Retroceda si ve un exceso</p>
+
+<p><strong>Señales de demasiado alto</strong>: timbre después de tocar la palanca, rebote
+<strong>Signos de nivel demasiado bajo</strong>: respuesta blanda y tardía</p>
+
+<h3 id="balance--ajuste-de-asimetra">4. Balance — Ajuste de asimetría</h3>
+
+<p><strong>Objetivo</strong>: Igual autoridad en ambas direcciones.</p>
+
+<p><strong>Método</strong>:
+- Vuela recto y nivelado.
+- Girar hacia la izquierda, observar la velocidad de respuesta.
+- Gira hacia la derecha, observa la velocidad de respuesta.
+- Ajustar el equilibrio para igualarlos.</p>
+
+<h3 id="warp-anchor-resonance">5–7. Warp, Anchor, Resonance</h3>
+
+<p>Parámetros de ajuste fino. Sólo ajuste después de que 1-4 estén sólidos.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Parámetro</th>
+      <th>Inicio</th>
+      <th>Ajustar cuando</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Warp</td>
+      <td>50</td>
+      <td>La modulación se siente demasiado dispersa o demasiado picosa.</td>
+    </tr>
+    <tr>
+      <td>Anchor</td>
+      <td>70</td>
+      <td>Quiere más/menos PID crudo mezclado</td>
+    </tr>
+    <tr>
+      <td>Resonance</td>
+      <td>30</td>
+      <td>El vuelo estacionario es inestable o el vuelo hacia adelante se siente sonoro</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="phase-2--avanzado">8. Phase 2 — Avanzado</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>Parámetro</th>
+      <th>Efecto</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Prescience</td>
+      <td>Avance de sincronización — más alto = la modulación lleva la fase más</td>
+    </tr>
+    <tr>
+      <td>Espelho</td>
+      <td>Acoplamiento diferencial — rollo más apretado, puede reducir la eficiencia</td>
+    </tr>
+    <tr>
+      <td>Saudade</td>
+      <td>Memoria de trazos — más fluida pero con menos capacidad de respuesta</td>
+    </tr>
+    <tr>
+      <td>SSFF</td>
+      <td>Inyección directa gyro→wave — comienza a las 10</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<p><em>El objetivo es una nave que vuele como si quisiera estar en el aire. Si estás luchando contra ello, retrocede y vuelve a sintonizar desde Cadence hacia arriba.</em></p>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<strong>Español</strong>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<a href='../../hr/'>Hrvatski</a>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<a href='../../ko/'>한국어</a>
+&nbsp;◇&nbsp;
+<a href='../../lv/'>Latviešu</a>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<a href='../../zh_CN/'>中文</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

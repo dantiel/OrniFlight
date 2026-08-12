@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='ko'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>비행 모드 — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Docs</p>
+<h1>비행 모드</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="section">비행 모드</h1>
+
+<p>모드는 송신기의 AUX 스위치를 통해 전환됩니다. 각 모드는 OrniFlight 구성기의 <strong>모드</strong> 탭에서 특정 AUX 채널 범위에 할당될 수 있습니다.</p>
+
+<h2 id="section-1">표준 모드</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>모드</th>
+      <th>기능</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>ARM</strong></td>
+      <td>비행 제어 활성화(모터/서보 활성화)</td>
+    </tr>
+    <tr>
+      <td><strong>ANGLE</strong></td>
+      <td>스틱이 중앙에 위치하면 자동 레벨 — 공예가 레벨로 돌아갑니다</td>
+    </tr>
+    <tr>
+      <td><strong>HORIZON</strong></td>
+      <td>중앙 근처의 하이브리드 — 각도 모드, 풀 스틱의 아크로</td>
+    </tr>
+    <tr>
+      <td><strong>ACRO</strong></td>
+      <td>기본 — 자동 레벨 없음, 순수 속도 제어</td>
+    </tr>
+    <tr>
+      <td><strong>AIRMODE</strong></td>
+      <td>전체 권한을 위해 0 스로틀에서 PID 루프를 활성 상태로 유지</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="orniflight--">OrniFlight-특정 모드</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>모드</th>
+      <th>기능</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>50</td>
+      <td><strong>INDEPENDENT</strong></td>
+      <td>독립적인 날개 제어 — 각 날개는 자체 서보 채널에 응답합니다</td>
+    </tr>
+    <tr>
+      <td>51</td>
+      <td><strong>GLIDE</strong></td>
+      <td>활공 모드 — 날개가 급상승하기 위해 수평 위치로 고정됨</td>
+    </tr>
+    <tr>
+      <td>52</td>
+      <td><strong>PROFILE</strong></td>
+      <td>비행 프로필 선택 — 3개의 PID/ONDAS 프로필 간 전환</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="section-2">유틸리티 모드</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>모드</th>
+      <th>기능</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>BEEPER</strong></td>
+      <td>분실된 항공기를 찾기 위한 버저 활성화</td>
+    </tr>
+    <tr>
+      <td><strong>BLACKBOX</strong></td>
+      <td>블랙박스 로깅 시작/중지</td>
+    </tr>
+    <tr>
+      <td><strong>FAILSAFE</strong></td>
+      <td>안전 장치 2단계(패닉 스위치)를 수동으로 트리거</td>
+    </tr>
+    <tr>
+      <td><strong>OSD</strong></td>
+      <td>OSD 표시 전환</td>
+    </tr>
+    <tr>
+      <td><strong>TELEMETRY</strong></td>
+      <td>원격 측정 출력 활성화/비활성화</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="section-3">오니톱터 노트</h2>
+
+<ul>
+  <li><strong>INDEPENDENT</strong> 모드는 OrniFlight —에 고유하며 비대칭 추력 및 차동 날개 제어를 위해 날개별 서보 매핑을 가능하게 합니다.</li>
+  <li><strong>GLIDE</strong> 모드는 날개를 중립 위치에 유지하여 열 상승 및 에너지 효율적인 하강에 유용합니다.</li>
+  <li><strong>PROFILE</strong> 전환을 통해 다양한 비행 조건(예: 순항 대 공격적 기동)에 대한 비행 중 ONDAS 매개변수 변경이 가능합니다.</li>
+</ul>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<a href='../../hr/'>Hrvatski</a>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<strong>한국어</strong>
+&nbsp;◇&nbsp;
+<a href='../../lv/'>Latviešu</a>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<a href='../../zh_CN/'>中文</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

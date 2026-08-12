@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='lv'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>Seriālie porti — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Docs</p>
+<h1>Seriālie porti</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="serilie-porti">Seriālie porti</h1>
+
+<p>OrniFlight izmanto seriālos portus saziņai ar perifērijas ierīcēm: uztvērēju, GPS, telemetriju, VTX vadību, Blackbox reģistrēšanu un MSP (konfiguratora savienojums).</p>
+
+<h2 id="serilo-portu-veidi">Seriālo portu veidi</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Tips</th>
+      <th>Apraksts</th>
+      <th>Labākais</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>VCP</strong></td>
+      <td>USB Virtuālais COM Ports — tiešs USB savienojums ar procesoru</td>
+      <td>Konfigurators (MSP)</td>
+    </tr>
+    <tr>
+      <td><strong>UART</strong></td>
+      <td>Aparatūras TX/RX tapas ar aparatūras signāla noteikšanu</td>
+      <td>RX, GPS, Telemetrija, VTX, Blackbox</td>
+    </tr>
+    <tr>
+      <td><strong>SoftSerial</strong></td>
+      <td>Programmatūras vadīts seriāls uz jebkura kontaktu pāra</td>
+      <td>Mazs joslas platums: tikai telemetrija</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>VCP nepatērē fizisku UART — tas vienmēr ir pieejams konfiguratoram.</p>
+
+<h2 id="ostas-pieirana">Ostas piešķiršana</h2>
+
+<p>Programmā OrniFlight Configurator atveriet cilni <strong>Porti</strong>, lai piešķirtu funkcijas:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Funkcija</th>
+      <th>Tipisks UART</th>
+      <th>Piezīmes</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Seriāls RX</td>
+      <td>UART1 vai UART3</td>
+      <td>SBUS, CRSF, IBUS utt.</td>
+    </tr>
+    <tr>
+      <td>GPS</td>
+      <td>UART3 vai UART6</td>
+      <td>57600 vai 115200 bodi</td>
+    </tr>
+    <tr>
+      <td>Telemetrija</td>
+      <td>Jebkurš TX pin</td>
+      <td>SmartPort, HoTT, IBUS</td>
+    </tr>
+    <tr>
+      <td>VTX (Tramp/SmartAudio)</td>
+      <td>Jebkurš TX pin</td>
+      <td>Vienvada</td>
+    </tr>
+    <tr>
+      <td>Blackbox</td>
+      <td>Jebkurš TX pin</td>
+      <td>OpenLog vai iebūvēta zibspuldze</td>
+    </tr>
+    <tr>
+      <td>MSP</td>
+      <td>VCP (USB)</td>
+      <td>Konfiguratora savienojums</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="omnibusf4-portu-kartana">OMNIBUSF4 Portu kartēšana</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>UART</th>
+      <th>Piespraudes</th>
+      <th>Tipisks lietojums</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>VCP</td>
+      <td>USB</td>
+      <td>MSP (konfigurators)</td>
+    </tr>
+    <tr>
+      <td>UART1</td>
+      <td>TX1/RX1</td>
+      <td>Seriāls RX</td>
+    </tr>
+    <tr>
+      <td>UART3</td>
+      <td>TX3/RX3</td>
+      <td>GPS vai telemetrija</td>
+    </tr>
+    <tr>
+      <td>UART6</td>
+      <td>TX6/RX6</td>
+      <td>Bezmaksas / Blackbox / VTX</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="softserial">SoftSerial</h2>
+
+<p>SoftSerial ir pieejams, taču tam ir ierobežots joslas platums. Piemērots tikai zema ātruma telemetrijai (piemēram, 9600 bodi SmartPort). Nav ieteicams Serial RX vai GPS.</p>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<a href='../../hr/'>Hrvatski</a>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<a href='../../ko/'>한국어</a>
+&nbsp;◇&nbsp;
+<strong>Latviešu</strong>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<a href='../../zh_CN/'>中文</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

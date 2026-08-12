@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='ko'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>비디오 송신기(VTX) — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Docs</p>
+<h1>비디오 송신기(VTX)</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="vtx">비디오 송신기(VTX)</h1>
+
+<p>OrniFlight는 FPV ornithopter에 대한 VTX 제어를 지원합니다. VTX 모듈은 OrniFlight 구성기, MSP 또는 CLI — 설정 대역, 채널, 전력 레벨 및 피트 모드를 통해 구성할 수 있습니다.</p>
+
+<h2 id="section">지원되는 프로토콜</h2>
+
+<ol>
+  <li><strong>IRC Tramp</strong> — 소형 VTX 모듈에 공통, 경량 FPV 오니톱터에 이상적</li>
+  <li><strong>TBS SmartAudio</strong> — 피트 모드를 지원하는 디지털 프로토콜</li>
+  <li><strong>RTC6705</strong> — VTX가 통합된 보드에서 직접 SPI 제어(예: SPRACINGF3NEO)</li>
+</ol>
+
+<h2 id="section-1">구성</h2>
+
+<p>VTX 설정은 OrniFlight 구성기의 <strong>VTX</strong> 탭 또는 CLI를 통해 관리됩니다.</p>
+
+<p><code>
+set vtx_band = 5           # Raceband
+set vtx_channel = 1        # 5658 MHz
+set vtx_power = 2          # 200mW
+set vtx_low_power_disarm = ON  # Lower power when disarmed
+set vtx_pit_mode_freq = 0  # Pit mode frequency (0 = disabled)
+</code></p>
+
+<h2 id="section-2">직렬 포트</h2>
+
+<p>VTX 제어에는 전용 UART TX 핀이 필요합니다. <code>IRC Tramp</code> 또는 <code>TBS SmartAudio</code> 주변 장치를 사용하여 <strong>포트</strong> 탭에서 포트를 구성합니다.</p>
+
+<h2 id="fpv-ornithopter--">FPV Ornithopter 고려 사항</h2>
+
+<ul>
+  <li>무게가 중요합니다. — 경량 VTX 모듈 선택(Tramp Nano, Eachine Nano)</li>
+  <li>안테나 장착 : 날개가 펄럭이는 공간 확보</li>
+  <li>전원 필터링: LC 필터 뒤에 VTX 전원을 연결하여 비디오의 서보 노이즈를 방지합니다.</li>
+  <li>소형 VTX 모듈의 과열을 방지하기 위해 벤치 테스트에는 피트 모드를 권장합니다.</li>
+</ul>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<a href='../../hr/'>Hrvatski</a>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<strong>한국어</strong>
+&nbsp;◇&nbsp;
+<a href='../../lv/'>Latviešu</a>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<a href='../../zh_CN/'>中文</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

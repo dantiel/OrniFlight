@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='sv'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>Flyglägen — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Docs</p>
+<h1>Flyglägen</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="flyglgen">Flyglägen</h1>
+
+<p>Lägen växlas via AUX-omkopplare på din sändare. Varje läge kan tilldelas ett specifikt AUX-kanalområde på fliken <strong>Modes</strong> i OrniFlight Configurator.</p>
+
+<h2 id="standardlgen">Standardlägen</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Läge</th>
+      <th>Funktion</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>ARM</strong></td>
+      <td>Aktivera flygkontroll (motorer/servon aktiva)</td>
+    </tr>
+    <tr>
+      <td><strong>ANGLE</strong></td>
+      <td>Auto-level — farkoster återgår till nivå när pinnar centreras</td>
+    </tr>
+    <tr>
+      <td><strong>HORIZON</strong></td>
+      <td>Hybrid — vinkelläge nära mitten, acro på full stick</td>
+    </tr>
+    <tr>
+      <td><strong>ACRO</strong></td>
+      <td>Standard — ingen autonivå, ren hastighetskontroll</td>
+    </tr>
+    <tr>
+      <td><strong>AIRMODE</strong></td>
+      <td>Håller PID loop aktiv vid noll gas för full auktoritet</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="orniflight-specifika-lgen">OrniFlight-specifika lägen</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Läge</th>
+      <th>Funktion</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>50</td>
+      <td><strong>INDEPENDENT</strong></td>
+      <td>Oberoende vingkontroll — varje vinge svarar på sin egen servokanal</td>
+    </tr>
+    <tr>
+      <td>51</td>
+      <td><strong>GLIDE</strong></td>
+      <td>Glidläge — vingar låsta i horisontellt läge för svävande</td>
+    </tr>
+    <tr>
+      <td>52</td>
+      <td><strong>PROFILE</strong></td>
+      <td>Val av flygprofil — växla mellan 3 PID/ONDAS-profiler</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="verktygslgen">Verktygslägen</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Läge</th>
+      <th>Funktion</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>BEEPER</strong></td>
+      <td>Aktivera summer för att lokalisera förlorat flygplan</td>
+    </tr>
+    <tr>
+      <td><strong>BLACKBOX</strong></td>
+      <td>Starta/stoppa Blackbox-loggning</td>
+    </tr>
+    <tr>
+      <td><strong>FAILSAFE</strong></td>
+      <td>Trigga felsäkert steg 2 manuellt (panikbrytare)</td>
+    </tr>
+    <tr>
+      <td><strong>OSD</strong></td>
+      <td>Växla OSD-skärm</td>
+    </tr>
+    <tr>
+      <td><strong>TELEMETRY</strong></td>
+      <td>Aktivera/inaktivera telemetriutgång</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="ornithopter-notes">Ornithopter Notes</h2>
+
+<ul>
+  <li><strong>INDEPENDENT</strong>-läget är unikt för OrniFlight — det möjliggör servomappning per ving för asymmetrisk dragkraft och differentiell vingkontroll</li>
+  <li><strong>GLIDE</strong>-läget håller vingarna i neutralt läge, användbart för termisk svävning och energieffektiv nedstigning</li>
+  <li><strong>PROFILE</strong>-växling tillåter ONDAS-parameterändringar under flygning för varierande flygförhållanden (t.ex. kryssning kontra aggressiv manövrering)</li>
+</ul>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<a href='../../hr/'>Hrvatski</a>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<a href='../../ko/'>한국어</a>
+&nbsp;◇&nbsp;
+<a href='../../lv/'>Latviešu</a>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<strong>Svenska</strong>
+&nbsp;◇&nbsp;
+<a href='../../zh_CN/'>中文</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

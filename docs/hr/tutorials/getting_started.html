@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='hr'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>Prvi koraci — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Tutorials</p>
+<h1>Prvi koraci</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="prvi-koraci">Prvi koraci</h1>
+
+<p>Dobrodošli u OrniFlight! Ovaj vodič vodi vas kroz početno postavljanje kontrolera leta vašeg ornitoptera.</p>
+
+<h2 id="to-trebate">Što trebate</h2>
+
+<ul>
+  <li><strong>OrniFlight konfigurator</strong> — preuzimanje s <a href="https://orniflight.org">orniflight.org</a></li>
+  <li><strong>USB kabel</strong> — za spajanje kontrolera leta na računalo</li>
+  <li><strong>Ornithopter</strong> sa:
+    <ul>
+      <li>Podržani kontroler leta (OMNIBUSF4, TINYFISH)</li>
+      <li>Servo za aktiviranje krila</li>
+      <li>Prijemnik povezan s vašim odašiljačem</li>
+      <li>Baterija (2S–4S LiPo)</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="brzi-poetak">Brzi početak</h2>
+
+<h3 id="flash-firmware">1. Flash firmware</h3>
+
+<ol>
+  <li>Otvorite <strong>OrniFlight konfigurator</strong></li>
+  <li>Idite na karticu <strong>Firmware Flasher</strong></li>
+  <li>Odaberite ciljnu ploču (OMNIBUSF4 ili TINYFISH)</li>
+  <li>Odaberite najnoviju stabilnu verziju</li>
+  <li>Kliknite <strong>Load Firmware</strong> zatim <strong>Flash Firmware</strong></li>
+</ol>
+
+<h3 id="poetna-konfiguracija">2. Početna konfiguracija</h3>
+
+<p>Nakon treptanja, konfigurator će od vas tražiti da primijenite prilagođene zadane postavke. <strong>Uvijek prihvatiti.</strong></p>
+
+<h3 id="postavljanje-prijemnika">3. Postavljanje prijemnika</h3>
+
+<ol>
+  <li>Idite na karticu <strong>Portovi</strong> → postavite ispravan UART na <code>Serial RX</code></li>
+  <li>Idite na karticu <strong>Konfiguracija</strong> → odaberite svoj protokol prijemnika (CRSF, SBUS, itd.)</li>
+  <li>Idite na karticu <strong>Prijemnik</strong> → potvrdite da pokreti štapa odgovaraju očekivanim kanalima</li>
+  <li>Postavite krajnje točke kanala: 1000–2000 sa 1500 središtem</li>
+</ol>
+
+<h3 id="servo-podeavanje">4. Servo podešavanje</h3>
+
+<ol>
+  <li>Idite na karticu <strong>Servos</strong></li>
+  <li>Provjerite odgovara li servo mapiranje konfiguraciji krila vašeg ornitoptera</li>
+  <li>Testirajte smjer servo — obrnuti ako je potrebno</li>
+  <li>Postavite središnji položaj (krila vodoravno = 1500)</li>
+</ol>
+
+<h3 id="postavljanje-naina">5. Postavljanje načina</h3>
+
+<ol>
+  <li>Idite na karticu <strong>Načini</strong></li>
+  <li>Dodijelite ARM prekidaču AUX</li>
+  <li>Dodijelite načine letenja (ANGLE / ACRO / HORIZON) po želji</li>
+  <li>Dodijelite INDEPENDENT i GLIDE rezervnim prekidačima</li>
+  <li>Konfigurirajte BEEPER za lociranje izgubljenog modela</li>
+</ol>
+
+<h3 id="prvi-let">6. Prvi let</h3>
+
+<ol>
+  <li><strong>Odspojite polugu krila za testiranje na stolu</strong></li>
+  <li>Aktivirajte i provjerite smjer kretanja servoagregata</li>
+  <li>Provjerite odziv leptira za gas</li>
+  <li>Za prvi stvarni let: koristite način ANGLE, niske stope</li>
+  <li>Lebdite u razini očiju, podrežite po potrebi</li>
+</ol>
+
+<h2 id="sljedei-koraci">Sljedeći koraci</h2>
+
+<ul>
+  <li><a href="basic_setup.html">Osnovno postavljanje</a> — detaljan vodič za konfiguraciju</li>
+  <li><a href="../../tutorials/ondas_tuning.html">ONDAS ugađanje</a> — podešavanje dinamike lepršanja</li>
+  <li><a href="../../tutorials/tuning.html">PID podešavanje</a> — prilagođava karakteristike leta</li>
+</ul>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<strong>Hrvatski</strong>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<a href='../../ko/'>한국어</a>
+&nbsp;◇&nbsp;
+<a href='../../lv/'>Latviešu</a>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<a href='../../zh_CN/'>中文</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

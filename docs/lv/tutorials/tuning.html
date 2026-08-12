@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='lv'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>PID Tuning — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Tutorials</p>
+<h1>PID Tuning</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="pid-tuning">PID Tuning</h1>
+
+<p>OrniFlight izmanto PID (proporcionālais integrālais atvasinājums) kontrolieri, kas pielāgots lidojumam ar spārnu spārnu. Noregulēšana būtiski atšķiras no parastajiem lidaparātiem, jo ​​vilces spēks ir periodisks.</p>
+
+<h2 id="ornitoptera-pid-pamati">Ornitoptera PID Pamati</h2>
+
+<p>Atšķirībā no parastajiem lidaparātiem, kur vilces spēks ir gandrīz nepārtraukts, ornitoptera vilce svārstās ar katru spārna gājienu. Tas rada:</p>
+
+<ul>
+  <li><strong>Vilces pulsācija</strong> ar svārstību frekvenci (parasti 5–15 Hz)</li>
+  <li><strong>No fāzes atkarīga vadības iestāde</strong> — vienai un tai pašai PID izvadei ir atšķirīgs efekts atkarībā no tā, kurā gājiena ciklā tā tiek lietota</li>
+  <li><strong>Savienotā sānsveres dinamika</strong> — asimetriskā spārna vilce vienlaikus ietekmē abas asis</li>
+</ul>
+
+<h2 id="pid-noteikumi">PID Noteikumi</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Termiņš</th>
+      <th>Efekts</th>
+      <th>Ornitoptera piezīme</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>P</strong></td>
+      <td>Proporcionāla — tūlītēja korekcija</td>
+      <td>Izmantojiet konservatīvas vērtības; svārstības ir plivināšanas-sinhronas</td>
+    </tr>
+    <tr>
+      <td><strong>Es</strong></td>
+      <td>Integrāla — pastāvīga kļūdu labošana</td>
+      <td>Būtiski, lai saglabātu attieksmi slīdēšanas laikā</td>
+    </tr>
+    <tr>
+      <td><strong>D</strong></td>
+      <td>Atvasinājums — slāpē svārstības</td>
+      <td>Pielāgots spārnu gājiena ātrumam, nevis rāmja svārstībām</td>
+    </tr>
+    <tr>
+      <td><strong>F</strong></td>
+      <td>Feed-forward — tiešā stick uz izvadi</td>
+      <td>Noderīga skaidrai reakcijai uz ripošanas ass</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="skuma-vrtbas">Sākuma vērtības</h2>
+
+<p>Vidēja izmēra ornitopteram (1–1,5 m spārnu plētums):</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Ass</th>
+      <th>P</th>
+      <th>es</th>
+      <th>D</th>
+      <th>F</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Roll</td>
+      <td>25</td>
+      <td>30</td>
+      <td>15</td>
+      <td>30</td>
+    </tr>
+    <tr>
+      <td>Piķis</td>
+      <td>30</td>
+      <td>35</td>
+      <td>20</td>
+      <td>35</td>
+    </tr>
+    <tr>
+      <td>Žāga</td>
+      <td>40</td>
+      <td>35</td>
+      <td>10</td>
+      <td>20</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="noskaoanas-procedra">Noskaņošanas procedūra</h2>
+
+<h3 id="vispirms-novrtjiet-noregulanu">1. Vispirms novērtējiet noregulēšanu</h3>
+
+<p>Pirms PID regulēšanas iestatiet tarifus, kas jūtas ērti:
+- Sāciet ar RC Rate 0,90, Super Rate 0,65, Expo 0,30
+- Pielāgojiet savam lidošanas stilam un ornitoptera izmēram</p>
+
+<h3 id="p-gain">2. P Gain</h3>
+
+<p>Palieliniet P, līdz redzat svārstības ar svārstību frekvenci, pēc tam atkāpieties par 20%:
+- Ripošanas svārstības: spārnu svārstības ar gājiena ātrumu
+- Soļa svārstības: svārstīšanās uz priekšu un atpakaļ
+- Leņķiskās svārstības: astes kustināšana sinhronizēta ar sitieniem</p>
+
+<h3 id="d-ieguvums">3. D Ieguvums</h3>
+
+<p>Palieliniet D, lai mazinātu atlēcienu pēc asas nūjas ievadīšanas:
+- Pārāk daudz: servo trīce, pārkaršana
+- Pārāk maz: zvana pēc sitiena/piķa apstāšanās</p>
+
+<h3 id="es-iegstu">4. Es iegūstu</h3>
+
+<p>Es iegūstu skaitītāju pastāvīgu novirzi:
+- Palieliniet, līdz tiek novērsta novirze
+- Pārāk daudz: lēnas svārstības pie 1–2 Hz (zem svārstību ātruma)</p>
+
+<h2 id="ondas-integrcija">ONDAS Integrācija</h2>
+
+<p>ONDAS (Ornitoptera nelineārā dinamiskā aerodinamiskā sistēma) modulē PID izvadi katrā spārna gājienā. Pēc pamata PID regulēšanas:</p>
+
+<ol>
+  <li>Iestatiet <strong>Cadence Gain</strong> — pārslēdz modulācijas logu uz aerodinamiski optimālo fāzi
+2. Iestatiet <strong>Ferocity P</strong> — tūlītēju asimetrisko vilces palielinājumu
+3. Iestatiet <strong>Ferocity D</strong> — paredzamo vilkšanas izmantošanu
+4. Precīzi noregulējiet <strong>Balance</strong> — kreisā/labā spārna simetriju</li>
+</ol>
+
+<p>Detalizētu procedūru skatiet <a href="ondas_tuning.html">ONDAS Tuning Guide</a>.</p>
+
+<h2 id="blackbox-analze">Blackbox analīze</h2>
+
+<p>Iespējojiet Blackbox reģistrēšanu, lai vizualizētu PID veiktspēju. Meklējiet:
+- <strong>P-termiņa svārstības</strong> pie svārstību frekvences → samazina P
+- <strong>I termiņa likvidēšana</strong> ilgstošu pagriezienu laikā → samazina I vai palielina I termiņa atslābumu
+- <strong>D-term troksnis</strong> no vibrācijas → vispirms pārbaudiet mehānisko līdzsvaru, pēc tam samaziniet D</p>
+
+<h2 id="lidojuma-profili">Lidojuma profili</h2>
+
+<p>OrniFlight atbalsta 3 pārslēdzamus lidojuma profilus lidojuma laikā:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Profils</th>
+      <th>Lietošanas gadījums</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1</td>
+      <td>Standarta kruīzs</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>Augsta veiklība / agresīva</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>Efektivitāte / termiskā paaugstināšanās</td>
+    </tr>
+  </tbody>
+</table>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<a href='../../hr/'>Hrvatski</a>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<a href='../../ko/'>한국어</a>
+&nbsp;◇&nbsp;
+<strong>Latviešu</strong>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<a href='../../zh_CN/'>中文</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='pt'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>ONDAS — Estabilização adaptativa dinâmica normalizada oscilante — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Wiki</p>
+<h1>ONDAS — Estabilização adaptativa dinâmica normalizada oscilante</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="ondas--estabilizao-adaptativa-dinmica-normalizada-oscilante">ONDAS — Estabilização adaptativa dinâmica normalizada oscilante</h1>
+
+<h2 id="o-princpio-fundamental">O Princípio Fundamental</h2>
+
+<p>Uma aeronave de asa fixa ou convencional gera forças de controle <strong>continuamente</strong> —, uma deflexão da superfície de controle ou mudança RPM produz um momento de estado estacionário. Um ornitóptero não. Cada grama de empuxo, cada Newton de torque, está <strong>ligado à fase</strong> dentro do ciclo de batida de asa. O mesmo impulso de força aplicado em diferentes pontos do curso produz resultados fundamentalmente diferentes.</p>
+
+<p>ONDAS reconhece esta realidade e modula o esforço de estabilização de forma síncrona com o ciclo de oscilação.</p>
+
+<hr />
+
+<h2 id="cadence--o-crebro-timing">Cadence — O Cérebro Timing</h2>
+
+<p>Cadence é o filtro ONDAS mais crítico porque determina <strong>quando</strong> a correção ocorre dentro de cada batida de asa.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Fase do AVC</th>
+      <th>Efeito da aplicação de força</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Centro de descida</td>
+      <td>Elevação máxima, autoridade de rolagem</td>
+    </tr>
+    <tr>
+      <td>Fim do curso descendente (frenagem)</td>
+      <td>Arrasto induzido → momento de guinada</td>
+    </tr>
+    <tr>
+      <td>Centro ascendente</td>
+      <td>Impulso para trás, inclinação para cima</td>
+    </tr>
+    <tr>
+      <td>Final ascendente</td>
+      <td>Inversão de asa, efeito mínimo</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><strong>Cadence muda a janela de modulação</strong> para alinhar com a fase onde o braço da alavanca aerodinâmica é mais longo. Cadência errada = luta contra a física das asas. Cadência correta = cada miliwatt se torna autoridade de controle.</p>
+
+<h3 id="parmetros">Parâmetros</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>Parâmetro</th>
+      <th>Valor</th>
+      <th>Função</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>ONDAS_K0</code></td>
+      <td>1,0</td>
+      <td>Deslocamento da fase base</td>
+    </tr>
+    <tr>
+      <td><code>ONDAS_K2</code></td>
+      <td>10,0</td>
+      <td>Propagação/nitidez de fase</td>
+    </tr>
+    <tr>
+      <td><code>ONDAS_PHASE_SCALE</code></td>
+      <td>0,00005</td>
+      <td>Fator pequeno, grande alavancagem</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h2 id="ferocity-p--impulso-assimtrico-imediato">Ferocity P — Impulso Assimétrico Imediato</h2>
+
+<p>Ferocity P aumenta a <strong>quadratura da forma de onda</strong> (formato trapezoidal: permanência em ±1, rampa de cosseno entre) proporcionalmente ao erro PID atual.</p>
+
+<ul>
+  <li>Mais impulso de um lado → momento imediato</li>
+  <li>A asa freada no final do curso experimenta <strong>arrasto induzido</strong> — este é o contra-momento</li>
+  <li>Efeito: direto, proporcional, imediato</li>
+</ul>
+
+<hr />
+
+<h2 id="ferocity-d--explorao-de-arrasto-antecipado">Ferocity D — Exploração de arrasto antecipado</h2>
+
+<p>Ferocity D completa o quadro. Onde P fornece assimetria de empuxo, D aproveita o <strong>arrasto da asa contralateral</strong> como freio.</p>
+
+<ul>
+  <li>Lê a taxa de erro da mudança e <strong>antecipa</strong></li>
+  <li>Pode explorar deliberadamente o arrasto de uma asa desacelerada para momentos de guinada/inclinação</li>
+  <li>P+D juntos criam um <strong>par de momentos diferenciais</strong> — impulso no lado A, arrasto no lado B — mais eficiente do que apenas impulso</li>
+</ul>
+
+<hr />
+
+<h2 id="trs-maneiras-de-cadenceferocity-d-aumentar-ferocity">Três maneiras de Cadence/Ferocity D aumentar Ferocity</h2>
+
+<h3 id="zzz18zzz-d-direto-aumenta-p-durante-mudana-rpida-de-erro">1. Zzz18zzz D direto aumenta P durante mudança rápida de erro</h3>
+
+<p>Em rajadas ou manobras agressivas, <code>error_rate</code> é grande. D multiplica isso e aumenta a ferocidade básica. A asa torna-se <em>mais nítida</em> (mais trapezoidal) porque P+D juntos exigem mais quadratura do que P sozinho. Resultado: autoridade máxima precisamente quando é crítico.</p>
+
+<h3 id="zzz19zzz-cadence-indireto-muda-o-ponto-de-alavancagem">2. Zzz19zzz Cadence indireto muda o ponto de alavancagem</h3>
+
+<p>Cadence modula <em>quando</em> no ciclo a ferocidade atua. Mover a janela para uma fase mais aerodinamicamente sensível (por exemplo, centro de movimento descendente vs. final de movimento ascendente) significa que o <strong>mesmo valor de ferocidade</strong> produz mais efeito de amplificação — efetivamente sem alteração numérica.</p>
+
+<h3 id="combinatria--d--cadence-durante-a-recuperao-de-estol">3. Combinatória — D × Cadence durante a recuperação de estol</h3>
+
+<p>Em um estol: alta taxa de afundamento → D detecta a taxa de → que aumenta a ferocidade. Simultaneamente, a cadência muda a modulação para a fase de descida, onde a asa tem mordida máxima. A interação: D fornece a força, cadência o momento certo. Sem cadência, a força D chega na fase errada e se dissipa inutilmente.</p>
+
+<hr />
+
+<h2 id="parmetros-ondas-adicionais">Parâmetros ONDAS adicionais</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Parâmetro</th>
+      <th>Função</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Balance</strong></td>
+      <td>Simetria de empuxo para cima/para baixo — Viés de termo I entre movimento ascendente e descendente. Compensa a assimetria das asas, tolerâncias de fabricação e desgaste</td>
+    </tr>
+    <tr>
+      <td><strong>Warp</strong></td>
+      <td>Roll/Yaw P → Diferencial de ferocidade L/R — asas direita e esquerda batem independentemente no eixo de rotação para manobras de inclinação e curva</td>
+    </tr>
+    <tr>
+      <td><strong>Anchor</strong></td>
+      <td>A ancoragem de fase — bloqueia a modulação em uma referência de fase específica, resistindo ao desvio</td>
+    </tr>
+    <tr>
+      <td><strong>Resonance</strong></td>
+      <td>A compensação de ressonância da fuselagem — evita modos estruturais emocionantes da fuselagem</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h2 id="analogia">Analogia</h2>
+
+<p><strong>Cadence é o maestro. Ferocity P e D são os instrumentos.</strong></p>
+
+<p>Sem maestro, eles tocam —, mas não juntos. Com um, o ruído se torna música.</p>
+
+<hr />
+
+<h2 id="veja-tambm">Veja também</h2>
+
+<ul>
+  <li><a href="../../tutorials/ondas_tuning.html">Guia de ajuste ONDAS</a> — procedimento prático de ajuste</li>
+  <li><a href="msp.html">Protocolo MSP</a> formato de ligação — para parâmetros ONDAS</li>
+  <li><a href="profiles.html">Perfis de voo</a> configuração ONDAS com reconhecimento de perfil —</li>
+</ul>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<a href='../../hr/'>Hrvatski</a>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<a href='../../ko/'>한국어</a>
+&nbsp;◇&nbsp;
+<a href='../../lv/'>Latviešu</a>
+&nbsp;◇&nbsp;
+<strong>Português</strong>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<a href='../../zh_CN/'>中文</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

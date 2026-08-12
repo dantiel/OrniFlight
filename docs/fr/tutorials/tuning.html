@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='fr'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>PID Réglage — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Tutorials</p>
+<h1>PID Réglage</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="pid-rglage">PID Réglage</h1>
+
+<p>OrniFlight utilise un contrôleur PID (Proportionnel-Intégral-Dérivé) adapté au vol à ailes battantes. Le réglage diffère considérablement de celui des avions conventionnels en raison de la nature périodique de la poussée battante.</p>
+
+<h2 id="ornithoptre-pid-bases">Ornithoptère PID Bases</h2>
+
+<p>Contrairement aux avions conventionnels où la poussée est presque continue, la poussée des ornithoptères oscille à chaque coup d’aile. Cela crée :</p>
+
+<ul>
+  <li><strong>Ondulation de poussée</strong> à la fréquence de battement (généralement 5–15 Hz)</li>
+  <li><strong>Autorité de contrôle dépendante de la phase</strong> — la même sortie PID a un effet différent selon l’endroit où elle est appliquée dans le cycle de course.</li>
+  <li><strong>Dynamique roulis-lacet couplée</strong> La poussée asymétrique de l’aile — affecte les deux axes simultanément</li>
+</ul>
+
+<h2 id="pid-conditions">PID Conditions</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Terme</th>
+      <th>Effet</th>
+      <th>Note sur les ornithoptères</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>P</strong></td>
+      <td>Correction immédiate proportionnelle —</td>
+      <td>Utilisez des valeurs conservatrices ; l’oscillation est synchrone au battement</td>
+    </tr>
+    <tr>
+      <td><strong>Je</strong></td>
+      <td>Correction d’erreur persistante intégrale —</td>
+      <td>Indispensable pour maintenir l’attitude lors des glissades</td>
+    </tr>
+    <tr>
+      <td><strong>D</strong></td>
+      <td>La dérivée — amortit les oscillations</td>
+      <td>Adapté à la cadence de l’aile et non aux oscillations du cadre</td>
+    </tr>
+    <tr>
+      <td><strong>F</strong></td>
+      <td>Feed-forward — collage direct sur la sortie</td>
+      <td>Utile pour une réponse nette sur l’axe de roulis</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="valeurs-de-dpart">Valeurs de départ</h2>
+
+<p>Pour un ornithoptère de taille moyenne (1–1,5m d’envergure) :</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Axe</th>
+      <th>P</th>
+      <th>Je</th>
+      <th>D</th>
+      <th>F</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Rouleau</td>
+      <td>25</td>
+      <td>30</td>
+      <td>15</td>
+      <td>30</td>
+    </tr>
+    <tr>
+      <td>Emplacement</td>
+      <td>30</td>
+      <td>35</td>
+      <td>20</td>
+      <td>35</td>
+    </tr>
+    <tr>
+      <td>Lacet</td>
+      <td>40</td>
+      <td>35</td>
+      <td>10</td>
+      <td>20</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="procdure-de-rglage">Procédure de réglage</h2>
+
+<h3 id="le-rglage-du-taux-en-premier">1. Le réglage du taux en premier</h3>
+
+<p>Avant le réglage PID, définissez des taux qui vous conviennent :
+- Commencez avec RC Taux 0,90, Super Taux 0,65, Expo 0,30
+- Ajustez-le en fonction de votre style de vol et de la taille de votre ornithoptère</p>
+
+<h3 id="gain-p">2. Gain P</h3>
+
+<p>Augmentez P jusqu’à ce que vous voyiez une oscillation à la fréquence de battement, puis réduisez de 20 % :
+- Oscillation en roulis : oscillation de l’aile à la cadence
+- Oscillation de tangage : oscillation d’avant en arrière
+- Oscillation de lacet : remuement de la queue synchronisé avec les coups</p>
+
+<h3 id="gain-d">3. Gain D</h3>
+
+<p>Augmentez D pour amortir le rebond après des entrées brusques avec le stick :
+- Trop : jitter des servos, surchauffe
+- Trop peu : sonnerie après l’arrêt du roulis/tangage</p>
+
+<h3 id="je-gagne">4. Je gagne</h3>
+
+<p>Je gagne des compteurs dérive persistante :
+- Augmenter jusqu’à éliminer la dérive
+- Trop : oscillation lente à 1–2 Hz (en dessous du taux de battement)</p>
+
+<h2 id="ondas-intgration">ONDAS Intégration</h2>
+
+<p>ONDAS (Ornithopter Nonlinear Dynamic Aerodynamic System) module la sortie PID dans chaque coup d’aile. Après le réglage de base de PID :</p>
+
+<ol>
+  <li>Réglez <strong>Cadence Gain</strong> — déplace la fenêtre de modulation sur une phase aérodynamiquement optimale</li>
+  <li>Réglez <strong>Ferocity P</strong> — sur-boost asymétrique immédiat</li>
+  <li>Définir <strong>Ferocity D</strong> — exploitation anticipée du glisser</li>
+  <li>Affinez la symétrie de l’aile gauche/droite <strong>Balance</strong> —</li>
+</ol>
+
+<p>Voir le <a href="ondas_tuning.html">Guide de réglage ONDAS</a> pour la procédure détaillée.</p>
+
+<h2 id="analyse-de-la-bote-noire">Analyse de la boîte noire</h2>
+
+<p>Activez la journalisation Blackbox pour visualiser les performances de PID. Recherchez :
+- <strong>Oscillation du terme P</strong> à la fréquence de battement → réduit P
+- <strong>Remontage du terme I</strong> pendant les virages soutenus → réduire le terme I ou augmenter la relaxation du terme I
+- <strong>Bruit de terme D</strong> provenant des vibrations →, vérifiez d’abord l’équilibre mécanique, puis réduisez D</p>
+
+<h2 id="profils-de-vol">Profils de vol</h2>
+
+<p>OrniFlight prend en charge 3 profils de vol commutables en cours de vol :</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Profil</th>
+      <th>Cas d’utilisation</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1</td>
+      <td>Croisière standard</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>Haute agilité / agressif</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>Efficacité / envolée thermique</td>
+    </tr>
+  </tbody>
+</table>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<strong>Français</strong>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<a href='../../hr/'>Hrvatski</a>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<a href='../../ko/'>한국어</a>
+&nbsp;◇&nbsp;
+<a href='../../lv/'>Latviešu</a>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<a href='../../zh_CN/'>中文</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

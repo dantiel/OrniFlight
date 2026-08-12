@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='id'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>Keamanan — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Docs</p>
+<h1>Keamanan</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="keamanan">Keamanan</h1>
+
+<h2 id="daftar-periksa-pra-penerbangan">Daftar Periksa Pra-Penerbangan</h2>
+
+<ol>
+  <li><strong>Sayap</strong>: Pastikan sayap terpasang dengan aman dan sambungannya utuh</li>
+  <li><strong>Baterai</strong>: Terisi penuh, diamankan dengan benar, jumlah sel benar</li>
+  <li><strong>Kontrol</strong>: Verifikasi respons stick di tab penerima Configurator</li>
+  <li><strong>Failsafe</strong>: Tes di bangku cadangan sebelum penerbangan (lihat <a href="failsafe.html">Failsafe</a>)</li>
+  <li><strong>Arm Switch</strong>: Mengonfigurasi dan menguji —, jangan pernah mengandalkan stick arming saja</li>
+  <li><strong>Area Peluncuran</strong>: Bebas dari orang, rintangan, dan penghalang di atas kepala</li>
+</ol>
+
+<h2 id="keamanan-lengan">Keamanan Lengan</h2>
+
+<p>OrniFlight menggunakan banyak pengaman sebelum mempersenjatai:</p>
+
+<ul>
+  <li><strong>Throttle rendah</strong>: Throttle harus minimum</li>
+  <li><strong>Level</strong>: Kerajinan harus cukup rata</li>
+  <li><strong>RX Signal</strong>: Diperlukan sinyal penerima yang valid</li>
+  <li><strong>CPU Load</strong>: Sistem tidak boleh kelebihan beban</li>
+  <li><strong>Kalibrasi</strong>: Akselerometer dan gyro harus dikalibrasi</li>
+</ul>
+
+<h2 id="keamanan-dalam-penerbangan">Keamanan Dalam Penerbangan</h2>
+
+<ul>
+  <li><strong>Terbang dalam garis pandang visual</strong></li>
+  <li>Jaga jarak aman dari manusia dan hewan</li>
+  <li>Pantau tegangan baterai — mendarat sebelum ambang peringatan</li>
+  <li>Di FPV: selalu terbang dengan pengintai</li>
+  <li>Angin: ornithopter bisa menjadi peka terhadap angin — ketahui batas kemampuanmu</li>
+</ul>
+
+<h2 id="prosedur-darurat">Prosedur Darurat</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Situasi</th>
+      <th>Aksi</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Kehilangan orientasi</td>
+      <td>Beralih ke mode INDEPENDENT, stik tengah</td>
+    </tr>
+    <tr>
+      <td>Kehilangan sinyal</td>
+      <td>Failsafe akan mendarat secara otomatis (jika prosedur LAND dikonfigurasi)</td>
+    </tr>
+    <tr>
+      <td>Kerusakan sayap</td>
+      <td>Segera lucuti — sayap berhenti</td>
+    </tr>
+    <tr>
+      <td>Serangan burung</td>
+      <td>Melucuti senjata, menilai kerusakan sebelum mempersenjatai kembali</td>
+    </tr>
+    <tr>
+      <td>Baterai lemah</td>
+      <td>Mendarat segera — ornithopters tidak memiliki autorotasi</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="resiko-khusus-ornithopter">Resiko Khusus Ornithopter</h2>
+
+<ul>
+  <li><strong>Bahaya terjepit</strong>: Mengepakkan sayap dapat menyebabkan cedera — jaga tangan tetap bersih saat bersenjata</li>
+  <li><strong>Kegagalan linkage</strong>: Periksa semua pushrod dan ball joint sebelum penerbangan</li>
+  <li><strong>Resonance</strong>: Frekuensi kepakan tertentu dapat memicu resonansi badan pesawat — tune ONDAS sapuan yang harus dihindari</li>
+  <li><strong>Glide lockout</strong>: Jika servo sayap gagal pada posisi non-netral, pendaratan terkontrol tidak mungkin dilakukan — uji posisi servo failsafe</li>
+</ul>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<a href='../../hr/'>Hrvatski</a>
+&nbsp;◇&nbsp;
+<strong>Bahasa Indonesia</strong>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<a href='../../ko/'>한국어</a>
+&nbsp;◇&nbsp;
+<a href='../../lv/'>Latviešu</a>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<a href='../../zh_CN/'>中文</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='hr'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>Osnovno postavljanje — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Tutorials</p>
+<h1>Osnovno postavljanje</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="osnovno-postavljanje">Osnovno postavljanje</h1>
+
+<blockquote>
+  <p><em>Konfigurirajte svoj ornitopter za prvi let.</em></p>
+</blockquote>
+
+<h2 id="kontrolni-popis-prije-leta">Kontrolni popis prije leta</h2>
+
+<p>Prije bilo čega drugog:</p>
+
+<ul>
+  <li>[ ] Kontrola leta bljeskala je OrniFlight</li>
+  <li>[ ] Prijemnik povezan s odašiljačem</li>
+  <li>[ ] Servo povezani na ispravne PWM izlaze</li>
+  <li>[ ] Baterija spojena (krila osigurana!)</li>
+</ul>
+
+<h2 id="postavljanje-prijemnika">Postavljanje prijemnika</h2>
+
+<h3 id="crsf-preporueno">CRSF (preporučeno)</h3>
+
+<ol>
+  <li><strong>Kartica Portovi</strong>: Postavite UART (npr. UART1) na “Serijski RX”</li>
+  <li><strong>Konfiguracijska kartica</strong>: Receiver Mode = “Serial-based receiver”, Provider = “CRSF”</li>
+  <li>Uključite napajanje, provjerite pomicanje ulaza kanala na kartici Prijemnik</li>
+</ol>
+
+<h3 id="sbus--ostalo">SBUS / Ostalo</h3>
+
+<p>Isti proces — odaberite odgovarajući protokol na kartici Konfiguracija.</p>
+
+<h2 id="servo-mapiranje">Servo mapiranje</h2>
+
+<p>U kartici <strong>Servos</strong>:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Servo</th>
+      <th>Funkcija</th>
+      <th>Zadana stopa</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Servo 0</td>
+      <td>Lijevo krilo</td>
+      <td>250 Hz</td>
+    </tr>
+    <tr>
+      <td>Servo 1</td>
+      <td>Desno krilo</td>
+      <td>250 Hz</td>
+    </tr>
+    <tr>
+      <td>Servo 2</td>
+      <td>Grb/kormilo</td>
+      <td>50 Hz</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>Podesite min/max/sredinu kako bi odgovarali rasponu vašeg servo uređaja. Testirajte s “Override” za potvrdu smjera.</p>
+
+<h2 id="odabir-naina-letenja">Odabir načina letenja</h2>
+
+<p>Na kartici <strong>Načini rada</strong>:</p>
+
+<ol>
+  <li><strong>ARM</strong>: Dodijelite prekidaču (sigurnost!)</li>
+  <li><strong>ORNITHOPTER INDEPENDENT</strong> ili <strong>ORNITHOPTER GLIDE</strong>: Odaberite primarni način leta</li>
+  <li><strong>ORNITHOPTER PROFILE</strong>: Dodatna dodjela — za promjenu profila tijekom leta</li>
+</ol>
+
+<h2 id="ondas-prvo-podeavanje">ONDAS Prvo podešavanje</h2>
+
+<p>Idite na podkarticu <strong>Napredno → ONDAS</strong>:</p>
+
+<ol>
+  <li><strong>Cadence dobitak</strong>: Počnite od 50 (sredina). Ovo je najvažniji parametar.</li>
+  <li><strong>Ferocity D dobitak</strong>: Počnite od 30. Ovo je vaša primarna stabilizacija.</li>
+  <li><strong>Ferocity P Gain</strong>: Počnite od 20 za roll/pitch, 0 za skretanje.</li>
+  <li><strong>Balance pojačanje</strong>: 0 (centrirano).</li>
+</ol>
+
+<p>Priključite bateriju, <strong>čvrsto pričvrstite ornitopter</strong> i ARM. Promatrajte kretanje servo —, trebalo bi biti glatko, sinusoidno treptanje.</p>
+
+<h2 id="prvi-let">Prvi let</h2>
+
+<ol>
+  <li>Počnite s blagim bacanjem u vjetar</li>
+  <li>Koristite način rada GLIDE za prirodan osjećaj uzdizanja</li>
+  <li>Koristite način INDEPENDENT kada želite izravnu kontrolu frekvencije</li>
+  <li>Sletite, podesite ONDAS, ponovite</li>
+</ol>
+
+<hr />
+
+<p><em>Sljedeće: <a href="ondas_tuning.html">ONDAS Vodič za podešavanje</a> →</em></p>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<strong>Hrvatski</strong>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<a href='../../ko/'>한국어</a>
+&nbsp;◇&nbsp;
+<a href='../../lv/'>Latviešu</a>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<a href='../../zh_CN/'>中文</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

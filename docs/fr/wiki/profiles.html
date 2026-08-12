@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='fr'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>Profils de vol — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Wiki</p>
+<h1>Profils de vol</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="profils-de-vol">Profils de vol</h1>
+
+<blockquote>
+  <p><em>4 emplacements de réglage indépendants, commutables en vol.</em></p>
+</blockquote>
+
+<h2 id="concept">Concept</h2>
+
+<p>OrniFlight stocke 4 structures <code>ornithopterProfile_t</code> complètes — contenant chacune les 19 ONDAS et les paramètres de dynamique des ailes. Un mode BOX (<code>BOXORNITHOPTERPROFILE</code>, permanentId 52) sélectionne le profil actif via un commutateur RC à 2 positions mappé sur 4 emplacements (0–3).</p>
+
+<h2 id="pourquoi-les-profils-">Pourquoi les profils ?</h2>
+
+<p>Différents régimes de vol nécessitent des réglages différents :</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Profil</th>
+      <th>Cas d’utilisation</th>
+      <th>Cadence</th>
+      <th>Ferocity</th>
+      <th>Remarques</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>0</td>
+      <td><strong>Croisière</strong></td>
+      <td>Milieu (50)</td>
+      <td>Faible (30)</td>
+      <td>Vol avant efficace</td>
+    </tr>
+    <tr>
+      <td>1</td>
+      <td><strong>Acrobatie</strong></td>
+      <td>Faible (20)</td>
+      <td>Élevé (80)</td>
+      <td>Autorité maximale</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td><strong>Survol/Loiter</strong></td>
+      <td>Élevé (70)</td>
+      <td>Milieu (50)</td>
+      <td>Stabilité par rapport à la vitesse</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td><strong>Glisser</strong></td>
+      <td>Milieu (50)</td>
+      <td>Faible (10)</td>
+      <td>Intervention minimale</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="que-contient-un-profil">Que contient un profil</h2>
+
+<p>Les 19 champs de <code>ornithopterProfile_t</code> :</p>
+
+<ul>
+  <li><strong>Géométrie de glisse</strong> : glide_angle</li>
+  <li><strong>ONDAS v2 (10)</strong> : cadence, ferocity_d/p/roll/yaw, équilibre, warp, warp_yaw, ancre, résonance</li>
+  <li><strong>Phase 2 (4)</strong> : prescience, espelho, saudade, ssff</li>
+  <li><strong>Forme de vague (2)</strong> : ferocity_downStroke, ferocity_upStroke</li>
+  <li><strong>Aéroélastique (2)</strong> : aeroelastic_glide_coefficient, aeroelastic_flap_coefficient</li>
+</ul>
+
+<h2 id="quest-ce-qui-est-global-pas-par-profil">Qu’est-ce qui est global (pas par profil)</h2>
+
+<ul>
+  <li>Canal de fréquence (un canal RC, fonctionne à la fois en INDEPENDENT et GLIDE)</li>
+  <li>Angles de montage des servos</li>
+  <li>Déphasages battants</li>
+  <li>géométrie GralhaAzul (servo_speed, max_amplitude, flap_magnitude, wing_origin)</li>
+</ul>
+
+<p>Ce sont des constantes physiques de la cellule —, elles ne changent pas avec le régime de vol.</p>
+
+<h2 id="changement-de-vol">Changement de vol</h2>
+
+<ol>
+  <li>Attribuez un interrupteur 2 ou 3 positions à un canal de réserve</li>
+  <li>Dans l’onglet Modes du configurateur, mappez cette plage à <code>ORNITHOPTER PROFILE</code></li>
+  <li>Chaque position du commutateur sélectionne l’un des 4 emplacements</li>
+  <li>La liste déroulante du profil du configurateur modifie l’emplacement <em>actuellement sélectionné</em> via MSP</li>
+</ol>
+
+<hr />
+
+<p><em>Voir <code>src/main/flight/ornithopter_profile.h</code> pour la définition de la structure.</em></p>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<strong>Français</strong>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<a href='../../hr/'>Hrvatski</a>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<a href='../../ko/'>한국어</a>
+&nbsp;◇&nbsp;
+<a href='../../lv/'>Latviešu</a>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<a href='../../zh_CN/'>中文</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

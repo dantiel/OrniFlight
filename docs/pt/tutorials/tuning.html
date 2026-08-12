@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='pt'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>PID Ajuste — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Tutorials</p>
+<h1>PID Ajuste</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="pid-ajuste">PID Ajuste</h1>
+
+<p>OrniFlight usa um controlador PID (Proporcional-Integral-Derivativo) adaptado para vôo com asas batendo. O ajuste difere significativamente das aeronaves convencionais devido à natureza periódica do empuxo oscilante.</p>
+
+<h2 id="ornitptero-pid-noes-bsicas">Ornitóptero PID Noções básicas</h2>
+
+<p>Ao contrário das aeronaves convencionais, onde o empuxo é quase contínuo, o empuxo do ornitóptero oscila a cada golpe de asa. Isso cria:</p>
+
+<ul>
+  <li><strong>Ondulação de impulso</strong> na frequência de oscilação (normalmente 5–15 Hz)</li>
+  <li><strong>Autoridade de controle dependente de fase</strong> — a mesma saída PID tem efeito diferente dependendo de onde no ciclo de curso ela é aplicada</li>
+  <li><strong>Dinâmica de rotação e guinada acoplada</strong> O empuxo assimétrico da asa — afeta ambos os eixos simultaneamente</li>
+</ul>
+
+<h2 id="pid-termos">PID Termos</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Prazo</th>
+      <th>Efeito</th>
+      <th>Nota sobre ornitóptero</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>P</strong></td>
+      <td>Correção imediata — proporcional</td>
+      <td>Use valores conservadores; oscilação é oscilante síncrona</td>
+    </tr>
+    <tr>
+      <td><strong>Eu</strong></td>
+      <td>Correção de erro persistente — integral</td>
+      <td>Essencial para manter a atitude durante os planeios</td>
+    </tr>
+    <tr>
+      <td><strong>D</strong></td>
+      <td>Derivada — amortece oscilações</td>
+      <td>Ajustado à taxa de curso da asa, não às oscilações do quadro</td>
+    </tr>
+    <tr>
+      <td><strong>Foda-se</strong></td>
+      <td>Feed-forward — direto stick-to-output</td>
+      <td>Útil para resposta nítida no eixo de rotação</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="valores-iniciais">Valores iniciais</h2>
+
+<p>Para um ornitóptero de tamanho médio (1–1,5 m de envergadura):</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Eixo</th>
+      <th>P</th>
+      <th>eu</th>
+      <th>D</th>
+      <th>F</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Rolo</td>
+      <td>25</td>
+      <td>30</td>
+      <td>15</td>
+      <td>30</td>
+    </tr>
+    <tr>
+      <td>Argumento</td>
+      <td>30</td>
+      <td>35</td>
+      <td>20</td>
+      <td>35</td>
+    </tr>
+    <tr>
+      <td>Guinada</td>
+      <td>40</td>
+      <td>35</td>
+      <td>10</td>
+      <td>20</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="procedimento-de-ajuste">Procedimento de ajuste</h2>
+
+<h3 id="avalie-o-ajuste-primeiro">1. Avalie o ajuste primeiro</h3>
+
+<p>Antes de ajustar o PID, defina taxas que sejam confortáveis:
+- Comece com RC Taxa 0,90, Super Taxa 0,65, Expo 0,30
+- Ajuste de acordo com seu estilo de vôo e tamanho do ornitóptero</p>
+
+<h3 id="ganho-p">2. Ganho P</h3>
+
+<p>Aumente P até ver a oscilação na frequência de oscilação e, em seguida, diminua 20%:
+- Oscilação de rotação: oscilação da asa na taxa de curso
+- Oscilação de passo: balanço para frente e para trás
+- Oscilação de guinada: abanar a cauda sincronizado com os golpes</p>
+
+<h3 id="ganho-d">3. Ganho D</h3>
+
+<p>Aumente D para amortecer o retorno após movimentos bruscos do stick:
+- Demais: servo jitter, superaquecimento
+- Muito pouco: toque após parar o roll/pitch</p>
+
+<h3 id="eu-ganho">4. Eu ganho</h3>
+
+<p>Eu ganho desvio persistente de contadores:
+- Aumente até que a deriva seja eliminada
+- Demais: oscilação lenta a 1–2 Hz (abaixo da taxa de oscilação)</p>
+
+<h2 id="integrao-ondas">Integração ONDAS</h2>
+
+<p>ONDAS (Ornithopter Nonlinear Dynamic Aerodynamic System) modula a saída PID dentro de cada golpe de asa. Após o ajuste básico do PID:</p>
+
+<ol>
+  <li>Defina <strong>Cadence Gain</strong> — muda a janela de modulação para a fase aerodinamicamente ideal</li>
+  <li>Defina <strong>Ferocity P</strong> — impulso de impulso assimétrico imediato</li>
+  <li>Definir <strong>Ferocity D</strong> — exploração antecipada de arrasto</li>
+  <li>Ajuste <strong>Balance</strong> — simetria da asa esquerda/direita</li>
+</ol>
+
+<p>Consulte o <a href="ondas_tuning.html">Guia de ajuste ONDAS</a> para obter procedimentos detalhados.</p>
+
+<h2 id="anlise-de-caixa-preta">Análise de caixa preta</h2>
+
+<p>Ative o registro do Blackbox para visualizar o desempenho do PID. Procure:
+- <strong>Oscilação do termo P</strong> na frequência de oscilação → reduz P
+- <strong>Encerramento do termo I</strong> durante curvas sustentadas → reduz I ou aumenta o relaxamento do termo I
+- <strong>Ruído de termo D</strong> da vibração → verifique primeiro o equilíbrio mecânico e depois reduza D</p>
+
+<h2 id="perfis-de-voo">Perfis de voo</h2>
+
+<p>OrniFlight suporta 3 perfis de voo comutáveis durante o voo:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Perfil</th>
+      <th>Caso de uso</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1</td>
+      <td>Cruzeiro padrão</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>Alta agilidade/agressividade</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>Eficiência / elevação térmica</td>
+    </tr>
+  </tbody>
+</table>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<a href='../../hr/'>Hrvatski</a>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<a href='../../ko/'>한국어</a>
+&nbsp;◇&nbsp;
+<a href='../../lv/'>Latviešu</a>
+&nbsp;◇&nbsp;
+<strong>Português</strong>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<a href='../../zh_CN/'>中文</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

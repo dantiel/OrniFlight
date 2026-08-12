@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='ru'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>Начало работы — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Tutorials</p>
+<h1>Начало работы</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="section">Начало работы</h1>
+
+<p>Добро пожаловать в OrniFlight! Это руководство проведет вас через первоначальную настройку контроллера полета орнитоптера.</p>
+
+<h2 id="section-1">Что вам нужно</h2>
+
+<ul>
+  <li><strong>OrniFlight Конфигуратор</strong> — скачать с <a href="https://orniflight.org">orniflight.org</a></li>
+  <li><strong>кабель USB</strong> — для подключения полетного контроллера к компьютеру.</li>
+  <li><strong>Орнитоптер</strong> с:
+    <ul>
+      <li>Поддерживаемый полетный контроллер (OMNIBUSF4, TINYFISH)</li>
+      <li>Сервоприводы для приведения в действие крыла</li>
+      <li>Приемник привязан к вашему передатчику</li>
+      <li>Аккумулятор (2S–4S LiPo)</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="section-2">Быстрый старт</h2>
+
+<h3 id="section-3">1. Прошить прошивку</h3>
+
+<ol>
+  <li>Откройте <strong>Конфигуратор OrniFlight</strong>.</li>
+  <li>Перейдите на вкладку <strong>Прошивка</strong>.</li>
+  <li>Выберите цель доски (OMNIBUSF4 или TINYFISH).</li>
+  <li>Выберите последнюю стабильную версию.</li>
+  <li>Нажмите <strong>Загрузить прошивку</strong>, затем <strong>Загрузить прошивку</strong>.</li>
+</ol>
+
+<h3 id="section-4">2. Первоначальная настройка</h3>
+
+<p>После прошивки Конфигуратор предложит применить пользовательские настройки по умолчанию. <strong>Всегда соглашайтесь.</strong></p>
+
+<h3 id="section-5">3. Настройка приемника</h3>
+
+<ol>
+  <li>Перейдите на вкладку <strong>Порты</strong>. → установите правильный UART на <code>Serial RX</code>.</li>
+  <li>Перейдите на вкладку <strong>Конфигурация</strong> → и выберите протокол приемника (CRSF, SBUS и т. д.).</li>
+  <li>Перейдите на вкладку <strong>Приемник</strong> → и убедитесь, что движения джойстика соответствуют ожидаемым каналам.</li>
+  <li>Установите конечные точки канала: 1000–2000 с центром 1500.</li>
+</ol>
+
+<h3 id="section-6">4. Настройка сервопривода</h3>
+
+<ol>
+  <li>Перейдите на вкладку <strong>Сервоприводы</strong>.</li>
+  <li>Убедитесь, что отображение сервоприводов соответствует конфигурации крыла вашего орнитоптера.</li>
+  <li>При необходимости проверьте направление сервопривода — на обратное.</li>
+  <li>Установите центральное положение (крылья по горизонтали = 1500).</li>
+</ol>
+
+<h3 id="section-7">5. Настройка режимов</h3>
+
+<ol>
+  <li>Перейдите на вкладку <strong>Режимы</strong>.</li>
+  <li>Назначьте ARM переключателю AUX.</li>
+  <li>Назначьте режимы полета (ANGLE/ACRO/HORIZON) по желанию.</li>
+  <li>Назначьте INDEPENDENT и GLIDE запасным переключателям.</li>
+  <li>Настройте BEEPER для поиска потерянной модели.</li>
+</ol>
+
+<h3 id="section-8">6. Первый полет</h3>
+
+<ol>
+  <li><strong>Отсоедините тягу крыла для стендовых испытаний</strong></li>
+  <li>Активируйте и проверьте направление движения сервопривода.</li>
+  <li>Проверьте реакцию дроссельной заслонки.</li>
+  <li>Для первого реального полета: используйте режим ANGLE, низкие тарифы.</li>
+  <li>Наведите курсор на уровень глаз, обрежьте при необходимости</li>
+</ol>
+
+<h2 id="section-9">Следующие шаги</h2>
+
+<ul>
+  <li><a href="basic_setup.html">Базовая настройка</a> подробное пошаговое руководство по настройке —</li>
+  <li><a href="../../tutorials/ondas_tuning.html">ONDAS Tuning</a> — мелодия, хлопающая динамика</li>
+  <li><a href="../../tutorials/tuning.html">PID Tuning</a> — корректирует летные характеристики</li>
+</ul>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<a href='../../hr/'>Hrvatski</a>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<a href='../../ko/'>한국어</a>
+&nbsp;◇&nbsp;
+<a href='../../lv/'>Latviešu</a>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<strong>Русский</strong>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<a href='../../zh_CN/'>中文</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

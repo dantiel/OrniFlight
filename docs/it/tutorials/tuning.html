@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='it'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>PID Sintonia — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Tutorials</p>
+<h1>PID Sintonia</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="pid-sintonia">PID Sintonia</h1>
+
+<p>OrniFlight utilizza un controller PID (Proporzionale-Integrale-Derivativo) adattato per il volo ad ala battente. La messa a punto differisce significativamente da quella degli aerei convenzionali a causa della natura periodica della spinta sbattente.</p>
+
+<h2 id="nozioni-di-base-sullornitottero-pid">Nozioni di base sull’ornitottero PID</h2>
+
+<p>A differenza degli aerei convenzionali in cui la spinta è quasi continua, la spinta degli ornitotteri oscilla ad ogni colpo d’ala. Questo crea:</p>
+
+<ul>
+  <li><strong>Ondulazione della spinta</strong> alla frequenza di sbattimento (tipicamente 5–15 Hz)</li>
+  <li><strong>Autorità di controllo dipendente dalla fase</strong> — la stessa uscita PID ha effetti diversi a seconda del punto del ciclo di corsa in cui viene applicata</li>
+  <li><strong>Dinamica roll-yaw accoppiata</strong> — la spinta asimmetrica dell’ala influisce su entrambi gli assi contemporaneamente</li>
+</ul>
+
+<h2 id="pid-termini">PID Termini</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Termine</th>
+      <th>Effetto</th>
+      <th>Nota sull’ornitottero</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>P</strong></td>
+      <td>Correzione immediata proporzionale —</td>
+      <td>Utilizzare valori conservativi; l’oscillazione è sincrona al battito delle ali</td>
+    </tr>
+    <tr>
+      <td><strong>Io</strong></td>
+      <td>Correzione errori persistenti integrali —</td>
+      <td>Indispensabile per mantenere l’assetto durante le planate</td>
+    </tr>
+    <tr>
+      <td><strong>D</strong></td>
+      <td>Il derivato — smorza le oscillazioni</td>
+      <td>Sintonizzato sulla frequenza della corsa dell’ala, non sulle oscillazioni del telaio</td>
+    </tr>
+    <tr>
+      <td><strong>Cazzo</strong></td>
+      <td>Feed-forward — stick-to-output diretto</td>
+      <td>Utile per una risposta nitida sull’asse di rollio</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="valori-iniziali">Valori iniziali</h2>
+
+<p>Per un ornitottero di medie dimensioni (apertura alare 1–1,5 m):</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Asse</th>
+      <th>P</th>
+      <th>Io</th>
+      <th>D</th>
+      <th>F</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Rotolo</td>
+      <td>25</td>
+      <td>30</td>
+      <td>15</td>
+      <td>30</td>
+    </tr>
+    <tr>
+      <td>Passo</td>
+      <td>30</td>
+      <td>35</td>
+      <td>20</td>
+      <td>35</td>
+    </tr>
+    <tr>
+      <td>Imbardata</td>
+      <td>40</td>
+      <td>35</td>
+      <td>10</td>
+      <td>20</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="procedura-di-ottimizzazione">Procedura di ottimizzazione</h2>
+
+<h3 id="prima-la-regolazione-della-velocit">1. Prima la regolazione della velocità</h3>
+
+<p>Prima di accordare PID, imposta le frequenze che ti sembrano comode:
+- Inizia con RC Tasso 0,90, Super Tasso 0,65, Expo 0,30
+- Adatta al tuo stile di volo e alle dimensioni dell’ornitottero</p>
+
+<h3 id="guadagno-p">2. Guadagno P</h3>
+
+<p>Aumenta P finché non vedi l’oscillazione alla frequenza di sbattimento, quindi diminuisci del 20%:
+- Oscillazione del rollio: oscillazione dell’ala alla frequenza della corsa
+- Oscillazione del passo: bobbing avanti-indietro
+- Oscillazione dell’imbardata: scodinzolio sincronizzato con i colpi</p>
+
+<h3 id="guadagno-d">3. Guadagno D</h3>
+
+<p>Aumenta D per smorzare il rimbalzo dopo input bruschi della levetta:
+- Troppo: jitter del servo, surriscaldamento
+- Troppo poco: squillo dopo l’arresto del rollio/beccheggio</p>
+
+<h3 id="ci-guadagno">4. Ci guadagno</h3>
+
+<p>Ottengo contatori deriva persistente:
+- Aumentare fino all’eliminazione della deriva
+- Troppo: oscillazione lenta a 1–2 Hz (al di sotto della velocità di sbattimento)</p>
+
+<h2 id="ondas-integrazione">ONDAS Integrazione</h2>
+
+<p>ONDAS (Ornithopter Nonlinear Dynamic Aerodynamic System) modula l’uscita PID all’interno di ogni colpo d’ala. Dopo l’accordatura base di PID:</p>
+
+<ol>
+  <li>Imposta <strong>Cadence Gain</strong> — sposta la finestra di modulazione sulla fase aerodinamicamente ottimale</li>
+  <li>Imposta <strong>Ferocity P</strong> — immediato aumento della spinta asimmetrica</li>
+  <li>Impostare <strong>Ferocity D</strong> — sfruttamento anticipato della resistenza</li>
+  <li>Perfeziona <strong>Balance</strong> — la simmetria dell’ala sinistra/destra</li>
+</ol>
+
+<p>Vedere la <a href="ondas_tuning.html">Guida alla sintonizzazione ONDAS</a> per la procedura dettagliata.</p>
+
+<h2 id="analisi-della-scatola-nera">Analisi della scatola nera</h2>
+
+<p>Abilita la registrazione Blackbox per visualizzare le prestazioni PID. Cerca:
+- <strong>Oscillazione del termine P</strong> alla frequenza di battito → riduce P
+- <strong>Avvolgimento del termine I</strong> durante le virate sostenute → riduce il rilassamento del I termine o aumenta il relax del termine I
+- <strong>Rumore del termine D</strong> derivante dalle vibrazioni → controllare prima il bilanciamento meccanico, quindi ridurre D</p>
+
+<h2 id="profili-di-volo">Profili di volo</h2>
+
+<p>OrniFlight supporta 3 profili di volo commutabili durante il volo:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Profilo</th>
+      <th>Caso d’uso</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1</td>
+      <td>Crociera standard</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>Elevata agilità/aggressività</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>Efficienza / impennata termica</td>
+    </tr>
+  </tbody>
+</table>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<a href='../../hr/'>Hrvatski</a>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<strong>Italiano</strong>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<a href='../../ko/'>한국어</a>
+&nbsp;◇&nbsp;
+<a href='../../lv/'>Latviešu</a>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<a href='../../zh_CN/'>中文</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

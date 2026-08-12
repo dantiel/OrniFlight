@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='zh_CN'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>视频发射器 (VTX) — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Docs</p>
+<h1>视频发射器 (VTX)</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="vtx">视频发射器 (VTX)</h1>
+
+<p>OrniFlight 支持 FPV 扑翼机的 VTX 控制。 VTX 模块可通过 OrniFlight 配置器、MSP 或 CLI — 设置频段、通道、功率电平和坑模式进行配置。</p>
+
+<h2 id="section">支持的协议</h2>
+
+<ol>
+  <li><strong>IRC Tramp</strong> — 常见于小型 VTX 模块，非常适合轻型 FPV 扑翼机</li>
+  <li><strong>TBS SmartAudio</strong> — 支持坑模式的数字协议</li>
+  <li><strong>RTC6705</strong> — 在带有集成 VTX 的板上直接 SPI 控制（例如 SPRACINGF3NEO）</li>
+</ol>
+
+<h2 id="section-1">配置</h2>
+
+<p>VTX 设置通过 OrniFlight 配置器中的 <strong>VTX</strong> 选项卡或通过 CLI 进行管理：</p>
+
+<p>呜呜呜</p>
+
+<h2 id="section-2">串口</h2>
+
+<p>VTX 控制需要专用的 UART TX 引脚。使用 <code>IRC Tramp</code> 或 <code>TBS SmartAudio</code> 外设在 <strong>端口</strong> 选项卡中配置端口。</p>
+
+<h2 id="fpv-">FPV 扑翼机注意事项</h2>
+
+<ul>
+  <li>重量很关键 — 选择轻量级 VTX 模块（Tramp Nano、Eachine Nano）</li>
+  <li>天线安装：确保与扑翼的间隙</li>
+  <li>电源滤波：在 LC 滤波器之后连接 VTX 电源，以避免视频中的伺服噪声</li>
+  <li>建议在台架测试中使用坑模式，以避免小型 VTX 模块过热</li>
+</ul>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<a href='../../hr/'>Hrvatski</a>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<a href='../../ko/'>한국어</a>
+&nbsp;◇&nbsp;
+<a href='../../lv/'>Latviešu</a>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<strong>中文</strong>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

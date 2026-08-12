@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='ja'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>MSP プロトコル — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Wiki</p>
+<h1>MSP プロトコル</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="msp-">MSP プロトコル</h1>
+
+<blockquote>
+  <p><em>MultiWii シリアル プロトコル — コンフィグレータが OrniFlight と通信する方法。</em></p>
+</blockquote>
+
+<h2 id="section">概要</h2>
+
+<p>OrniFlight は、鳥飛行装置固有のメッセージを使用して Betaflight MSP を拡張します。正式な仕様は、<code>src/main/msp/</code> のファームウェア リポジトリにあります。</p>
+
+<p><strong>現在のバージョン:</strong> apiVersion 1.46 (OrniFlight v0.4.6)</p>
+
+<h2 id="section-1">重要なメッセージ</h2>
+
+<h3 id="msppidadvanced-112--0x70">MSP_PID_ADVANCED (112 / 0x70)</h3>
+
+<p>メインの ONDAS チューニング メッセージ。 48 バイト (レガシー) から 87 バイト (1.46) に増加しました。</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>API バージョン</th>
+      <th>サイズ</th>
+      <th>新しいコンテンツ</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1.33</td>
+      <td>48</td>
+      <td>レガシー PID アドバンスト</td>
+    </tr>
+    <tr>
+      <td>1.42</td>
+      <td>59</td>
+      <td>+ itermRelaxCutoff、ONDAS v2 で 10 のゲイン</td>
+    </tr>
+    <tr>
+      <td>1.43</td>
+      <td>71</td>
+      <td>+ servo_mount_angle[4]、phase_shift[4]、prescience、espelho、saudade、ssff</td>
+    </tr>
+    <tr>
+      <td>1.44</td>
+      <td>75</td>
+      <td>+ サーボ速度、最大振幅、フラップ振幅、翼原点オフセット[4]</td>
+    </tr>
+    <tr>
+      <td>1.45</td>
+      <td>82</td>
+      <td>+ freq_channel、freq_min_hz、freq_max_hz、flight_mode、flutter_gain、flutter_hz、throttle_bypass</td>
+    </tr>
+    <tr>
+      <td>1.46</td>
+      <td>87</td>
+      <td>+ プロファイルインデックス、フェロシティ_ダウンストローク、フェロシティ_アップストローク、エアロエラスティック_グライド、エアロエラスティック_フラップ</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="mspservoconfigurations-120--0x78">MSP_SERVO_CONFIGURATIONS (120 / 0x78)</h3>
+
+<p>4 ONDAS の末尾バイトを含むサーボ構成: glide_deg + ONDAS v1 トリプレット。</p>
+
+<h2 id="section-2">下位互換性</h2>
+
+<p>すべての API バージョンには下位互換性があります。 48 バイトの送信者は 1.46 の受信者と通信します。— 追加フィールドのデフォルトは適切な値です。</p>
+
+<h2 id="section-3">ワイヤー形式</h2>
+
+<p>すべてのマルチバイト値はリトルエンディアンです。符号付きの値は、回線上に <code>value + 128</code> として保存されます。符号なしゲイン値 (0–100) は直接値です。配列の長さの前に u8 カウントが付きます。</p>
+
+<hr />
+
+<p><em>完全な仕様については、ファームウェア リポジトリの <code>docs/MSP_FIRMWARE_INTERFACE.md</code> を参照してください。</em></p>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<a href='../../hr/'>Hrvatski</a>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<strong>日本語</strong>
+&nbsp;◇&nbsp;
+<a href='../../ko/'>한국어</a>
+&nbsp;◇&nbsp;
+<a href='../../lv/'>Latviešu</a>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<a href='../../zh_CN/'>中文</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

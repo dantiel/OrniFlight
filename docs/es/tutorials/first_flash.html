@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='es'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>Primer destello — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Tutorials</p>
+<h1>Primer destello</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="primer-destello">Primer destello</h1>
+
+<blockquote>
+  <p><em>Obtener OrniFlight en su controlador de vuelo — paso a paso.</em></p>
+</blockquote>
+
+<h2 id="lo-que-necesitas">Lo que necesitas</h2>
+
+<ul>
+  <li>Controlador de vuelo basado en STM32F4 (OMNIBUSF4, TINYFISH, MATEKF405, etc.)</li>
+  <li>cable USB</li>
+  <li><a href="http://dfu-util.sourceforge.net/">dfu-util</a> o STM32CubeProgrammer</li>
+  <li>Archivo OrniFlight <code>.hex</code> de la <a href="https://github.com/dantiel/OrniFlight/releases">página de lanzamientos</a></li>
+</ul>
+
+<h2 id="paso-1-ingrese-al-modo-dfu">Paso 1: Ingrese al modo DFU</h2>
+
+<ol>
+  <li><strong>Mantén presionado el botón BOOT</strong> en tu controlador de vuelo</li>
+  <li><strong>Conecte USB</strong> mientras mantiene presionado el botón</li>
+  <li><strong>Suelta</strong> después de 2 segundos</li>
+</ol>
+
+<p>Verificar en macOS/Linux:</p>
+
+<p><code>
+dfu-util -l
+</code>z</p>
+
+<p>Debería mostrar <code>Found DFU: [0483:df11]</code></p>
+
+<h2 id="paso-2-flashear">Paso 2: Flashear</h2>
+
+<p><code>
+dfu-util -a 0 -D obj/orniflight_0.4.6_OMNIBUSF4.hex
+</code>z</p>
+
+<h2 id="paso-3-primer-arranque">Paso 3: primer arranque</h2>
+
+<ol>
+  <li>Desenchufe USB</li>
+  <li>Vuelva a enchufar USB (no mantenga presionado BOOT)</li>
+  <li>Conéctese a través del configurador OrniFlight</li>
+</ol>
+
+<h2 id="paso-4-configuracin-bsica">Paso 4: Configuración básica</h2>
+
+<p>En el Configurador:</p>
+
+<ol>
+  <li><strong>Pestaña Puertos</strong>: Configure UART para su receptor (Serial RX)</li>
+  <li><strong>Pestaña Configuración</strong>: Seleccione el protocolo del receptor (se recomienda CRSF)</li>
+  <li><strong>Pestaña Modos</strong>: configure los interruptores ARM, GLIDE/INDEPENDENT y PROFILE.</li>
+  <li><strong>Pestaña avanzada → ONDAS</strong>: revise los valores predeterminados, ajuste Cadence primero</li>
+</ol>
+
+<h2 id="solucin-de-problemas">Solución de problemas</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Problema</th>
+      <th>Arreglar</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>dispositivo DFU no encontrado</td>
+      <td>Pruebe un cable USB diferente, verifique el botón BOOT</td>
+    </tr>
+    <tr>
+      <td>El flash falla</td>
+      <td>Verifique la instalación de dfu-util, permisos USB</td>
+    </tr>
+    <tr>
+      <td>Sin arranque después del flash</td>
+      <td>Vuelva a flashear, verifique que el hexadecimal coincida con su objetivo</td>
+    </tr>
+    <tr>
+      <td>El configurador no se conecta</td>
+      <td>Verifique el puerto COM y la velocidad en baudios</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<p><em>Siguiente: <a href="basic_setup.html">Configuración básica</a> →</em></p>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<strong>Español</strong>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<a href='../../hr/'>Hrvatski</a>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<a href='../../ko/'>한국어</a>
+&nbsp;◇&nbsp;
+<a href='../../lv/'>Latviešu</a>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<a href='../../zh_CN/'>中文</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

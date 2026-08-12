@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='it'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>Controlli — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Docs</p>
+<h1>Controlli</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="controlli">Controlli</h1>
+
+<p>OrniFlight utilizza la mappatura stick standard RC con estensioni specifiche per gli ornitotteri.</p>
+
+<h2 id="mappatura-degli-stick">Mappatura degli stick</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Bastone</th>
+      <th>Asse</th>
+      <th>Effetto primario</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Acceleratore (sinistra, verticale)</td>
+      <td>Acceleratore</td>
+      <td>Ampiezza/spinta del battito d’ali</td>
+    </tr>
+    <tr>
+      <td>Imbardata (sinistra, orizzontale)</td>
+      <td>Imbardata</td>
+      <td>Spinta alare differenziale per virata</td>
+    </tr>
+    <tr>
+      <td>Intonazione (destra, verticale)</td>
+      <td>Passo</td>
+      <td>Inclinazione avanti/indietro</td>
+    </tr>
+    <tr>
+      <td>Rotolare (a destra, orizzontale)</td>
+      <td>Rotolo</td>
+      <td>Sistema bancario sinistro/destro</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="modalit-di-volo">Modalità di volo</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Modalità</th>
+      <th>Comportamento dello stick</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>ACRO</strong></td>
+      <td>Gli stick controllano la velocità angolare — nessun livello automatico</td>
+    </tr>
+    <tr>
+      <td><strong>ANGLE</strong></td>
+      <td>L’angolo di controllo degli stick — si livella automaticamente quando viene rilasciato</td>
+    </tr>
+    <tr>
+      <td><strong>HORIZON</strong></td>
+      <td>ANGLE vicino al centro, ACRO alla massima deflessione</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>ACRO è consigliato a piloti esperti. ANGLE è ottimo per i primi voli e per il volo in termica.</p>
+
+<h2 id="controlli-specifici-degli-ornitotteri">Controlli specifici degli ornitotteri</h2>
+
+<h3 id="modalit-independent">Modalità INDEPENDENT</h3>
+
+<p>Quando la modalità INDEPENDENT è attiva, ciascun servo dell’ala risponde in modo indipendente:
+- <strong>Levetta sinistra</strong> → servi dell’ala sinistra
+- <strong>Levetta destra</strong> → servi dell’ala destra
+- Consente lo sbattimento asimmetrico per manovre aggressive</p>
+
+<h3 id="modalit-glide">Modalità GLIDE</h3>
+
+<p>La modalità GLIDE blocca entrambe le ali in posizione orizzontale. L’ornitottero diventa un aliante:
+- <strong>L’acceleratore</strong> non ha alcun effetto sulla posizione dell’ala
+- <strong>Beccheggio/Roll/Imbardata</strong> influenzano ancora le superfici di controllo della coda (se in dotazione)</p>
+
+<h3 id="cambio-profilo">Cambio profilo</h3>
+
+<p>La commutazione del profilo in volo tramite il canale AUX consente di modificare i parametri PID/ONDAS durante il volo:
+- <strong>Profilo 1</strong>: impostazioni di crociera standard
+- <strong>Profilo 2</strong>: impostazioni ad alta agilità
+- <strong>Profilo 3</strong>: impostazioni di efficienza/planata</p>
+
+<h2 id="tariffe">Tariffe</h2>
+
+<p>Configura le tariffe nella scheda <strong>PID Tuning</strong>. Per gli ornitotteri, iniziare con ritmi conservativi. — La dinamica del battito d’ali amplifica gli input di controllo:
+- Tasso RC: 0,80–1,00
+- Tasso super: 0,60–0,70
+-Expo: 0,20–0,40</p>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<a href='../../hr/'>Hrvatski</a>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<strong>Italiano</strong>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<a href='../../ko/'>한국어</a>
+&nbsp;◇&nbsp;
+<a href='../../lv/'>Latviešu</a>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<a href='../../zh_CN/'>中文</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

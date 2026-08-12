@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='ru'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>LED Полоса — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Docs</p>
+<h1>LED Полоса</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="led-">LED Полоса</h1>
+
+<p>OrniFlight поддерживает адресные полосы WS2812/SK6812 LED для индикации состояния и визуальной обратной связи.</p>
+
+<h2 id="section">Конфигурация</h2>
+
+<p>Полосы LED настраиваются на вкладке <strong>LED Strip</strong> конфигуратора OrniFlight. Каждую позицию, цвет и функцию LED можно настроить индивидуально.</p>
+
+<h2 id="section-1">Функции</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Функция</th>
+      <th>Визуальный эффект</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Индикатор заряда батареи</td>
+      <td>Цветовой градиент от зеленого → желтого → красного</td>
+    </tr>
+    <tr>
+      <td>RSSI</td>
+      <td>Отображение уровня сигнала</td>
+    </tr>
+    <tr>
+      <td>Государство Армии</td>
+      <td>Изменение цвета при постановке/снятии с охраны</td>
+    </tr>
+    <tr>
+      <td>Режим полета</td>
+      <td>Цвета, специфичные для режима</td>
+    </tr>
+    <tr>
+      <td>Предупреждение</td>
+      <td>Шаблоны мигания при низком заряде батареи, отказоустойчивость</td>
+    </tr>
+    <tr>
+      <td>Хлопающий индикатор</td>
+      <td>Импульс с текущей частотой колебаний</td>
+    </tr>
+    <tr>
+      <td>Направление тяги</td>
+      <td>Сдвиг цвета, обозначающий выходной сигнал крена/тангажа/рысканья</td>
+    </tr>
+    <tr>
+      <td>GPS</td>
+      <td>Блокировка спутника и направление домой</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="section-2">Аппаратное обеспечение</h2>
+
+<ul>
+  <li>светодиоды WS2812 или SK6812 RGB</li>
+  <li>Подключитесь к контакту <strong>LED</strong> на полетном контроллере.</li>
+  <li>Питание светодиодов от BEC (НЕ питайте от 3,3В, — используйте 5В)</li>
+  <li>Для длинных полос (&gt;8 светодиодов) подключайте питание 5 В напрямую к клеммам аккумулятора, а не через FC.</li>
+</ul>
+
+<h2 id="section-3">Использование орнитоптера</h2>
+
+<p><strong>Индикатор взмахов</strong> является уникальным: светодиоды OrniFlight — пульсируют синхронно с частотой взмахов крыльев, обеспечивая визуальное представление ритма взмахов и помогая настроить параметры частоты вращения ONDAS.</p>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<a href='../../hr/'>Hrvatski</a>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<a href='../../ko/'>한국어</a>
+&nbsp;◇&nbsp;
+<a href='../../lv/'>Latviešu</a>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<strong>Русский</strong>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<a href='../../zh_CN/'>中文</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

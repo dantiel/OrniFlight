@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='lv'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>Drošība — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Docs</p>
+<h1>Drošība</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="droba">Drošība</h1>
+
+<h2 id="kontrolsaraksts-pirms-lidojuma">Kontrolsaraksts pirms lidojuma</h2>
+
+<p>1. <strong>Spārni</strong>: pārliecinieties, vai spārni ir droši uzstādīti un savienojums ir neskarts.
+2. <strong>Akumulators</strong>: pilnībā uzlādēts, pareizi nostiprināts, pareizs šūnu skaits
+3. <strong>Vadības</strong>: pārbaudiet nūjas atbildes cilnē Configurator uztvērējs
+4. <strong>Failsafe</strong>: pārbaude uz stenda pirms lidojuma (skatiet <a href="failsafe.html">Failsafe</a>).
+5. <strong>Izslēgšanas slēdzis</strong>: konfigurējiet un pārbaudiet —, nekad nepaļaujieties tikai uz aktivizēšanu ar stieni.
+6. <strong>Palaišanas zona</strong>: brīva no cilvēkiem, šķēršļiem un šķēršļiem virs galvas</p>
+
+<h2 id="roku-droba">Roku drošība</h2>
+
+<p>OrniFlight pirms bruņojuma aktivizēšanas izmanto vairākus drošības līdzekļus:</p>
+
+<ul>
+  <li><strong>Zems droseles vārsts</strong>: droselei jābūt minimālai</li>
+  <li><strong>Līmenis</strong>: amatniecībai jābūt pietiekami līdzenai</li>
+  <li><strong>RX signāls</strong>: nepieciešams derīgs uztvērēja signāls</li>
+  <li><strong>CPU Slodze</strong>: Sistēmu nedrīkst pārslogot</li>
+  <li><strong>Kalibrēšana</strong>: akselerometrs un žiroskops ir jākalibrē</li>
+</ul>
+
+<h2 id="droba-lidojuma-laik">Drošība lidojuma laikā</h2>
+
+<ul>
+  <li><strong>Lido vizuālā redzamības zonā</strong></li>
+  <li>Ievērojiet drošu attālumu no cilvēkiem un dzīvniekiem</li>
+  <li>Pārraugiet akumulatora spriegumu — zemi pirms brīdinājuma sliekšņa</li>
+  <li>Zzz15zzz: vienmēr lidojiet ar noteicēju</li>
+  <li>Vējš: ornitopteri var būt jutīgi pret vēju. — zina savas robežas</li>
+</ul>
+
+<h2 id="rkrtas-procedras">Ārkārtas procedūras</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Situācija</th>
+      <th>Darbība</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Orientācijas zudums</td>
+      <td>Pārslēgt uz INDEPENDENT režīmu, centrālais spieķi</td>
+    </tr>
+    <tr>
+      <td>Signāla zudums</td>
+      <td>Failsafe automātiski piezemēsies (ja ir konfigurēta LAND procedūra)</td>
+    </tr>
+    <tr>
+      <td>Spārnu bojājumi</td>
+      <td>Nekavējoties atbruņot — spārni apstājas</td>
+    </tr>
+    <tr>
+      <td>Putnu sadursme</td>
+      <td>Atbruņojiet, novērtējiet bojājumus pirms atkārtotas apbruņošanas</td>
+    </tr>
+    <tr>
+      <td>Zems akumulators</td>
+      <td>Zeme nekavējoties — ornitopteriem nav autorotācijas</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="ornitopteriem-paie-riski">Ornitopteriem īpašie riski</h2>
+
+<ul>
+  <li><strong>Saspiešanas risks</strong>: spārnu plivināšana var radīt savainojumus. — Turiet rokas brīvas, kad tās ir bruņotas</li>
+  <li><strong>Savienojuma kļūme</strong>: pirms lidojuma pārbaudiet visus stieņus un lodveida savienojumus</li>
+  <li><strong>Resonance</strong>: noteiktas svārstību frekvences var izraisīt lidmašīnas korpusa rezonansi. — melodija ONDAS, lai izvairītos no</li>
+  <li><strong>Slīdēšanas bloķēšana</strong>: ja spārnu servo nedarbojas neitrālā stāvoklī, kontrolēta nosēšanās nav iespējama.</li>
+</ul>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<a href='../../hr/'>Hrvatski</a>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<a href='../../ko/'>한국어</a>
+&nbsp;◇&nbsp;
+<strong>Latviešu</strong>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<a href='../../zh_CN/'>中文</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

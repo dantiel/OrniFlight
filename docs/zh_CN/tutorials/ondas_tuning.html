@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='zh_CN'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>ONDAS 调音指南 — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Tutorials</p>
+<h1>ONDAS 调音指南</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="ondas-">ONDAS 调音指南</h1>
+
+<blockquote>
+  <p><em>ONDAS理论—的实用伴侣如何通过感觉调整每个参数。</em></p>
+</blockquote>
+
+<h2 id="section">调整顺序</h2>
+
+<p>ONDAS 参数是相互依赖的。按以下顺序调整它们：</p>
+
+<p>呜呜呜</p>
+
+<h2 id="section-1">一步一步</h2>
+
+<h3 id="cadence--">1. Cadence — 找到你的相位窗口</h3>
+
+<p><strong>目标</strong>：将调制放置在您的机翼咬合力最强的位置。</p>
+
+<p><strong>方法</strong>： 
+- 从 50 开始
+- 增加到 70 — 滚动响应是否会变弱？
+- 减少到 30 — 滚动响应是否会变强？
+- “最强”点是你的机翼动力冲程达到峰值的地方</p>
+
+<p><strong>太高的迹象</strong>：反应迟钝，工艺感觉“延迟”
+<strong>太低的迹象</strong>：响应不稳定、滚动过冲</p>
+
+<h3 id="ferocity-d--">2. Ferocity D — 稳定工艺</h3>
+
+<p><strong>目标</strong>：初级稳定，无振荡。</p>
+
+<p><strong>方法</strong>：
+- 20 点开始
+- 悬停或稳定向前飞行
+- 增加直到你感觉工艺“变硬”
+- 从您第一次注意到振荡的地方退后 5 个点</p>
+
+<p><strong>太高的迹象</strong>：伺服系统中出现细微振动、电机般的嗡嗡声
+<strong>太低的迹象</strong>：工艺漂移，感觉松动</p>
+
+<h3 id="ferocity-p--">3. Ferocity P — 酥脆</h3>
+
+<p><strong>目标</strong>：反应灵敏但不抽搐。</p>
+
+<p><strong>方法</strong>：
+- 15 点开始
+- 撞击滚动杆 — 飞行器会立即咬住吗？
+- 增加直到摇杆响应清晰
+- 如果发现超调，请后退</p>
+
+<p><strong>太高的迹象</strong>：摇杆输入后振铃，反弹
+<strong>太低的迹象</strong>：糊状、延迟反应</p>
+
+<h3 id="balance--">4. Balance — 不对称调整</h3>
+
+<p><strong>目标</strong>：双向权力平等。</p>
+
+<p><strong>方法</strong>：
+- 直线且水平飞行
+- 向左滚动，注意反应速度
+- 向右滚动，注意反应速度
+- 调整平衡以平衡它们</p>
+
+<h3 id="warpanchorresonance">5–7。 Warp、Anchor、Resonance</h3>
+
+<p>微调参数。 1-4 稳定后才可调整。</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>参数</th>
+      <th>开始</th>
+      <th>调整时间</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Warp</td>
+      <td>50</td>
+      <td>50调制感觉太分散或太尖峰</td>
+    </tr>
+    <tr>
+      <td>Anchor</td>
+      <td>70</td>
+      <td>70想要更多/更少的原始 PID 混入</td>
+    </tr>
+    <tr>
+      <td>Resonance</td>
+      <td>30</td>
+      <td>悬停不稳定，或向前飞行时感觉有响声</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="phase-2--">8. Phase 2 — 高级</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>参数</th>
+      <th>效果</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Prescience</td>
+      <td>时序提前 — 更高 = 调制超前相位更多</td>
+    </tr>
+    <tr>
+      <td>Espelho</td>
+      <td>差动联轴器— 滚得更紧，可能会降低效率</td>
+    </tr>
+    <tr>
+      <td>Saudade</td>
+      <td>笔划记忆 — 更平滑，但反应较差</td>
+    </tr>
+    <tr>
+      <td>SSFF</td>
+      <td>直接gyro→wave注入— 10点开始</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<p><em>我们的目标是打造一种能够像在空中一样飞行的飞行器。如果您正在抗拒，请退后并从 Cadence 向上重新调整。</em></p>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<a href='../../hr/'>Hrvatski</a>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<a href='../../ko/'>한국어</a>
+&nbsp;◇&nbsp;
+<a href='../../lv/'>Latviešu</a>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<strong>中文</strong>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

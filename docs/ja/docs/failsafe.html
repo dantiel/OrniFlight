@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='ja'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>フェイルセーフ — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Docs</p>
+<h1>フェイルセーフ</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="section">フェイルセーフ</h1>
+
+<p>OrniFlight には、受信機の信号損失が発生した場合に羽ばたき飛行装置を保護する 2 段階のフェイルセーフ システムが搭載されています。</p>
+
+<h2 id="section-1">2 段階システム</h2>
+
+<h3 id="section-2">ステージ 1 — 信号損失が検出されました</h3>
+
+<p>次の場合にトリガーされます:
+- いずれかの飛行チャネルに無効なパルス長があります
+- 受信機はフェールセーフ モードを報告します
+- 設定された期間、受信機から信号がありません</p>
+
+<p><strong>アクション</strong>: すべてのチャネルがフォールバック値 (<code>rxfail</code> で設定) に切り替わります。信号が戻ると、短い回復ウィンドウが — 始まり、通常の飛行が再開されます。</p>
+
+<h3 id="section-3">ステージ 2 — ガードタイムが終了しました</h3>
+
+<p>ステージ 1 が <code>failsafe_delay</code> (デフォルト: 400ms) より長く持続し、かつクラフトが武装している場合に開始されます。</p>
+
+<p><strong>手順</strong> (<code>failsafe_procedure</code> 経由で設定可能):</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>手順</th>
+      <th>行動</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>DROP</strong></td>
+      <td>直ちに武装解除 — 翼が停止し、航空機が降下します。</td>
+    </tr>
+    <tr>
+      <td><strong>LAND</strong></td>
+      <td>グライド モード — 翼は水平にロックされ、制御された降下</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><strong>LAND</strong> は、鳥飛行プター — に推奨される手順です。滑空降下のために翼を中立位置に保持し、信号回復のための時間を与えます。</p>
+
+<h2 id="cli-">CLI 設定</h2>
+
+<p><code>
+set failsafe_delay = 4         # Guard time in 0.1s (4 = 400ms)
+set failsafe_procedure = LAND  # DROP or LAND
+set failsafe_throttle = 1000   # Fallback throttle (low)
+set failsafe_switch_mode = STAGE1  # Transmitter switch behavior
+</code></p>
+
+<h2 id="section-4">受信機のフェールセーフ</h2>
+
+<p>また、信号損失時に<strong>パルスなし</strong>を出力するように受信機のフェールセーフを設定します。これにより、フライト コントローラーが損失を検出し、ステージ 1 をアクティブ化できるようになります。</p>
+
+<h2 id="section-5">テスト</h2>
+
+<p><strong>翼リンケージを外した状態で</strong>ベンチ上でフェールセーフをテストします。
+1. FAILSAFE モードをスイッチに割り当てます
+2. 宇宙船の準備を整える
+3. スイッチ → を切り替えて、フェールセーフ手順を確認します。
+4. サーボの動作が期待どおりであることを確認します。</p>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<a href='../../hr/'>Hrvatski</a>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<strong>日本語</strong>
+&nbsp;◇&nbsp;
+<a href='../../ko/'>한국어</a>
+&nbsp;◇&nbsp;
+<a href='../../lv/'>Latviešu</a>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<a href='../../zh_CN/'>中文</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

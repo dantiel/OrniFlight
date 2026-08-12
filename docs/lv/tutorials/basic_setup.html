@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='lv'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>Pamata iestatīšana — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Tutorials</p>
+<h1>Pamata iestatīšana</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="pamata-iestatana">Pamata iestatīšana</h1>
+
+<blockquote>
+  <p><em>Konfigurējiet savu ornitopteri pirmajam lidojumam.</em></p>
+</blockquote>
+
+<h2 id="kontrolsaraksts-pirms-lidojuma">Kontrolsaraksts pirms lidojuma</h2>
+
+<p>Pirms visa cita:</p>
+
+<ul>
+  <li>[ ] Lidojuma kontrolieris mirgo ar OrniFlight</li>
+  <li>[ ] Uztvērējs ir saistīts ar raidītāju</li>
+  <li>[ ] Servo pieslēgti pareizajām PWM izejām</li>
+  <li>[ ] Akumulators ir pievienots (spārni nostiprināti!)</li>
+</ul>
+
+<h2 id="uztvrja-iestatana">Uztvērēja iestatīšana</h2>
+
+<h3 id="crsf-ieteicams">CRSF (ieteicams)</h3>
+
+<ol>
+  <li><strong>Cilne Ports</strong>: iestatiet UART (piem., UART1) uz “Serial RX”
+2. <strong> Konfigurācijas cilne</strong>: uztvērēja režīms = “seriāls uztvērējs”, nodrošinātājs = “CRSF”</li>
+  <li>Strāvas padeves cikls, pārbaudiet, vai kanālu ieejas pārvietojas cilnē Uztvērējs</li>
+</ol>
+
+<h3 id="sbus--cits">SBUS / Cits</h3>
+
+<p>Tas pats process — atlasiet atbilstošo protokolu cilnē Konfigurācija.</p>
+
+<h2 id="servo-kartana">Servo kartēšana</h2>
+
+<p>Cilnē <strong>Servos</strong>:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Servo</th>
+      <th>Funkcija</th>
+      <th>Noklusējuma likme</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Servo 0</td>
+      <td>Kreisais spārns</td>
+      <td>250 Hz</td>
+    </tr>
+    <tr>
+      <td>Servo 1</td>
+      <td>Labais spārns</td>
+      <td>250 Hz</td>
+    </tr>
+    <tr>
+      <td>Servo 2</td>
+      <td>Crest/Stūre</td>
+      <td>50 Hz</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>Pielāgojiet min/max/vidējo, lai atbilstu jūsu servo diapazonam. Lai pārbaudītu virzienu, pārbaudiet, izmantojot opciju Override.</p>
+
+<h2 id="lidojuma-rema-izvle">Lidojuma režīma izvēle</h2>
+
+<p>Cilnē <strong>Režīmi</strong>:</p>
+
+<p>1. <strong>ARM</strong>: piešķiriet slēdzim (drošība!)
+2. <strong>ORNITHOPTER INDEPENDENT</strong> vai <strong>ORNITHOPTER GLIDE</strong>: izvēlieties savu galveno lidojuma režīmu
+3. <strong>ORNITHOPTER PROFILE</strong>: izvēles — piešķiršana profila pārslēgšanai lidojuma laikā.</p>
+
+<h2 id="ondas-pirm-skaoana">ONDAS Pirmā skaņošana</h2>
+
+<p>Dodieties uz <strong>Papildu → ONDAS apakšcilni</strong>:</p>
+
+<ol>
+  <li><strong>Cadence pieaugums</strong>: sāciet no 50 (vidus). Šis ir vissvarīgākais parametrs.</li>
+  <li><strong>Ferocity D pieaugums</strong>: sāciet no 30. Šī ir jūsu galvenā stabilizācija.</li>
+  <li><strong>Ferocity P pieaugums</strong>: sāciet ar 20, lai ripotu/soļu, 0, lai pagrieztos.</li>
+  <li><strong>Balance pieaugums</strong>: 0 (centrā).</li>
+</ol>
+
+<p>Pievienojiet akumulatoru, <strong>nostipriniet ornitopteri stingri</strong> un ARM. Ievērojiet servo kustību — tai jābūt gludai, sinusoidālai plivināšanai.</p>
+
+<h2 id="pirmais-lidojums">Pirmais lidojums</h2>
+
+<ol>
+  <li>Sāciet ar maigu metienu vējā</li>
+  <li>Izmantojiet GLIDE režīmu, lai iegūtu dabisku planējošo sajūtu</li>
+  <li>Izmantojiet INDEPENDENT režīmu, ja vēlaties tiešu frekvences vadību</li>
+  <li>Nozemējiet, noregulējiet ONDAS, atkārtojiet</li>
+</ol>
+
+<hr />
+
+<p><em>Nākamais: <a href="ondas_tuning.html">ONDAS skaņošanas ceļvedis</a> →</em></p>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<a href='../../hr/'>Hrvatski</a>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<a href='../../ko/'>한국어</a>
+&nbsp;◇&nbsp;
+<strong>Latviešu</strong>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<a href='../../zh_CN/'>中文</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

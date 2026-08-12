@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='ru'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>ONDAS — Осциллирующая нормализованная динамическая адаптивная стабилизация — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Wiki</p>
+<h1>ONDAS — Осциллирующая нормализованная динамическая адаптивная стабилизация</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="ondas------">ONDAS — Осциллирующая нормализованная динамическая адаптивная стабилизация</h1>
+
+<h2 id="section">Основной принцип</h2>
+
+<p>Самолет или обычный самолет создают управляющие силы <strong>постоянно</strong> —, отклонение поверхности управления или изменение RPMz создают установившийся момент. Орнитоптер этого не делает. Каждый грамм тяги, каждый Ньютон крутящего момента <strong>привязаны</strong> к фазе цикла взмахов крыльев. Один и тот же силовой импульс, приложенный в разных точках гребка, дает принципиально разные результаты.</p>
+
+<p>ONDAS признает эту реальность и модулирует усилие стабилизации синхронно с циклом взмахов.</p>
+
+<hr />
+
+<h2 id="cadence---">Cadence — Временной мозг</h2>
+
+<p>Cadence — наиболее важный фильтр ONDAS, поскольку он определяет <strong>когда</strong> коррекция происходит в пределах каждого взмаха крыльев.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Фаза инсульта</th>
+      <th>Эффект приложения силы</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Центр нисходящего удара</td>
+      <td>Максимальный подъем, авторитет крена</td>
+    </tr>
+    <tr>
+      <td>Конец хода вниз (торможение)</td>
+      <td>Индуцированное сопротивление → момент рыскания</td>
+    </tr>
+    <tr>
+      <td>Центр подъема</td>
+      <td>Тяга назад, тангаж вверх</td>
+    </tr>
+    <tr>
+      <td>Конец подъема вверх</td>
+      <td>Разворот крыла, минимальный эффект</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><strong>Cadence сдвигает окно модуляции</strong> в соответствии с фазой, где аэродинамическое плечо рычага самое длинное. Неправильная частота вращения = нарушение физики крыла. Правильная частота вращения педалей = каждый милливатт становится контрольным органом.</p>
+
+<h3 id="section-1">Параметры</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>Параметр</th>
+      <th>Значение</th>
+      <th>Функция</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>ONDAS_K0</code></td>
+      <td>1.0</td>
+      <td>Базовое смещение фазы</td>
+    </tr>
+    <tr>
+      <td><code>ONDAS_K2</code></td>
+      <td>10,0</td>
+      <td>Разброс фазы/резкость</td>
+    </tr>
+    <tr>
+      <td><code>ONDAS_PHASE_SCALE</code></td>
+      <td>0,00005</td>
+      <td>Маленький фактор, большое кредитное плечо</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h2 id="ferocity-p----">Ferocity P — Немедленный асимметричный толчок</h2>
+
+<p>Ferocity P увеличивает <strong>прямоугольность сигнала</strong> (трапециевидную форму: задержка на уровне ±1, косинусное изменение между ними) пропорционально текущей ошибке PID.</p>
+
+<ul>
+  <li>Больше тяги с одной стороны → в данный момент</li>
+  <li>Заторможенное крыло в конце хода испытывает <strong>индуцированное сопротивление</strong> —, это противодействующий момент.</li>
+  <li>Эффект: прямой, пропорциональный, немедленный</li>
+</ul>
+
+<hr />
+
+<h2 id="ferocity-d----">Ferocity D — Эксплуатация упреждающего сопротивления</h2>
+
+<p>Ferocity D завершает картину. Там, где P обеспечивает асимметрию тяги, D использует <strong>сопротивление контралатерального крыла</strong> в качестве тормоза.</p>
+
+<ul>
+  <li>Считывает частоту ошибок и <strong>предвидит</strong></li>
+  <li>Может намеренно использовать сопротивление замедленного крыла для моментов рыскания/тангажа.</li>
+  <li>P+D вместе создают <strong>пару дифференциальных моментов</strong> —, тягу на стороне A, сопротивление на стороне B — более эффективно, чем только тяга</li>
+</ul>
+
+<hr />
+
+<h2 id="cadenceferocity-d--ferocity">Три способа Cadence/Ferocity D Увеличивает Ferocity</h2>
+
+<h3 id="d--p-----">1. Прямой — D увеличивает P во время быстрого изменения ошибки</h3>
+
+<p>При порывах ветра или агрессивных маневрах <code>error_rate</code> имеет большое значение. D умножает это значение и увеличивает базовую свирепость. Крыло становится <em>острее</em> (более трапециевидным), потому что вместе P+D требует большей прямоугольности, чем одно P. Результат: максимум полномочий именно тогда, когда это критично.</p>
+
+<h3 id="cadence----1">2. Косвенное — Cadence смещает точку воздействия</h3>
+
+<p>Cadence модулирует <em>когда</em> в цикле действует свирепость. Перемещение окна в более аэродинамически чувствительную фазу (например, центр хода вниз по сравнению с концом хода вверх) означает, что <strong>то же самое значение жесткости</strong> дает больший эффект, эффективно усиливая — без числовых изменений.</p>
+
+<h3 id="d--cadence-----">3. Комбинаторный — D × Cadence во время восстановления после срыва</h3>
+
+<p>В стойле: высокая скорость снижения → D обнаруживает, что скорость → увеличивает свирепость. Одновременно с этим каденция смещает модуляцию в фазу хода вниз, когда крыло имеет максимальный прикус. Взаимодействие: D обеспечивает силу, ритм в нужный момент. Без каденса сила D достигает неправильной фазы и бесполезно рассеивается.</p>
+
+<hr />
+
+<h2 id="ondas">Дополнительные параметры ONDAS</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Параметр</th>
+      <th>Функция</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Balance</strong></td>
+      <td>Симметрия тяги вверх/вниз — I-членное смещение между ходом вверх и вниз. Компенсирует асимметрию крыла, производственные допуски и износ</td>
+    </tr>
+    <tr>
+      <td><strong>Warp</strong></td>
+      <td>Крен/рыскание P → Дифференциал жесткости L/R — Правое и левое крылья машут независимо по оси крена для маневров крена и поворота</td>
+    </tr>
+    <tr>
+      <td><strong>Anchor</strong></td>
+      <td>Фазовая привязка — фиксирует модуляцию по определенному опорному значению фазы, предотвращая дрейф</td>
+    </tr>
+    <tr>
+      <td><strong>Resonance</strong></td>
+      <td>Компенсация резонанса планера — позволяет избежать возбуждения структурных колебаний планера</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h2 id="section-2">Аналогия</h2>
+
+<p><strong>Cadence — дирижёр. Ferocity P и D — инструменты.</strong></p>
+
+<p>Без дирижера они играют —, но не вместе. С одним шум становится музыкой.</p>
+
+<hr />
+
+<h2 id="section-3">См. также</h2>
+
+<ul>
+  <li><a href="../../tutorials/ondas_tuning.html">ONDAS Руководство по настройке</a> — практическая процедура настройки</li>
+  <li><a href="msp.html">Протокол MSP</a> формат провода — для параметров ONDAS</li>
+  <li><a href="profiles.html">Профили полетов</a> — конфигурация ONDAS с учетом профиля</li>
+</ul>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<a href='../../hr/'>Hrvatski</a>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<a href='../../ko/'>한국어</a>
+&nbsp;◇&nbsp;
+<a href='../../lv/'>Latviešu</a>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<strong>Русский</strong>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<a href='../../zh_CN/'>中文</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

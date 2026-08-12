@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='ko'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>ONDAS 튜닝 가이드 — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Tutorials</p>
+<h1>ONDAS 튜닝 가이드</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="ondas--">ONDAS 튜닝 가이드</h1>
+
+<blockquote>
+  <p><em>ONDAS 이론 —의 실제적인 동반자로서 느낌에 따라 각 매개변수를 조정하는 방법.</em></p>
+</blockquote>
+
+<h2 id="section">튜닝 순서</h2>
+
+<p>ONDAS 매개변수는 상호 의존적입니다. 다음 순서로 조정하세요.</p>
+
+<p><code>
+1. Cadence    →  timing
+2. Ferocity D →  primary stabilization
+3. Ferocity P →  response crispness
+4. Balance    →  upstroke/downstroke bias
+5. Warp       →  modulation width
+6. Anchor     →  dry/wet mix
+7. Resonance  →  cycle-to-cycle memory
+8. Phase 2    →  advanced (prescience, espelho, saudade, SSFF)
+</code></p>
+
+<h2 id="section-1">단계별</h2>
+
+<h3 id="cadence----">1. Cadence — 단계 찾기 창</h3>
+
+<p><strong>목표</strong>: 날개가 가장 많이 물리는 곳에 모듈레이션을 배치합니다.</p>
+
+<p><strong>방법</strong>: 
+- 50부터 시작
+- 70 —로 올리면 롤 반응이 약해지나요?
+- 30 —로 줄이면 롤 반응이 강해지나요?
+- “가장 강한” 지점은 날개의 파워 스트로크가 최고조에 달하는 지점입니다.</p>
+
+<p><strong>너무 높음의 징후</strong>: 흐릿한 반응, 공예가 “지연된” 느낌
+<strong>너무 낮은 징후</strong>: 갑작스러운 반응, 롤 오버슈트</p>
+
+<h3 id="ferocity-d---">2. Ferocity D — 기술을 안정시키세요</h3>
+
+<p><strong>목표</strong>: 진동 없이 1차 안정화.</p>
+
+<p><strong>방법</strong>:
+- 20부터 시작
+- 호버링 또는 꾸준한 전진 비행
+- 공예가 “뻣뻣해진다”는 느낌이 들 때까지 늘리세요.
+- 처음 진동을 느낀 지점에서 5개 지점을 뒤로 물러서세요.</p>
+
+<p><strong>너무 높은 징후</strong>: 미세한 진동, 서보의 모터 같은 윙윙거림
+<strong>너무 낮은 징후</strong>: 기체가 표류하고 느슨한 느낌</p>
+
+<h3 id="ferocity-p--">3. Ferocity P — 바삭함</h3>
+
+<p><strong>목표</strong>: 반응이 빠르지만 경련을 일으키지는 않습니다.</p>
+
+<p><strong>방법</strong>:
+- 15시부터 시작
+- 범프 더 롤 스틱 — 공예품이 즉시 물릴까요?
+- 스틱 반응이 선명해질 때까지 증가시킵니다.
+- 오버슛이 보이면 물러서세요.</p>
+
+<p><strong>너무 높음의 징후</strong>: 스틱 입력 후 벨 소리, 바운스백
+<strong>너무 낮은 징후</strong>: 흐릿하고 반응이 지연됨</p>
+
+<h3 id="balance---">4. Balance — 비대칭 튜닝</h3>
+
+<p><strong>목표</strong>: 양방향에서 동일한 권한을 부여합니다.</p>
+
+<p><strong>방법</strong>:
+- 직선으로 수평으로 비행
+- 왼쪽으로 굴림, 응답 속도 확인
+- 오른쪽으로 굴러 반응 속도 확인
+- 균형을 맞춰 균형을 맞추세요.</p>
+
+<h3 id="warp-anchor-resonance">5–7. Warp, Anchor, Resonance</h3>
+
+<p>매개변수를 미세 조정합니다. 1~4가 확실한 이후에만 조정하세요.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>파람</th>
+      <th>시작</th>
+      <th>조정 시기</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Warp</td>
+      <td>50</td>
+      <td>변조가 너무 퍼져 있거나 너무 뾰족한 느낌</td>
+    </tr>
+    <tr>
+      <td>Anchor</td>
+      <td>70</td>
+      <td>더 많거나 더 적은 원시 PID 혼합을 원함</td>
+    </tr>
+    <tr>
+      <td>Resonance</td>
+      <td>30</td>
+      <td>호버링이 불안정하거나 앞으로 비행할 때 벨소리가 울리는 느낌</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="phase-2--">8. Phase 2 — 고급</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>파람</th>
+      <th>효과</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Prescience</td>
+      <td>타이밍 어드밴스 — 더 높음 = 변조가 위상을 더 앞당김</td>
+    </tr>
+    <tr>
+      <td>Espelho</td>
+      <td>차동 커플링 — 롤이 더 단단해지면 효율성이 저하될 수 있음</td>
+    </tr>
+    <tr>
+      <td>Saudade</td>
+      <td>스트로크 메모리 — 더 부드럽지만 응답성이 떨어짐</td>
+    </tr>
+    <tr>
+      <td>SSFF</td>
+      <td>직접 gyro→wave 주입 — 10시 시작</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<p><em>목표는 공중에 떠 있고 싶은 것처럼 날아가는 비행체입니다. 맞서 싸우고 있다면 물러서서 Cadence에서 다시 조정하세요.</em></p>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<a href='../../hr/'>Hrvatski</a>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<strong>한국어</strong>
+&nbsp;◇&nbsp;
+<a href='../../lv/'>Latviešu</a>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<a href='../../zh_CN/'>中文</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

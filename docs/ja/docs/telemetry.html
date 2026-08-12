@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='ja'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>テレメトリ — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Docs</p>
+<h1>テレメトリ</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="section">テレメトリ</h1>
+
+<p>テレメトリは、OrniFlight から無線送信機 — のバッテリー電圧、電流、RSSI、GPS の座標、高度などの飛行データを送信します。</p>
+
+<h2 id="section-1">サポートされているプロトコル</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>プロトコル</th>
+      <th>無線システム</th>
+      <th>ワイヤー数</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>CRSF</strong></td>
+      <td>クロスファイア / トレーサー / ELRS</td>
+      <td>RX と統合 (双方向)</td>
+    </tr>
+    <tr>
+      <td><strong>SmartPort</strong></td>
+      <td>FrSky</td>
+      <td>1 ワイヤー (TX ピン)</td>
+    </tr>
+    <tr>
+      <td><strong>HoTT</strong></td>
+      <td>グラウプナー</td>
+      <td>1 ワイヤー (TX+TZ)</td>
+    </tr>
+    <tr>
+      <td><strong>IBUS</strong></td>
+      <td>FlySky</td>
+      <td>1 ワイヤー (センサー TX)</td>
+    </tr>
+    <tr>
+      <td><strong>LTM</strong></td>
+      <td>光テレメトリ (MWP)</td>
+      <td>1 ワイヤー (TX)</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="section-2">構成</h2>
+
+<ol>
+  <li>コンフィギュレーター → <strong>ポート</strong> で、UART TX ピンを適切なテレメトリ プロトコルに設定します。</li>
+  <li>テレメトリ機能を有効にします: <code>feature TELEMETRY</code></li>
+  <li>必要に応じてテレメトリ反転を構成します</li>
+</ol>
+
+<p><strong>CRSF</strong> の場合、テレメトリは自動的に処理されます。— 個別のポートは必要ありません。</p>
+
+<h2 id="smartport-frsky">SmartPort (FrSky)</h2>
+
+<p>SmartPort では、F4 プロセッサで信号の反転が必要です。次のいずれか:
+- インバーター内蔵フライトコントローラーを使用
+- SoftSerial を <code>set tlm_inversion = ON</code> とともに使用する</p>
+
+<p><code>
+feature TELEMETRY
+set tlm_inverted = ON
+set tlm_halfduplex = ON
+</code></p>
+
+<h2 id="section-3">テレメトリ データ</h2>
+
+<p>OrniFlight は次のように送信します。
+- VBAT 電圧 (メインバッテリー)
+- 消費電流 / 消費 mAh
+- RSSI (信号強度)
+- フライトモード/アームステータス
+- GPS 座標 (装備されている場合)
+- 高度 / バリオ (気圧計の場合)
+- ONDAS フライト プロファイルがアクティブです</p>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<a href='../../hr/'>Hrvatski</a>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<strong>日本語</strong>
+&nbsp;◇&nbsp;
+<a href='../../ko/'>한국어</a>
+&nbsp;◇&nbsp;
+<a href='../../lv/'>Latviešu</a>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<a href='../../zh_CN/'>中文</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='ko'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>LED 스트립 — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Docs</p>
+<h1>LED 스트립</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="led-">LED 스트립</h1>
+
+<p>OrniFlight는 상태 표시 및 시각적 피드백을 위해 주소 지정이 가능한 WS2812/SK6812 LED 스트립을 지원합니다.</p>
+
+<h2 id="section">구성</h2>
+
+<p>LED 스트립은 OrniFlight 구성기의 <strong>LED Strip</strong> 탭에서 구성됩니다. 각 LED 위치, 색상 및 기능은 개별적으로 설정할 수 있습니다.</p>
+
+<h2 id="section-1">기능</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>기능</th>
+      <th>시각효과</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>배터리 표시기</td>
+      <td>녹색 → 노란색 → 빨간색의 색상 그라데이션</td>
+    </tr>
+    <tr>
+      <td>RSSI</td>
+      <td>신호 강도 표시</td>
+    </tr>
+    <tr>
+      <td>팔 상태</td>
+      <td>팔/해제 시 색상 변경</td>
+    </tr>
+    <tr>
+      <td>비행 모드</td>
+      <td>모드별 색상</td>
+    </tr>
+    <tr>
+      <td>경고</td>
+      <td>배터리 부족을 위한 깜박임 패턴, 안전 장치</td>
+    </tr>
+    <tr>
+      <td>플래핑 표시기</td>
+      <td>현재 플래핑 주파수의 펄스</td>
+    </tr>
+    <tr>
+      <td>추력 방향</td>
+      <td>롤/피치/요 출력을 나타내는 색상 이동</td>
+    </tr>
+    <tr>
+      <td>GPS</td>
+      <td>위성 잠금 및 홈 방향</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="section-2">하드웨어</h2>
+
+<ul>
+  <li>WS2812 또는 SK6812 RGB LED</li>
+  <li>비행 컨트롤러의 <strong>LED</strong> 패드/핀에 연결하세요.</li>
+  <li>BEC의 전원 LED(3.3V —에서 5V를 사용하지 않음)</li>
+  <li>긴 스트립(8개 이상의 LED)의 경우 FC를 통하지 않고 배터리 패드에 직접 5V 전원을 연결합니다.</li>
+</ul>
+
+<h2 id="section-3">오르니톱터 사용</h2>
+
+<p><strong>플래핑 표시기</strong>는 날개 스트로크 주파수와 동기화되는 OrniFlight — LED 펄스에 고유하며, 펄럭이는 리듬을 시각적으로 표현하고 ONDAS 케이던스 매개변수를 조정하는 데 도움이 됩니다.</p>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<a href='../../hr/'>Hrvatski</a>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<strong>한국어</strong>
+&nbsp;◇&nbsp;
+<a href='../../lv/'>Latviešu</a>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<a href='../../zh_CN/'>中文</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

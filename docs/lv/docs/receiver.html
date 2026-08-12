@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='lv'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>Uztvērējs (RX) — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Docs</p>
+<h1>Uztvērējs (RX)</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="uztvrjs-rx">Uztvērējs (RX)</h1>
+
+<p>OrniFlight atbalsta vairākus uztvērēja protokolus jūsu ornitoptera radio vadībai.</p>
+
+<h2 id="atbalsttie-protokoli">Atbalstītie protokoli</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Protokols</th>
+      <th>Tips</th>
+      <th>Piezīmes</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>CRSF</strong> (Crossfire)</td>
+      <td>Sērijas</td>
+      <td>Zems latentums, telemetrija, ieteicams</td>
+    </tr>
+    <tr>
+      <td><strong>SBUS</strong></td>
+      <td>Sērijas</td>
+      <td>Apgriezts, nepieciešams invertors uz F4</td>
+    </tr>
+    <tr>
+      <td><strong>IBUS</strong> (FlySky)</td>
+      <td>Sērijas</td>
+      <td>Neapgriezts, tiešs UART</td>
+    </tr>
+    <tr>
+      <td><strong>PPM</strong></td>
+      <td>Viena vada analogs</td>
+      <td>8ch, mantojums, nav ieteicams</td>
+    </tr>
+    <tr>
+      <td><strong>SPEKTRUM</strong></td>
+      <td>Sērijas</td>
+      <td>1024/2048, saistīt, izmantojot CLI</td>
+    </tr>
+    <tr>
+      <td><strong>FPORT</strong></td>
+      <td>Sērijas</td>
+      <td>FrSky, apvieno RX+Telemetriju</td>
+    </tr>
+    <tr>
+      <td><strong>GHST</strong> (Spoks)</td>
+      <td>Sērijas</td>
+      <td>ImmersionRC, zems latentums</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="srijas-rx-konfigurcija">Sērijas RX konfigurācija</h2>
+
+<ol>
+  <li>Savienojiet uztvērēju ar brīvu UART RX tapu</li>
+  <li>Programmā Configurator → <strong>Ports</strong>: iestatiet UART uz <code>Serial RX</code>.</li>
+  <li>Programmā Configurator → <strong>Configuration</strong>: atlasiet protokolu</li>
+  <li>Zzz8zzz uz F4: iespējojiet <code>set sbus_inversion = ON</code></li>
+</ol>
+
+<h2 id="cli-tr-iestatana">CLI Ātrā iestatīšana</h2>
+
+<p><code>
+feature RX_SERIAL
+set serialrx_provider = CRSF
+set serialrx_inverted = OFF
+set serialrx_halfduplex = OFF
+save
+</code></p>
+
+<h2 id="neatteicas">Neatteicas</h2>
+
+<p>Konfigurējiet uztvērēju bezatteices, lai signāla zuduma gadījumā uztvērējs izvadītu <strong>nav impulsu</strong>. Pēc tam lidojuma kontrolieris to noteiks un aktivizēs savu bezatteices procedūru. Skatiet <a href="failsafe.html">Failsafe</a> FC līmeņa konfigurāciju.</p>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<a href='../../hr/'>Hrvatski</a>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<a href='../../ko/'>한국어</a>
+&nbsp;◇&nbsp;
+<strong>Latviešu</strong>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<a href='../../zh_CN/'>中文</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

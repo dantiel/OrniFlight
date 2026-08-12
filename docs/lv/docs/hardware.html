@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='lv'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>Atbalstītā aparatūra — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Docs</p>
+<h1>Atbalstītā aparatūra</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="atbalstt-aparatra">Atbalstītā aparatūra</h1>
+
+<p>OrniFlight darbojas ar preču STM32F3/F4/F7 lidojumu kontrolieriem. Bāzes līnija ir <strong>STM32F3</strong> —. Jebkurš F3 mērķis ar taimera tapām ar servospējām lidos.</p>
+
+<h2 id="lidojuma-kontrolieri">Lidojuma kontrolieri</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Valde</th>
+      <th>MCU</th>
+      <th>IMU</th>
+      <th>Zibspuldze</th>
+      <th>Uztvērējs</th>
+      <th>Statuss</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>TINYFISH</strong></td>
+      <td>STM32F303</td>
+      <td>MPU6000 (SPI)</td>
+      <td>256 KB</td>
+      <td>FrSky D8 (integrēts)</td>
+      <td>✅ Primārais</td>
+    </tr>
+    <tr>
+      <td><strong>OMNIBUSF4</strong></td>
+      <td>STM32F405</td>
+      <td>MPU6000 (SPI)</td>
+      <td>1 MB + 16 MB SPI</td>
+      <td>—</td>
+      <td>✅ Atbalstīts</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="tinyfish--vieglkais-orniflight-mris">TINYFISH — Vieglākais OrniFlight mērķis</h3>
+
+<p>Fishpepper izstrādātais TINYFISH ir ideāls ornitoptera lidojuma kontrolieris: spalvu svars, uz F3 balstīts un ar <strong>integrētu FrSky D8 uztvērēju</strong>. Nav ārēju RX, bez papildu vadu —, tikai jauda, ​​servo un lidojums.</p>
+
+<ul>
+  <li><strong>MCU</strong>: STM32F303CCT6 @ 72 MHz</li>
+  <li><strong>Gyro</strong>: MPU6000 (SPI, var 8 kHz)</li>
+  <li><strong>Flash</strong>: 256 KB mikroshēmā</li>
+  <li><strong>RAM</strong>: 40 KB</li>
+  <li><strong>Uztvērējs</strong>: integrēts FrSky D8 (SBUS iekšēji maršrutēts uz UART2)</li>
+  <li><strong>UART</strong>: VCP + 2 aparatūras UART (UART1 bez maksas GPS/CRSF papildinājumam)</li>
+  <li><strong>Ieeja</strong>: 2-4S LiPo (tiešā servo jauda)</li>
+  <li><strong>Svars</strong>: ~2,5 g</li>
+</ul>
+
+<p>TINYFISH pierāda, ka pārpasaulīgai plivināšanas kontrolei nav nepieciešama F7. Zzz73zzz vada pilnu ONDAS cauruļvadu — 10 modulācijas kanālus, trapecveida spārnu ODE, 4 lidojuma profilus — 256 KB robežās.</p>
+
+<h3 id="omnibusf4--pieejamais-darba-zirgs">OMNIBUSF4 — Pieejamais darba zirgs</h3>
+
+<p>Klasiskais F4 mērķis. Lēti, visuresoši, pilnvērtīgi ar OSD un plašu SPI zibspuldzi Blackbox reģistrēšanai. Izstrādes un lielākām būvēm paredzētais risinājums.</p>
+
+<ul>
+  <li><strong>MCU</strong>: STM32F405RGT6 @ 168 MHz</li>
+  <li><strong>Gyro</strong>: MPU6000 (SPI, var 8 kHz)</li>
+  <li><strong>Flash</strong>: 1 MB mikroshēma + 16 MB SPI (Blackbox)</li>
+  <li><strong>RAM</strong>: 192 KB</li>
+  <li><strong>OSD</strong>: AT7456E (saderīgs ar MAX7456)</li>
+  <li><strong>UART</strong>: VCP + 5 aparatūras UART</li>
+  <li><strong>Barometrs</strong>: BMP280 (daži varianti)</li>
+  <li><strong>Ievade</strong>: 2-6S LiPo</li>
+</ul>
+
+<hr />
+
+<h2 id="ornitoptera-anatomija">Ornitoptera anatomija</h2>
+
+<h3 id="sprnu-servo">Spārnu servo</h3>
+
+<p>OrniFlight kontrolē PWM servo. Galvenās specifikācijas:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Parametrs</th>
+      <th>Tipisks diapazons</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Impulsa platums</td>
+      <td>500–2500 µ</td>
+    </tr>
+    <tr>
+      <td>Centrs</td>
+      <td>1500 µs</td>
+    </tr>
+    <tr>
+      <td>Biežums</td>
+      <td>50–330 Hz</td>
+    </tr>
+    <tr>
+      <td>Gājiena leņķis</td>
+      <td>±15–45°</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>Augstas veiktspējas ornitopteriem ir ieteicami digitālie servo ar 330 Hz atjaunināšanas ātrumu. Analogie servo darbojas ar 50 Hz, bet tiem ir zemāka precizitāte.</p>
+
+<h3 id="uztvrjs">Uztvērējs</h3>
+
+<p>Tiek atbalstīts jebkurš seriālā uztvērēja protokols. CRSF (TBS Crossfire / ExpressLRS) ir ieteicams:
+- Zems latentums (būtisks, lai kontrolētu viļņus)
+- Iebūvēta telemetrija
+- RSSI, izmantojot protokolu (bez papildu vadu)</p>
+
+<h3 id="akumulators">Akumulators</h3>
+
+<ul>
+  <li><strong>2S (7,4 V)</strong>: mazi ornitopteri ar tiešu servo barošanu</li>
+  <li><strong>3S (11,1 V)</strong>: vidēji ornitopteri, BEC nepieciešami servo</li>
+  <li><strong>4S (14,8 V)</strong>: lieli ornitopteri, ieteicami ārējie BEC</li>
+</ul>
+
+<hr />
+
+<h2 id="atbalstts-perifrijas-ierces">Atbalstītās perifērijas ierīces</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Perifērijas</th>
+      <th>Izmantojot</th>
+      <th>Piezīmes</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>GPS</td>
+      <td>UART</td>
+      <td>UBlox M8N vai saderīgs</td>
+    </tr>
+    <tr>
+      <td>VTX</td>
+      <td>UART TX</td>
+      <td>Tramps, SmartAudio</td>
+    </tr>
+    <tr>
+      <td>Kamera</td>
+      <td>—</td>
+      <td>Jebkura analogā FPV kamera</td>
+    </tr>
+    <tr>
+      <td>Zummers</td>
+      <td>BUZZ pad</td>
+      <td>Aktīvs 5V zummers</td>
+    </tr>
+    <tr>
+      <td>LED Strip</td>
+      <td>LED pad</td>
+      <td>WS2812 / SK6812</td>
+    </tr>
+    <tr>
+      <td>OpenLog</td>
+      <td>UART TX</td>
+      <td>Blackbox mežizstrāde</td>
+    </tr>
+    <tr>
+      <td>Bluetooth</td>
+      <td>UART</td>
+      <td>MSP caurlaide mobilajai skaņošanai</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h2 id="nkotnes-mri">Nākotnes mērķi</h2>
+
+<p>OrniFlight mērķis ir atbalstīt papildu STM32F4/F7 mērķus, kur ir pieejami pietiekami UART un taimera resursi, lai veiktu servo vadību. Apsveicam ar ieguldījumiem.</p>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<a href='../../hr/'>Hrvatski</a>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<a href='../../ko/'>한국어</a>
+&nbsp;◇&nbsp;
+<strong>Latviešu</strong>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<a href='../../zh_CN/'>中文</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

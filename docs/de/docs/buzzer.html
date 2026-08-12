@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='de'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>Summer — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Docs</p>
+<h1>Summer</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="summer">Summer</h1>
+
+<p>OrniFlight unterstützt aktive Summer zur akustischen Statusanzeige und zur Ortung verlorener Modelle.</p>
+
+<h2 id="funktionen">Funktionen</h2>
+
+<ul>
+  <li><strong>Aktivieren/Deaktivieren</strong> — unterschiedliche Töne</li>
+  <li><strong>Batterie schwach</strong> — wiederholte Warntöne</li>
+  <li><strong>Failsafe</strong> — SOS Muster</li>
+  <li><strong>Verlorenes Modell</strong> — kontinuierlicher Piepton über den Schalter</li>
+  <li><strong>GPS Fix</strong> — Bestätigungston bei der Satellitensperre</li>
+  <li><strong>Kalibrierung</strong> — Signaltonmuster während der Kreisel-/Beschleunigungskalibrierung</li>
+  <li><strong>RX Signal verloren</strong> — Warnung, wenn die Empfängerverbindung unterbrochen wird</li>
+</ul>
+
+<h2 id="hardware">Hardware</h2>
+
+<ul>
+  <li>Schließen Sie einen aktiven 5-V-Summer (KEIN passiver Piezo) an die Pads <strong>BUZZ-</strong> und <strong>BUZZ+</strong> an</li>
+  <li>Der Summer wird von einem Transistor auf dem FC — angesteuert. Für Standard-Summer ist kein externer Treiber erforderlich</li>
+</ul>
+
+<h2 id="cli-einstellungen">CLI Einstellungen</h2>
+
+<p><code>
+beeper -GYRO_CALIBRATED     # Disable gyro calibration beeps
+beeper -RX_LOST             # Enable receiver lost warning
+beeper -ON_USB              # Disable beeper when USB connected
+</code></p>
+
+<h2 id="ornithopter-sicherheit">Ornithopter-Sicherheit</h2>
+
+<p>Der Piepser ist besonders nützlich für große Ornithopter, die möglicherweise in hohem Gras oder Laub landen. Konfigurieren Sie den BEEPER-Modus über einen Taster, um ihn bei Bedarf schnell zu aktivieren.</p>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<strong>Deutsch</strong>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<a href='../../hr/'>Hrvatski</a>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<a href='../../ko/'>한국어</a>
+&nbsp;◇&nbsp;
+<a href='../../lv/'>Latviešu</a>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<a href='../../zh_CN/'>中文</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

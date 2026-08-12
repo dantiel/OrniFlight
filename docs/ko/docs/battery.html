@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='ko'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>배터리 모니터링 — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Docs</p>
+<h1>배터리 모니터링</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="section">배터리 모니터링</h1>
+
+<p>OrniFlight는 ADC(아날로그-디지털 변환기)를 통해 기본 배터리 전압을 모니터링합니다. 이를 통해 부저, LED 상태 및 LED 스트립 패턴을 통해 배터리 부족 경고를 활성화할 수 있습니다.</p>
+
+<h2 id="section-1">기능</h2>
+
+<ul>
+  <li>연결 시 셀 수 자동 감지(최소/최대 셀 전압 기준)</li>
+  <li>구성 가능한 임계값을 통한 배터리 부족 경고</li>
+  <li>mAh 소비에 대한 전류 감지(FC에서 지원하는 경우)</li>
+  <li>OSD로 표시되고 원격 측정을 통해 전송되는 전압</li>
+</ul>
+
+<h2 id="section-2">지원되는 대상</h2>
+
+<p>지원되는 모든 비행 컨트롤러(OMNIBUSF4, TINYFISH)에는 전압 분배기를 통한 VBAT 모니터링이 포함됩니다.</p>
+
+<h2 id="section-3">연결</h2>
+
+<p><strong>항상 극성을 확인하십시오.</strong> 연결하기 전에 예상되는 전압을 측정하십시오. 전압이 잘못되거나 극성이 바뀌면 비행 컨트롤러가 파손될 수 있습니다.</p>
+
+<h3 id="omnibusf4">OMNIBUSF4</h3>
+
+<p>메인 배터리를 VBAT 패드에 연결하세요. 온보드 전압 분배기는 최대 6S를 직접 처리합니다.</p>
+
+<h3 id="tinyfish">TINYFISH</h3>
+
+<p>VBAT는 보드의 전원 입력 —를 통해 라우팅되며 별도의 연결이 필요하지 않습니다.</p>
+
+<h2 id="cli-">CLI 설정</h2>
+
+<p><code>
+set vbat_min_cell_voltage = 330       # Minimum per-cell voltage (3.3V)
+set vbat_max_cell_voltage = 430       # Maximum per-cell voltage (4.3V)
+set vbat_warning_cell_voltage = 350   # Warning threshold (3.5V)
+set battery_meter_type = ADC
+set current_meter_type = ADC          # If current sensor available
+</code></p>
+
+<h2 id="section-4">안전</h2>
+
+<p>LiPo 배터리는 부하 상태에서 셀당 3.5V 미만으로 방전되어서는 안 됩니다. OrniFlight의 구성 가능한 임계값은 안전한 작동과 배터리 수명을 보장하는 데 도움이 됩니다.</p>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<a href='../../hr/'>Hrvatski</a>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<strong>한국어</strong>
+&nbsp;◇&nbsp;
+<a href='../../lv/'>Latviešu</a>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<a href='../../zh_CN/'>中文</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='sv'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>ONDAS Tuning Guide — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Tutorials</p>
+<h1>ONDAS Tuning Guide</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="ondas-tuning-guide">ONDAS Tuning Guide</h1>
+
+<blockquote>
+  <p><em>Den praktiska följeslagaren till ONDAS Theory — hur man ställer in varje parameter efter känsla.</em></p>
+</blockquote>
+
+<h2 id="tuning-order">Tuning Order</h2>
+
+<p>ONDAS parametrar är beroende av varandra. Ställ in dem i denna sekvens:</p>
+
+<p><code>
+1. Cadence    →  timing
+2. Ferocity D →  primary stabilization
+3. Ferocity P →  response crispness
+4. Balance    →  upstroke/downstroke bias
+5. Warp       →  modulation width
+6. Anchor     →  dry/wet mix
+7. Resonance  →  cycle-to-cycle memory
+8. Phase 2    →  advanced (prescience, espelho, saudade, SSFF)
+</code></p>
+
+<h2 id="steg-fr-steg">Steg för steg</h2>
+
+<h3 id="cadence--hitta-ditt-fasfnster">1. Cadence — Hitta ditt fasfönster</h3>
+
+<p><strong>Mål</strong>: Placera moduleringen där din vinge har mest bett.</p>
+
+<p><strong>Metod</strong>: 
+- Börja vid 50
+- Öka till 70 — blir rollresponsen svagare?
+- Minska till 30 — blir rollresponsen starkare?
+– Den “starkaste” punkten är där din vings kraftslag toppar</p>
+
+<p><strong>Tecken på för högt</strong>: Grumpig respons, båten känns “försenad”
+<strong>Tecken på för lågt</strong>: Ryckig respons, överskjutning vid kast</p>
+
+<h3 id="ferocity-d--steady-the-craft">2. Ferocity D — Steady the Craft</h3>
+
+<p><strong>Mål</strong>: Primär stabilisering utan oscillation.</p>
+
+<p><strong>Metod</strong>:
+- Börjar kl 20
+- Sväva eller sväva framåt
+- Öka tills du känner att hantverket “stelnar”
+- Backa 5 punkter från där du först märker svängning</p>
+
+<p><strong>Tecken på för högt</strong>: Fina vibrationer, motorliknande surr i servon
+<strong>Tecken på för lågt</strong>: Hantverksdrift, känns löst</p>
+
+<h3 id="ferocity-p--crispness">3. Ferocity P — Crispness</h3>
+
+<p><strong>Mål</strong>: Responsiv men inte ryckig.</p>
+
+<p><strong>Metod</strong>:
+- Börjar kl 15
+- Bump the roll stick — biter hantverket direkt?
+- Öka tills stickresponsen är skarp
+- Backa om du ser överskott</p>
+
+<p><strong>Tecken på för högt</strong>: Ringning efter stickinmatning, studs tillbaka
+<strong>Tecken på för lågt</strong>: Grötig, försenad respons</p>
+
+<h3 id="balance--asymmetri-tuning">4. Balance — Asymmetri Tuning</h3>
+
+<p><strong>Mål</strong>: Lika auktoriteter i båda riktningarna.</p>
+
+<p><strong>Metod</strong>:
+- Flyg rakt och jämnt
+- Rulla åt vänster, notera svarshastighet
+- Rulla åt höger, notera svarshastighet
+- Justera balansen för att utjämna dem</p>
+
+<h3 id="warp-anchor-resonance">5–7. Warp, Anchor, Resonance</h3>
+
+<p>Finjustera parametrar. Justera först efter 1-4 är solida.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Param</th>
+      <th>Starta</th>
+      <th>Justera när</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Warp</td>
+      <td>50</td>
+      <td>Modulering känns för spridd eller för toppig</td>
+    </tr>
+    <tr>
+      <td>Anchor</td>
+      <td>70</td>
+      <td>Vill ha mer/mindre raw PID blandat in</td>
+    </tr>
+    <tr>
+      <td>Resonance</td>
+      <td>30</td>
+      <td>Att sväva instabilt eller flyga framåt känns ringigt</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="phase-2--avancerat">8. Phase 2 — Avancerat</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>Param</th>
+      <th>Effekt</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Prescience</td>
+      <td>Timing advance — högre = modulering leder fas mer</td>
+    </tr>
+    <tr>
+      <td>Espelho</td>
+      <td>Differentialkoppling — tätare rulle, kan minska effektiviteten</td>
+    </tr>
+    <tr>
+      <td>Saudade</td>
+      <td>Slagminne — mjukare men mindre lyhörd</td>
+    </tr>
+    <tr>
+      <td>SSFF</td>
+      <td>Direkt gyro→wave-injektion — börjar kl. 10</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<p><em>Målet är ett hantverk som flyger som det vill vara i luften. Om du kämpar mot det, backa och återställa från Cadence up.</em></p>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<a href='../../hr/'>Hrvatski</a>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<a href='../../ko/'>한국어</a>
+&nbsp;◇&nbsp;
+<a href='../../lv/'>Latviešu</a>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<strong>Svenska</strong>
+&nbsp;◇&nbsp;
+<a href='../../zh_CN/'>中文</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

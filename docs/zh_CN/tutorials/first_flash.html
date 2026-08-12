@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='zh_CN'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>第一个闪光 — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Tutorials</p>
+<h1>第一个闪光</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="section">第一个闪光</h1>
+
+<blockquote>
+  <p><em>一步步将 OrniFlight 安装到您的飞控 —。</em></p>
+</blockquote>
+
+<h2 id="section-1">你需要什么</h2>
+
+<ul>
+  <li>基于 STM32F4 的飞行控制器（OMNIBUSF4、TINYFISH、MATEKF405 等）</li>
+  <li>USB 电缆</li>
+  <li><a href="http://dfu-util.sourceforge.net/">dfu-util</a> 或 STM32CubeProgrammer</li>
+  <li>来自 <a href="https://github.com/dantiel/OrniFlight/releases">发布页面</a> 的 OrniFlight <code>.hex</code> 文件</li>
+</ul>
+
+<h2 id="dfu-">第 1 步：进入 DFU 模式</h2>
+
+<ol>
+  <li><strong>按住飞控上的 BOOT 按钮</strong></li>
+  <li><strong>按住按钮的同时插入 USB</strong></li>
+  <li><strong>2秒后松开</strong></li>
+</ol>
+
+<p>在 macOS/Linux 上验证：</p>
+
+<p>呜呜呜</p>
+
+<p>应该显示 <code>Found DFU: [0483:df11]</code></p>
+
+<h2 id="section-2">步骤 2：闪光</h2>
+
+<p>呜呜呜</p>
+
+<h2 id="section-3">步骤 3：首次启动</h2>
+
+<p>1.拔掉USB的插头
+2. 重新插入 USB（不要按住 BOOT）
+3. 通过 OrniFlight 配置器连接</p>
+
+<h2 id="section-4">步骤 4：基本配置</h2>
+
+<p>在配置器中：</p>
+
+<ol>
+  <li><strong>端口选项卡</strong>：为您的接收器配置 UART（串行 RX）</li>
+  <li><strong>配置选项卡</strong>：选择接收器协议（推荐 CRSF）</li>
+  <li><strong>模式选项卡</strong>：设置 ARM、GLIDE/INDEPENDENT 和 PROFILE 开关</li>
+  <li><strong>高级 → ONDAS 选项卡</strong>：查看默认值，首先调整 Cadence</li>
+</ol>
+
+<h2 id="section-5">故障排除</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>问题</th>
+      <th>修复</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>找不到 DFU 设备</td>
+      <td>尝试不同的 USB 电缆，检查 BOOT 按钮</td>
+    </tr>
+    <tr>
+      <td>闪存失败</td>
+      <td>检查 dfu-util 安装、USB 权限</td>
+    </tr>
+    <tr>
+      <td>刷机后无法开机</td>
+      <td>重新刷新，验证十六进制与您的目标匹配</td>
+    </tr>
+    <tr>
+      <td>配置器无法连接</td>
+      <td>检查 COM 端口和波特率</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<p><em>下一步：<a href="basic_setup.html">基本设置</a> →</em></p>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<a href='../../hr/'>Hrvatski</a>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<a href='../../ko/'>한국어</a>
+&nbsp;◇&nbsp;
+<a href='../../lv/'>Latviešu</a>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<strong>中文</strong>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

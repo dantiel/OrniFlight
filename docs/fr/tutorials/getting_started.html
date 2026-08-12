@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='fr'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>Mise en route — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Tutorials</p>
+<h1>Mise en route</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="mise-en-route">Mise en route</h1>
+
+<p>Bienvenue sur OrniFlight ! Ce guide vous guide à travers la configuration initiale de votre contrôleur de vol ornithoptère.</p>
+
+<h2 id="ce-dont-vous-avez-besoin">Ce dont vous avez besoin</h2>
+
+<ul>
+  <li><strong>Configurateur OrniFlight</strong> Téléchargement — depuis <a href="https://orniflight.org">orniflight.org</a></li>
+  <li><strong>câble USB</strong> — pour connecter le contrôleur de vol à l’ordinateur</li>
+  <li><strong>Ornithoptère</strong> avec :
+    <ul>
+      <li>Contrôleur de vol pris en charge (OMNIBUSF4, TINYFISH)</li>
+      <li>Servos pour l’actionnement des ailes</li>
+      <li>Récepteur lié à votre émetteur</li>
+      <li>Battery (2S–4S LiPo)</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="dmarrage-rapide">Démarrage rapide</h2>
+
+<h3 id="micrologiciel-flash">1. Micrologiciel Flash</h3>
+
+<ol>
+  <li>Ouvrez le <strong>configurateur OrniFlight</strong>.</li>
+  <li>Accédez à l’onglet <strong>Firmware Flasher</strong></li>
+  <li>Sélectionnez votre cible de tableau (OMNIBUSF4 ou TINYFISH)</li>
+  <li>Choisissez la dernière version stable</li>
+  <li>Cliquez sur <strong>Charger le micrologiciel</strong>, puis sur <strong>Flash Firmware</strong>.</li>
+</ol>
+
+<h3 id="configuration-initiale">2. Configuration initiale</h3>
+
+<p>Après le clignotement, le configurateur vous demandera d’appliquer les paramètres par défaut personnalisés. <strong>Toujours accepter.</strong></p>
+
+<h3 id="configuration-du-rcepteur">3. Configuration du récepteur</h3>
+
+<ol>
+  <li>Allez dans l’onglet <strong>Ports</strong> → et définissez le bon UART sur <code>Serial RX</code>.</li>
+  <li>Allez dans l’onglet <strong>Configuration</strong> → sélectionnez votre protocole de récepteur (CRSF, SBUS, etc.)</li>
+  <li>Accédez à l’onglet <strong>Récepteur</strong> → et vérifiez que les mouvements du stick correspondent aux canaux attendus.</li>
+  <li>Définissez les points de terminaison du canal : 1000–2000 avec un centre de 1 500.</li>
+</ol>
+
+<h3 id="configuration-des-servos">4. Configuration des servos</h3>
+
+<ol>
+  <li>Accédez à l’onglet <strong>Servos</strong></li>
+  <li>Vérifiez que le mappage des servos correspond à la configuration des ailes de votre ornithoptère.</li>
+  <li>Testez la direction du servo — en marche arrière si nécessaire</li>
+  <li>Réglez la position centrale (ailes horizontales = 1500)</li>
+</ol>
+
+<h3 id="configuration-des-modes">5. Configuration des modes</h3>
+
+<ol>
+  <li>Accédez à l’onglet <strong>Modes</strong></li>
+  <li>Attribuez ARM à un commutateur AUX</li>
+  <li>Attribuez les modes de vol (ANGLE / ACRO / HORIZON) comme vous le souhaitez</li>
+  <li>Attribuez INDEPENDENT et GLIDE aux commutateurs de rechange</li>
+  <li>Configurez BEEPER pour la localisation des modèles perdus</li>
+</ol>
+
+<h3 id="premier-vol">6. Premier vol</h3>
+
+<ol>
+  <li><strong>Déconnectez la tringlerie de l’aile pour les tests au banc</strong></li>
+  <li>Armez et vérifiez la direction du mouvement du servo.</li>
+  <li>Vérifiez la réponse de l’accélérateur</li>
+  <li>Pour le premier vol réel : utilisez le mode ANGLE, tarifs bas</li>
+  <li>Survolez au niveau des yeux, coupez si nécessaire</li>
+</ol>
+
+<h2 id="prochaines-tapes">Prochaines étapes</h2>
+
+<ul>
+  <li><a href="basic_setup.html">Configuration de base</a> Procédure pas à pas de configuration détaillée de —</li>
+  <li><a href="../../tutorials/ondas_tuning.html">ONDAS Tuning</a> — tune dynamique de battement</li>
+  <li><a href="../../tutorials/tuning.html">PID Tuning</a> — ajuste les caractéristiques de vol</li>
+</ul>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<strong>Français</strong>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<a href='../../hr/'>Hrvatski</a>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<a href='../../ko/'>한국어</a>
+&nbsp;◇&nbsp;
+<a href='../../lv/'>Latviešu</a>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<a href='../../zh_CN/'>中文</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

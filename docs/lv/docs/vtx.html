@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='lv'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>Video raidītājs (VTX) — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Docs</p>
+<h1>Video raidītājs (VTX)</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="video-raidtjs-vtx">Video raidītājs (VTX)</h1>
+
+<p>OrniFlight atbalsta VTX vadību FPV ornitopteriem. VTX moduļus var konfigurēt, izmantojot OrniFlight Configurator, MSP vai CLI — iestatīšanas joslu, kanālu, jaudas līmeni un bedres režīmu.</p>
+
+<h2 id="atbalsttie-protokoli">Atbalstītie protokoli</h2>
+
+<ol>
+  <li><strong>IRC Tramp</strong> — Izplatīts maziem VTX moduļiem, ideāli piemērots viegliem FPV ornitopteriem</li>
+  <li><strong>TBS SmartAudio</strong> — Digitālais protokols ar bedres režīma atbalstu</li>
+  <li><strong>RTC6705</strong> — Tieša SPI vadība uz dēļiem ar integrētu VTX (piemēram, SPRACINGF3NEO)</li>
+</ol>
+
+<h2 id="konfigurcija">Konfigurācija</h2>
+
+<p>Zzz26zzz iestatījumi tiek pārvaldīti, izmantojot cilni <strong>VTX</strong> programmā OrniFlight Configurator vai CLI:</p>
+
+<p><code>
+set vtx_band = 5           # Raceband
+set vtx_channel = 1        # 5658 MHz
+set vtx_power = 2          # 200mW
+set vtx_low_power_disarm = ON  # Lower power when disarmed
+set vtx_pit_mode_freq = 0  # Pit mode frequency (0 = disabled)
+</code></p>
+
+<h2 id="serilais-ports">Seriālais ports</h2>
+
+<p>VTX vadībai ir nepieciešams īpašs UART TX tapa. Konfigurējiet portu cilnē <strong>Porti</strong>, izmantojot <code>IRC Tramp</code> vai <code>TBS SmartAudio</code> perifērijas ierīci.</p>
+
+<h2 id="fpv-ornitoptera-apsvrumi">FPV Ornitoptera apsvērumi</h2>
+
+<ul>
+  <li>Svars ir kritisks — izvēlieties vieglos VTX moduļus (Tramp Nano, Eachine Nano)</li>
+  <li>Antenas stiprinājums: nodrošiniet atstarpi no plīvojošiem spārniem</li>
+  <li>Jaudas filtrēšana: pievienojiet VTX jaudu pēc LC filtra, lai izvairītos no servo trokšņa video</li>
+  <li>Bedru režīms ir ieteicams testēšanai uz stenda, lai izvairītos no mazu VTX moduļu pārkaršanas</li>
+</ul>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<a href='../../hr/'>Hrvatski</a>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<a href='../../ko/'>한국어</a>
+&nbsp;◇&nbsp;
+<strong>Latviešu</strong>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<a href='../../zh_CN/'>中文</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

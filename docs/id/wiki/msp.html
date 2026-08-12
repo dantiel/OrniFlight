@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='id'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>MSP Protokol — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Wiki</p>
+<h1>MSP Protokol</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="msp-protokol">MSP Protokol</h1>
+
+<blockquote>
+  <p><em>MultiWii Serial Protocol — bagaimana Configurator berbicara dengan OrniFlight.</em></p>
+</blockquote>
+
+<h2 id="ikhtisar">Ikhtisar</h2>
+
+<p>OrniFlight memperluas Betaflight MSP dengan pesan khusus ornithopter. Spesifikasi resmi ada di repositori firmware di <code>src/main/msp/</code>.</p>
+
+<p><strong>Versi saat ini:</strong> apiVersion 1.46 (OrniFlight v0.4.6)</p>
+
+<h2 id="pesan-utama">Pesan Utama</h2>
+
+<h3 id="msppidadvanced-112--0x70">MSP_PID_ADVANCED (112 / 0x70)</h3>
+
+<p>Pesan penyetelan ONDAS utama. Berkembang dari 48 byte (warisan) menjadi 87 byte (1,46).</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>API Versi</th>
+      <th>Ukuran</th>
+      <th>Konten Baru</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1.33</td>
+      <td>48</td>
+      <td>Zzz18zzz lawas tingkat lanjut</td>
+    </tr>
+    <tr>
+      <td>1.42</td>
+      <td>59</td>
+      <td>+ itermRelaxCutoff, keuntungan 10 ONDAS v2</td>
+    </tr>
+    <tr>
+      <td>1.43</td>
+      <td>71</td>
+      <td>+ servo_mount_angle[4], fase_shift[4], prescience, espelho, saudade, ssff</td>
+    </tr>
+    <tr>
+      <td>1.44</td>
+      <td>75</td>
+      <td>+ servo_speed, max_amplitude, flap_magnitude, wing_origin_offset[4]</td>
+    </tr>
+    <tr>
+      <td>1.45</td>
+      <td>82</td>
+      <td>+ freq_channel, freq_min_hz, freq_max_hz, flight_mode, flutter_gain, flutter_hz, throttle_bypass</td>
+    </tr>
+    <tr>
+      <td>1.46</td>
+      <td>87</td>
+      <td>+ profile_index, ferocity_downstroke, ferocity_upstroke, aeroelastic_glide, aeroelastic_flap</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="mspservoconfigurations-120--0x78">MSP_SERVO_CONFIGURATIONS (120 / 0x78)</h3>
+
+<p>Konfigurasi servo dengan 4 byte tambahan ONDAS: glide_deg + ONDAS v1 triplet.</p>
+
+<h2 id="kompatibilitas-mundur">Kompatibilitas Mundur</h2>
+
+<p>Semua versi API kompatibel dengan versi sebelumnya. Pengirim 48-byte berkomunikasi dengan penerima 1,46 — bidang tambahan default ke nilai yang masuk akal.</p>
+
+<h2 id="format-kawat">Format Kawat</h2>
+
+<p>Semua nilai multi-byte adalah little-endian. Nilai yang ditandatangani disimpan sebagai <code>value + 128</code> di kabel. Nilai penguatan yang tidak ditandatangani (0–100) bersifat langsung. Panjang array diawali dengan hitungan u8.</p>
+
+<hr />
+
+<p><em>Lihat <code>docs/MSP_FIRMWARE_INTERFACE.md</code> di repositori firmware untuk spesifikasi lengkapnya.</em></p>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<a href='../../hr/'>Hrvatski</a>
+&nbsp;◇&nbsp;
+<strong>Bahasa Indonesia</strong>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<a href='../../ko/'>한국어</a>
+&nbsp;◇&nbsp;
+<a href='../../lv/'>Latviešu</a>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<a href='../../zh_CN/'>中文</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

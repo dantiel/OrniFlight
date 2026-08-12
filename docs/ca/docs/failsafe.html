@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='ca'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>A prova de fallades — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Docs</p>
+<h1>A prova de fallades</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="a-prova-de-fallades">A prova de fallades</h1>
+
+<p>OrniFlight té un sistema de seguretat de dues etapes per protegir el vostre ornitòpter en cas de pèrdua de senyal del receptor.</p>
+
+<h2 id="sistema-de-dues-etapes">Sistema de dues etapes</h2>
+
+<h3 id="etapa-1--sha-detectat-una-prdua-de-senyal">Etapa 1 — S’ha detectat una pèrdua de senyal</h3>
+
+<p>Activat quan:
+- Qualsevol canal de vol té una longitud de pols no vàlida
+- El receptor informa en mode de seguretat
+- Sense senyal del receptor durant un temps configurat</p>
+
+<p><strong>Acció</strong>: tots els canals canvien a valors de reserva (configurats mitjançant <code>rxfail</code>). S’inicia una breu finestra de recuperació — si el senyal torna, es reprèn el vol normal.</p>
+
+<h3 id="etapa-2--temps-de-gurdia-caducat">Etapa 2 — Temps de guàrdia caducat</h3>
+
+<p>S’introdueix quan l’etapa 1 persisteix més que <code>failsafe_delay</code> (per defecte: 400 ms) I l’embarcació està armada.</p>
+
+<p><strong>Procediments</strong> (configurable mitjançant <code>failsafe_procedure</code>):</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Procediment</th>
+      <th>Comportament</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>DROP</strong></td>
+      <td>Desarmar immediatament — les ales s’aturen, l’avió baixa</td>
+    </tr>
+    <tr>
+      <td><strong>LAND</strong></td>
+      <td>Mode de lliscament — ales bloquejades horitzontals, descens controlat</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><strong>LAND</strong> és el procediment recomanat per als ornitòpters — manté les ales en una posició neutra per a un descens lliscant, donant temps per a la recuperació del senyal.</p>
+
+<h2 id="cli-configuraci">CLI Configuració</h2>
+
+<p><code>
+set failsafe_delay = 4         # Guard time in 0.1s (4 = 400ms)
+set failsafe_procedure = LAND  # DROP or LAND
+set failsafe_throttle = 1000   # Fallback throttle (low)
+set failsafe_switch_mode = STAGE1  # Transmitter switch behavior
+</code></p>
+
+<h2 id="receptor-failsafe">Receptor Failsafe</h2>
+
+<p>També configureu la seguretat del vostre receptor per emetre <strong>sense polsos</strong> en pèrdua de senyal. Això permet al controlador de vol detectar la pèrdua i activar l’etapa 1.</p>
+
+<h2 id="prova">Prova</h2>
+
+<p>Prova de seguretat <strong>amb l’articulació de l’ala desconnectada</strong> al banc:
+1. Assigna el mode FAILSAFE a un interruptor
+2. Arma l’oficina
+3. Commuteu l’interruptor → observeu el procediment de seguretat
+4. Verifiqueu que el comportament del servo coincideix amb les expectatives</p>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<strong>Català</strong>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<a href='../../hr/'>Hrvatski</a>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<a href='../../ko/'>한국어</a>
+&nbsp;◇&nbsp;
+<a href='../../lv/'>Latviešu</a>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<a href='../../zh_CN/'>中文</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='gl'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>Configuración básica — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Tutorials</p>
+<h1>Configuración básica</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="configuracin-bsica">Configuración básica</h1>
+
+<blockquote>
+  <p><em>Configura o teu ornitóptero para o primeiro voo.</em></p>
+</blockquote>
+
+<h2 id="lista-de-verificacin-previa-ao-voo">Lista de verificación previa ao voo</h2>
+
+<p>Antes de nada:</p>
+
+<ul>
+  <li>[ ] O controlador de voo parpadeou con OrniFlight</li>
+  <li>[ ] Receptor conectado ao transmisor</li>
+  <li>[ ] Servos conectados para corrixir as saídas PWM</li>
+  <li>[ ] Batería conectada (as aseguradas!)</li>
+</ul>
+
+<h2 id="configuracin-do-receptor">Configuración do receptor</h2>
+
+<h3 id="crsf-recomendado">CRSF (Recomendado)</h3>
+
+<ol>
+  <li><strong>Ports tab</strong>: Set UART (e.g. UART1) to “Serial RX”</li>
+  <li><strong>Pestaña Configuración</strong>: Modo receptor = “Receptor baseado en serie”, Provedor = “CRSF”</li>
+  <li>Ciclo de alimentación, verifique que as entradas da canle se movan na pestana Receptor</li>
+</ol>
+
+<h3 id="sbus--outros">SBUS / Outros</h3>
+
+<p>Mesmo proceso —, seleccione o protocolo apropiado na pestana Configuración.</p>
+
+<h2 id="mapeo-de-servos">Mapeo de servos</h2>
+
+<p>Na pestana <strong>Servos</strong>:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Servo</th>
+      <th>Función</th>
+      <th>Taxa predeterminada</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Servo 0</td>
+      <td>Á esquerda</td>
+      <td>250 Hz</td>
+    </tr>
+    <tr>
+      <td>Servo 1</td>
+      <td>Á dereita</td>
+      <td>250 Hz</td>
+    </tr>
+    <tr>
+      <td>Servo 2</td>
+      <td>Cresta/Temón</td>
+      <td>50 Hz</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>Axusta mínimo/máx./medio para que coincida co rango do teu servo. Proba con “Anular” para verificar a dirección.</p>
+
+<h2 id="seleccin-do-modo-de-voo">Selección do modo de voo</h2>
+
+<p>Na pestana <strong>Modos</strong>:</p>
+
+<ol>
+  <li><strong>ARM</strong>: Asignar a un interruptor (seguridade!)</li>
+  <li><strong>ORNITHOPTER INDEPENDENT</strong> ou <strong>ORNITHOPTER GLIDE</strong>: escolle o teu modo de voo principal</li>
+  <li><strong>ORNITHOPTER PROFILE</strong>: asignación de — opcional para o cambio de perfil durante o voo</li>
+</ol>
+
+<h2 id="ondas-primeira-afinacin">ONDAS Primeira afinación</h2>
+
+<p>Vaia á <strong>subpestaña avanzada → ONDAS</strong>:</p>
+
+<ol>
+  <li><strong>Cadence Gain</strong>: comeza a 50 (mediados). Este é o parámetro máis importante.</li>
+  <li><strong>Ferocity D Gain</strong>: comeza ás 30. Esta é a túa estabilización principal.</li>
+  <li><strong>Ferocity P Gain</strong>: comeza a partir de 20 para rollo / cabeceo, 0 para guiñada.</li>
+  <li><strong>Balance Ganancia</strong>: 0 (centrado).</li>
+</ol>
+
+<p>Conecte unha batería, <strong>fixe firmemente o ornitóptero</strong> e ARM. Observe o movemento do servo — debe ser suave e sinusoidal.</p>
+
+<h2 id="first-flight">First Flight</h2>
+
+<ol>
+  <li>Comeza cun lanzamento suave ao vento</li>
+  <li>Usa o modo GLIDE para unha sensación natural de elevación</li>
+  <li>Use o modo INDEPENDENT cando quere controlar a frecuencia directa</li>
+  <li>Aterra, axusta ONDAS, repite</li>
+</ol>
+
+<hr />
+
+<p><em>Seguinte: <a href="ondas_tuning.html">ONDAS Guía de afinación</a> →</em></p>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<strong>Galego</strong>
+&nbsp;◇&nbsp;
+<a href='../../hr/'>Hrvatski</a>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<a href='../../ko/'>한국어</a>
+&nbsp;◇&nbsp;
+<a href='../../lv/'>Latviešu</a>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<a href='../../zh_CN/'>中文</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

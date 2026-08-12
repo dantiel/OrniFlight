@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='zh_CN'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>安全 — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Docs</p>
+<h1>安全</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="section">安全</h1>
+
+<h2 id="section-1">飞行前检查清单</h2>
+
+<ol>
+  <li><strong>机翼</strong>：确保机翼安装牢固且连杆完好</li>
+  <li><strong>电池</strong>：已充满电、正确固定、电池数正确</li>
+  <li><strong>控制</strong>：验证配置器接收器选项卡中的摇杆响应</li>
+  <li><strong>故障安全</strong>：飞行前在台上测试（参见<a href="failsafe.html">故障安全</a>）</li>
+  <li><strong>布防开关</strong>：配置和测试 — 永远不要单独依赖摇杆布防</li>
+  <li><strong>发射区域</strong>：没有人员、障碍物和头顶障碍物</li>
+</ol>
+
+<h2 id="section-2">手臂安全</h2>
+
+<p>OrniFlight 在布防前使用多个安全装置：</p>
+
+<ul>
+  <li><strong>油门低</strong>：油门必须最小</li>
+  <li><strong>等级</strong>：工艺必须相当水平</li>
+  <li><strong>RX 信号</strong>：需要有效的接收器信号</li>
+  <li><strong>CPU 负载</strong>：系统不得过载</li>
+  <li><strong>校准</strong>：必须校准加速度计和陀螺仪</li>
+</ul>
+
+<h2 id="section-3">飞行安全</h2>
+
+<ul>
+  <li><strong>在视线范围内飞行</strong></li>
+  <li>与人和动物保持安全距离</li>
+  <li>在警告阈值之前监控电池电压 — 着陆</li>
+  <li>在 FPV 中：始终与观察员一起飞行</li>
+  <li>风：扑翼机可能对风敏感 — 知道你的极限</li>
+</ul>
+
+<h2 id="section-4">紧急程序</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>情况</th>
+      <th>行动</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>失去方向</td>
+      <td>切换到 INDEPENDENT 模式，中心摇杆</td>
+    </tr>
+    <tr>
+      <td>信号丢失</td>
+      <td>故障保护将自动着陆（如果配置了 LAND 程序）</td>
+    </tr>
+    <tr>
+      <td>机翼损伤</td>
+      <td>立即解除武装 — 翅膀停止</td>
+    </tr>
+    <tr>
+      <td>鸟击</td>
+      <td>解除武装，在重新武装之前评估损失</td>
+    </tr>
+    <tr>
+      <td>电池电量低</td>
+      <td>立即着陆 — 扑翼机没有自转</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="section-5">扑翼机特定风险</h2>
+
+<ul>
+  <li><strong>夹伤危险</strong>：拍打翅膀可能会造成伤害 — 武装时请保持双手远离</li>
+  <li><strong>连杆故障</strong>：飞行前检查所有推杆和球窝接头</li>
+  <li><strong>Resonance</strong>：某些扑动频率可能会激发机身共振 — 调整 ONDAS 扫描以避免</li>
+  <li><strong>滑翔锁定</strong>：如果机翼伺服系统在非中立位置发生故障，则不可能进行受控着陆 — 测试伺服系统故障安全位置</li>
+</ul>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<a href='../../hr/'>Hrvatski</a>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<a href='../../ko/'>한국어</a>
+&nbsp;◇&nbsp;
+<a href='../../lv/'>Latviešu</a>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<strong>中文</strong>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

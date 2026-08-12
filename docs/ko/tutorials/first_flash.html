@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='ko'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>첫 번째 플래시 — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Tutorials</p>
+<h1>첫 번째 플래시</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="section">첫 번째 플래시</h1>
+
+<blockquote>
+  <p><em>OrniFlight를 비행 컨트롤러 —에 단계별로 가져오기.</em></p>
+</blockquote>
+
+<h2 id="section-1">필요한 것</h2>
+
+<ul>
+  <li>STM32F4 기반 비행 컨트롤러 (OMNIBUSF4, TINYFISH, MATEKF405 등)</li>
+  <li>USB 케이블</li>
+  <li><a href="http://dfu-util.sourceforge.net/">dfu-util</a> 또는 STM32CubeProgrammer</li>
+  <li><a href="https://github.com/dantiel/OrniFlight/releases">릴리스 페이지</a>의 OrniFlight <code>.hex</code> 파일</li>
+</ul>
+
+<h2 id="dfu--">1단계: DFU 모드로 전환</h2>
+
+<ol>
+  <li>비행 컨트롤러의 <strong>BOOT 버튼</strong>을 길게 누르세요.</li>
+  <li><strong>버튼을 누른 상태에서 USB</strong>를 연결하세요.</li>
+  <li>2초 후 <strong>손을 떼세요</strong></li>
+</ol>
+
+<p>macOS/Linux에서 확인:</p>
+
+<p><code>
+dfu-util -l
+</code></p>
+
+<p><code>Found DFU: [0483:df11]</code>를 표시해야 함</p>
+
+<h2 id="section-2">2단계: 플래시</h2>
+
+<p><code>
+dfu-util -a 0 -D obj/orniflight_0.4.6_OMNIBUSF4.hex
+</code></p>
+
+<h2 id="section-3">3단계: 첫 번째 부팅</h2>
+
+<ol>
+  <li>USB의 플러그를 뽑습니다.</li>
+  <li>USB를 다시 연결합니다(BOOT를 잡지 마세요).</li>
+  <li>OrniFlight 구성기를 통해 연결</li>
+</ol>
+
+<h2 id="section-4">4단계: 기본 구성</h2>
+
+<p>구성자에서:</p>
+
+<ol>
+  <li><strong>포트 탭</strong>: 수신기에 대한 UART 구성(직렬 RX)</li>
+  <li><strong>구성 탭</strong>: 수신기 프로토콜 선택(CRSF 권장)</li>
+  <li><strong>모드 탭</strong>: ARM, GLIDE/INDEPENDENT 및 PROFILE 스위치 설정</li>
+  <li><strong>고급 → ONDAS 탭</strong>: 기본값을 검토하고 먼저 Cadence를 조정합니다.</li>
+</ol>
+
+<h2 id="section-5">문제 해결</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>문제</th>
+      <th>수정</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>DFU 장치를 찾을 수 없습니다</td>
+      <td>다른 USB 케이블을 사용해 보고 BOOT 버튼을 확인하세요</td>
+    </tr>
+    <tr>
+      <td>플래시 실패</td>
+      <td>dfu-util 설치, USB 권한 확인</td>
+    </tr>
+    <tr>
+      <td>플래시 후 부팅되지 않음</td>
+      <td>다시 플래시하고 16진수가 목표와 일치하는지 확인</td>
+    </tr>
+    <tr>
+      <td>구성자가 연결되지 않음</td>
+      <td>COM 포트 및 전송 속도 확인</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<p><em>다음: <a href="basic_setup.html">기본 설정</a> →</em></p>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<a href='../../hr/'>Hrvatski</a>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<strong>한국어</strong>
+&nbsp;◇&nbsp;
+<a href='../../lv/'>Latviešu</a>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<a href='../../zh_CN/'>中文</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

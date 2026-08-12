@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='ko'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>원격 측정 — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Docs</p>
+<h1>원격 측정</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="section">원격 측정</h1>
+
+<p>원격 측정은 OrniFlight에서 무선 송신기 — 배터리 전압, 전류, RSSI, GPS 좌표, 고도 등의 비행 데이터를 보냅니다.</p>
+
+<h2 id="section-1">지원되는 프로토콜</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>프로토콜</th>
+      <th>무선 시스템</th>
+      <th>와이어 수</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>CRSF</strong></td>
+      <td>크로스파이어/트레이서/ELRS</td>
+      <td>RX와 통합(양방향)</td>
+    </tr>
+    <tr>
+      <td><strong>SmartPort</strong></td>
+      <td>FrSky</td>
+      <td>1선(TX 핀)</td>
+    </tr>
+    <tr>
+      <td><strong>HoTT</strong></td>
+      <td>그라우프너</td>
+      <td>1선(TX+TZ)</td>
+    </tr>
+    <tr>
+      <td><strong>IBUS</strong></td>
+      <td>FlySky</td>
+      <td>1선(센서 TX)</td>
+    </tr>
+    <tr>
+      <td><strong>LTM</strong></td>
+      <td>가벼운 원격 측정(MWP)</td>
+      <td>1선(TX)</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="section-2">구성</h2>
+
+<ol>
+  <li>구성기 → <strong>포트</strong>에서: UART TX 핀을 적절한 원격 측정 프로토콜로 설정합니다.</li>
+  <li>원격 측정 기능 활성화: <code>feature TELEMETRY</code></li>
+  <li>필요한 경우 원격 측정 반전을 구성합니다.</li>
+</ol>
+
+<p><strong>CRSF</strong>의 경우 원격 측정은 — 별도의 포트가 필요 없이 자동으로 처리됩니다.</p>
+
+<h2 id="smartport-frsky">SmartPort (FrSky)</h2>
+
+<p>SmartPort는 F4 프로세서에서 신호 반전이 필요합니다. 다음 중 하나:
+- 인버터가 내장된 비행 컨트롤러 사용
+- <code>set tlm_inversion = ON</code>와 함께 SoftSerial 사용</p>
+
+<p><code>
+feature TELEMETRY
+set tlm_inverted = ON
+set tlm_halfduplex = ON
+</code></p>
+
+<h2 id="section-3">원격 측정 데이터</h2>
+
+<p>OrniFlight는 다음을 전송합니다:
+- VBAT 전압(메인 배터리)
+- 현재 소모량 / mAh 소모
+- RSSI (신호 강도)
+- 비행 모드 / 팔 상태
+- GPS 좌표(사양 적용 시)
+- 고도/바리오(기압계인 경우)
+- ONDAS 비행 프로필이 활성화되었습니다.</p>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<a href='../../hr/'>Hrvatski</a>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<strong>한국어</strong>
+&nbsp;◇&nbsp;
+<a href='../../lv/'>Latviešu</a>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<a href='../../zh_CN/'>中文</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

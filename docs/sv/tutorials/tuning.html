@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='sv'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>PID Tuning — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Tutorials</p>
+<h1>PID Tuning</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="pid-tuning">PID Tuning</h1>
+
+<p>OrniFlight använder en PID (Proportional-Integral-Derivative) styrenhet anpassad för flaxande vingflyg. Tuning skiljer sig avsevärt från konventionella flygplan på grund av den periodiska karaktären av flaxande dragkraft.</p>
+
+<h2 id="ornithopter-pid-grunderna">Ornithopter PID Grunderna</h2>
+
+<p>Till skillnad från konventionella flygplan där dragkraften är nästan kontinuerlig, svänger ornithopterkraften med varje vingslag. Detta skapar:</p>
+
+<ul>
+  <li><strong>Trivningsrippel</strong> vid flaxande frekvens (vanligtvis 5–15 Hz)</li>
+  <li><strong>Fasberoende kontrollmyndighet</strong> — samma PID-utgång har olika effekt beroende på var i slagcykeln den appliceras</li>
+  <li><strong>Kopplad roll-yaw-dynamik</strong> — asymmetrisk vingkraft påverkar båda axlarna samtidigt</li>
+</ul>
+
+<h2 id="pid-villkor">PID Villkor</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Term</th>
+      <th>Effekt</th>
+      <th>Ornithopter Note</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>P</strong></td>
+      <td>Proportionell — omedelbar korrigering</td>
+      <td>Använd konservativa värderingar; svängningen är flaxande synkron</td>
+    </tr>
+    <tr>
+      <td><strong>Jag</strong></td>
+      <td>Integral — ihållande felkorrigering</td>
+      <td>Viktigt för att bibehålla attityden under glidningar</td>
+    </tr>
+    <tr>
+      <td><strong>D</strong></td>
+      <td>Derivat — dämpar svängningar</td>
+      <td>Inställd på vingslagfrekvens, inte ramsvängningar</td>
+    </tr>
+    <tr>
+      <td><strong>F</strong></td>
+      <td>Mata framåt — direkt stick-to-output</td>
+      <td>Användbar för skarp respons på rullaxeln</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="startvrden">Startvärden</h2>
+
+<p>För en medelstor ornithopter (1–1,5m vingspann):</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Axel</th>
+      <th>P</th>
+      <th>jag</th>
+      <th>D</th>
+      <th>F</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Rulla</td>
+      <td>25</td>
+      <td>30</td>
+      <td>15</td>
+      <td>30</td>
+    </tr>
+    <tr>
+      <td>Pitch</td>
+      <td>30</td>
+      <td>35</td>
+      <td>20</td>
+      <td>35</td>
+    </tr>
+    <tr>
+      <td>Jaja</td>
+      <td>40</td>
+      <td>35</td>
+      <td>10</td>
+      <td>20</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="trimprocedur">Trimprocedur</h2>
+
+<h3 id="rate-tuning-frst">1. Rate Tuning först</h3>
+
+<p>Innan PID ställer in, ställ in hastigheter som känns bekväma:
+- Börja med RC Rate 0,90, Super Rate 0,65, Expo 0,30
+- Justera för din flygstil och ornithopterstorlek</p>
+
+<h3 id="p-vinst">2. P Vinst</h3>
+
+<p>Öka P tills du ser oscillation vid flaxande frekvens, backa sedan 20 %:
+- Rullsvängning: vingsvängning vid slaghastighet
+- Pitch oscillation: fram-bak gupp
+- Yaw oscillation: svansvifta synkroniserat med slag</p>
+
+<h3 id="d-vinst">3. D Vinst</h3>
+
+<p>Öka D för att dämpa tillbakastudsningen efter vassa stickingångar:
+- För mycket: servojitter, överhettning
+- För lite: ringer efter rullnings-/pitchstopp</p>
+
+<h3 id="jag-vinner">4. Jag vinner</h3>
+
+<p>Jag får räknare ihållande drift:
+- Öka tills driften elimineras
+- För mycket: långsam oscillation vid 1–2 Hz (under flaxande hastighet)</p>
+
+<h2 id="ondas-integration">ONDAS Integration</h2>
+
+<p>ONDAS (Ornithopter Nolinear Dynamic Aerodynamic System) modulerar PID-utgången inom varje vingslag. Efter grundläggande PID-inställning:</p>
+
+<ol>
+  <li>Ställ in <strong>Cadence Gain</strong> — skiftar moduleringsfönstret till aerodynamiskt optimal fas</li>
+  <li>Ställ in <strong>Ferocity P</strong> — omedelbar asymmetrisk dragkraftsförstärkning</li>
+  <li>Ställ in <strong>Ferocity D</strong> — förutseende dragexploatering</li>
+  <li>Finjustera <strong>Balance</strong> — vänster-/högersymmetri</li>
+</ol>
+
+<p>Se <a href="ondas_tuning.html">ONDAS Tuning Guide</a> för detaljerad procedur.</p>
+
+<h2 id="blackbox-analys">Blackbox-analys</h2>
+
+<p>Aktivera Blackbox-loggning för att visualisera PID-prestanda. Leta efter:
+- <strong>P-term oscillation</strong> vid flaxande frekvens → minska P
+- <strong>I-term windup</strong> under ihållande svängar → minska I eller öka I-term relax
+- <strong>D-term buller</strong> från vibrationer → kontrollera först den mekaniska balansen och minska sedan D</p>
+
+<h2 id="flygprofiler">Flygprofiler</h2>
+
+<p>OrniFlight stöder 3 flygprofiler som kan bytas mellan flyg:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Profil</th>
+      <th>Användningsfall</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1</td>
+      <td>Standardkryssning</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>Hög smidighet / aggressiv</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>Effektivitet / termisk skyhöghet</td>
+    </tr>
+  </tbody>
+</table>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<a href='../../hr/'>Hrvatski</a>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<a href='../../ko/'>한국어</a>
+&nbsp;◇&nbsp;
+<a href='../../lv/'>Latviešu</a>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<strong>Svenska</strong>
+&nbsp;◇&nbsp;
+<a href='../../zh_CN/'>中文</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

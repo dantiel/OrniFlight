@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='sv'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>On-Screen Display (OSD) — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Docs</p>
+<h1>On-Screen Display (OSD)</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="on-screen-display-osd">On-Screen Display (OSD)</h1>
+
+<p>OrniFlight inkluderar en inbyggd OSD (On-Screen Display) som använder MAX7456 eller AT7456E chip. Zzz14zzz lägger över flygdata på ditt FPV-videoflöde.</p>
+
+<h2 id="element-som-stds">Element som stöds</h2>
+
+<p>Konfigurera element på fliken <strong>OSD</strong> i OrniFlight Configurator. Dra och släpp element för att placera dem på skärmen.</p>
+
+<h3 id="flygdata">Flygdata</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>Element</th>
+      <th>Visar</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Batterispänning</td>
+      <td>Huvudbatterispänning (t.ex. 14,8V)</td>
+    </tr>
+    <tr>
+      <td>Genomsnittlig cellspänning</td>
+      <td>Spänning per cell (t.ex. 3,7V)</td>
+    </tr>
+    <tr>
+      <td>Aktuell dragning</td>
+      <td>Momentan förstärkare</td>
+    </tr>
+    <tr>
+      <td>mAh Drawn</td>
+      <td>Kumulativ förbrukad kapacitet</td>
+    </tr>
+    <tr>
+      <td>RSSI</td>
+      <td>Signalstyrka från mottagare</td>
+    </tr>
+    <tr>
+      <td>Flygläge</td>
+      <td>Aktuellt läge (INDEPENDENT, GLIDE, etc.)</td>
+    </tr>
+    <tr>
+      <td>Gasspjällsläge</td>
+      <td>Aktuell gasspjällsprocent</td>
+    </tr>
+    <tr>
+      <td>Timer</td>
+      <td>Flygtid / beväpnad tid</td>
+    </tr>
+    <tr>
+      <td>Hantverksnamn</td>
+      <td>OrniFlight hantverksnamn</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="ornithopter-specifik">Ornithopter-specifik</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>Element</th>
+      <th>Visar</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Flaggfrekvens</td>
+      <td>Aktuell vingslagshastighet i Hz</td>
+    </tr>
+    <tr>
+      <td>ONDAS Profil</td>
+      <td>Aktivt flygprofilnummer (1-3)</td>
+    </tr>
+    <tr>
+      <td>Cadence Fas</td>
+      <td>Strömmoduleringsfasoffset</td>
+    </tr>
+    <tr>
+      <td>Servovinkel</td>
+      <td>Vingservoläge</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="font-management">Font Management</h2>
+
+<p>OSD använder ett teckenbaserat displaysystem. Zzz8zzz-konfiguratorns <strong>OSD</strong>-flik innehåller en <strong>Teckensnittshanterare</strong> för att ladda upp anpassade teckensnitt och glyfer.</p>
+
+<h2 id="cli-instllningar">CLI Inställningar</h2>
+
+<p><code>
+set osd_units = METRIC
+set osd_warn_bitmask = 270335  # Warning flag bitmask
+set osd_tim1 = 2560            # Timer 1 source
+set osd_tim2 = 2561            # Timer 2 source
+</code></p>
+
+<h2 id="hrdvara">Hårdvara</h2>
+
+<p>För närvarande stödd OSD-chip: <strong>AT7456E</strong> (finns på OMNIBUSF4 och kompatibla kort). MAX7456 är kompatibel och automatiskt upptäckt.</p>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<a href='../../hr/'>Hrvatski</a>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<a href='../../ko/'>한국어</a>
+&nbsp;◇&nbsp;
+<a href='../../lv/'>Latviešu</a>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<strong>Svenska</strong>
+&nbsp;◇&nbsp;
+<a href='../../zh_CN/'>中文</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

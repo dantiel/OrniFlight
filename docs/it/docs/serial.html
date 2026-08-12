@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='it'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>Porte seriali — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Docs</p>
+<h1>Porte seriali</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="porte-seriali">Porte seriali</h1>
+
+<p>OrniFlight utilizza porte seriali per la comunicazione con le periferiche: ricevitori, GPS, telemetria, controllo VTX, registrazione Blackbox e MSP (connessione al configuratore).</p>
+
+<h2 id="tipi-di-porte-seriali">Tipi di porte seriali</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Digitare</th>
+      <th>Descrizione</th>
+      <th>Ideale per</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>VCP</strong></td>
+      <td>USB Porta COM virtuale — connessione diretta USB al processore</td>
+      <td>Configuratore (MSP)</td>
+    </tr>
+    <tr>
+      <td><strong>UART</strong></td>
+      <td>Pin hardware TX/RX con rilevamento del segnale hardware</td>
+      <td>RX, GPS, Telemetria, VTX, Scatola nera</td>
+    </tr>
+    <tr>
+      <td><strong>SoftSerial</strong></td>
+      <td>Seriale gestita dal software su qualsiasi coppia di pin</td>
+      <td>Larghezza di banda ridotta: solo telemetria</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>VCP non consuma un fisico UART — è sempre disponibile per il Configuratore.</p>
+
+<h2 id="assegnazione-del-porto">Assegnazione del porto</h2>
+
+<p>Nel OrniFlight Configurator, vai alla scheda <strong>Porte</strong> per assegnare le funzioni:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Funzione</th>
+      <th>Tipico UART</th>
+      <th>Note</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Seriale RX</td>
+      <td>UART1 o UART3</td>
+      <td>SBUS, CRSF, IBUS, ecc.</td>
+    </tr>
+    <tr>
+      <td>GPS</td>
+      <td>UART3 o UART6</td>
+      <td>57600 o 115200 baud</td>
+    </tr>
+    <tr>
+      <td>Telemetria</td>
+      <td>Qualsiasi TX pin</td>
+      <td>SmartPort, HoTT, IBUS</td>
+    </tr>
+    <tr>
+      <td>VTX (Vagabondo/SmartAudio)</td>
+      <td>Qualsiasi TX pin</td>
+      <td>Filo singolo</td>
+    </tr>
+    <tr>
+      <td>Scatola nera</td>
+      <td>Qualsiasi TX pin</td>
+      <td>OpenLog o flash integrato</td>
+    </tr>
+    <tr>
+      <td>MSP</td>
+      <td>VCP (USB)</td>
+      <td>Collegamento al configuratore</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="omnibusf4-mappatura-delle-porte">OMNIBUSF4 Mappatura delle porte</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>UART</th>
+      <th>Perni</th>
+      <th>Uso tipico</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>VCP</td>
+      <td>USB</td>
+      <td>MSP (Configuratore)</td>
+    </tr>
+    <tr>
+      <td>UART1</td>
+      <td>TX1/RX1</td>
+      <td>Seriale RX</td>
+    </tr>
+    <tr>
+      <td>UART3</td>
+      <td>TX3/RX3</td>
+      <td>GPS o Telemetria</td>
+    </tr>
+    <tr>
+      <td>UART6</td>
+      <td>TX6/RX6</td>
+      <td>Gratuito / Scatola nera / VTX</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="softserial">SoftSerial</h2>
+
+<p>SoftSerial è disponibile ma ha una larghezza di banda limitata. Adatto solo per telemetria a bassa velocità (ad esempio 9600 baud SmartPort). Non consigliato per seriale RX o GPS.</p>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<a href='../../hr/'>Hrvatski</a>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<strong>Italiano</strong>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<a href='../../ko/'>한국어</a>
+&nbsp;◇&nbsp;
+<a href='../../lv/'>Latviešu</a>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<a href='../../zh_CN/'>中文</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

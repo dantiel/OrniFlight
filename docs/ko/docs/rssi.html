@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='ko'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>RSSI — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Docs</p>
+<h1>RSSI</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="rssi">RSSI</h1>
+
+<p>RSSI(수신 신호 강도 표시기)는 라디오 링크의 품질을 보여줍니다. OrniFlight는 아날로그 입력, 직렬 수신기 데이터 또는 프로토콜 RSSI에서 RSSI를 소싱할 수 있습니다.</p>
+
+<h2 id="rssi-">RSSI 소스</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>소스</th>
+      <th>연결</th>
+      <th>구성</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>직렬 프로토콜</strong></td>
+      <td>없음(직렬 RX 와이어 사용)</td>
+      <td>CRSF, GHST — 자동</td>
+    </tr>
+    <tr>
+      <td><strong>AUX 채널</strong></td>
+      <td>없음(TX는 RSSI를 채널로 보냄)</td>
+      <td><code>set rssi_channel = 8</code></td>
+    </tr>
+    <tr>
+      <td><strong>아날로그 ADC</strong></td>
+      <td>FC → 수신기의 RSSI 패드 RSSI 출력</td>
+      <td><code>set rssi_adc_channel = 1</code></td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="section">구성</h2>
+
+<h3 id="rssicrsfghstsbus">직렬 RSSI(CRSF/GHST/SBUS)</h3>
+
+<p><code>
+set rssi_src_frame_errors = OFF
+set rssi_scale = 100
+set rssi_offset = 0
+</code></p>
+
+<p>RSSI는 추가 배선이 필요하지 않은 직렬 프로토콜 —에 의해 자동으로 전송됩니다.</p>
+
+<h3 id="rssi-1">아날로그 RSSI</h3>
+
+<p>비행 컨트롤러에 수신기 RSSI 출력 → RSSI 패드 연결:</p>
+
+<p><code>
+set rssi_adc_channel = 1      # Use ADC channel 1
+set rssi_scale = 100          # Scale to 0-100%
+set rssi_offset = 0
+</code></p>
+
+<h3 id="aux--rssi">AUX 채널 RSSI</h3>
+
+<p>특정 채널에서 RSSI를 보내도록 송신기를 구성한 후:</p>
+
+<p><code>
+set rssi_channel = 12         # Aux channel number
+set rssi_scale = 100
+set rssi_offset = 0
+</code></p>
+
+<h2 id="section-1">디스플레이</h2>
+
+<p>RSSI는 OSD에 표시되며 원격 측정을 통해 라디오로 전송될 수 있습니다. 경고 임계값을 구성합니다.</p>
+
+<p><code>
+set osd_rssi_alarm = 20        # Warning at 20% RSSI
+</code></p>
+
+<h2 id="section-2">오니톱터 범위</h2>
+
+<p>ornithopter의 경우 RSSI는 — 날개를 펄럭이는 날개가 역동적인 RF 간섭 패턴을 만드는 데 중요합니다. 초기 테스트 비행 중에 RSSI를 모니터링하여 모든 날개 위치에서 안정적인 링크 성능을 확인하십시오.</p>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<a href='../../hr/'>Hrvatski</a>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<strong>한국어</strong>
+&nbsp;◇&nbsp;
+<a href='../../lv/'>Latviešu</a>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<a href='../../zh_CN/'>中文</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='lv'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>Pirmā zibspuldze — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Tutorials</p>
+<h1>Pirmā zibspuldze</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="pirm-zibspuldze">Pirmā zibspuldze</h1>
+
+<blockquote>
+  <p><em>Soli pa solim OrniFlight pievienošana lidojuma kontrolierim —.</em></p>
+</blockquote>
+
+<h2 id="kas-jums-nepiecieams">Kas jums nepieciešams</h2>
+
+<ul>
+  <li>uz STM32F4 balstīts lidojuma kontrolieris (OMNIBUSF4, TINYFISH, MATEKF405 utt.)</li>
+  <li>USB kabelis</li>
+  <li><a href="http://dfu-util.sourceforge.net/">dfu-util</a> vai STM32CubeProgrammer</li>
+  <li>OrniFlight <code>.hex</code> fails no <a href="https://github.com/dantiel/OrniFlight/releases">izlaidumu lapas</a></li>
+</ul>
+
+<h2 id="darbba-ieejiet-dfu-rem">1. darbība: ieejiet DFU režīmā</h2>
+
+<p>1. <strong>Turiet nospiestu BOOT pogu</strong> uz lidojuma kontroliera
+2. <strong>Pieslēdziet USB</strong>, turot pogu
+3. <strong>Atlaidiet</strong> pēc 2 sekundēm</p>
+
+<p>Pārbaudiet operētājsistēmā macOS/Linux:</p>
+
+<p><code>
+dfu-util -l
+</code></p>
+
+<p>Jārāda <code>Found DFU: [0483:df11]</code></p>
+
+<h2 id="darbba-zibspuldze">2. darbība. Zibspuldze</h2>
+
+<p><code>
+dfu-util -a 0 -D obj/orniflight_0.4.6_OMNIBUSF4.hex
+</code></p>
+
+<h2 id="darbba-pirm-palaiana">3. darbība. Pirmā palaišana</h2>
+
+<ol>
+  <li>Atvienojiet USB
+2. Pieslēdziet USB atpakaļ (neturiet BOOT)</li>
+  <li>Izveidojiet savienojumu, izmantojot programmu OrniFlight Configurator</li>
+</ol>
+
+<h2 id="darbba-pamata-konfigurcija">4. darbība: pamata konfigurācija</h2>
+
+<p>Konfiguratorā:</p>
+
+<ol>
+  <li><strong>Cilne Ports</strong>: konfigurējiet UART savam uztvērējam (serial RX)</li>
+  <li><strong>Cilne Konfigurācija</strong>: atlasiet uztvērēja protokolu (ieteicams CRSF)
+3. <strong>Cilne Režīmi</strong>: iestatiet ARM, GLIDE/INDEPENDENT un PROFILE slēdžus.
+4. <strong>Papildu cilne → ONDAS</strong>: pārskatiet noklusējuma iestatījumus, vispirms noregulējiet Cadence</li>
+</ol>
+
+<h2 id="traucjummeklana">Traucējummeklēšana</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Problēma</th>
+      <th>Labot</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>DFU ierīce nav atrasta</td>
+      <td>Izmēģiniet citu USB kabeli, pārbaudiet pogu BOOT</td>
+    </tr>
+    <tr>
+      <td>Flash neizdodas</td>
+      <td>Pārbaudiet dfu-util instalāciju, USB atļaujas</td>
+    </tr>
+    <tr>
+      <td>Nav sāknēšanas pēc zibspuldzes</td>
+      <td>Atkārtoti mirgojiet, pārbaudiet, vai hex atbilst jūsu mērķim</td>
+    </tr>
+    <tr>
+      <td>Konfigurators nevar izveidot savienojumu</td>
+      <td>Pārbaudiet COM portu un datu pārraides ātrumu</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<p><em>Tālāk: <a href="basic_setup.html">Pamata iestatīšana</a> →</em></p>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<a href='../../hr/'>Hrvatski</a>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<a href='../../ko/'>한국어</a>
+&nbsp;◇&nbsp;
+<strong>Latviešu</strong>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<a href='../../zh_CN/'>中文</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

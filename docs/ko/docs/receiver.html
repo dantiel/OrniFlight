@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='ko'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>수신기(RX) — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Docs</p>
+<h1>수신기(RX)</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="rx">수신기(RX)</h1>
+
+<p>OrniFlight는 ornithopter의 무선 제어를 위한 다중 수신기 프로토콜을 지원합니다.</p>
+
+<h2 id="section">지원되는 프로토콜</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>프로토콜</th>
+      <th>유형</th>
+      <th>메모</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>CRSF</strong> (크로스파이어)</td>
+      <td>연재</td>
+      <td>낮은 대기 시간, 원격 측정 권장</td>
+    </tr>
+    <tr>
+      <td><strong>SBUS</strong></td>
+      <td>연재</td>
+      <td>반전됨, F4에 인버터가 필요함</td>
+    </tr>
+    <tr>
+      <td><strong>IBUS</strong>(FlySky)</td>
+      <td>연재</td>
+      <td>비반전, 직접 UART</td>
+    </tr>
+    <tr>
+      <td><strong>PPM</strong></td>
+      <td>단일 와이어 아날로그</td>
+      <td>8ch, 레거시, 권장되지 않음</td>
+    </tr>
+    <tr>
+      <td><strong>SPEKTRUM</strong></td>
+      <td>연재</td>
+      <td>1024/2048, CLI를 통해 바인딩</td>
+    </tr>
+    <tr>
+      <td><strong>FPORT</strong></td>
+      <td>연재</td>
+      <td>FrSky, RX+원격 측정 결합</td>
+    </tr>
+    <tr>
+      <td><strong>GHST</strong> (유령)</td>
+      <td>연재</td>
+      <td>ImmersionRC, 낮은 대기 시간</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="rx-">시리얼 RX 구성</h2>
+
+<ol>
+  <li>무료 UART RX 핀에 수신기를 연결합니다.</li>
+  <li>구성기 → <strong>포트</strong>에서: UART를 <code>Serial RX</code>로 설정합니다.</li>
+  <li>구성기 → <strong>구성</strong>에서 프로토콜을 선택합니다.</li>
+  <li>F4의 SBUS의 경우: <code>set sbus_inversion = ON</code>를 활성화합니다.</li>
+</ol>
+
+<h2 id="cli--">CLI 빠른 설정</h2>
+
+<p><code>
+feature RX_SERIAL
+set serialrx_provider = CRSF
+set serialrx_inverted = OFF
+set serialrx_halfduplex = OFF
+save
+</code></p>
+
+<h2 id="section-1">안전장치</h2>
+
+<p>수신기가 신호 손실 시 <strong>펄스 없음</strong>을 출력하도록 수신기 안전 장치를 구성합니다. 그러면 비행 컨트롤러가 이를 감지하고 자체 안전 장치 절차를 활성화합니다. FC 수준 구성은 <a href="failsafe.html">안전 장치</a>를 참조하세요.</p>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<a href='../../hr/'>Hrvatski</a>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<strong>한국어</strong>
+&nbsp;◇&nbsp;
+<a href='../../lv/'>Latviešu</a>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<a href='../../zh_CN/'>中文</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

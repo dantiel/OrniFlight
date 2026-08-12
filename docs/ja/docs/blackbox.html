@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='ja'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>ブラックボックスロギング — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Docs</p>
+<h1>ブラックボックスロギング</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="section">ブラックボックスロギング</h1>
+
+<p>Blackbox は、飛行後の分析、調整、デバッグのために飛行データを記録します。 OrniFlight は、オンボード フラッシュ チップまたは外部 OpenLog デバイスへのロギングをサポートします。</p>
+
+<h2 id="section-1">ログに記録される内容</h2>
+
+<ul>
+  <li><strong>ジャイロ</strong> — 生およびフィルタリングされた 3 軸角速度</li>
+  <li><strong>加速度計</strong> — 3 軸加速度</li>
+  <li><strong>PID 出力</strong> — 軸ごとの P、I、D、F 寄与</li>
+  <li><strong>ONDAS</strong> — Cadence、Ferocity P/D、およびその他のフラッピング固有のパラメーター</li>
+  <li><strong>RC コマンド</strong> — レート/エクスポ後のスティック位置</li>
+  <li><strong>サーボ出力</strong> — 各サーボチャンネルへの最終出力</li>
+  <li><strong>バッテリー</strong> — 反復あたりの電圧と電流</li>
+  <li><strong>GPS</strong> — 位置、速度、高度 (利用可能な場合)</li>
+</ul>
+
+<h2 id="section-2">セットアップ</h2>
+
+<h3 id="omnibusf4">オンボードフラッシュ (OMNIBUSF4)</h3>
+
+<p>OMNIBUSF4 には、Blackbox ログ用の 16MB オンボード フラッシュが含まれています。コンフィギュレータで有効にする:</p>
+
+<ol>
+  <li><strong>ブラックボックス</strong> タブ → <code>Blackbox logging device</code> を <code>Onboard flash</code> に設定します</li>
+  <li>ロギング レートを設定します (推奨: F4 ターゲットの場合は N=2 ～ 4 の <code>1/N</code>)</li>
+  <li>ロギングの開始/停止にスイッチを割り当てます。</li>
+</ol>
+
+<h3 id="openlog">外部 OpenLog</h3>
+
+<p>OpenLog を空き UART TX ピンに接続します。</p>
+
+<ol>
+  <li><strong>ポート</strong> タブ → UART を 115200 ボーで <code>Blackbox logging</code> に設定します</li>
+  <li>OpenLog を接続します: FC TX → OpenLog RX、プラス 5V/GND</li>
+</ol>
+
+<h2 id="section-3">分析ツール</h2>
+
+<ul>
+  <li><a href="https://github.com/betaflight/blackbox-log-viewer">Blackbox Explorer</a> — Webベースのログビューア</li>
+  <li>カスタム分析のために <code>blackbox_decode</code> — を CSV に変換します</li>
+</ul>
+
+<h2 id="ondas-">ONDAS 固有</h2>
+
+<p>Blackbox は、ONDAS パラメータを調整するために不可欠です。ログに記録される ONDAS データには次のものが含まれます。
+- <code>ondas_cadence_phase</code> — 変調ウィンドウ タイミング
+- <code>ondas_ferocity_p</code> / <code>ondas_ferocity_d</code> — 非対称推力コンポーネント
+- <code>ondas_balance</code> — 左右ウイングバランス
+- 各反復におけるサーボごとの出力</p>
+
+<p>これにより、羽ばたき機構の正確な分析と翼の非対称修正が可能になります。</p>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<a href='../../hr/'>Hrvatski</a>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<strong>日本語</strong>
+&nbsp;◇&nbsp;
+<a href='../../ko/'>한국어</a>
+&nbsp;◇&nbsp;
+<a href='../../lv/'>Latviešu</a>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<a href='../../zh_CN/'>中文</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

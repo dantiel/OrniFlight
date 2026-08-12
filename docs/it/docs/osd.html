@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='it'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>Visualizzazione su schermo (OSD) — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Docs</p>
+<h1>Visualizzazione su schermo (OSD)</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="visualizzazione-su-schermo-osd">Visualizzazione su schermo (OSD)</h1>
+
+<p>OrniFlight include un OSD (On-Screen Display) integrato che utilizza il chip MAX7456 o AT7456E. OSD sovrappone i dati di volo al tuo feed video FPV.</p>
+
+<h2 id="elementi-supportati">Elementi supportati</h2>
+
+<p>Configura gli elementi nella scheda <strong>OSD</strong> del configuratore OrniFlight. Trascina e rilascia gli elementi per posizionarli sullo schermo.</p>
+
+<h3 id="dati-del-volo">Dati del volo</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>Elemento</th>
+      <th>Visualizza</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Voltaggio della batteria</td>
+      <td>Voltaggio della batteria principale (es. 14,8 V)</td>
+    </tr>
+    <tr>
+      <td>Voltaggio medio delle celle</td>
+      <td>Voltaggio per cella (ad esempio 3,7 V)</td>
+    </tr>
+    <tr>
+      <td>Sorteggio attuale</td>
+      <td>Ampere istantanei</td>
+    </tr>
+    <tr>
+      <td>mAh Disegnata</td>
+      <td>Capacità cumulativa consumata</td>
+    </tr>
+    <tr>
+      <td>RSSI</td>
+      <td>Intensità del segnale dal ricevitore</td>
+    </tr>
+    <tr>
+      <td>Modalità volo</td>
+      <td>Modalità corrente (INDEPENDENT, GLIDE, ecc.)</td>
+    </tr>
+    <tr>
+      <td>Posizione dell’acceleratore</td>
+      <td>Percentuale attuale di accelerazione</td>
+    </tr>
+    <tr>
+      <td>Temporizzatore</td>
+      <td>Tempo di volo / tempo armato</td>
+    </tr>
+    <tr>
+      <td>Nome artigianale</td>
+      <td>OrniFlight nome artigianale</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="specifico-per-gli-ornitotteri">Specifico per gli ornitotteri</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>Elemento</th>
+      <th>Visualizza</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Frequenza di sbattimento</td>
+      <td>Frequenza attuale della corsa dell’ala in Hz</td>
+    </tr>
+    <tr>
+      <td>ONDAS Profilo</td>
+      <td>Numero del profilo di volo attivo (1-3)</td>
+    </tr>
+    <tr>
+      <td>Cadence Fase</td>
+      <td>Offset fase modulazione corrente</td>
+    </tr>
+    <tr>
+      <td>Angolo del servo</td>
+      <td>Posizione del servo dell’ala</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="gestione-dei-caratteri">Gestione dei caratteri</h2>
+
+<p>OSD utilizza un sistema di visualizzazione basato sui caratteri. La scheda <strong>OSD</strong> del configuratore OrniFlight include un <strong>Gestore font</strong> per caricare caratteri e glifi personalizzati.</p>
+
+<h2 id="cli-impostazioni">CLI Impostazioni</h2>
+
+<p><code>
+set osd_units = METRIC
+set osd_warn_bitmask = 270335  # Warning flag bitmask
+set osd_tim1 = 2560            # Timer 1 source
+set osd_tim2 = 2561            # Timer 2 source
+</code></p>
+
+<h2 id="attrezzatura">Attrezzatura</h2>
+
+<p>Chip OSD attualmente supportato: <strong>AT7456E</strong> (trovato su OMNIBUSF4 e schede compatibili). MAX7456 è compatibile e rilevato automaticamente.</p>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<a href='../../hr/'>Hrvatski</a>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<strong>Italiano</strong>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<a href='../../ko/'>한국어</a>
+&nbsp;◇&nbsp;
+<a href='../../lv/'>Latviešu</a>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<a href='../../zh_CN/'>中文</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

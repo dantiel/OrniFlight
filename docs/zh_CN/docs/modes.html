@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='zh_CN'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>飞行模式 — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Docs</p>
+<h1>飞行模式</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="section">飞行模式</h1>
+
+<p>通过发射器上的 AUX 开关切换模式。每种模式都可以在 OrniFlight 配置器的 <strong>模式</strong> 选项卡中分配给特定的 AUX 通道范围。</p>
+
+<h2 id="section-1">标准模式</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>模式</th>
+      <th>功能</th>
+      <th> </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>ARM</strong></td>
+      <td>启用飞行控制（电机/伺服系统激活）</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><strong>ANGLE</strong></td>
+      <td>当操纵杆居中时自动调平 — 飞行器返回水平</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><strong>HORIZON</strong></td>
+      <td>混合 — 角度模式靠近中心，全摇杆</td>
+      <td>Acro</td>
+    </tr>
+    <tr>
+      <td><strong>ACRO</strong></td>
+      <td>默认 — 无自动电平，纯速率控制</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><strong>AIRMODE</strong></td>
+      <td>保持 PID 循环处于零油门状态以获得完全权限</td>
+      <td> </td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="orniflight-">OrniFlight-特定模式</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>模式</th>
+      <th>功能</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>50</td>
+      <td>50 <strong>INDEPENDENT</strong></td>
+      <td>独立机翼控制 — 每个机翼响应其自己的伺服通道</td>
+    </tr>
+    <tr>
+      <td>51</td>
+      <td>51 <strong>GLIDE</strong></td>
+      <td>滑翔模式 — 翅膀锁定在水平位置以便翱翔</td>
+    </tr>
+    <tr>
+      <td>52</td>
+      <td>52 <strong>PROFILE</strong></td>
+      <td>飞行模式选择 — 在 3 个 PID/ONDAS 模式之间切换</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="section-2">实用模式</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>模式</th>
+      <th>功能</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>BEEPER</strong></td>
+      <td>激活蜂鸣器以定位丢失的飞机</td>
+    </tr>
+    <tr>
+      <td><strong>BLACKBOX</strong></td>
+      <td>启动/停止 Blackbox 日志记录</td>
+    </tr>
+    <tr>
+      <td><strong>FAILSAFE</strong></td>
+      <td>手动触发故障安全阶段 2（紧急开关）</td>
+    </tr>
+    <tr>
+      <td><strong>OSD</strong></td>
+      <td>切换 OSD 显示</td>
+    </tr>
+    <tr>
+      <td><strong>TELEMETRY</strong></td>
+      <td>启用/禁用遥测输出</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="section-3">扑翼机笔记</h2>
+
+<ul>
+  <li><strong>INDEPENDENT</strong> 模式是 OrniFlight — 所独有的，它支持每翼伺服映射，以实现不对称推力和差动翼控制</li>
+  <li><strong>GLIDE</strong> 模式将机翼保持在中立位置，对于热腾腾和节能下降非常有用</li>
+  <li><strong>PROFILE</strong> 切换允许在飞行中 ONDAS 参数更改以适应不同的飞行条件（例如，巡航与激进的机动）</li>
+</ul>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<a href='../../hr/'>Hrvatski</a>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<a href='../../ko/'>한국어</a>
+&nbsp;◇&nbsp;
+<a href='../../lv/'>Latviešu</a>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<strong>中文</strong>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

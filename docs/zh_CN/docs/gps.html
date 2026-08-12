@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='zh_CN'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>GPS — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Docs</p>
+<h1>GPS</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="gps">GPS</h1>
+
+<p>GPS 可为您的扑翼机实现位置保持、返航和基于遥测的导航。 OrniFlight 中的 GPS 功能是实用的，但被认为是实验性的 — 始终在视线范围内飞行。</p>
+
+<h2 id="section">支持的协议</h2>
+
+<ul>
+  <li><strong>UBLOX</strong>（推荐）— UBlox二进制协议，高效可靠</li>
+  <li><strong>NMEA</strong> — 基于文本的标准协议</li>
+</ul>
+
+<h2 id="section-1">硬件</h2>
+
+<ul>
+  <li>BN-880、BN-220 或类似的 UBlox M8N GPS+Compass 模块</li>
+  <li>连接：TX/RX 到免费的 UART，加上 5V/GND</li>
+  <li>将 GPS 安装在远离电源线和伺服电缆的位置，以最大限度地减少干扰</li>
+  <li>指南针/磁力计必须远离磁源（电源线、伺服系统）</li>
+</ul>
+
+<h2 id="section-2">配置</h2>
+
+<p>呜呜呜</p>
+
+<ol>
+  <li>在 <strong>Ports</strong> 选项卡中将串行端口分配给 GPS（UBlox 默认为 115200 波特）
+2.启用GPS功能
+3.设置提供者
+4.保存并重启</li>
+</ol>
+
+<h2 id="osd-">OSD 元素</h2>
+
+<p>OSD 中显示的 GPS 数据包括：
+- 卫星计数和定位类型
+- GPS 坐标（纬度/经度）
+- 地面速度
+- 海拔高度 (GPS)
+- 离家的距离
+- 回家方向箭头</p>
+
+<h2 id="section-3">扑翼机注意事项</h2>
+
+<ul>
+  <li>GPS 天线必须具有清晰的天空视野 — 安装位置对于扑动的机翼至关重要</li>
+  <li>小型扑翼机的重量损失很明显</li>
+  <li>GPS 辅助 RTH（返航）需要仔细调整导航 PID 值以实现扑动飞行动力学</li>
+</ul>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<a href='../../hr/'>Hrvatski</a>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<a href='../../ko/'>한국어</a>
+&nbsp;◇&nbsp;
+<a href='../../lv/'>Latviešu</a>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<strong>中文</strong>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

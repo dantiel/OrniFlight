@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='ca'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>LED Strip — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Docs</p>
+<h1>LED Strip</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="led-strip">LED Strip</h1>
+
+<p>OrniFlight admet tires WS2812/SK6812 LED adreçables per a la indicació d’estat i comentaris visuals.</p>
+
+<h2 id="configuraci">Configuració</h2>
+
+<p>Les tires LED es configuren a la pestanya <strong>LED Strip</strong> del Configurador OrniFlight. Cada posició, color i funció LED es poden configurar individualment.</p>
+
+<h2 id="funcions">Funcions</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Funció</th>
+      <th>Efecte visual</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Indicador de bateria</td>
+      <td>Gradient de color del verd → groc → vermell</td>
+    </tr>
+    <tr>
+      <td>RSSI</td>
+      <td>Visualització de la força del senyal</td>
+    </tr>
+    <tr>
+      <td>Estat del braç</td>
+      <td>Canvi de color en armar/desarmar</td>
+    </tr>
+    <tr>
+      <td>Mode de vol</td>
+      <td>Colors específics del mode</td>
+    </tr>
+    <tr>
+      <td>Avís</td>
+      <td>Patrons de parpelleig per a bateria baixa, seguretat</td>
+    </tr>
+    <tr>
+      <td>Indicador de bateig</td>
+      <td>Pols a la freqüència de flapping actual</td>
+    </tr>
+    <tr>
+      <td>Direcció d’empenta</td>
+      <td>Canvi de color que indica la sortida de gir/encaix/guiada</td>
+    </tr>
+    <tr>
+      <td>GPS</td>
+      <td>Bloqueig de satèl·lit i direcció a casa</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="maquinari">Maquinari</h2>
+
+<ul>
+  <li>LEDs WS2812 o SK6812 RGB</li>
+  <li>Connecteu-vos al coixinet/pin <strong>LED</strong> del vostre controlador de vol</li>
+  <li>LED d’alimentació des d’un BEC (NO s’alimenta des de 3,3 V — utilitza 5 V)</li>
+  <li>Per a tires llargues (&gt; 8 LED), connecteu l’alimentació de 5 V directament als coixinets de la bateria, no a través de FC</li>
+</ul>
+
+<h2 id="s-dornitpters">Ús d’ornitòpters</h2>
+
+<p>L’<strong>Indicador de bateig</strong> és exclusiu per als LED OrniFlight — pols sincronitzat amb la freqüència de batuda de l’ala, donant una representació visual del ritme de bateig i ajudant a ajustar els paràmetres de cadència ONDAS.</p>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<strong>Català</strong>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<a href='../../hr/'>Hrvatski</a>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<a href='../../ko/'>한국어</a>
+&nbsp;◇&nbsp;
+<a href='../../lv/'>Latviešu</a>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<a href='../../zh_CN/'>中文</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

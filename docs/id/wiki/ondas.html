@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='id'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>ONDAS — Stabilisasi Adaptif Dinamis Normalisasi Berosilasi — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Wiki</p>
+<h1>ONDAS — Stabilisasi Adaptif Dinamis Normalisasi Berosilasi</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="ondas--stabilisasi-adaptif-dinamis-normalisasi-berosilasi">ONDAS — Stabilisasi Adaptif Dinamis Normalisasi Berosilasi</h1>
+
+<h2 id="prinsip-inti">Prinsip Inti</h2>
+
+<p>Pesawat sayap tetap atau konvensional menghasilkan gaya kendali <strong>terus menerus</strong> — defleksi permukaan kendali atau perubahan RPM menghasilkan momen keadaan tunak. Ornithopter tidak. Setiap gram daya dorong, setiap Newton torsi, <strong>terikat fase</strong> dalam siklus kepakan sayap. Impuls gaya yang sama yang diterapkan pada titik-titik pukulan yang berbeda menghasilkan hasil yang berbeda secara mendasar.</p>
+
+<p>ONDAS mengakui kenyataan ini dan memodulasi upaya stabilisasi secara sinkron dengan siklus flapping.</p>
+
+<hr />
+
+<h2 id="cadence--otak-waktu">Cadence — Otak Waktu</h2>
+
+<p>Cadence adalah filter ONDAS yang paling kritis karena menentukan <strong>kapan</strong> koreksi terjadi dalam setiap kepakan sayap.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Fase Stroke</th>
+      <th>Pengaruh Penerapan Kekuatan</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Pusat gaya bawah</td>
+      <td>Pengangkatan maksimum, otoritas gulungan</td>
+    </tr>
+    <tr>
+      <td>Ujung downstroke (pengereman)</td>
+      <td>Tarikan terinduksi momen yaw →</td>
+    </tr>
+    <tr>
+      <td>Pusat gaya atas</td>
+      <td>Dorong ke belakang, pitch-up</td>
+    </tr>
+    <tr>
+      <td>Akhir gaya ke atas</td>
+      <td>Pembalikan sayap, efek minimal</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><strong>Cadence menggeser jendela modulasi</strong> agar sejajar dengan fase di mana lengan tuas aerodinamis terpanjang. Irama yang salah = melawan fisika sayap. Irama yang benar = setiap miliwatt menjadi otoritas kendali.</p>
+
+<h3 id="parameter">Parameter</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>Parameter</th>
+      <th>Nilai</th>
+      <th>Fungsi</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>ONDAS_K0</code></td>
+      <td>1.0</td>
+      <td>Offset fase dasar</td>
+    </tr>
+    <tr>
+      <td><code>ONDAS_K2</code></td>
+      <td>10.0</td>
+      <td>Fase Penyebaran/Ketajaman</td>
+    </tr>
+    <tr>
+      <td><code>ONDAS_PHASE_SCALE</code></td>
+      <td>0,00005</td>
+      <td>Faktor kecil, leverage besar</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h2 id="ferocity-p--dorongan-asimetris-segera">Ferocity P — Dorongan Asimetris Segera</h2>
+
+<p>Ferocity P meningkatkan <strong>kuadrat bentuk gelombang</strong> (bentuk trapesium: berada di ±1, tanjakan kosinus di antaranya) secara proporsional dengan kesalahan PID saat ini.</p>
+
+<ul>
+  <li>Lebih banyak dorongan di satu sisi → momen langsung</li>
+  <li>Sayap yang direm pada akhir langkah mengalami <strong>tarikan terinduksi</strong> — inilah momen tandingannya</li>
+  <li>Efek: langsung, proporsional, langsung</li>
+</ul>
+
+<hr />
+
+<h2 id="ferocity-d--eksploitasi-drag-antisipatif">Ferocity D — Eksploitasi Drag Antisipatif</h2>
+
+<p>Ferocity D melengkapi gambarnya. Jika P memberikan gaya dorong yang asimetris, D memanfaatkan <strong>tarikan sayap kontralateral</strong> sebagai rem.</p>
+
+<ul>
+  <li>Membaca tingkat kesalahan perubahan dan <strong>mengantisipasi</strong></li>
+  <li>Dapat dengan sengaja memanfaatkan gaya tarik sayap yang diperlambat untuk momen yaw/pitch</li>
+  <li>P+D bersama-sama menciptakan <strong>pasangan momen diferensial</strong> — gaya dorong di sisi A, tarikan di sisi B — lebih efisien dibandingkan gaya dorong saja</li>
+</ul>
+
+<hr />
+
+<h2 id="tiga-cara-cadenceferocity-d-meningkatkan-ferocity">Tiga Cara Cadence/Ferocity D Meningkatkan Ferocity</h2>
+
+<h3 id="zzz18zzz-d-langsung-meningkatkan-p-selama-perubahan-kesalahan-cepat">1. Zzz18zzz D langsung meningkatkan P selama perubahan kesalahan cepat</h3>
+
+<p>Dalam hembusan angin atau manuver agresif, <code>error_rate</code> berukuran besar. D mengalikan ini dan menambah keganasan dasar. Sayap menjadi <em>lebih tajam</em> (lebih berbentuk trapesium) karena P+D bersama-sama menuntut lebih banyak persegi daripada P saja. Hasilnya: otoritas maksimum justru pada saat kritis.</p>
+
+<h3 id="zzz19zzz-cadence-tidak-langsung-menggeser-titik-leverage">2. Zzz19zzz Cadence tidak langsung menggeser titik leverage</h3>
+
+<p>Cadence memodulasi <em>ketika</em> dalam keganasan siklus bertindak. Memindahkan jendela ke fase yang lebih sensitif secara aerodinamis (misalnya, pusat gaya turun vs. ujung gaya naik) berarti <strong>nilai keganasan yang sama</strong> menghasilkan lebih banyak efek — amplifikasi efektif tanpa perubahan numerik.</p>
+
+<h3 id="kombinatorial--d--cadence-selama-pemulihan-terhenti">3. Kombinatorial — D × Cadence selama pemulihan terhenti</h3>
+
+<p>Dalam keadaan terhenti: laju tenggelam yang tinggi → D mendeteksi laju → meningkatkan keganasan. Secara bersamaan, irama menggeser modulasi ke fase gaya turun di mana sayap memiliki gigitan maksimal. Interaksinya: D memberikan kekuatan, irama momen yang tepat. Tanpa irama, gaya-D mencapai fase yang salah dan menghilang dengan sia-sia.</p>
+
+<hr />
+
+<h2 id="parameter-ondas-tambahan">Parameter ONDAS tambahan</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Parameter</th>
+      <th>Fungsi</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Balance</strong></td>
+      <td>Simetri dorong atas/bawah — Bias istilah I antara gaya naik dan gaya turun. Mengkompensasi asimetri sayap, toleransi produksi, dan keausan</td>
+    </tr>
+    <tr>
+      <td><strong>Warp</strong></td>
+      <td>Roll/Yaw P → L/R ferocity differential — sayap kanan dan kiri mengepak secara independen pada sumbu roll untuk manuver bank dan belokan</td>
+    </tr>
+    <tr>
+      <td><strong>Anchor</strong></td>
+      <td>Penahan fase — mengunci modulasi ke referensi fase tertentu, menahan penyimpangan</td>
+    </tr>
+    <tr>
+      <td><strong>Resonance</strong></td>
+      <td>Kompensasi resonansi badan pesawat — menghindari mode struktural badan pesawat yang menarik</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h2 id="analogi">Analogi</h2>
+
+<p><strong>Cadence adalah konduktornya. Ferocity P dan D adalah instrumennya.</strong></p>
+
+<p>Tanpa konduktor, mereka bermain — tetapi tidak bersama-sama. Di satu sisi, kebisingan menjadi musik.</p>
+
+<hr />
+
+<h2 id="lihat-juga">Lihat Juga</h2>
+
+<ul>
+  <li><a href="../../tutorials/ondas_tuning.html">ONDAS Tuning Guide</a> — prosedur penyetelan praktis</li>
+  <li><a href="msp.html">Protokol MSP</a> format kawat — untuk parameter ONDAS</li>
+  <li><a href="profiles.html">Profil Penerbangan</a> — konfigurasi ONDAS yang sadar profil</li>
+</ul>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<a href='../../hr/'>Hrvatski</a>
+&nbsp;◇&nbsp;
+<strong>Bahasa Indonesia</strong>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<a href='../../ko/'>한국어</a>
+&nbsp;◇&nbsp;
+<a href='../../lv/'>Latviešu</a>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<a href='../../zh_CN/'>中文</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

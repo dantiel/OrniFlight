@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='zh_CN'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>航班资料 — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Wiki</p>
+<h1>航班资料</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="section">航班资料</h1>
+
+<blockquote>
+  <p><em>4 个独立调谐槽，可在飞行中切换。</em></p>
+</blockquote>
+
+<h2 id="section-1">概念</h2>
+
+<p>OrniFlight 存储 4 个完整的 <code>ornithopterProfile_t</code> 结构 —，每个结构包含所有 19 个 ONDAS 和翼动力学参数。 BOX 模式（<code>BOXORNITHOPTERPROFILE</code>、permanentId 52）通过映射到 4 个插槽 (0–3) 的 2 位 RC 开关选择活动配置文件。</p>
+
+<h2 id="section-2">为什么要配置文件？</h2>
+
+<p>不同的飞行状态需要不同的调整：</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>简介</th>
+      <th>使用案例</th>
+      <th>Cadence</th>
+      <th>Ferocity</th>
+      <th>笔记</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>0</td>
+      <td><strong>游轮</strong></td>
+      <td>中 (50)</td>
+      <td>低 (30)</td>
+      <td>高效前飞</td>
+    </tr>
+    <tr>
+      <td>1</td>
+      <td><strong>特技飞行</strong></td>
+      <td>低 (20)</td>
+      <td>高 (80)</td>
+      <td>最大权限</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td><strong>悬停/徘徊</strong></td>
+      <td>高 (70)</td>
+      <td>中 (50)</td>
+      <td>稳定性胜过速度</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td><strong>滑行</strong></td>
+      <td>中 (50)</td>
+      <td>低 (10)</td>
+      <td>最少的干预</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="section-3">个人资料中有什么</h2>
+
+<p><code>ornithopterProfile_t</code> 的所有 19 个字段：</p>
+
+<ul>
+  <li><strong>滑翔几何</strong>：glide_angle</li>
+  <li><strong>ONDAS v2 (10)</strong>：节奏、ferocity_d/p/roll/yaw、平衡、扭曲、warp_yaw、锚定、共振</li>
+  <li><strong>Phase 2 (4)</strong>：预知、espelho、saudade、ssff</li>
+  <li><strong>波形 (2)</strong>：ferocity_downtrip、ferocity_uprinkle</li>
+  <li><strong>气动弹性 (2)</strong>：aeroelastic_glide_coefficient、aeroelastic_flap_coefficient</li>
+</ul>
+
+<h2 id="section-4">什么是全局的（不是每个配置文件）</h2>
+
+<ul>
+  <li>频率通道（一个 RC 通道，适用于 INDEPENDENT 和 GLIDE）</li>
+  <li>伺服安装角度</li>
+  <li>扑动相移</li>
+  <li>GralhaAzul 几何（servo_speed、max_amplitude、flap_magnitude、wing_origin）</li>
+</ul>
+
+<p>这些是机身的物理常数 — 它们不会随着飞行状态而改变。</p>
+
+<h2 id="section-5">飞行中切换</h2>
+
+<ol>
+  <li>将 2 位或 3 位开关分配给备用通道</li>
+  <li>在“配置器模式”选项卡中，将该范围映射到 <code>ORNITHOPTER PROFILE</code></li>
+  <li>每个开关位置选择4个插槽之一</li>
+  <li>配置器的配置文件下拉列表通过 MSP 编辑<em>当前选择的</em>插槽</li>
+</ol>
+
+<hr />
+
+<p><em>请参阅 <code>src/main/flight/ornithopter_profile.h</code> 了解结构定义。</em></p>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<a href='../../hr/'>Hrvatski</a>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<a href='../../ko/'>한국어</a>
+&nbsp;◇&nbsp;
+<a href='../../lv/'>Latviešu</a>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<strong>中文</strong>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

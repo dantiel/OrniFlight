@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='ru'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>PID Тюнинг — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Tutorials</p>
+<h1>PID Тюнинг</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="pid-">PID Тюнинг</h1>
+
+<p>OrniFlight использует контроллер PID (пропорционально-интегрально-производный), адаптированный для полета с машущими крыльями. Тюнинг существенно отличается от обычных самолетов из-за периодического характера машущих тяг.</p>
+
+<h2 id="pid--1">Орнитоптер PID Основы</h2>
+
+<p>В отличие от обычных самолетов, у которых тяга почти постоянна, тяга орнитоптера колеблется при каждом взмахе крыла. Это создает:</p>
+
+<ul>
+  <li><strong>Пульсации тяги</strong> при частоте взмахов (обычно 5–15 Гц)</li>
+  <li><strong>Правило управления в зависимости от фазы</strong> — Один и тот же выходной сигнал PID имеет различный эффект в зависимости от того, в каком месте цикла хода он применяется.</li>
+  <li><strong>Связанная динамика крена и рыскания</strong> — асимметричная тяга крыла влияет на обе оси одновременно</li>
+</ul>
+
+<h2 id="pid--2">PID Условия</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Срок</th>
+      <th>Эффект</th>
+      <th>Орнитоптер Примечание</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>П</strong></td>
+      <td>Пропорциональная — немедленная коррекция</td>
+      <td>Используйте консервативные значения; колебание махово-синхронное</td>
+    </tr>
+    <tr>
+      <td><strong>Я</strong></td>
+      <td>Интегральная постоянная коррекция ошибок —</td>
+      <td>Необходим для поддержания позиции во время скольжения</td>
+    </tr>
+    <tr>
+      <td><strong>Д</strong></td>
+      <td>Производная — гасит колебания</td>
+      <td>Настроен на скорость хода крыла, а не на колебания рамы</td>
+    </tr>
+    <tr>
+      <td>** Ч**</td>
+      <td>Прямая связь — с прямой связью с выходом</td>
+      <td>Полезно для четкого отклика по оси крена</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="section">Начальные значения</h2>
+
+<p>Для орнитоптера среднего размера (размах крыльев 1–1,5 м):</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Ось</th>
+      <th>П</th>
+      <th>я</th>
+      <th>Д</th>
+      <th>Ф</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Ролл</td>
+      <td>25</td>
+      <td>30</td>
+      <td>15</td>
+      <td>30</td>
+    </tr>
+    <tr>
+      <td>Питч</td>
+      <td>30</td>
+      <td>35</td>
+      <td>20</td>
+      <td>35</td>
+    </tr>
+    <tr>
+      <td>рыскание</td>
+      <td>40</td>
+      <td>35</td>
+      <td>10</td>
+      <td>20</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="section-1">Процедура настройки</h2>
+
+<h3 id="section-2">1. Сначала настройте скорость</h3>
+
+<p>Перед настройкой PID установите комфортные скорости:
+- Начните с RC рейт 0,90, суперрейт 0,65, экспо 0,30.
+- Отрегулируйте свой стиль полета и размер орнитоптера.</p>
+
+<h3 id="p-">2. P-усиление</h3>
+
+<p>Увеличивайте P до тех пор, пока не увидите колебание на частоте взмахов, затем уменьшите 20%:
+- Колебания по крену: раскачивание крыла при скорости хода.
+- Колебания тангажа: покачивание вперед-назад.
+- Колебания рыскания: виляние хвостом синхронизировано с гребками</p>
+
+<h3 id="d-">3. D усиление</h3>
+
+<p>Увеличьте D, чтобы смягчить отскок после резкого нажатия джойстика:
+- Слишком много: дрожание сервопривода, перегрев.
+- Слишком мало: звон после остановки по крену/тангажу.</p>
+
+<h3 id="section-3">4. Я выигрываю</h3>
+
+<p>Я получаю счетчики постоянного дрейфа:
+- Увеличивать до устранения дрейфа
+- Слишком много: медленные колебания с частотой 1–2 Гц (ниже частоты взмахов).</p>
+
+<h2 id="ondas-">ONDAS Интеграция</h2>
+
+<p>ONDAS (нелинейная динамическая аэродинамическая система Ornithopter) модулирует выходной сигнал PID при каждом взмахе крыла. После базовой настройки PID:</p>
+
+<ol>
+  <li>Установите <strong>Cadence Gain</strong> — сдвигает окно модуляции на аэродинамически оптимальную фазу.</li>
+  <li>Установите <strong>Ferocity P</strong> — немедленное асимметричное усиление тяги.</li>
+  <li>Установите <strong>Ferocity D</strong> — упреждающую эксплуатацию перетаскивания.</li>
+  <li>Точная настройка <strong>Balance</strong> — симметрии левого/правого крыла.</li>
+</ol>
+
+<p>Подробную процедуру см. в <a href="ondas_tuning.html">ONDAS Руководство по настройке</a>.</p>
+
+<h2 id="section-4">Анализ черного ящика</h2>
+
+<p>Включите ведение журнала Blackbox, чтобы визуализировать производительность PID. Ищите:
+- <strong>P-членное колебание</strong> на частоте колебаний → уменьшите P
+- <strong>Закручивание I-члена</strong> во время продолжительных поворотов → уменьшите I или увеличьте расслабление I-члена.
+- <strong>Шум D-члена</strong> из-за вибрации → сначала проверьте механическую балансировку, затем уменьшите D</p>
+
+<h2 id="section-5">Профили полетов</h2>
+
+<p>OrniFlight поддерживает 3 профиля полета, переключаемые в полете:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Профиль</th>
+      <th>Вариант использования</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1</td>
+      <td>Стандартный круиз</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>Высокая маневренность/агрессивность</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>Эффективность/тепловой рост</td>
+    </tr>
+  </tbody>
+</table>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<a href='../../hr/'>Hrvatski</a>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<a href='../../ko/'>한국어</a>
+&nbsp;◇&nbsp;
+<a href='../../lv/'>Latviešu</a>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<strong>Русский</strong>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<a href='../../zh_CN/'>中文</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

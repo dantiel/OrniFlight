@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='ca'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>ONDAS — Estabilització adaptativa dinàmica normalitzada oscil·lant — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Wiki</p>
+<h1>ONDAS — Estabilització adaptativa dinàmica normalitzada oscil·lant</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="ondas--estabilitzaci-adaptativa-dinmica-normalitzada-oscillant">ONDAS — Estabilització adaptativa dinàmica normalitzada oscil·lant</h1>
+
+<h2 id="el-principi-bsic">El principi bàsic</h2>
+
+<p>Un avió d’ala fixa o convencional genera forces de control <strong>contínuament</strong> — una deflexió de la superfície de control o RPM canvi produeix un moment en estat estacionari. Un ornitòpter no. Cada gram d’empenta, cada Newton de parell, està <strong>limitat per fase</strong> dins del cicle de batec d’ala. El mateix impuls de força aplicat en diferents punts de la carrera produeix resultats fonamentalment diferents.</p>
+
+<p>ONDAS reconeix aquesta realitat i modula l’esforç d’estabilització de manera sincrònica amb el cicle de bateig.</p>
+
+<hr />
+
+<h2 id="cadence--el-cervell-del-temps">Cadence — El cervell del temps</h2>
+
+<p>Cadence és el filtre ONDAS més crític perquè determina <strong>quan</strong> es produeix la correcció dins de cada batec d’ala.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Fase d’ictus</th>
+      <th>Efecte de l’aplicació de la força</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Centre de baixada</td>
+      <td>Elevació màxima, autoritat de rodatge</td>
+    </tr>
+    <tr>
+      <td>Final de baixada (frenada)</td>
+      <td>Moment de guiñada d’arrossegament induït →</td>
+    </tr>
+    <tr>
+      <td>Centre de pujada</td>
+      <td>Empenxa cap enrere, llançament</td>
+    </tr>
+    <tr>
+      <td>Final de pujada</td>
+      <td>Inversió d’ala, efecte mínim</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><strong>Cadence desplaça la finestra de modulació</strong> per alinear-se amb la fase on el braç de palanca aerodinàmic és més llarg. Cadència incorrecta = lluita contra la física de les ales. Cadència correcta = cada miliwatt es converteix en autoritat de control.</p>
+
+<h3 id="parmetres">Paràmetres</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>Paràmetre</th>
+      <th>Valor</th>
+      <th>Funció</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>ONDAS_K0</code></td>
+      <td>1.0</td>
+      <td>Desplaçament de fase base</td>
+    </tr>
+    <tr>
+      <td><code>ONDAS_K2</code></td>
+      <td>10,0</td>
+      <td>Distribució de fases / nitidesa</td>
+    </tr>
+    <tr>
+      <td><code>ONDAS_PHASE_SCALE</code></td>
+      <td>0,00005</td>
+      <td>Factor petit, gran palanquejament</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h2 id="ferocity-p--empensi-asimtrica-immediata">Ferocity P — Empensió asimètrica immediata</h2>
+
+<p>Ferocity P augmenta la <strong>quadratitud de la forma d’ona</strong> (forma trapezoïdal: residència a ±1, rampa cosinus entre) proporcionalment a l’error PID actual.</p>
+
+<ul>
+  <li>Més empenta d’un costat → moment immediat</li>
+  <li>L’ala frenada al final de la carrera experimenta <strong>arrossegament induït</strong> — aquest és el moment contrari</li>
+  <li>Efecte: directe, proporcional, immediat</li>
+</ul>
+
+<hr />
+
+<h2 id="ferocity-d--explotaci-de-larrossegament-anticipat">Ferocity D — Explotació de l’arrossegament anticipat</h2>
+
+<p>Ferocity D completa la imatge. On P proporciona asimetria d’empenta, D aprofita la <strong>arrossegament de l’ala contralateral</strong> com a fre.</p>
+
+<ul>
+  <li>Llegeix la taxa d’error de canvi i <strong>anticipa</strong></li>
+  <li>Pot explotar deliberadament l’arrossegament d’una ala alentida per a moments de guindada/cau</li>
+  <li>P+D junts creen un <strong>parell de moments diferencials</strong> — empenta al costat A, arrossega al costat B — més eficient que només l’empenta</li>
+</ul>
+
+<hr />
+
+<h2 id="tres-maneres-cadenceferocity-d-augmenta-ferocity">Tres maneres Cadence/Ferocity D Augmenta Ferocity</h2>
+
+<h3 id="el--d-directe-augmenta-p-durant-el-canvi-rpid-derror">1. El — D directe augmenta P durant el canvi ràpid d’error</h3>
+
+<p>En ratxes o maniobres agressives, <code>error_rate</code> és gran. D multiplica això i s’afegeix a la ferocitat de base. L’ala es torna <em>més nítida</em> (més trapezoïdal) perquè P+D junts demanen més quadrat que P sol. Resultat: màxima autoritat precisament quan és crític.</p>
+
+<h3 id="indirecte--cadence-canvia-el-punt-de-palanquejament">2. Indirecte — Cadence canvia el punt de palanquejament</h3>
+
+<p>Cadence modula <em>quan</em> en el cicle actua la ferocitat. Moure la finestra a una fase més sensible a l’aerodinàmica (p. ex., el centre de la carrera descendent versus l’extrem de la carrera amunt) significa que el <strong>mateix valor de ferocitat</strong> produeix una amplificació més efectiva — sense canvis numèrics.</p>
+
+<h3 id="combinatria--d--cadence-durant-la-recuperaci-de-la-parada">3. Combinatòria — D × Cadence durant la recuperació de la parada</h3>
+
+<p>En una parada: alta taxa d’enfonsament → D detecta la velocitat → augmenta la ferocitat. Simultàniament, la cadència canvia la modulació a la fase de baixada on l’ala té la màxima mossegada. La interacció: D proporciona la força, la cadència el moment adequat. Sense cadència, la força D arriba a la fase equivocada i es dissipa inútilment.</p>
+
+<hr />
+
+<h2 id="parmetres-ondas-addicionals">Paràmetres ONDAS addicionals</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Paràmetre</th>
+      <th>Funció</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Balance</strong></td>
+      <td>Simetria d’empenta cap amunt/baix — Biaix del terme I entre la carrera amunt i la baixada. Compensa la asimetria de les ales, les toleràncies de fabricació i el desgast</td>
+    </tr>
+    <tr>
+      <td><strong>Warp</strong></td>
+      <td>Rodament/Guanyada P → L/R Diferencial de ferocitat — Les ales dreta i esquerra baten de manera independent a l’eix de gir per a maniobres de inclinació i gir</td>
+    </tr>
+    <tr>
+      <td><strong>Anchor</strong></td>
+      <td>L’ancoratge de fase — bloqueja la modulació a una referència de fase específica, resistint la deriva</td>
+    </tr>
+    <tr>
+      <td><strong>Resonance</strong></td>
+      <td>La compensació de ressonància de la cèl·lula — evita els modes estructurals emocionants de la cèl·lula</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h2 id="analogia">Analogia</h2>
+
+<p><strong>Cadence és el director. Ferocity P i D són els instruments.</strong></p>
+
+<p>Sense director, toquen — però no junts. Amb un, el soroll es converteix en música.</p>
+
+<hr />
+
+<h2 id="veure-tamb">Veure també</h2>
+
+<ul>
+  <li><a href="../../tutorials/ondas_tuning.html">Guia d’afinació ONDAS</a> procediment pràctic d’afinació —</li>
+  <li><a href="msp.html">Protocol MSP</a> format de cable — per als paràmetres ONDAS</li>
+  <li><a href="profiles.html">Perfils de vol</a> — Configuració ONDAS conscient del perfil</li>
+</ul>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<strong>Català</strong>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<a href='../../hr/'>Hrvatski</a>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<a href='../../ko/'>한국어</a>
+&nbsp;◇&nbsp;
+<a href='../../lv/'>Latviešu</a>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<a href='../../zh_CN/'>中文</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

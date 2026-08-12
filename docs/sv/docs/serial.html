@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='sv'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>Seriella portar — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Docs</p>
+<h1>Seriella portar</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="seriella-portar">Seriella portar</h1>
+
+<p>OrniFlight använder seriella portar för kommunikation med kringutrustning: mottagare, GPS, telemetri, VTX-kontroll, Blackbox-loggning och MSP (Configurator-anslutning).</p>
+
+<h2 id="seriella-porttyper">Seriella porttyper</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Skriv</th>
+      <th>Beskrivning</th>
+      <th>Bäst för</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>VCP</strong></td>
+      <td>USB Virtuell COM Port — direkt USB anslutning till processor</td>
+      <td>Konfigurator (MSP)</td>
+    </tr>
+    <tr>
+      <td><strong>UART</strong></td>
+      <td>Hårdvara TX/RX stift med hårdvarusignaldetektering</td>
+      <td>RX, GPS, Telemetri, VTX, Blackbox</td>
+    </tr>
+    <tr>
+      <td><strong>SoftSerial</strong></td>
+      <td>Programvarudriven serie på valfritt stiftpar</td>
+      <td>Låg bandbredd: endast telemetri</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>VCP förbrukar inte en fysisk UART — den är alltid tillgänglig för konfiguratorn.</p>
+
+<h2 id="port-tilldelning">Port Tilldelning</h2>
+
+<p>I OrniFlight Configurator, gå till fliken <strong>Portar</strong> för att tilldela funktioner:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Funktion</th>
+      <th>Typiskt UART</th>
+      <th>Anteckningar</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Seriell RX</td>
+      <td>UART1 eller UART3</td>
+      <td>SBUS, CRSF, IBUS, etc.</td>
+    </tr>
+    <tr>
+      <td>GPS</td>
+      <td>UART3 eller UART6</td>
+      <td>57600 eller 115200 baud</td>
+    </tr>
+    <tr>
+      <td>Telemetri</td>
+      <td>Alla TX-stift</td>
+      <td>SmartPort, HoTT, IBUS</td>
+    </tr>
+    <tr>
+      <td>VTX (Tramp/SmartAudio)</td>
+      <td>Alla TX-stift</td>
+      <td>Enkeltråd</td>
+    </tr>
+    <tr>
+      <td>Blackbox</td>
+      <td>Alla TX-stift</td>
+      <td>OpenLog eller inbyggd blixt</td>
+    </tr>
+    <tr>
+      <td>MSP</td>
+      <td>VCP (USB)</td>
+      <td>Konfiguratoranslutning</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="omnibusf4-portmappning">OMNIBUSF4 Portmappning</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>UART</th>
+      <th>Pins</th>
+      <th>Typisk användning</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>VCP</td>
+      <td>USB</td>
+      <td>MSP (Konfigurator)</td>
+    </tr>
+    <tr>
+      <td>UART1</td>
+      <td>TX1/RX1</td>
+      <td>Seriell RX</td>
+    </tr>
+    <tr>
+      <td>UART3</td>
+      <td>TX3/RX3</td>
+      <td>GPS eller telemetri</td>
+    </tr>
+    <tr>
+      <td>UART6</td>
+      <td>TX6/RX6</td>
+      <td>Gratis / Blackbox / VTX</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="softserial">SoftSerial</h2>
+
+<p>SoftSerial är tillgängligt men har begränsad bandbredd. Lämplig endast för telemetri med låg hastighet (t.ex. 9600 baud SmartPort). Rekommenderas inte för seriell RX eller GPS.</p>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<a href='../../hr/'>Hrvatski</a>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<a href='../../ko/'>한국어</a>
+&nbsp;◇&nbsp;
+<a href='../../lv/'>Latviešu</a>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<strong>Svenska</strong>
+&nbsp;◇&nbsp;
+<a href='../../zh_CN/'>中文</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

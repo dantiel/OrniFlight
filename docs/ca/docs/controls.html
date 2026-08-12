@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='ca'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>Controls — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Docs</p>
+<h1>Controls</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="controls">Controls</h1>
+
+<p>OrniFlight utilitza un mapeig estàndard de RC amb extensions específiques d’ornitòpters.</p>
+
+<h2 id="mapes-de-pals">Mapes de pals</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Pal</th>
+      <th>Eix</th>
+      <th>Efecte primari</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Acelerador (esquerra, vertical)</td>
+      <td>Acelerador</td>
+      <td>Amplitud de bateig / empenta</td>
+    </tr>
+    <tr>
+      <td>Guiada (esquerra, horitzontal)</td>
+      <td>Guia</td>
+      <td>Diferencial d’empenta d’ala per girar</td>
+    </tr>
+    <tr>
+      <td>Pas (Dreta, vertical)</td>
+      <td>Pitch</td>
+      <td>Inclinació cap endavant/enrere</td>
+    </tr>
+    <tr>
+      <td>Rotlla (Dreta, horitzontal)</td>
+      <td>Roll</td>
+      <td>Banca esquerra/dreta</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="modes-de-vol">Modes de vol</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Mode</th>
+      <th>Comportament del pal</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>ACRO</strong></td>
+      <td>Els pals controlen la velocitat angular — sense nivell automàtic</td>
+    </tr>
+    <tr>
+      <td><strong>ANGLE</strong></td>
+      <td>Els pals controlen l’angle — autonivell quan s’alliberen</td>
+    </tr>
+    <tr>
+      <td><strong>HORIZON</strong></td>
+      <td>ANGLE a prop del centre, ACRO a la desviació total</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>ACRO es recomana per a pilots experimentats. ANGLE és bo per als primers vols i per a la volada tèrmica.</p>
+
+<h2 id="controls-especfics-per-a-ornitpters">Controls específics per a ornitòpters</h2>
+
+<h3 id="mode-independent">Mode INDEPENDENT</h3>
+
+<p>Quan el mode INDEPENDENT està actiu, cada servo d’ala respon de manera independent:
+- <strong>Pasc esquerre</strong> → servos de l’ala esquerra
+- <strong>Pasc dret</strong> → servos de l’ala dreta
+- Permet un aleteig asimètric per a maniobres agressives</p>
+
+<h3 id="mode-glide">Mode GLIDE</h3>
+
+<p>El mode GLIDE bloqueja les dues ales en posició horitzontal. L’ornitòpter es converteix en un planador:
+- <strong>L’accelerador</strong> no té cap efecte en la posició de l’ala
+- <strong>Pitch/Roll/Yaw</strong> encara influeix en les superfícies de control de la cua (si està equipat)</p>
+
+<h3 id="canvi-de-perfil">Canvi de perfil</h3>
+
+<p>El canvi de perfil durant el vol mitjançant el canal AUX permet canviar els paràmetres PID/ONDAS a mig vol:
+- <strong>Perfil 1</strong>: Configuració estàndard del creuer
+- <strong>Perfil 2</strong>: Configuració d’alta agilitat
+- <strong>Perfil 3</strong>: Configuració d’eficiència/planament</p>
+
+<h2 id="tarifes">Tarifes</h2>
+
+<p>Configureu les tarifes a la pestanya <strong>PID Tuning</strong>. Per als ornitòpters, comenceu amb taxes conservadores — dinàmiques de flapping amplifiquen les entrades de control:
+- Tarifa RC: 0,80–1,00
+- Super tarifa: 0,60–0,70
+- Expo: 0,20–0,40</p>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<strong>Català</strong>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<a href='../../hr/'>Hrvatski</a>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<a href='../../ko/'>한국어</a>
+&nbsp;◇&nbsp;
+<a href='../../lv/'>Latviešu</a>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<a href='../../zh_CN/'>中文</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

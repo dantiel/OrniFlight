@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='ko'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>안전 — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Docs</p>
+<h1>안전</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="section">안전</h1>
+
+<h2 id="section-1">비행 전 체크리스트</h2>
+
+<ol>
+  <li><strong>날개</strong>: 날개가 단단히 장착되어 있고 연결 장치가 손상되지 않았는지 확인하세요.</li>
+  <li><strong>배터리</strong>: 완전히 충전되었고, 적절하게 고정되었으며, 정확한 셀 수입니다.</li>
+  <li><strong>컨트롤</strong>: 구성기 수신기 탭에서 스틱 응답을 확인합니다.</li>
+  <li><strong>Failsafe</strong>: 비행 전 벤치에서 테스트합니다(<a href="failsafe.html">Failsafe</a> 참조).</li>
+  <li><strong>암 스위치</strong>: — 구성 및 테스트는 스틱 무장에만 의존하지 않습니다.</li>
+  <li><strong>발사 영역</strong>: 사람, 장애물, 머리 위 장애물이 없는 곳</li>
+</ol>
+
+<h2 id="section-2">팔 안전</h2>
+
+<p>OrniFlight는 무장하기 전에 여러 가지 안전 장치를 사용합니다.</p>
+
+<ul>
+  <li><strong>스로틀 낮음</strong>: 스로틀은 최소 수준이어야 합니다.</li>
+  <li><strong>수준</strong>: 선박은 합리적으로 수평이어야 합니다.</li>
+  <li><strong>RX 신호</strong>: 유효한 수신기 신호가 필요합니다.</li>
+  <li><strong>CPU 로드</strong>: 시스템에 과부하가 걸려서는 안 됩니다.</li>
+  <li><strong>보정</strong>: 가속도계와 자이로를 보정해야 합니다.</li>
+</ul>
+
+<h2 id="section-3">기내 안전</h2>
+
+<ul>
+  <li><strong>눈에 보이는 시야 내에서 비행</strong></li>
+  <li>사람과 동물로부터 안전한 거리를 유지하세요.</li>
+  <li>경고 임계값 이전에 배터리 전압 — 랜드를 모니터링합니다.</li>
+  <li>FPV: 항상 정찰병과 함께 비행하세요</li>
+  <li>바람: 오니톱터는 바람에 민감할 수 있습니다 — 한계를 아세요</li>
+</ul>
+
+<h2 id="section-4">비상 절차</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>상황</th>
+      <th>액션</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>방향 상실</td>
+      <td>INDEPENDENT 모드로 전환, 중앙 스틱</td>
+    </tr>
+    <tr>
+      <td>신호 손실</td>
+      <td>비상 안전 장치가 자동으로 착륙합니다(LAND 절차가 구성된 경우)</td>
+    </tr>
+    <tr>
+      <td>날개 손상</td>
+      <td>즉시 무장 해제 — 날개 중지</td>
+    </tr>
+    <tr>
+      <td>버드 스트라이크</td>
+      <td>무장 해제, 재무장 전 피해 평가</td>
+    </tr>
+    <tr>
+      <td>배터리 부족</td>
+      <td>즉시 착륙 — ornithopter에는 자동 회전이 없습니다</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="ornithopter--">Ornithopter 관련 위험</h2>
+
+<ul>
+  <li><strong>핀치 위험</strong>: 날개를 펄럭이면 부상을 입을 수 있습니다. — 무장할 때 손을 깨끗이 유지하세요.</li>
+  <li><strong>연결 실패</strong>: 비행 전 모든 푸시로드와 볼 조인트를 확인하세요.</li>
+  <li><strong>Resonance</strong>: 특정 날개짓 주파수는 기체 공명을 자극할 수 있습니다. — ONDAS 스윕을 조정하여 피하기</li>
+  <li><strong>글라이드 잠금</strong>: 윙 서보가 중립이 아닌 위치에서 실패하면 제어된 착륙이 불가능합니다. — 테스트 서보 안전 장치 위치</li>
+</ul>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<a href='../../hr/'>Hrvatski</a>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<strong>한국어</strong>
+&nbsp;◇&nbsp;
+<a href='../../lv/'>Latviešu</a>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<a href='../../zh_CN/'>中文</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

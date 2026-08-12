@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='hr'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>Praćenje baterije — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Docs</p>
+<h1>Praćenje baterije</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="praenje-baterije">Praćenje baterije</h1>
+
+<p>OrniFlight prati napon glavnog akumulatora putem ADC (analogno-digitalni pretvarač). To omogućuje upozorenja o niskoj razini baterije putem zujalice, statusa LED i LED uzoraka trake.</p>
+
+<h2 id="znaajke">Značajke</h2>
+
+<ul>
+  <li>Automatsko otkrivanje broja ćelija pri povezivanju (na temelju minimalnog/maksimalnog napona ćelije)</li>
+  <li>Upozorenje o niskoj bateriji s podesivim pragovima</li>
+  <li>Senzor struje za potrošnju mAh (ako to podržava FC)</li>
+  <li>Napon prikazan u OSD i prenesen putem telemetrije</li>
+</ul>
+
+<h2 id="podrani-ciljevi">Podržani ciljevi</h2>
+
+<p>Svi podržani kontroleri leta (OMNIBUSF4, TINYFISH) uključuju VBAT nadzor preko razdjelnika napona.</p>
+
+<h2 id="veze">Veze</h2>
+
+<p><strong>UVIJEK PROVJERITE POLARITET.</strong> Prije spajanja izmjerite očekivane napone. Neispravan napon ili obrnuti polaritet uništit će vaš kontroler leta.</p>
+
+<h3 id="omnibusf4">OMNIBUSF4</h3>
+
+<p>Spojite glavnu bateriju na VBAT jastučić. Ugrađeni razdjelnik napona upravlja izravno do 6S.</p>
+
+<h3 id="tinyfish">TINYFISH</h3>
+
+<p>VBAT je usmjeren kroz ulaz napajanja ploče — nije potrebna posebna veza.</p>
+
+<h2 id="cli-postavke">CLI Postavke</h2>
+
+<p><code>
+set vbat_min_cell_voltage = 330       # Minimum per-cell voltage (3.3V)
+set vbat_max_cell_voltage = 430       # Maximum per-cell voltage (4.3V)
+set vbat_warning_cell_voltage = 350   # Warning threshold (3.5V)
+set battery_meter_type = ADC
+set current_meter_type = ADC          # If current sensor available
+</code></p>
+
+<h2 id="sigurnost">Sigurnost</h2>
+
+<p>LiPo baterije se nikada ne smiju prazniti ispod 3,5 V po ćeliji pod opterećenjem. Pragovi koji se mogu konfigurirati OrniFlight osiguravaju siguran rad i dugovječnost baterije.</p>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<strong>Hrvatski</strong>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<a href='../../ko/'>한국어</a>
+&nbsp;◇&nbsp;
+<a href='../../lv/'>Latviešu</a>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<a href='../../zh_CN/'>中文</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

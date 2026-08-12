@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='lv'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>Darba sākšana — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Tutorials</p>
+<h1>Darba sākšana</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="darba-skana">Darba sākšana</h1>
+
+<p>Laipni lūdzam OrniFlight! Šajā rokasgrāmatā ir sniegta informācija par ornitoptera lidojuma kontroliera sākotnējo iestatīšanu.</p>
+
+<h2 id="kas-jums-nepiecieams">Kas jums nepieciešams</h2>
+
+<ul>
+  <li><strong>OrniFlight Configurator</strong> — lejupielāde no <a href="https://orniflight.org">orniflight.org</a></li>
+  <li><strong>USB kabelis</strong> —, lai savienotu lidojuma kontrolieri ar datoru</li>
+  <li><strong>Ornitopteris</strong> ar:
+    <ul>
+      <li>Atbalstītais lidojuma kontrolieris (OMNIBUSF4, TINYFISH)</li>
+      <li>Servo spārnu iedarbināšanai</li>
+      <li>Uztvērējs ir saistīts ar jūsu raidītāju</li>
+      <li>Akumulators (2S–4S LiPo)</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="s-skana">Īsā sākšana</h2>
+
+<h3 id="flash-programmaparatra">1. Flash programmaparatūra</h3>
+
+<p>1. Atveriet <strong>OrniFlight Configurator</strong>
+2. Atveriet cilni <strong>Firmware Flasher</strong>
+3. Atlasiet tāfeles mērķi (OMNIBUSF4 vai TINYFISH)
+4. Izvēlieties jaunāko stabilo versiju
+5. Noklikšķiniet uz <strong>Ielādēt programmaparatūru</strong> un pēc tam — uz <strong>Flash programmaparatūru</strong>.</p>
+
+<h3 id="skotnj-konfigurcija">2. Sākotnējā konfigurācija</h3>
+
+<p>Pēc mirgošanas konfigurators liks jums piemērot pielāgotus noklusējuma iestatījumus. <strong>Vienmēr pieņemt.</strong></p>
+
+<h3 id="uztvrja-iestatana">3. Uztvērēja iestatīšana</h3>
+
+<p>1. Atveriet cilni <strong>Porti</strong>. → iestatiet pareizo UART uz <code>Serial RX</code>
+2. Atveriet cilni <strong>Konfigurācija</strong> → atlasiet uztvērēja protokolu (CRSF, SBUS utt.)
+3. Atveriet cilni <strong>Uztvērējs</strong> → — pārbaudiet, vai nūjas kustības atbilst gaidītajiem kanāliem.
+4. Iestatiet kanāla galapunktus: 1000–2000 ar 1500 centru</p>
+
+<h3 id="servo-iestatana">4. Servo iestatīšana</h3>
+
+<p>1. Atveriet cilni <strong>Servos</strong>
+2. Pārbaudiet, vai servo kartēšana atbilst jūsu ornitoptera spārnu konfigurācijai
+3. Ja nepieciešams, pārbaudiet servo virzienu — atpakaļgaitā
+4. Iestatiet vidējo pozīciju (spārni horizontāli = 1500)</p>
+
+<h3 id="remu-iestatana">5. Režīmu iestatīšana</h3>
+
+<p>1. Atveriet cilni <strong>Režīmi</strong>
+2. Piešķiriet ARM slēdzim AUX
+3. Piešķiriet lidojuma režīmus (ANGLE / ACRO / HORIZON) pēc vēlēšanās
+4. Piešķiriet INDEPENDENT un GLIDE rezerves slēdžiem
+5. Konfigurējiet BEEPER, lai noteiktu pazaudētā modeļa atrašanās vietu</p>
+
+<h3 id="pirmais-lidojums">6. Pirmais lidojums</h3>
+
+<p>1. <strong>Atvienojiet spārnu savienojumu, lai veiktu testēšanu stendā</strong>
+2. Nostipriniet un pārbaudiet servomehānisma kustības virzienu
+3. Pārbaudiet droseles reakciju
+4. Pirmajam faktiskajam lidojumam: izmantojiet ANGLE režīmu, zemas cenas
+5. Virziet acu līmenī, sagrieziet pēc vajadzības</p>
+
+<h2 id="nkamie-soi">Nākamie soļi</h2>
+
+<ul>
+  <li><a href="basic_setup.html">Pamata iestatīšana</a> — detalizēts konfigurācijas apraksts</li>
+  <li><a href="../../tutorials/ondas_tuning.html">ONDAS Tuning</a> — melodijas viļņošanās dinamika</li>
+  <li><a href="../../tutorials/tuning.html">PID Tuning</a> — pielāgot lidojuma raksturlielumus</li>
+</ul>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<a href='../../hr/'>Hrvatski</a>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<a href='../../ko/'>한국어</a>
+&nbsp;◇&nbsp;
+<strong>Latviešu</strong>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<a href='../../zh_CN/'>中文</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

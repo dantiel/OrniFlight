@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='sv'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>Grundläggande inställningar — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Tutorials</p>
+<h1>Grundläggande inställningar</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="grundlggande-instllningar">Grundläggande inställningar</h1>
+
+<blockquote>
+  <p><em>Konfigurera din ornithopter för första flygningen.</em></p>
+</blockquote>
+
+<h2 id="checklista-fre-flygning">Checklista före flygning</h2>
+
+<p>Före allt annat:</p>
+
+<ul>
+  <li>[ ] Flygkontrollen blinkade med OrniFlight</li>
+  <li>[ ] Mottagaren bunden till sändaren</li>
+  <li>[ ] Servon anslutna till korrekta PWM-utgångar</li>
+  <li>[ ] Batteri anslutet (vingarna säkrade!)</li>
+</ul>
+
+<h2 id="mottagareinstllningar">Mottagareinställningar</h2>
+
+<h3 id="crsf-rekommenderas">CRSF (rekommenderas)</h3>
+
+<ol>
+  <li><strong>Fliken Portar</strong>: Ställ in UART (t.ex. UART1) till “Serial RX”</li>
+  <li><strong>Fliken Konfiguration</strong>: Mottagarläge = “Serial-baserad mottagare”, Provider = “CRSF”</li>
+  <li>Slå på strömmen, kontrollera att kanalingångarna rör sig på fliken Mottagare</li>
+</ol>
+
+<h3 id="sbus--annat">SBUS / Annat</h3>
+
+<p>Samma process — välj lämpligt protokoll på fliken Konfiguration.</p>
+
+<h2 id="servomappning">Servomappning</h2>
+
+<p>På fliken <strong>Servos</strong>:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Servo</th>
+      <th>Funktion</th>
+      <th>Standardpris</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Servo 0</td>
+      <td>Vänsterflygeln</td>
+      <td>250 Hz</td>
+    </tr>
+    <tr>
+      <td>Servo 1</td>
+      <td>Högervinge</td>
+      <td>250 Hz</td>
+    </tr>
+    <tr>
+      <td>Servo 2</td>
+      <td>Vapen/Roder</td>
+      <td>50 Hz</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>Justera min/max/mitten för att matcha din servos räckvidd. Testa med “Åsidosätt” för att verifiera riktningen.</p>
+
+<h2 id="val-av-flyglge">Val av flygläge</h2>
+
+<p>På fliken <strong>Lägen</strong>:</p>
+
+<ol>
+  <li><strong>ARM</strong>: Tilldela en switch (säkerhet!)</li>
+  <li><strong>ORNITHOPTER INDEPENDENT</strong> eller <strong>ORNITHOPTER GLIDE</strong>: Välj ditt primära flygläge</li>
+  <li><strong>ORNITHOPTER PROFILE</strong>: Valfri —-tilldelning för byte av profil under flygning</li>
+</ol>
+
+<h2 id="ondas-frsta-stmningen">ONDAS Första stämningen</h2>
+
+<p>Gå till <strong>Avancerat → ONDAS underfliken</strong>:</p>
+
+<ol>
+  <li><strong>Cadence Gain</strong>: Börja vid 50 (mitten). Detta är den viktigaste parametern.</li>
+  <li><strong>Ferocity D Gain</strong>: Börja vid 30. Detta är din primära stabilisering.</li>
+  <li><strong>Ferocity P Gain</strong>: Börja vid 20 för roll/pitch, 0 för yaw.</li>
+  <li><strong>Balance Vinst</strong>: 0 (centrerad).</li>
+</ol>
+
+<p>Anslut ett batteri, <strong>säkra ornithoptern ordentligt</strong> och ARM. Observera servorörelse — den ska vara jämn, sinusformad flaxande.</p>
+
+<h2 id="frsta-flygningen">Första flygningen</h2>
+
+<ol>
+  <li>Börja med ett försiktigt kast mot vinden</li>
+  <li>Använd GLIDE-läget för naturlig svävande känsla</li>
+  <li>Använd INDEPENDENT-läget när du vill ha direkt frekvenskontroll</li>
+  <li>Landa, justera ONDAS, upprepa</li>
+</ol>
+
+<hr />
+
+<p><em>Nästa: <a href="ondas_tuning.html">ONDAS Tuning Guide</a> →</em></p>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<a href='../../hr/'>Hrvatski</a>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<a href='../../ko/'>한국어</a>
+&nbsp;◇&nbsp;
+<a href='../../lv/'>Latviešu</a>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<strong>Svenska</strong>
+&nbsp;◇&nbsp;
+<a href='../../zh_CN/'>中文</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

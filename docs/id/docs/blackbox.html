@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='id'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>Pencatatan Kotak Hitam — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Docs</p>
+<h1>Pencatatan Kotak Hitam</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="pencatatan-kotak-hitam">Pencatatan Kotak Hitam</h1>
+
+<p>Blackbox mencatat data penerbangan untuk analisis pasca-penerbangan, penyetelan, dan debugging. OrniFlight mendukung logging ke chip flash onboard atau perangkat OpenLog eksternal.</p>
+
+<h2 id="apa-yang-dicatat">Apa yang Dicatat</h2>
+
+<ul>
+  <li><strong>Gyro</strong> — kecepatan sudut 3 sumbu mentah dan terfilter</li>
+  <li><strong>Akselerometer</strong> — akselerasi 3 sumbu</li>
+  <li><strong>PID Output</strong> — kontribusi P, I, D, F per sumbu</li>
+  <li><strong>ONDAS</strong> — Cadence, Ferocity P/D, dan parameter khusus pengepakkan lainnya</li>
+  <li><strong>Perintah RC</strong> — tetap posisi setelah tarif/pameran</li>
+  <li><strong>Output Servo</strong> keluaran akhir — ke setiap saluran servo</li>
+  <li><strong>Baterai</strong> tegangan dan arus — per iterasi</li>
+  <li><strong>GPS</strong> — posisi, kecepatan, ketinggian (bila tersedia)</li>
+</ul>
+
+<h2 id="pengaturan">Pengaturan</h2>
+
+<h3 id="flash-terpasang-omnibusf4">Flash Terpasang (OMNIBUSF4)</h3>
+
+<p>Zzz34zzz menyertakan flash onboard 16MB untuk logging Blackbox. Aktifkan di Konfigurator:</p>
+
+<ol>
+  <li><strong>Kotak Hitam</strong> tab → Setel <code>Blackbox logging device</code> ke <code>Onboard flash</code></li>
+  <li>Tetapkan tingkat logging (direkomendasikan: <code>1/N</code> dengan N=2-4 untuk target F4)</li>
+  <li>Tetapkan saklar untuk memulai/menghentikan pencatatan</li>
+</ol>
+
+<h3 id="zzz36zzz-eksternal">Zzz36zzz eksternal</h3>
+
+<p>Hubungkan OpenLog ke pin UART TX gratis:</p>
+
+<ol>
+  <li><strong>Ports</strong> tab → Setel UART ke <code>Blackbox logging</code> pada 115200 baud</li>
+  <li>Hubungkan OpenLog: FC TX → OpenLog RX, ditambah 5V/GND</li>
+</ol>
+
+<h2 id="alat-analisis">Alat Analisis</h2>
+
+<ul>
+  <li><a href="https://github.com/betaflight/blackbox-log-viewer">Blackbox Explorer</a> — penampil log berbasis web</li>
+  <li><code>blackbox_decode</code> — konversikan ke CSV untuk analisis khusus</li>
+</ul>
+
+<h2 id="ondas-khusus">ONDAS-Khusus</h2>
+
+<p>Blackbox sangat penting untuk menyetel parameter ONDAS. Data ONDAS yang dicatat meliputi:
+- waktu jendela modulasi <code>ondas_cadence_phase</code> —
+- komponen dorong asimetris <code>ondas_ferocity_p</code> / <code>ondas_ferocity_d</code> —
+- <code>ondas_balance</code> — keseimbangan sayap kiri/kanan
+- Output per-servo pada setiap iterasi</p>
+
+<p>Hal ini memungkinkan analisis yang tepat terhadap mekanika kepakan dan koreksi asimetri sayap.</p>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<a href='../../hr/'>Hrvatski</a>
+&nbsp;◇&nbsp;
+<strong>Bahasa Indonesia</strong>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<a href='../../ko/'>한국어</a>
+&nbsp;◇&nbsp;
+<a href='../../lv/'>Latviešu</a>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<a href='../../zh_CN/'>中文</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

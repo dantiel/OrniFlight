@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='lv'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>ONDAS — Oscilējoša normalizēta dinamiskā adaptīvā stabilizācija — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Wiki</p>
+<h1>ONDAS — Oscilējoša normalizēta dinamiskā adaptīvā stabilizācija</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="ondas--osciljoa-normalizta-dinamisk-adaptv-stabilizcija">ONDAS — Oscilējoša normalizēta dinamiskā adaptīvā stabilizācija</h1>
+
+<h2 id="pamatprincips">Pamatprincips</h2>
+
+<p>Fiksētu spārnu vai parasts gaisa kuģis ģenerē vadības spēkus <strong>nepārtraukti</strong> — vadības virsmas novirze vai RPM izmaiņas rada līdzsvara stāvokļa momentu. Ornitopterim tā nav. Katrs vilces grams, katrs griezes momenta ņūtons ir <strong>saistīts ar fāzi</strong> spārnu sitienu ciklā. Viens un tas pats spēka impulss, kas tiek pielietots dažādos gājiena punktos, rada būtiski atšķirīgus rezultātus.</p>
+
+<p>ONDAS atzīst šo realitāti un modulē stabilizācijas centienus sinhroni ar plivināšanas ciklu.</p>
+
+<hr />
+
+<h2 id="cadence--laika-smadzenes">Cadence — Laika smadzenes</h2>
+
+<p>Cadence ir viskritiskākais ONDAS filtrs, jo tas nosaka <strong>kad</strong> korekcija notiek katrā spārna sitienā.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Insulta fāze</th>
+      <th>Spēka pielietošanas ietekme</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Downstroke centrs</td>
+      <td>Maksimālā pacēluma, apgāšanās autoritāte</td>
+    </tr>
+    <tr>
+      <td>Uz leju (bremzēšana)</td>
+      <td>Izraisītā vilkšana → griešanās moments</td>
+    </tr>
+    <tr>
+      <td>Upstroke centrs</td>
+      <td>Vilce uz aizmuguri, slīpums uz augšu</td>
+    </tr>
+    <tr>
+      <td>Uz augšu vērsta gals</td>
+      <td>Spārnu apvēršana, minimāls efekts</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><strong>Cadence pārbīda modulācijas logu</strong>, lai saskaņotos ar fāzi, kurā aerodinamiskā sviras svira ir garākā. Nepareiza kadence = kaujas spārnu fizika. Pareiza kadence = katrs milivats kļūst par kontroles autoritāti.</p>
+
+<h3 id="parametri">Parametri</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>Parametrs</th>
+      <th>Vērtība</th>
+      <th>Funkcija</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>ONDAS_K0</code></td>
+      <td>1,0</td>
+      <td>Bāzes fāzes nobīde</td>
+    </tr>
+    <tr>
+      <td><code>ONDAS_K2</code></td>
+      <td>10,0</td>
+      <td>Fāzes izplatība / asums</td>
+    </tr>
+    <tr>
+      <td><code>ONDAS_PHASE_SCALE</code></td>
+      <td>0,00005</td>
+      <td>Mazs faktors, liels sviras efekts</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h2 id="ferocity-p--tltja-asimetrisk-vilce">Ferocity P — Tūlītēja asimetriskā vilce</h2>
+
+<p>Ferocity P palielina <strong>viļņu formas kvadrātu</strong> (trapecveida forma: aiztures pie ±1, kosinusa rampa starp) proporcionāli pašreizējai PID kļūdai.</p>
+
+<ul>
+  <li>Vairāk virzības vienā pusē → tūlītējs brīdis</li>
+  <li>Bremzētais spārns gājiena beigās piedzīvo <strong>izraisītu pretestību</strong> — Šis ir pretmirklis</li>
+  <li>Ietekme: tieša, proporcionāla, tūlītēja</li>
+</ul>
+
+<hr />
+
+<h2 id="ferocity-d--paredzama-vilkanas-izmantoana">Ferocity D — Paredzama vilkšanas izmantošana</h2>
+
+<p>Ferocity D pabeidz attēlu. Ja P nodrošina vilces asimetriju, D izmanto <strong>kontralaterālā spārna vilkšanu</strong> kā bremzi.</p>
+
+<p>- Nolasa izmaiņu kļūdu līmeni un <strong>paredz</strong>
+- Prot apzināti izmantot palēnināta spārna vilkšanu, lai radītu sānsveres / slīpuma momentus
+- P+D kopā izveido <strong>diferenciālo momentu pāri</strong> — vilce A pusē, vilkšana B pusē — efektīvāka nekā tikai vilce</p>
+
+<hr />
+
+<h2 id="trs-veidi-cadenceferocity-d-palielina-ferocity">Trīs veidi Cadence/Ferocity D Palielina Ferocity</h2>
+
+<h3 id="tie--d-palielina-p-straujas-kdu-maias-laik">1. Tiešā — D palielina P straujas kļūdu maiņas laikā</h3>
+
+<p>Brāzmās vai agresīvos manevros <code>error_rate</code> ir liels. D to reizina un palielina pamata mežonīgumu. Spārns kļūst <em>asāks</em> (vairāk trapecveida), jo P+D kopā prasa vairāk kvadrātveida nekā P atsevišķi. Rezultāts: maksimāla autoritāte tieši kritiskos gadījumos.</p>
+
+<h3 id="netie--cadence-maina-sviras-punktu">2. Netiešā — Cadence maina sviras punktu</h3>
+
+<p>Cadence modulē <em>kad</em> ciklā darbojas mežonība. Loga pārvietošana aerodinamiski jutīgākā fāzē (piem., lejupejošā gājiena centrs pret augšupvirziena galu) nozīmē, ka <strong>tāda pati nežēlības vērtība</strong> rada lielāku efektu — efektīvu pastiprinājumu bez skaitliskām izmaiņām.</p>
+
+<h3 id="kombinatorisk--d--cadence-apstdinanas-laik">3. Kombinatoriskā — D × Cadence apstādināšanas laikā</h3>
+
+<p>Stāvā: augsts grimšanas ātrums → D nosaka ātrumu → palielina mežonību. Vienlaikus kadence novirza modulāciju lejupslīdes fāzē, kur spārnam ir maksimālais sakodiens. Saspēle: D nodrošina spēku, ritmu īstajā brīdī. Bez kadences D-spēks nonāk nepareizā fāzē un izkliedējas bezjēdzīgi.</p>
+
+<hr />
+
+<h2 id="papildu-ondas-parametri">Papildu ONDAS parametri</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Parametrs</th>
+      <th>Funkcija</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Balance</strong></td>
+      <td>Uz augšu/uz leju vilces simetrija — I termiņa novirze starp gājienu uz augšu un uz leju. Kompensē spārnu asimetriju, ražošanas pielaides un nodilumu</td>
+    </tr>
+    <tr>
+      <td><strong>Warp</strong></td>
+      <td>Apgāšanās/virzīšanās P → L/R niknuma diferenciālis — labais un kreisais spārns atsevišķi svārstās uz sānsveres ass sānsveres un pagrieziena manevriem</td>
+    </tr>
+    <tr>
+      <td><strong>Anchor</strong></td>
+      <td>Fāzes noenkurojums — bloķē modulāciju uz noteiktu fāzes atsauci, izturot novirzi</td>
+    </tr>
+    <tr>
+      <td><strong>Resonance</strong></td>
+      <td>Lidmašīnas korpusa rezonanses kompensācija — izvairās no aizraujošiem lidmašīnas korpusa strukturālajiem režīmiem</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h2 id="analogija">Analogija</h2>
+
+<p><strong>Cadence ir diriģents. Ferocity P un D ir instrumenti.</strong></p>
+
+<p>Bez diriģenta viņi spēlē —, bet ne kopā. Ar vienu troksnis kļūst par mūziku.</p>
+
+<hr />
+
+<h2 id="skatt-ar">Skatīt arī</h2>
+
+<ul>
+  <li><a href="../../tutorials/ondas_tuning.html">ONDAS skaņošanas ceļvedis</a> — praktiska skaņošanas procedūra</li>
+  <li><a href="msp.html">MSP protokols</a> — vadu formāts ONDAS parametriem</li>
+  <li><a href="profiles.html">Lidojuma profili</a> — profilu apzinoša ONDAS konfigurācija</li>
+</ul>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<a href='../../hr/'>Hrvatski</a>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<a href='../../ko/'>한국어</a>
+&nbsp;◇&nbsp;
+<strong>Latviešu</strong>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<a href='../../zh_CN/'>中文</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

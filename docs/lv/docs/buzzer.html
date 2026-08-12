@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='lv'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>Zumer — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Docs</p>
+<h1>Zumer</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="zumer">Zumer</h1>
+
+<p>OrniFlight atbalsta aktīvos skaņas signālus skaņas statusa indikācijai un pazaudētā modeļa atrašanās vietai.</p>
+
+<h2 id="funkcijas">Funkcijas</h2>
+
+<ul>
+  <li><strong>Ieslēgt/izslēgt</strong> — atšķirīgi toņi</li>
+  <li><strong>Zems akumulatora uzlādes līmenis</strong> — atkārtojas brīdinājuma skaņas signāli</li>
+  <li><strong>Failsafe</strong> — SOS modelis</li>
+  <li><strong>Lost Model</strong> — nepārtraukts pīkstiens, izmantojot slēdzi</li>
+  <li><strong>GPS Fix</strong> — apstiprinājuma signāls satelīta bloķēšanā</li>
+  <li><strong>Kalibrēšana</strong> — pīkstienu modeļi žiroskopa/paātrinājuma kalibrēšanas laikā</li>
+  <li><strong>RX signāls pazudis</strong> — brīdinājums, kad uztvērēja savienojums pazūd</li>
+</ul>
+
+<h2 id="aparatra">Aparatūra</h2>
+
+<ul>
+  <li>Pievienojiet 5 V aktīvo zummeru (NAV pasīvo pjezo) ar <strong>BUZZ-</strong> un <strong>BUZZ+</strong> spilventiņiem</li>
+  <li>Zummeru darbina FC — tranzistors. standarta zummeriem nav nepieciešams ārējs draiveris</li>
+</ul>
+
+<h2 id="cli-iestatjumi">CLI Iestatījumi</h2>
+
+<p><code>
+beeper -GYRO_CALIBRATED     # Disable gyro calibration beeps
+beeper -RX_LOST             # Enable receiver lost warning
+beeper -ON_USB              # Disable beeper when USB connected
+</code></p>
+
+<h2 id="ornitoptera-droba">Ornitoptera drošība</h2>
+
+<p>Pīkstulis ir īpaši noderīgs lieliem ornitopteriem, kas var iekrist augstā zālē vai lapotnē. Konfigurējiet BEEPER režīmu uz īstermiņa slēdzi, lai vajadzības gadījumā ātri aktivizētu.</p>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<a href='../../hr/'>Hrvatski</a>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<a href='../../ko/'>한국어</a>
+&nbsp;◇&nbsp;
+<strong>Latviešu</strong>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<a href='../../zh_CN/'>中文</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

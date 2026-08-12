@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='lv'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>Lidojuma režīmi — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Docs</p>
+<h1>Lidojuma režīmi</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="lidojuma-remi">Lidojuma režīmi</h1>
+
+<p>Režīmi tiek pārslēgti, izmantojot raidītāja AUX slēdžus. Katru režīmu var piešķirt noteiktam AUX kanālu diapazonam OrniFlight Configurator cilnē <strong>Modes</strong>.</p>
+
+<h2 id="standarta-remi">Standarta režīmi</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Režīms</th>
+      <th>Funkcija</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>ARM</strong></td>
+      <td>Iespējot lidojuma vadību (motori/servo aktīvi)</td>
+    </tr>
+    <tr>
+      <td><strong>ANGLE</strong></td>
+      <td>Automātiskā līmeņa — kuģis atgriežas līmenī, kad nūjas ir centrētas</td>
+    </tr>
+    <tr>
+      <td><strong>HORIZON</strong></td>
+      <td>Hibrīds — leņķa režīms tuvu centram, acro pie pilnas nūjas</td>
+    </tr>
+    <tr>
+      <td><strong>ACRO</strong></td>
+      <td>Noklusējuma — nav automātiskā līmeņa, tīra ātruma kontrole</td>
+    </tr>
+    <tr>
+      <td><strong>AIRMODE</strong></td>
+      <td>Uztur PID cilpu aktīvu pie nulles droseles, lai nodrošinātu pilnu autoritāti</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="orniflight-specifiskie-remi">OrniFlight-specifiskie režīmi</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Režīms</th>
+      <th>Funkcija</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>50</td>
+      <td><strong>INDEPENDENT</strong></td>
+      <td>Neatkarīga spārna vadība — katrs spārns reaģē uz savu servo kanālu</td>
+    </tr>
+    <tr>
+      <td>51</td>
+      <td><strong>GLIDE</strong></td>
+      <td>Slīdēšanas režīms — spārni fiksēti horizontālā stāvoklī, lai planētu</td>
+    </tr>
+    <tr>
+      <td>52</td>
+      <td><strong>PROFILE</strong></td>
+      <td>Lidojuma profila izvēle — pārslēgšanās starp 3 PID/ONDAS profiliem</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="lietdergie-remi">Lietderīgie režīmi</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Režīms</th>
+      <th>Funkcija</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>BEEPER</strong></td>
+      <td>Aktivizēt zummeru, lai atrastu pazudušo lidaparātu</td>
+    </tr>
+    <tr>
+      <td><strong>BLACKBOX</strong></td>
+      <td>Sākt/apturēt Blackbox reģistrēšanu</td>
+    </tr>
+    <tr>
+      <td><strong>FAILSAFE</strong></td>
+      <td>Manuāli iedarbiniet 2. atteices posmu (panikas slēdzis)</td>
+    </tr>
+    <tr>
+      <td><strong>OSD</strong></td>
+      <td>Pārslēgt OSD displeju</td>
+    </tr>
+    <tr>
+      <td><strong>TELEMETRY</strong></td>
+      <td>Iespējot/atspējot telemetrijas izvadi</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="ornitoptera-piezmes">Ornitoptera piezīmes</h2>
+
+<ul>
+  <li><strong>INDEPENDENT</strong> režīms ir unikāls OrniFlight —, tas nodrošina katra spārna servo kartēšanu asimetriskai vilces un diferenciāla spārnu kontrolei</li>
+  <li><strong>GLIDE</strong> režīms notur spārnus neitrālā stāvoklī, noder termiskai planēšanai un energoefektīvai nolaišanai
+- <strong>PROFILE</strong> pārslēgšana ļauj lidojuma laikā mainīt ONDAS parametrus dažādos lidojuma apstākļos (piemēram, kruīza un agresīvas manevrēšanas gadījumā).</li>
+</ul>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<a href='../../hr/'>Hrvatski</a>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<a href='../../ko/'>한국어</a>
+&nbsp;◇&nbsp;
+<strong>Latviešu</strong>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<a href='../../zh_CN/'>中文</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

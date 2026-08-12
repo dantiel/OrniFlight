@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='zh_CN'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>开始使用 — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Tutorials</p>
+<h1>开始使用</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="section">开始使用</h1>
+
+<p>欢迎来到OrniFlight！本指南将引导您完成扑翼机飞行控制器的初始设置。</p>
+
+<h2 id="section-1">你需要什么</h2>
+
+<ul>
+  <li><strong>OrniFlight 配置器</strong> — 从 <a href="https://orniflight.org">orniflight.org</a> 下载</li>
+  <li><strong>USB 电缆</strong> — 将飞行控制器连接到计算机</li>
+  <li><strong>扑翼机</strong> 具有：
+    <ul>
+      <li>支持的飞行控制器（OMNIBUSF4、TINYFISH）</li>
+      <li>机翼驱动伺服系统</li>
+      <li>接收器绑定到您的发射器</li>
+      <li>电池（2S–4S LiPo）</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="section-2">快速入门</h2>
+
+<h3 id="section-3">1. 闪存固件</h3>
+
+<ol>
+  <li>打开 <strong>OrniFlight 配置器</strong></li>
+  <li>转到 <strong>固件刷新器</strong> 选项卡</li>
+  <li>选择您的开发板目标（OMNIBUSF4 或 TINYFISH）
+4.选择最新稳定版本</li>
+  <li>单击“<strong>加载固件</strong>”，然后单击“<strong>刷新固件</strong>”</li>
+</ol>
+
+<h3 id="section-4">2. 初始配置</h3>
+
+<p>闪烁后，配置器将提示您应用自定义默认值。 <strong>始终接受。</strong></p>
+
+<h3 id="section-5">3. 接收器设置</h3>
+
+<ol>
+  <li>转到 <strong>端口</strong> 选项卡 → 将正确的 UART 设置为 <code>Serial RX</code></li>
+  <li>转到 <strong>配置</strong> 选项卡 → 选择您的接收器协议（CRSF、SBUS 等）</li>
+  <li>转到 <strong>接收器</strong> 选项卡 → 验证摇杆移动是否与预期通道匹配
+4.设置通道端点：1000–2000，中心1500</li>
+</ol>
+
+<h3 id="section-6">4. 伺服设置</h3>
+
+<ol>
+  <li>转到<strong>舵机</strong>选项卡</li>
+  <li>验证伺服映射与扑翼机的机翼配置相匹配</li>
+  <li>如果需要测试舵机方向 — 反向</li>
+  <li>设置中心位置（机翼水平 = 1500）</li>
+</ol>
+
+<h3 id="section-7">5. 模式设置</h3>
+
+<ol>
+  <li>转到 <strong>模式</strong> 选项卡</li>
+  <li>将 ARM 分配给 AUX 开关</li>
+  <li>根据需要指定飞行模式（ANGLE / ACRO / HORIZON）</li>
+  <li>将 INDEPENDENT 和 GLIDE 分配给备用交换机
+5.配置BEEPER进行丢失模型定位</li>
+</ol>
+
+<h3 id="section-8">6. 第一次飞行</h3>
+
+<ol>
+  <li><strong>断开机翼连杆进行台架测试</strong></li>
+  <li>启动并验证舵机运动方向
+3.检查油门响应</li>
+  <li>首次实际飞行：使用ANGLE模式，资费低</li>
+  <li>将鼠标悬停在视线高度，根据需要进行修剪</li>
+</ol>
+
+<h2 id="section-9">后续步骤</h2>
+
+<ul>
+  <li><a href="basic_setup.html">基本设置</a> — 详细配置演练</li>
+  <li><a href="../../tutorials/ondas_tuning.html">ONDAS 调音</a> — 调整扑动动态</li>
+  <li><a href="../../tutorials/tuning.html">PID 调整</a> — 调整飞行特性</li>
+</ul>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<a href='../../hr/'>Hrvatski</a>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<a href='../../ko/'>한국어</a>
+&nbsp;◇&nbsp;
+<a href='../../lv/'>Latviešu</a>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<strong>中文</strong>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='lv'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>Blackbox reģistrēšana — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Docs</p>
+<h1>Blackbox reģistrēšana</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="blackbox-reistrana">Blackbox reģistrēšana</h1>
+
+<p>Blackbox ieraksta lidojuma datus pēclidojuma analīzei, regulēšanai un atkļūdošanai. OrniFlight atbalsta reģistrēšanu iebūvētajā zibatmiņas mikroshēmā vai ārējā OpenLog ierīcē.</p>
+
+<h2 id="kas-tiek-reistrts">Kas tiek reģistrēts</h2>
+
+<ul>
+  <li><strong>Gyro</strong> — neapstrādāts un filtrēts 3 asu leņķiskais ātrums</li>
+  <li><strong>Akselerometrs</strong> — 3 asu paātrinājums</li>
+  <li><strong>PID izvade</strong> — P, I, D, F ieguldījumi uz asi</li>
+  <li><strong>ONDAS</strong> — Cadence, Ferocity P/D un citi viļņošanai raksturīgi parametri</li>
+  <li><strong>RC komandas</strong> — nūju pozīcijas pēc likmēm/izstādes</li>
+  <li><strong>Servo izeja</strong> — galīgā izeja katram servo kanālam</li>
+  <li><strong>Akumulators</strong> — spriegums un strāva vienā iterācijā</li>
+  <li><strong>GPS</strong> — pozīcija, ātrums, augstums (ja pieejams)</li>
+</ul>
+
+<h2 id="iestatana">Iestatīšana</h2>
+
+<h3 id="iebvt-zibatmia-omnibusf4">iebūvētā zibatmiņa (OMNIBUSF4)</h3>
+
+<p>Zzz34zzz ietver 16 MB iebūvēto zibatmiņu Blackbox reģistrēšanai. Iespējot konfiguratorā:</p>
+
+<p>1. <strong>Blackbox</strong> cilne → Iestatīt <code>Blackbox logging device</code> uz <code>Onboard flash</code>
+2. Iestatiet reģistrēšanas ātrumu (ieteicams: <code>1/N</code> ar N=2-4 F4 mērķiem)
+3. Piešķiriet slēdzi, lai sāktu/pārtrauktu reģistrēšanu</p>
+
+<h3 id="rjais-openlog">Ārējais OpenLog</h3>
+
+<p>Savienojiet OpenLog ar bezmaksas UART TX tapu:</p>
+
+<p>1. Cilne <strong>Porti</strong> → Iestatiet UART uz <code>Blackbox logging</code> pie 115 200 bodu
+2. Savienojiet OpenLog: FC TX → OpenLog RX plus 5V/GND</p>
+
+<h2 id="analzes-rki">Analīzes rīki</h2>
+
+<ul>
+  <li><a href="https://github.com/betaflight/blackbox-log-viewer">Blackbox Explorer</a> — tīmekļa žurnālu skatītājs</li>
+  <li><code>blackbox_decode</code> — konvertējiet uz CSV pielāgotai analīzei</li>
+</ul>
+
+<h2 id="ondas-specifiski">ONDAS-specifiski</h2>
+
+<p>Blackbox ir būtiska ONDAS parametru regulēšanai. Reģistrētajos ONDAS datos ietilpst:
+- <code>ondas_cadence_phase</code> — modulācijas loga laiks
+- <code>ondas_ferocity_p</code> / <code>ondas_ferocity_d</code> — asimetriskas vilces komponentes
+- <code>ondas_balance</code> — kreisā/labā spārna līdzsvars
+- Per-servo izvade katrā iterācijā</p>
+
+<p>Tas ļauj precīzi analizēt plivināšanas mehāniku un spārnu asimetrijas korekcijas.</p>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<a href='../../hr/'>Hrvatski</a>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<a href='../../ko/'>한국어</a>
+&nbsp;◇&nbsp;
+<strong>Latviešu</strong>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<a href='../../zh_CN/'>中文</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

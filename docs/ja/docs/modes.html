@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='ja'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>フライトモード — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Docs</p>
+<h1>フライトモード</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="section">フライトモード</h1>
+
+<p>モードは送信機のAUXスイッチで切り替えます。各モードは、OrniFlight コンフィギュレーターの <strong>モード</strong> タブで特定の AUX チャンネル範囲に割り当てることができます。</p>
+
+<h2 id="section-1">標準モード</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>モード</th>
+      <th>機能</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>ARM</strong></td>
+      <td>飛行制御を有効にする (モーター/サーボがアクティブ)</td>
+    </tr>
+    <tr>
+      <td><strong>ANGLE</strong></td>
+      <td>自動レベル — クラフトはスティックを中心に置くとレベルに戻ります</td>
+    </tr>
+    <tr>
+      <td><strong>HORIZON</strong></td>
+      <td>ハイブリッド — 角度モードは中心付近、フルスティックではアクロ</td>
+    </tr>
+    <tr>
+      <td><strong>ACRO</strong></td>
+      <td>デフォルト — 自動レベルなし、純粋なレート制御</td>
+    </tr>
+    <tr>
+      <td><strong>AIRMODE</strong></td>
+      <td>フル権限を得るために、PID ループをゼロ スロットルでアクティブに保ちます。</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="orniflight-">OrniFlight 固有のモード</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>モード</th>
+      <th>機能</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>50</td>
+      <td><strong>INDEPENDENT</strong></td>
+      <td>独立した翼制御 — 各翼は独自のサーボ チャネルに応答します。</td>
+    </tr>
+    <tr>
+      <td>51</td>
+      <td><strong>GLIDE</strong></td>
+      <td>グライド モード — 翼は水平位置にロックされ、ソアリングを実現</td>
+    </tr>
+    <tr>
+      <td>52</td>
+      <td><strong>PROFILE</strong></td>
+      <td>フライト プロファイルの選択 — 3 つの PID/ONDAS プロファイル間で切り替え</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="section-2">ユーティリティモード</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>モード</th>
+      <th>機能</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>BEEPER</strong></td>
+      <td>失われた航空機を見つけるためにブザーを作動させる</td>
+    </tr>
+    <tr>
+      <td><strong>BLACKBOX</strong></td>
+      <td>Blackbox ログの開始/停止</td>
+    </tr>
+    <tr>
+      <td><strong>FAILSAFE</strong></td>
+      <td>フェールセーフ ステージ 2 (パニック スイッチ) を手動でトリガーする</td>
+    </tr>
+    <tr>
+      <td><strong>OSD</strong></td>
+      <td>OSD の表示を切り替える</td>
+    </tr>
+    <tr>
+      <td><strong>TELEMETRY</strong></td>
+      <td>テレメトリ出力を有効/無効にする</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="section-3">羽ばたき台のメモ</h2>
+
+<ul>
+  <li><strong>INDEPENDENT</strong> モードは OrniFlight — に固有であり、非対称推力と差動翼制御のための翼ごとのサーボ マッピングが可能になります。</li>
+  <li><strong>GLIDE</strong> モードは翼を中立位置に保持し、熱上昇やエネルギー効率の高い降下に役立ちます</li>
+  <li><strong>PROFILE</strong> スイッチにより、さまざまな飛行条件 (例: 巡航と積極的な操縦) に合わせて飛行中に ONDAS パラメーターを変更できます。</li>
+</ul>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<a href='../../hr/'>Hrvatski</a>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<strong>日本語</strong>
+&nbsp;◇&nbsp;
+<a href='../../ko/'>한국어</a>
+&nbsp;◇&nbsp;
+<a href='../../lv/'>Latviešu</a>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<a href='../../zh_CN/'>中文</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='id'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>Pemantauan Baterai — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Docs</p>
+<h1>Pemantauan Baterai</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="pemantauan-baterai">Pemantauan Baterai</h1>
+
+<p>OrniFlight memonitor tegangan baterai utama melalui ADC (Analog-to-Digital Converter). Hal ini mengaktifkan peringatan baterai lemah melalui bel, status LED, dan pola strip LED.</p>
+
+<h2 id="fitur">Fitur</h2>
+
+<ul>
+  <li>Deteksi otomatis jumlah sel saat terhubung (berdasarkan tegangan sel min/maks)</li>
+  <li>Peringatan baterai lemah dengan ambang batas yang dapat dikonfigurasi</li>
+  <li>Penginderaan arus untuk konsumsi mAh (jika didukung oleh FC)</li>
+  <li>Tegangan ditampilkan di OSD dan ditransmisikan melalui telemetri</li>
+</ul>
+
+<h2 id="target-yang-didukung">Target yang Didukung</h2>
+
+<p>Semua pengontrol penerbangan yang didukung (OMNIBUSF4, TINYFISH) menyertakan pemantauan VBAT melalui pembagi tegangan.</p>
+
+<h2 id="koneksi">Koneksi</h2>
+
+<p><strong>SELALU PERIKSA POLARITAS.</strong> Ukur voltase yang diharapkan sebelum menghubungkan. Tegangan yang salah atau polaritas terbalik akan merusak pengontrol penerbangan Anda.</p>
+
+<h3 id="omnibusf4">OMNIBUSF4</h3>
+
+<p>Hubungkan baterai utama ke bantalan VBAT. Pembagi tegangan onboard menangani hingga 6S secara langsung.</p>
+
+<h3 id="tinyfish">TINYFISH</h3>
+
+<p>VBAT disalurkan melalui input daya papan — tidak diperlukan koneksi terpisah.</p>
+
+<h2 id="cli-pengaturan">CLI Pengaturan</h2>
+
+<p><code>
+set vbat_min_cell_voltage = 330       # Minimum per-cell voltage (3.3V)
+set vbat_max_cell_voltage = 430       # Maximum per-cell voltage (4.3V)
+set vbat_warning_cell_voltage = 350   # Warning threshold (3.5V)
+set battery_meter_type = ADC
+set current_meter_type = ADC          # If current sensor available
+</code></p>
+
+<h2 id="keamanan">Keamanan</h2>
+
+<p>baterai LiPo tidak boleh habis di bawah 3,5V per sel saat beban. Ambang batas OrniFlight yang dapat dikonfigurasi membantu memastikan pengoperasian yang aman dan umur baterai yang panjang.</p>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<a href='../../hr/'>Hrvatski</a>
+&nbsp;◇&nbsp;
+<strong>Bahasa Indonesia</strong>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<a href='../../ko/'>한국어</a>
+&nbsp;◇&nbsp;
+<a href='../../lv/'>Latviešu</a>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<a href='../../zh_CN/'>中文</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

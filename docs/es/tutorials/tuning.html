@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='es'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>PID Sintonización — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Tutorials</p>
+<h1>PID Sintonización</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="pid-sintonizacin">PID Sintonización</h1>
+
+<p>OrniFlight utiliza un controlador PID (Proporcional-Integral-Derivado) adaptado para vuelo con aleteo. La sintonización difiere significativamente de la de los aviones convencionales debido a la naturaleza periódica del empuje de aleteo.</p>
+
+<h2 id="conceptos-bsicos-del-ornitptero-pid">Conceptos básicos del ornitóptero PID</h2>
+
+<p>A diferencia de los aviones convencionales, donde el empuje es casi continuo, el empuje de los ornitópteros oscila con cada golpe de ala. Esto crea:</p>
+
+<ul>
+  <li><strong>Ondulación de empuje</strong> a frecuencia de aleteo (normalmente 5–15 Hz)</li>
+  <li><strong>Autoridad de control dependiente de la fase</strong> — la misma salida PID tiene un efecto diferente según en qué parte del ciclo de carrera se aplica</li>
+  <li><strong>Dinámica de giro-guiñada acoplada</strong> — el empuje asimétrico del ala afecta a ambos ejes simultáneamente</li>
+</ul>
+
+<h2 id="pid-trminos">PID Términos</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Término</th>
+      <th>Efecto</th>
+      <th>Nota del ornitóptero</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>P</strong></td>
+      <td>Corrección inmediata proporcional —</td>
+      <td>Utilice valores conservadores; oscilación es sincronizada con el aleteo</td>
+    </tr>
+    <tr>
+      <td><strong>Yo</strong></td>
+      <td>Corrección integral de errores persistentes —</td>
+      <td>Imprescindible para mantener la actitud durante los deslizamientos</td>
+    </tr>
+    <tr>
+      <td><strong>D</strong></td>
+      <td>La derivada — amortigua las oscilaciones</td>
+      <td>Ajustado a la frecuencia de brazada del ala, no a las oscilaciones del cuadro</td>
+    </tr>
+    <tr>
+      <td><strong>Maldita sea</strong></td>
+      <td>Feed-forward — directo a la salida</td>
+      <td>Útil para una respuesta nítida en el eje de balanceo</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="valores-iniciales">Valores iniciales</h2>
+
+<p>Para un ornitóptero de tamaño mediano (1–1,5 m de envergadura):</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Eje</th>
+      <th>P</th>
+      <th>Yo</th>
+      <th>D</th>
+      <th>F</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Rollo</td>
+      <td>25</td>
+      <td>30</td>
+      <td>15</td>
+      <td>30</td>
+    </tr>
+    <tr>
+      <td>Lanzamiento</td>
+      <td>30</td>
+      <td>35</td>
+      <td>20</td>
+      <td>35</td>
+    </tr>
+    <tr>
+      <td>Guiñada</td>
+      <td>40</td>
+      <td>35</td>
+      <td>10</td>
+      <td>20</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="procedimiento-de-ajuste">Procedimiento de ajuste</h2>
+
+<h3 id="ajuste-de-tarifas-primero">1. Ajuste de tarifas primero</h3>
+
+<p>Antes de realizar la sintonización PID, establezca velocidades que le resulten cómodas:
+- Comience con RC Tarifa 0,90, Super Tarifa 0,65, Expo 0,30
+- Ajuste según su estilo de vuelo y tamaño de ornitóptero.</p>
+
+<h3 id="ganancia-p">2. Ganancia P</h3>
+
+<p>Aumente P hasta que vea una oscilación en la frecuencia de aleteo, luego retroceda un 20%:
+- Oscilación de balanceo: el ala se bambolea al ritmo de brazada.
+- Oscilación de cabeceo: balanceo longitudinal
+- Oscilación de guiñada: movimiento de cola sincronizado con las brazadas</p>
+
+<h3 id="d-ganancia">3.D Ganancia</h3>
+
+<p>Aumente D para amortiguar el rebote después de golpes bruscos con el stick:
+- Demasiado: fluctuación del servo, sobrecalentamiento
+- Demasiado poco: suena después de que se detiene el balanceo/el cabeceo</p>
+
+<h3 id="yo-gano">4. Yo gano</h3>
+
+<p>Gano contadores de deriva persistente:
+- Aumentar hasta eliminar la deriva.
+- Demasiado: oscilación lenta a 1–2 Hz (por debajo de la frecuencia de aleteo)</p>
+
+<h2 id="integracin-ondas">Integración ONDAS</h2>
+
+<p>ONDAS (Sistema aerodinámico dinámico no lineal de Ornithopter) modula la salida de PID dentro de cada golpe de ala. Después del ajuste básico de PID:</p>
+
+<ol>
+  <li>Establezca <strong>Cadence Gain</strong> — cambia la ventana de modulación a una fase aerodinámicamente óptima</li>
+  <li>Establezca <strong>Ferocity P</strong> — impulso de empuje asimétrico inmediato</li>
+  <li>Establecer <strong>Ferocity D</strong> — explotación de arrastre anticipada</li>
+  <li>Afinar <strong>Balance</strong> — simetría del ala izquierda/derecha</li>
+</ol>
+
+<p>Consulte la <a href="ondas_tuning.html">Guía de sintonización ONDAS</a> para conocer el procedimiento detallado.</p>
+
+<h2 id="anlisis-de-caja-negra">Análisis de caja negra</h2>
+
+<p>Habilite el registro de Blackbox para visualizar el rendimiento de PID. Busque:
+- <strong>Oscilación del término P</strong> en frecuencia de aleteo → reduce P
+- <strong>Limpieza del término I</strong> durante giros sostenidos → reduce el I o aumenta la relajación del término I
+- <strong>Ruido D-term</strong> por vibración → verifique primero el equilibrio mecánico y luego reduzca D</p>
+
+<h2 id="perfiles-de-vuelo">Perfiles de vuelo</h2>
+
+<p>OrniFlight admite 3 perfiles de vuelo conmutables en pleno vuelo:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Perfil</th>
+      <th>Caso de uso</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1</td>
+      <td>Crucero estándar</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>Alta agilidad/agresividad</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>Eficiencia / elevación térmica</td>
+    </tr>
+  </tbody>
+</table>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<strong>Español</strong>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<a href='../../hr/'>Hrvatski</a>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<a href='../../ko/'>한국어</a>
+&nbsp;◇&nbsp;
+<a href='../../lv/'>Latviešu</a>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<a href='../../zh_CN/'>中文</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

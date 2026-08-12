@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='it'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>Sicurezza — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Docs</p>
+<h1>Sicurezza</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="sicurezza">Sicurezza</h1>
+
+<h2 id="lista-di-controllo-pre-volo">Lista di controllo pre-volo</h2>
+
+<ol>
+  <li><strong>Ali</strong>: assicurarsi che le ali siano montate saldamente e che il collegamento sia intatto</li>
+  <li><strong>Batteria</strong>: completamente carica, adeguatamente protetta, conteggio delle celle corretto</li>
+  <li><strong>Controlli</strong>: verifica le risposte dello stick nella scheda del ricevitore del Configuratore</li>
+  <li><strong>Failsafe</strong>: test al banco prima del volo (vedi <a href="failsafe.html">Failsafe</a>)</li>
+  <li><strong>Arm Switch</strong>: configura e testa —, non fare mai affidamento solo sull’armamento tramite levetta</li>
+  <li><strong>Area di lancio</strong>: libera da persone, ostacoli e ostacoli sopraelevati</li>
+</ol>
+
+<h2 id="sicurezza-del-braccio">Sicurezza del braccio</h2>
+
+<p>OrniFlight utilizza più sicurezze prima dell’inserimento:</p>
+
+<ul>
+  <li><strong>Throttle low</strong>: l’acceleratore deve essere al minimo</li>
+  <li><strong>Livello</strong>: l’imbarcazione deve essere ragionevolmente livellata</li>
+  <li><strong>Segnale RX</strong>: è richiesto un segnale del ricevitore valido</li>
+  <li><strong>CPU Load</strong>: il sistema non deve essere sovraccaricato</li>
+  <li><strong>Calibrazione</strong>: l’accelerometro e il giroscopio devono essere calibrati</li>
+</ul>
+
+<h2 id="sicurezza-in-volo">Sicurezza in volo</h2>
+
+<ul>
+  <li><strong>Vola entro la linea visiva</strong></li>
+  <li>Mantenere la distanza di sicurezza da persone e animali</li>
+  <li>Monitorare la tensione della batteria — prima della soglia di avviso</li>
+  <li>In FPV: vola sempre con uno spotter</li>
+  <li>Vento: gli ornitotteri possono essere sensibili al vento. — conosce i tuoi limiti</li>
+</ul>
+
+<h2 id="procedure-di-emergenza">Procedure di emergenza</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Situazione</th>
+      <th>Azione</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Perdita di orientamento</td>
+      <td>Passa alla modalità INDEPENDENT, levette centrali</td>
+    </tr>
+    <tr>
+      <td>Perdita di segnale</td>
+      <td>Il Failsafe atterrerà automaticamente (se è configurata la procedura LAND)</td>
+    </tr>
+    <tr>
+      <td>Danni all’ala</td>
+      <td>Disarmare immediatamente — le ali si fermano</td>
+    </tr>
+    <tr>
+      <td>Colpo di uccello</td>
+      <td>Disarmare, valutare i danni prima di riarmarsi</td>
+    </tr>
+    <tr>
+      <td>Batteria scarica</td>
+      <td>Atterra immediatamente — Gli ornitotteri non hanno autorotazione</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="rischi-specifici-degli-ornitotteri">Rischi specifici degli ornitotteri</h2>
+
+<ul>
+  <li><strong>Pericolo di pizzicamento</strong>: il battito delle ali può causare lesioni — tenere le mani lontane quando si è armati</li>
+  <li><strong>Guasto del collegamento</strong>: controllare prima del volo tutte le aste di comando e i giunti sferici</li>
+  <li><strong>Resonance</strong>: Alcune frequenze di battito d’ali possono eccitare le risonanze della cellula — sintonizzare ONDAS spazzare per evitare</li>
+  <li><strong>Blocco della planata</strong>: se i servi delle ali si guastano in posizione non neutra, l’atterraggio controllato è impossibile — testare le posizioni di failsafe dei servi</li>
+</ul>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<a href='../../hr/'>Hrvatski</a>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<strong>Italiano</strong>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<a href='../../ko/'>한국어</a>
+&nbsp;◇&nbsp;
+<a href='../../lv/'>Latviešu</a>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<a href='../../zh_CN/'>中文</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

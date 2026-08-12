@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='id'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>Mode Penerbangan — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Docs</p>
+<h1>Mode Penerbangan</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="mode-penerbangan">Mode Penerbangan</h1>
+
+<p>Mode dialihkan melalui sakelar AUX pada pemancar Anda. Setiap mode dapat ditetapkan ke rentang saluran AUX tertentu di tab <strong>Modes</strong> pada OrniFlight Configurator.</p>
+
+<h2 id="mode-standar">Mode Standar</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Modus</th>
+      <th>Fungsi</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>ARM</strong></td>
+      <td>Aktifkan kontrol penerbangan (motor/servo aktif)</td>
+    </tr>
+    <tr>
+      <td><strong>ANGLE</strong></td>
+      <td>Kerajinan — level otomatis kembali ke level ketika tongkat berada di tengah</td>
+    </tr>
+    <tr>
+      <td><strong>HORIZON</strong></td>
+      <td>Mode sudut — hibrida dekat tengah, acro pada tongkat penuh</td>
+    </tr>
+    <tr>
+      <td><strong>ACRO</strong></td>
+      <td>Zzz2zzz default tidak ada level otomatis, kontrol laju murni</td>
+    </tr>
+    <tr>
+      <td><strong>AIRMODE</strong></td>
+      <td>Menjaga loop PID tetap aktif pada throttle nol untuk otoritas penuh</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="orniflight-mode-khusus">OrniFlight-Mode Khusus</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Modus</th>
+      <th>Fungsi</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>50</td>
+      <td><strong>INDEPENDENT</strong></td>
+      <td>Kontrol sayap independen — setiap sayap merespons saluran servonya sendiri</td>
+    </tr>
+    <tr>
+      <td>51</td>
+      <td><strong>GLIDE</strong></td>
+      <td>Mode luncur sayap — terkunci dalam posisi horizontal untuk melonjak</td>
+    </tr>
+    <tr>
+      <td>52</td>
+      <td><strong>PROFILE</strong></td>
+      <td>Pemilihan profil penerbangan — beralih antara 3 profil PID/ONDAS</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="mode-utilitas">Mode Utilitas</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Modus</th>
+      <th>Fungsi</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>BEEPER</strong></td>
+      <td>Aktifkan buzzer untuk mencari lokasi pesawat yang hilang</td>
+    </tr>
+    <tr>
+      <td><strong>BLACKBOX</strong></td>
+      <td>Mulai/hentikan pencatatan Blackbox</td>
+    </tr>
+    <tr>
+      <td><strong>FAILSAFE</strong></td>
+      <td>Memicu failsafe tahap 2 secara manual (panic switch)</td>
+    </tr>
+    <tr>
+      <td><strong>OSD</strong></td>
+      <td>Alihkan tampilan OSD</td>
+    </tr>
+    <tr>
+      <td><strong>TELEMETRY</strong></td>
+      <td>Mengaktifkan/menonaktifkan keluaran telemetri</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="catatan-ornithopter">Catatan Ornithopter</h2>
+
+<ul>
+  <li>Mode <strong>INDEPENDENT</strong> unik untuk OrniFlight — yang memungkinkan pemetaan servo per sayap untuk daya dorong asimetris dan kontrol sayap diferensial</li>
+  <li>Mode <strong>GLIDE</strong> menahan sayap pada posisi netral, berguna untuk lonjakan termal dan penurunan hemat energi</li>
+  <li><strong>PROFILE</strong> peralihan memungkinkan perubahan parameter ONDAS dalam penerbangan untuk berbagai kondisi penerbangan (misalnya, manuver jelajah vs. agresif)</li>
+</ul>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<a href='../../hr/'>Hrvatski</a>
+&nbsp;◇&nbsp;
+<strong>Bahasa Indonesia</strong>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<a href='../../ko/'>한국어</a>
+&nbsp;◇&nbsp;
+<a href='../../lv/'>Latviešu</a>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<a href='../../zh_CN/'>中文</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

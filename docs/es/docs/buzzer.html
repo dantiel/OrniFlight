@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='es'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>Zumbador — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Docs</p>
+<h1>Zumbador</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="zumbador">Zumbador</h1>
+
+<p>OrniFlight admite zumbadores activos para indicación audible de estado y ubicación de modelo perdido.</p>
+
+<h2 id="funciones">Funciones</h2>
+
+<ul>
+  <li><strong>Armar/Desarmar</strong> — tonos distintos</li>
+  <li><strong>Batería baja</strong> — pitidos de advertencia repetidos</li>
+  <li><strong>A prueba de fallos</strong> patrón — SOS</li>
+  <li><strong>Modelo perdido</strong> — pitido continuo mediante interruptor</li>
+  <li><strong>GPS Fix</strong> — tono de confirmación en bloqueo de satélite</li>
+  <li><strong>Calibración</strong> patrones de pitidos — durante la calibración de giro/aceleración</li>
+  <li><strong>RX Señal perdida</strong> — advertencia cuando se cae la conexión del receptor</li>
+</ul>
+
+<h2 id="hardware">Hardware</h2>
+
+<ul>
+  <li>Conecte un zumbador activo de 5 V (NO un piezo pasivo) a los pads <strong>BUZZ-</strong> y <strong>BUZZ+</strong></li>
+  <li>El zumbador es controlado por un transistor en el FC —. No se necesita controlador externo para los zumbadores estándar.</li>
+</ul>
+
+<h2 id="configuracin-cli">configuración CLI</h2>
+
+<p><code>
+beeper -GYRO_CALIBRATED     # Disable gyro calibration beeps
+beeper -RX_LOST             # Enable receiver lost warning
+beeper -ON_USB              # Disable beeper when USB connected
+</code>z</p>
+
+<h2 id="seguridad-de-los-ornitpteros">Seguridad de los ornitópteros</h2>
+
+<p>El localizador es especialmente útil para ornitópteros grandes que pueden aterrizar en pasto alto o follaje. Configure el modo BEEPER en un interruptor momentáneo para una activación rápida cuando sea necesario.</p>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<strong>Español</strong>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<a href='../../hr/'>Hrvatski</a>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<a href='../../ko/'>한국어</a>
+&nbsp;◇&nbsp;
+<a href='../../lv/'>Latviešu</a>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<a href='../../zh_CN/'>中文</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

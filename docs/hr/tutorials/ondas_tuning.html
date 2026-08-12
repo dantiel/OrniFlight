@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='hr'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>ONDAS Vodič za podešavanje — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Tutorials</p>
+<h1>ONDAS Vodič za podešavanje</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="ondas-vodi-za-podeavanje">ONDAS Vodič za podešavanje</h1>
+
+<blockquote>
+  <p><em>Praktični pratilac teorije ONDAS — kako podesiti svaki parametar prema osjećaju.</em></p>
+</blockquote>
+
+<h2 id="redoslijed-podeavanja">Redoslijed podešavanja</h2>
+
+<p>ONDAS parametri su međusobno ovisni. Podesite ih ovim redoslijedom:</p>
+
+<p><code>
+1. Cadence    →  timing
+2. Ferocity D →  primary stabilization
+3. Ferocity P →  response crispness
+4. Balance    →  upstroke/downstroke bias
+5. Warp       →  modulation width
+6. Anchor     →  dry/wet mix
+7. Resonance  →  cycle-to-cycle memory
+8. Phase 2    →  advanced (prescience, espelho, saudade, SSFF)
+</code></p>
+
+<h2 id="korak-po-korak">Korak po korak</h2>
+
+<h3 id="cadence--pronaite-svoju-fazu-prozora">1. Cadence — Pronađite svoju fazu prozora</h3>
+
+<p><strong>Cilj</strong>: Postavite modulaciju tamo gdje vaše krilo ima najveći ugriz.</p>
+
+<p><strong>Metoda</strong>: 
+- Počnite od 50
+- Povećanje na 70 — postaje li odgovor na bacanje slabiji?
+- Smanjenje na 30 — postaje li odgovor na bacanje jači?
+- “Najjača” točka je mjesto gdje je snaga vašeg krila vrhunac</p>
+
+<p><strong>Znakovi previsokog</strong>: Mješav odgovor, čini se da plovilo “kasni”
+<strong>Znakovi preniskog</strong>: Trzaj odgovor, prekoračenje pri bacanju</p>
+
+<h3 id="ferocity-d--uvrstite-vjetinu">2. Ferocity D — Učvrstite vještinu</h3>
+
+<p><strong>Cilj</strong>: Primarna stabilizacija bez oscilacija.</p>
+
+<p><strong>Metoda</strong>:
+- Početak u 20
+- Lebdenje ili stabilan let prema naprijed
+- Povećavajte dok ne osjetite da se letjelica “ukrutila”
+- Odstupite 5 točaka od mjesta na kojem ste prvi put primijetili oscilaciju</p>
+
+<p><strong>Znakovi previsoke</strong>: Fine vibracije, zujanje poput motora u servosima
+<strong>Znakovi preniskog</strong>: Craft zanosi, osjeća se labavo</p>
+
+<h3 id="ferocity-p--hrskavost">3. Ferocity P — Hrskavost</h3>
+
+<p><strong>Cilj</strong>: Odgovara, ali ne trza.</p>
+
+<p><strong>Metoda</strong>:
+- Početak u 15
+- Bump the roll stick — zagrize li craft odmah?
+- Povećavajte dok reakcija štapića ne postane oštra
+- Odstupite ako vidite prekoračenje</p>
+
+<p><strong>Znakovi previsoke</strong>: Zvono nakon unosa sticka, vraćanje
+<strong>Znakovi preniskog</strong>: Kašast, odgođen odgovor</p>
+
+<h3 id="balance--podeavanje-asimetrije">4. Balance — Podešavanje asimetrije</h3>
+
+<p><strong>Cilj</strong>: Jednak autoritet u oba smjera.</p>
+
+<p><strong>Metoda</strong>:
+- Letite ravno i ravno
+- Okrenite se lijevo, obratite pažnju na brzinu odgovora
+- Okrenite se desno, obratite pažnju na brzinu odgovora
+- Podesite ravnotežu kako biste ih izjednačili</p>
+
+<h3 id="warp-anchor-resonance">5–7. Warp, Anchor, Resonance</h3>
+
+<p>Parametri finog podešavanja. Podesite tek nakon što su 1-4 solidne.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Param</th>
+      <th>Početak</th>
+      <th>Podesite kada</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Warp</td>
+      <td>50</td>
+      <td>Čini se da je modulacija previše raširena ili previše oštra</td>
+    </tr>
+    <tr>
+      <td>Anchor</td>
+      <td>70</td>
+      <td>Želite više/manje sirovog PID umiješanog u</td>
+    </tr>
+    <tr>
+      <td>Resonance</td>
+      <td>30</td>
+      <td>Lebdenje nestabilno, ili let prema naprijed čini se zvonjavim</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="phase-2--napredni">8. Phase 2 — Napredni</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>Param</th>
+      <th>Učinak</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Prescience</td>
+      <td>Vremenski napredak — viši = modulacija vodi fazu više</td>
+    </tr>
+    <tr>
+      <td>Espelho</td>
+      <td>Diferencijalna spojka — čvršće kotrljanje, može smanjiti učinkovitost</td>
+    </tr>
+    <tr>
+      <td>Saudade</td>
+      <td>Stroke memory — glatkiji, ali manje osjetljiv</td>
+    </tr>
+    <tr>
+      <td>SSFF</td>
+      <td>Izravna injekcija gyro→valova — počinje od 10</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<p><em>Cilj je letjelica koja leti kao da želi biti u zraku. Ako se borite protiv toga, odstupite i ponovno podesite od Cadence prema gore.</em></p>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<strong>Hrvatski</strong>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<a href='../../ko/'>한국어</a>
+&nbsp;◇&nbsp;
+<a href='../../lv/'>Latviešu</a>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<a href='../../zh_CN/'>中文</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

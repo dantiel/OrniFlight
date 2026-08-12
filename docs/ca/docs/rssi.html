@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='ca'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>RSSI — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Docs</p>
+<h1>RSSI</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="rssi">RSSI</h1>
+
+<p>RSSI (indicador de força del senyal rebut) mostra la qualitat del vostre enllaç de ràdio. OrniFlight pot obtenir RSSI des de l’entrada analògica, les dades del receptor en sèrie o el protocol RSSI.</p>
+
+<h2 id="rssi-fonts">RSSI Fonts</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Font</th>
+      <th>Connexió</th>
+      <th>Configuració</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Protocol sèrie</strong></td>
+      <td>Cap (a través del cable de sèrie RX)</td>
+      <td>CRSF, GHST — automàtic</td>
+    </tr>
+    <tr>
+      <td><strong>Canal AUX</strong></td>
+      <td>Cap (TX envia RSSI com a canal)</td>
+      <td><code>set rssi_channel = 8</code></td>
+    </tr>
+    <tr>
+      <td><strong>Zzz25zzz analògic</strong></td>
+      <td>RSSI coixinet activat FC → Receptor RSSI fora</td>
+      <td><code>set rssi_adc_channel = 1</code></td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="configuraci">Configuració</h2>
+
+<h3 id="srie-rssi-crsfghstsbus">Sèrie RSSI (CRSF/GHST/SBUS)</h3>
+
+<p><code>
+set rssi_src_frame_errors = OFF
+set rssi_scale = 100
+set rssi_offset = 0
+</code></p>
+
+<p>RSSI es transmet automàticament mitjançant protocols sèrie —, no cal cablejat addicional.</p>
+
+<h3 id="zzz32zzz-analgic">Zzz32zzz analògic</h3>
+
+<p>Connecteu el receptor RSSI sortida → RSSI coixinet al controlador de vol:</p>
+
+<p><code>
+set rssi_adc_channel = 1      # Use ADC channel 1
+set rssi_scale = 100          # Scale to 0-100%
+set rssi_offset = 0
+</code></p>
+
+<h3 id="aux-canal-rssi">AUX Canal RSSI</h3>
+
+<p>Configureu el vostre transmissor per enviar RSSI a un canal específic i, a continuació:</p>
+
+<p><code>
+set rssi_channel = 12         # Aux channel number
+set rssi_scale = 100
+set rssi_offset = 0
+</code></p>
+
+<h2 id="mostra">Mostra</h2>
+
+<p>RSSI es mostra a OSD i es pot transmetre mitjançant telemetria a la vostra ràdio. Configura els llindars d’avís:</p>
+
+<p><code>
+set osd_rssi_alarm = 20        # Warning at 20% RSSI
+</code></p>
+
+<h2 id="gamma-dornitpters">Gamma d’ornitòpters</h2>
+
+<p>Per als ornitòpters, RSSI és crític. Les ales — que aletegen creen patrons d’interferència RF dinàmics. Superviseu RSSI durant els vols de prova inicials per verificar el rendiment de l’enllaç fiable a totes les posicions de les ales.</p>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<strong>Català</strong>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<a href='../../hr/'>Hrvatski</a>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<a href='../../ko/'>한국어</a>
+&nbsp;◇&nbsp;
+<a href='../../lv/'>Latviešu</a>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<a href='../../zh_CN/'>中文</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

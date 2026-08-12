@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='es'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>GPS — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Docs</p>
+<h1>GPS</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="gps">GPS</h1>
+
+<p>GPS permite mantener la posición, regresar a casa y navegar mediante telemetría para su ornitóptero. Las características de GPS en OrniFlight son funcionales, pero se consideran experimentales. — siempre vuela dentro de la línea de visión.</p>
+
+<h2 id="protocolos-admitidos">Protocolos admitidos</h2>
+
+<ul>
+  <li><strong>UBLOX</strong> (recomendado) — Protocolo binario UBlox, eficiente y confiable</li>
+  <li><strong>NMEA</strong> — Protocolo estándar basado en texto</li>
+</ul>
+
+<h2 id="hardware">Hardware</h2>
+
+<ul>
+  <li>BN-880, BN-220 o módulos similares UBlox M8N GPS+Compass</li>
+  <li>Conecte: TX/RX a un UART gratuito, más 5V/GND</li>
+  <li>Monte el GPS lejos de cables de alimentación y servocables para minimizar las interferencias.</li>
+  <li>La brújula/magnetómetro debe estar alejado de fuentes magnéticas (cables de alimentación, servos)</li>
+</ul>
+
+<h2 id="configuracin">Configuración</h2>
+
+<p><code>
+feature GPS
+set gps_provider = UBLOX
+set gps_sbas_mode = AUTO
+set gps_auto_baud = ON
+set gps_ublox_use_galileo = ON
+</code>z</p>
+
+<ol>
+  <li>Asigne el puerto serie a GPS en la pestaña <strong>Puertos</strong> (115200 baudios predeterminados para UBlox)</li>
+  <li>Habilite la función GPS</li>
+  <li>Establecer proveedor</li>
+  <li>Guardar y reiniciar</li>
+</ol>
+
+<h2 id="osd-elementos">OSD Elementos</h2>
+
+<p>Los datos de GPS mostrados en OSD incluyen:
+- Recuento de satélites y tipo de corrección.
+- Coordenadas GPS (lat/lon)
+- Velocidad de avance
+- Altitud (GPS)
+- Distancia desde casa
+- Flecha de dirección de inicio</p>
+
+<h2 id="consideraciones-sobre-ornitpteros">Consideraciones sobre ornitópteros</h2>
+
+<ul>
+  <li>La antena GPS debe tener una vista despejada del cielo. La ubicación de montaje — es crítica con alas batientes.</li>
+  <li>La penalización de peso es significativa en ornitópteros pequeños.</li>
+  <li>RTH (regreso a casa) asistido por GPS requiere un ajuste cuidadoso de los valores de navegación PID para la dinámica de vuelo de aleteo</li>
+</ul>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<strong>Español</strong>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<a href='../../hr/'>Hrvatski</a>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<a href='../../ko/'>한국어</a>
+&nbsp;◇&nbsp;
+<a href='../../lv/'>Latviešu</a>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<a href='../../zh_CN/'>中文</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='zh_CN'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>电池监控 — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Docs</p>
+<h1>电池监控</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="section">电池监控</h1>
+
+<p>OrniFlight 通过 ADC（模数转换器）监控主电池电压。这可以通过蜂鸣器、状态 LED 和 LED 条带模式发出低电量警告。</p>
+
+<h2 id="section-1">特点</h2>
+
+<ul>
+  <li>连接时自动检测电池计数（基于最小/最大电池电压）</li>
+  <li>具有可配置阈值的低电量警告</li>
+  <li>mAh 消耗电流感应（如果 FC 支持）</li>
+  <li>电压显示在 OSD 中并通过遥测传输</li>
+</ul>
+
+<h2 id="section-2">支持的目标</h2>
+
+<p>所有支持的飞行控制器（OMNIBUSF4、TINYFISH）包括通过分压器进行 VBAT 监控。</p>
+
+<h2 id="section-3">连接</h2>
+
+<p><strong>始终检查极性。</strong> 连接前测量预期电压。不正确的电压或反极性会损坏您的飞行控制器。</p>
+
+<h3 id="omnibusf4">OMNIBUSF4</h3>
+
+<p>将主电池连接到 VBAT 垫。板载分压器可直接处理高达 6S 的电流。</p>
+
+<h3 id="tinyfish">TINYFISH</h3>
+
+<p>VBAT 通过主板的电源输入 — 进行路由，无需单独连接。</p>
+
+<h2 id="cli-">CLI 设置</h2>
+
+<p>呜呜呜</p>
+
+<h2 id="section-4">安全</h2>
+
+<p>LiPo 电池在负载下切勿放电至每节电池 3.5V 以下。 OrniFlight 的可配置阈值有助于确保安全操作和电池寿命。</p>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<a href='../../hr/'>Hrvatski</a>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<a href='../../ko/'>한국어</a>
+&nbsp;◇&nbsp;
+<a href='../../lv/'>Latviešu</a>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<strong>中文</strong>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

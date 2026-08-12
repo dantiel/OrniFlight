@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='fr'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>RSSI — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Docs</p>
+<h1>RSSI</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="rssi">RSSI</h1>
+
+<p>RSSI (indicateur de force du signal reçu) indique la qualité de votre liaison radio. OrniFlight peut obtenir RSSI à partir d’une entrée analogique, de données de récepteur série ou du protocole RSSI.</p>
+
+<h2 id="rssi-sources">RSSI Sources</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Source</th>
+      <th>Connexion</th>
+      <th>Configuration</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Protocole série</strong></td>
+      <td>Aucun (sur le fil série RX)</td>
+      <td>CRSF, GHST — automatique</td>
+    </tr>
+    <tr>
+      <td><strong>Chaîne AUX</strong></td>
+      <td>Aucun (TX envoie RSSI comme canal)</td>
+      <td><code>set rssi_channel = 8</code></td>
+    </tr>
+    <tr>
+      <td><strong>Analogique ADC</strong></td>
+      <td>Pad RSSI activé FC → Récepteur RSSI sorti</td>
+      <td><code>set rssi_adc_channel = 1</code></td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="configuration">Configuration</h2>
+
+<h3 id="srie-rssi-crsfghstsbus">Série RSSI (CRSF/GHST/SBUS)</h3>
+
+<p><code>
+set rssi_src_frame_errors = OFF
+set rssi_scale = 100
+set rssi_offset = 0
+</code></p>
+
+<p>RSSI est transmis automatiquement par les protocoles série —, aucun câblage supplémentaire n’est nécessaire.</p>
+
+<h3 id="analogique-rssi">Analogique RSSI</h3>
+
+<p>Connectez le récepteur RSSI sortie → RSSI pad sur le contrôleur de vol :</p>
+
+<p><code>
+set rssi_adc_channel = 1      # Use ADC channel 1
+set rssi_scale = 100          # Scale to 0-100%
+set rssi_offset = 0
+</code></p>
+
+<h3 id="aux-chane-rssi">AUX Chaîne RSSI</h3>
+
+<p>Configurez votre émetteur pour envoyer RSSI sur un canal spécifique, puis :</p>
+
+<p><code>
+set rssi_channel = 12         # Aux channel number
+set rssi_scale = 100
+set rssi_offset = 0
+</code></p>
+
+<h2 id="affichage">Affichage</h2>
+
+<p>RSSI est affiché dans le OSD et peut être transmis par télémétrie à votre radio. Configurez les seuils d’avertissement :</p>
+
+<p><code>
+set osd_rssi_alarm = 20        # Warning at 20% RSSI
+</code></p>
+
+<h2 id="porte-des-ornithoptres">Portée des ornithoptères</h2>
+
+<p>Pour les ornithoptères, RSSI est essentiel. Les ailes battantes de — créent des modèles d’interférence dynamiques de RF. Surveillez RSSI pendant les vols d’essai initiaux pour vérifier les performances fiables de la liaison à toutes les positions de l’aile.</p>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<strong>Français</strong>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<a href='../../hr/'>Hrvatski</a>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<a href='../../ko/'>한국어</a>
+&nbsp;◇&nbsp;
+<a href='../../lv/'>Latviešu</a>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<a href='../../zh_CN/'>中文</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

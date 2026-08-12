@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='id'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>Pengaturan Dasar — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Tutorials</p>
+<h1>Pengaturan Dasar</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="pengaturan-dasar">Pengaturan Dasar</h1>
+
+<blockquote>
+  <p><em>Konfigurasi ornithopter Anda untuk penerbangan pertama.</em></p>
+</blockquote>
+
+<h2 id="daftar-periksa-pra-penerbangan">Daftar Periksa Pra-Penerbangan</h2>
+
+<p>Sebelum hal lain:</p>
+
+<ul>
+  <li>[ ] Pengontrol penerbangan di-flash dengan OrniFlight</li>
+  <li>[ ] Penerima terikat ke pemancar</li>
+  <li>[ ] Servo terhubung ke output PWM yang benar</li>
+  <li>[ ] Baterai tersambung (sayap diamankan!)</li>
+</ul>
+
+<h2 id="pengaturan-penerima">Pengaturan Penerima</h2>
+
+<h3 id="crsf-disarankan">CRSF (Disarankan)</h3>
+
+<ol>
+  <li><strong>Tab port</strong>: Setel UART (misalnya UART1) ke “Serial RX”</li>
+  <li><strong>Tab konfigurasi</strong>: Mode Penerima = “Penerima berbasis serial”, Penyedia = “CRSF”</li>
+  <li>Siklus daya, verifikasi perpindahan input saluran di tab Penerima</li>
+</ol>
+
+<h3 id="sbus--lainnya">SBUS / Lainnya</h3>
+
+<p>Proses yang sama — pilih protokol yang sesuai di tab Konfigurasi.</p>
+
+<h2 id="pemetaan-servo">Pemetaan Servo</h2>
+
+<p>Di <strong>tab Servo</strong>:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Servo</th>
+      <th>Fungsi</th>
+      <th>Tingkat Default</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Servo 0</td>
+      <td>Sayap Kiri</td>
+      <td>250Hz</td>
+    </tr>
+    <tr>
+      <td>Servo 1</td>
+      <td>Sayap Kanan</td>
+      <td>250Hz</td>
+    </tr>
+    <tr>
+      <td>Servo 2</td>
+      <td>Puncak/Kemudi</td>
+      <td>50Hz</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>Sesuaikan min/maks/tengah agar sesuai dengan jangkauan servo Anda. Uji dengan “Override” untuk memverifikasi arah.</p>
+
+<h2 id="pemilihan-mode-penerbangan">Pemilihan Mode Penerbangan</h2>
+
+<p>Di <strong>tab Mode</strong>:</p>
+
+<ol>
+  <li><strong>ARM</strong>: Tetapkan ke sakelar (keamanan!)</li>
+  <li><strong>ORNITHOPTER INDEPENDENT</strong> atau <strong>ORNITHOPTER GLIDE</strong>: Pilih mode penerbangan utama Anda</li>
+  <li><strong>ORNITHOPTER PROFILE</strong>: Penetapan — opsional untuk peralihan profil dalam penerbangan</li>
+</ol>
+
+<h2 id="ondas-penyetelan-pertama">ONDAS Penyetelan Pertama</h2>
+
+<p>Buka <strong>Sub-tab → ONDAS lanjutan</strong>:</p>
+
+<ol>
+  <li><strong>Cadence Gain</strong>: Mulai dari 50 (pertengahan). Ini adalah parameter terpenting.</li>
+  <li><strong>Ferocity D Gain</strong>: Mulai pada 30. Ini adalah stabilisasi utama Anda.</li>
+  <li><strong>Ferocity P Gain</strong>: Mulai dari 20 untuk roll/pitch, 0 untuk yaw.</li>
+  <li><strong>Balance Gain</strong>: 0 (di tengah).</li>
+</ol>
+
+<p>Hubungkan baterai, <strong>kencangkan ornithopter dengan kuat</strong>, dan ARM. Amati gerakan servo —, gerakannya harus halus dan berbentuk sinusoidal.</p>
+
+<h2 id="penerbangan-pertama">Penerbangan Pertama</h2>
+
+<ol>
+  <li>Mulailah dengan lemparan lembut ke arah angin</li>
+  <li>Gunakan mode GLIDE untuk sensasi melonjak alami</li>
+  <li>Gunakan mode INDEPENDENT bila Anda ingin kontrol frekuensi langsung</li>
+  <li>Mendarat, sesuaikan ONDAS, ulangi</li>
+</ol>
+
+<hr />
+
+<p><em>Berikutnya: <a href="ondas_tuning.html">Panduan Penyetelan ONDAS</a> →</em></p>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<a href='../../hr/'>Hrvatski</a>
+&nbsp;◇&nbsp;
+<strong>Bahasa Indonesia</strong>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<a href='../../ko/'>한국어</a>
+&nbsp;◇&nbsp;
+<a href='../../lv/'>Latviešu</a>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<a href='../../zh_CN/'>中文</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>

@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='lv'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>MSP protokols — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Wiki</p>
+<h1>MSP protokols</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="msp-protokols">MSP protokols</h1>
+
+<blockquote>
+  <p><em>MultiWii seriālais protokols — kā konfigurators runā ar OrniFlight.</em></p>
+</blockquote>
+
+<h2 id="prskats">Pārskats</h2>
+
+<p>OrniFlight paplašina Betaflight MSP ar ornitopteram raksturīgiem ziņojumiem. Autoritatīvā specifikācija atrodas programmaparatūras repozitorijā <code>src/main/msp/</code>.</p>
+
+<p><strong>Pašreizējā versija:</strong> apiVersion 1.46 (OrniFlight v0.4.6)</p>
+
+<h2 id="galvenie-ziojumi">Galvenie ziņojumi</h2>
+
+<h3 id="msppidadvanced-1120x70">MSP_PID_ADVANCED (112/0x70)</h3>
+
+<p>Galvenais ONDAS skaņošanas ziņojums. Pieaudzis no 48 baitiem (mantots) līdz 87 baitiem (1,46).</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>API Versija</th>
+      <th>Izmērs</th>
+      <th>Jauns saturs</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1,33</td>
+      <td>48</td>
+      <td>Mantojums PID uzlabots</td>
+    </tr>
+    <tr>
+      <td>1,42</td>
+      <td>59</td>
+      <td>+ itermRelaxCutoff, 10 ONDAS v2 ieguvumi</td>
+    </tr>
+    <tr>
+      <td>1,43</td>
+      <td>71</td>
+      <td>+ servo_mount_angle[4], phase_shift[4], prescience, espelho, saudade, ssff</td>
+    </tr>
+    <tr>
+      <td>1,44</td>
+      <td>75</td>
+      <td>+ servo_ātrums, maksimālā_amplitūda, flap_magnitude, wing_origin_offset[4]</td>
+    </tr>
+    <tr>
+      <td>1,45</td>
+      <td>82</td>
+      <td>+ Freq_channel, Freq_min_hz, Freq_max_hz, flight_mode, flutter_gain, flutter_hz, throttle_bypass</td>
+    </tr>
+    <tr>
+      <td>1,46</td>
+      <td>87</td>
+      <td>+ profila_indekss, ferocity_downstroke, ferocity_upstroke, aeroelastic_glide, aeroeastic_flap</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="mspservoconfigurations-1200x78">MSP_SERVO_CONFIGURATIONS (120/0x78)</h3>
+
+<p>Servo konfigurācija ar 4 ONDAS beigu baitiem: glide_deg + ONDAS v1 triplets.</p>
+
+<h2 id="atgriezenisk-saderba">Atgriezeniskā saderība</h2>
+
+<p>Visas API versijas ir saderīgas ar atpakaļejošu datumu. 48 baitu sūtītājs runā ar 1,46 uztvērēju. — papildu lauki pēc noklusējuma ir saprātīgi.</p>
+
+<h2 id="vadu-formts">Vadu formāts</h2>
+
+<p>Visas vairāku baitu vērtības ir mazas. Parakstītās vērtības, kas tiek saglabātas kā <code>value + 128</code> uz vada. Neparakstītas pastiprinājuma vērtības (0–100) ir tiešas. Masīvu garumi, pirms kuriem ir u8, tiek skaitīti.</p>
+
+<hr />
+
+<ul>
+  <li>Pilnu specifikāciju skatiet programmaparatūras repozitorijā <code>docs/MSP_FIRMWARE_INTERFACE.md</code>.*</li>
+</ul>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<a href='../../'>English</a>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<a href='../../hr/'>Hrvatski</a>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<a href='../../ko/'>한국어</a>
+&nbsp;◇&nbsp;
+<strong>Latviešu</strong>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<a href='../../zh_CN/'>中文</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+</script>
+</body>
+</html>
