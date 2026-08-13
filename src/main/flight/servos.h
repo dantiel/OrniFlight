@@ -52,9 +52,12 @@ enum {
     INPUT_SOURCE_COUNT
 };
 
-// ── Servo index definitions ─────────────────────────────────────────────────
+// -- Servo index definitions -------------------------------------------------
 // Per-mixer-mode servo channel indices.  Values may overlap across mixer
-// modes (only one mode is active at a time).
+// modes (only one mode is active at a time).  NOTE: SERVO_GIMBAL_PITCH/ROLL
+// (0/1) intentionally collide with SERVO_ORNITHOPTER_1/2 (0/1) because both
+// map onto physical servo pins 1 and 2.  Gimbal/camera writes are guarded
+// against MIXER_SERVO_ORNITHOPTER in servos.c.
 #define MAX_SERVO_RULES 16
 #define COUNT_SERVO_RULES(x) (sizeof(x) / sizeof(x[0]))
 typedef enum {
@@ -96,9 +99,9 @@ typedef enum {
 
 #define MAX_ORNITHOPTER_PAIRS 4
 
-// Each ornithopter pair = 2 wing servos × 4 inputs (roll, pitch, yaw, flapping).
+// Each ornithopter pair = 2 wing servos x 4 inputs (roll, pitch, yaw, flapping).
 // The built-in servoMixerOrnithopter table is fixed at this many rules and cannot
-// be represented by the user's custom smix array (MAX_SERVO_RULES = 2×servos = 16).
+// be represented by the user's custom smix array (MAX_SERVO_RULES = 2xservos = 16).
 #define MAX_ORNITHOPTER_SERVO_RULES (MAX_ORNITHOPTER_PAIRS * 2 * 4)
 
 #define SERVO_PLANE_INDEX_MIN SERVO_FLAPS
@@ -159,20 +162,20 @@ typedef struct servoConfig_s {
     uint8_t tri_unarmed_servo;              // send tail servo correction pulses even when unarmed
     uint8_t channel_forwarding_start_channel;
 
-    int8_t servo_mount_angle[MAX_ORNITHOPTER_PAIRS]; // per-pair incidence °: 0=parallel, +=inward, -=outward, max ±30
-    int8_t flapping_phase_shift[MAX_ORNITHOPTER_PAIRS]; // per-pair phase offset °: -180..+180, 0=all wings in phase
-    int8_t wing_origin_offset[MAX_ORNITHOPTER_PAIRS];  // per-pair mechanical asymmetry trim ° (-30..+30)
+    int8_t servo_mount_angle[MAX_ORNITHOPTER_PAIRS]; // per-pair incidence deg: 0=parallel, +=inward, -=outward, max +/-30
+    int8_t flapping_phase_shift[MAX_ORNITHOPTER_PAIRS]; // per-pair phase offset deg: -180..+180, 0=all wings in phase
+    int8_t wing_origin_offset[MAX_ORNITHOPTER_PAIRS];  // per-pair mechanical asymmetry trim deg (-30..+30)
     int8_t flap_base_amplitude;
-    uint16_t servo_speed_deg_s;      // max servo angular velocity °/s (default 857 = 60°/70ms). Drives glide transition rate, max frequency.
-    uint8_t servo_max_amplitude;     // hard amplitude clamp ° (default 55). Everything above is mechanically impossible.
-    uint8_t flap_magnitude;          // throttle→amplitude scaling: centi-deg per µs above threshold (default 4 → 0.04 °/µs)
+    uint16_t servo_speed_deg_s;      // max servo angular velocity deg/s (default 857 = 60deg/70ms). Drives glide transition rate, max frequency.
+    uint8_t servo_max_amplitude;     // hard amplitude clamp deg (default 55). Everything above is mechanically impossible.
+    uint8_t flap_magnitude;          // throttle->amplitude scaling: centi-deg per us above threshold (default 4 -> 0.04 deg/us)
 
-    // ── Frequency control (shared AUX channel, same knob in both modes) ──
-    uint8_t ornithopter_freq_channel;        // AUX channel index (0=AUX1/CH5, 1=AUX2/CH6…) for frequency
+    // -- Frequency control (shared AUX channel, same knob in both modes) --
+    uint8_t ornithopter_freq_channel;        // AUX channel index (0=AUX1/CH5, 1=AUX2/CH6...) for frequency
     uint8_t ornithopter_freq_min;            // frequency mapped to RC=1000 (Hz, default 1)
     uint8_t ornithopter_freq_max;            // frequency mapped to RC=2000 (Hz, default 25)
 
-    // ── Flight profile switching ──
+    // -- Flight profile switching --
     uint8_t ornithopter_profile_channel;     // AUX channel for profile selection via BOXORNITHOPTERPROFILE
     uint8_t ornithopter_profile_index;       // active profile index (0-3), overridden by BOX at runtime
 } servoConfig_t;

@@ -1923,14 +1923,18 @@ void FAST_CODE pidController(const pidProfile_t *pidProfile, timeUs_t currentTim
         }
 
         if (axis == FD_YAW) {
+            // Mount-angle coupling: amplitude (ferocity) yaw shares the same
+            // drag/AOA authority as the static wing-twist yaw, so it must also
+            // vanish at parallel incidence (sin(0)=0) and peak at +/-30deg.
+            float yawMountScale = sin_approx(servoConfig()->servo_mount_angle[0] * RAD);
             if (currentOrnithopterProfile()->warp_yaw_gain != 0) {
                 flappingFerocityDifferentialYaw = constrainf(
-                    pidData[axis].P * (float)currentOrnithopterProfile()->warp_yaw_gain * WARP_SCALE,
+                    pidData[axis].P * (float)currentOrnithopterProfile()->warp_yaw_gain * WARP_SCALE * yawMountScale,
                     -0.5f, 0.5f);
             }
             if (currentOrnithopterProfile()->ferocity_yaw_gain != 0) {
                 flappingFerocityModulation += constrainf(
-                    pidData[axis].P * (float)currentOrnithopterProfile()->ferocity_yaw_gain * FEROCITY_P_SCALE,
+                    pidData[axis].P * (float)currentOrnithopterProfile()->ferocity_yaw_gain * FEROCITY_P_SCALE * yawMountScale,
                     -0.15f, 0.15f);
             }
         }

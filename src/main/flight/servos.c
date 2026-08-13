@@ -66,16 +66,21 @@ void pgResetFn_servoConfig(servoConfig_t *servoConfig) {
     servoConfig->servo_lowpass_freq = 0;
     servoConfig->channel_forwarding_start_channel = AUX1;
     
-    servoConfig->servo_mount_angle[0] = 20; // pair 0: mild inward — drag‑rudder yaw
-    // pairs 1‑3 default to 0° (parallel — passive tail yaw)
-    // flapping_phase_shift defaults to 0° for all pairs (all wings flap in phase)
+    // Per-pair wing incidence. YAW authority = sin(angle); PITCH/ROLL = cos(angle).
+    // Front (+) and hind (-) pairs are opposed so a yaw command twists them in
+    // opposite directions (fore/aft twist couple -> differential drag yaw).
+    servoConfig->servo_mount_angle[0] = 20;   // front pair: mild inward - drag-rudder yaw
+    servoConfig->servo_mount_angle[1] = -30;  // hind pair: opposite incidence - fore/aft twist couple
+    servoConfig->servo_mount_angle[2] = 0;    // future pair: parallel (no yaw authority)
+    servoConfig->servo_mount_angle[3] = 0;    // future pair: parallel (no yaw authority)
+    // flapping_phase_shift defaults to 0deg for all pairs (all wings flap in phase)
     servoConfig->flap_base_amplitude = 60;
-    servoConfig->servo_speed_deg_s = 857;       // 60° / 70ms — typical micro servo
-    servoConfig->servo_max_amplitude = 55;       // °, ±55° max mechanical throw
-    servoConfig->flap_magnitude = 4;             // 4° per 960µs throttle above 1040
+    servoConfig->servo_speed_deg_s = 857;       // 60deg / 70ms - typical micro servo
+    servoConfig->servo_max_amplitude = 55;       // deg, +/-55deg max mechanical throw
+    servoConfig->flap_magnitude = 4;             // 4deg per 960us throttle above 1040
     servoConfig->ornithopter_freq_channel = 1;   // AUX2 / CH6
-    servoConfig->ornithopter_freq_min = 1;       // 1 Hz at RC minimum
-    servoConfig->ornithopter_freq_max = 25;      // 25 Hz at RC maximum
+    servoConfig->ornithopter_freq_min = 1;       // 1 Hz at RC minimum
+    servoConfig->ornithopter_freq_max = 25;      // 25 Hz at RC maximum
     servoConfig->ornithopter_profile_channel = 2; // AUX3 / CH7
     servoConfig->ornithopter_profile_index = 0;
 
@@ -123,15 +128,15 @@ static const servoMixer_t servoMixerGimbal[] = {
 };
 
 
-// ── Ornithopter mixer table ──────────────────────────────────────────────────
-// Multi‑pair table (up to 4 pairs = 8 servos).  YAW and PITCH rates are scaled
+// -- Ornithopter mixer table --------------------------------------------------
+// Multi-pair table (up to 4 pairs = 8 servos).  YAW and PITCH rates are scaled
 // at runtime by sin/cos(servo_mount_angle[pair]), so the same table serves any
-// incidence geometry.  Each pair gets its own FLAPPING input (0–7) for per‑pair
+// incidence geometry.  Each pair gets its own FLAPPING input (0-7) for per-pair
 // phase shifting:
-//   Pair 0 (servos 1,2): FLAPPING_0, FLAPPING_1 → left/right front wings
-//   Pair 1 (servos 3,4): FLAPPING_2, FLAPPING_3 → left/right hind wings
-//   Pair 2 (servos 5,6): FLAPPING_4, FLAPPING_5 → future
-//   Pair 3 (servos 7,8): FLAPPING_6, FLAPPING_7 → future
+//   Pair 0 (servos 1,2): FLAPPING_0, FLAPPING_1 -> left/right front wings
+//   Pair 1 (servos 3,4): FLAPPING_2, FLAPPING_3 -> left/right hind wings
+//   Pair 2 (servos 5,6): FLAPPING_4, FLAPPING_5 -> future
+//   Pair 3 (servos 7,8): FLAPPING_6, FLAPPING_7 -> future
 // Convention: odd-indexed servos = LEFT wing, even-indexed = RIGHT wing.
 static const servoMixer_t servoMixerOrnithopter[] = {
     // Pair 0: left wing servo
@@ -287,18 +292,48 @@ void servosInit(void)
     }
 }
 
+// Scale ornithopter mixer rates by per-pair wing incidence angle:
+//   YAW   *= sin(angle) -> 0 at parallel (0deg), max at +/-30deg (drag-rudder)
+//   PITCH *= cos(angle) -> vertical thrust component
+//   ROLL  *= cos(angle) -> differential-lift component (same geometry as pitch)
+static void applyOrnithopterMountScaling(void)
+{
+    if (!useServo || currentMixerMode != MIXER_SERVO_ORNITHOPTER) {
+        return;
+    }
+
+    for (int i = 0; i < servoRuleCount; i++) {
+        uint8_t ch = currentServoMixer[i].targetChannel;
+        if (ch > SERVO_ORNITHOPTER_8) {
+            continue;   // not an ornithopter servo channel
+        }
+        int pair = (ch - SERVO_ORNITHOPTER_1) / 2;
+        if (pair >= MAX_ORNITHOPTER_PAIRS) {
+            continue;
+        }
+        float a = servoConfig()->servo_mount_angle[pair] * RAD;
+        if (currentServoMixer[i].inputSource == INPUT_STABILIZED_YAW) {
+            currentServoMixer[i].rate = (int8_t)lrintf(currentServoMixer[i].rate * sin_approx(a));
+        } else if (currentServoMixer[i].inputSource == INPUT_STABILIZED_PITCH ||
+                   currentServoMixer[i].inputSource == INPUT_STABILIZED_ROLL) {
+            currentServoMixer[i].rate = (int8_t)lrintf(currentServoMixer[i].rate * cos_approx(a));
+        }
+    }
+}
+
 void loadCustomServoMixer(void)
 {
-    // Ornithopter always uses its built-in 32-rule table (8 wing servos × 4 inputs:
+    // Ornithopter always uses its built-in 32-rule table (8 wing servos x 4 inputs:
     // roll, pitch, yaw, flapping). The user's custom smix array is capped at
-    // MAX_SERVO_RULES (= 2 × MAX_SUPPORTED_SERVOS = 16) and therefore cannot hold
-    // the ornithopter mixer — falling back to it would silently drop the YAW (and
+    // MAX_SERVO_RULES (= 2 x MAX_SUPPORTED_SERVOS = 16) and therefore cannot hold
+    // the ornithopter mixer - falling back to it would silently drop the YAW (and
     // flapping) rules, leaving the wings unresponsive to rudder/roll input.
     if (currentMixerMode == MIXER_SERVO_ORNITHOPTER) {
         servoRuleCount = COUNT_SERVO_RULES(servoMixerOrnithopter);
         for (int i = 0; i < servoRuleCount; i++) {
             currentServoMixer[i] = servoMixerOrnithopter[i];
         }
+        applyOrnithopterMountScaling();
         return;
     }
 
@@ -354,33 +389,14 @@ void servoConfigureOutput(void)
         }
     }
 
-    // ── Per‑pair servo‑mount‑angle coupling (applied LAST) ──
-    // Each servo pair (left+right) may have a different incidence angle.
-    // Scale YAW by sin(angle) and PITCH by cos(angle) for each rule's pair.
-    // 0°=parallel (YAW→0), ±30°=full drag‑rudder.
-    if (useServo && currentMixerMode == MIXER_SERVO_ORNITHOPTER) {
-        for (int i = 0; i < servoRuleCount; i++) {
-            uint8_t ch = currentServoMixer[i].targetChannel;
-            // only scale ornithopter servo channels
-            if (ch > SERVO_ORNITHOPTER_8)
-                continue;
-            int pair = (ch - SERVO_ORNITHOPTER_1) / 2;
-            if (pair >= MAX_ORNITHOPTER_PAIRS)
-                continue;
-            float a = servoConfig()->servo_mount_angle[pair] * RAD;
-            if (currentServoMixer[i].inputSource == INPUT_STABILIZED_YAW) {
-                currentServoMixer[i].rate = (int16_t)lrintf(currentServoMixer[i].rate * sin_approx(a));
-            } else if (currentServoMixer[i].inputSource == INPUT_STABILIZED_PITCH) {
-                currentServoMixer[i].rate = (int16_t)lrintf(currentServoMixer[i].rate * cos_approx(a));
-            }
-        }
-    }
+    // NOTE: per-pair servo-mount-angle coupling (YAW=sin, PITCH/ROLL=cos) is
+    // applied inside loadCustomServoMixer(), which runs for ornithopter above.
 }
 
 
 // void calculateFlapping()
 
-// ── Adaptive EMA filter + Glide transition state (GralhaAzul: emaServo + tecerTransicaoGlide) ──
+// -- Adaptive EMA filter + Glide transition state (GralhaAzul: emaServo + tecerTransicaoGlide) --
 static float emaFlappingLeft[MAX_ORNITHOPTER_PAIRS];
 static float emaFlappingRight[MAX_ORNITHOPTER_PAIRS];
 static bool  emaInitialised = false;
@@ -390,7 +406,7 @@ static float glideCurrentRight[MAX_ORNITHOPTER_PAIRS];
 static bool  glideTransitionActive = false;
 static uint32_t glideLastMicros = 0;
 
-// Servo speed in °/µs: 857°/s → 0.000857 °/µs
+// Servo speed in deg/us: 857deg/s -> 0.000857 deg/us
 static inline float servoDegPerUs(void) {
     return (float)servoConfig()->servo_speed_deg_s / 1e6f;
 }
@@ -402,11 +418,11 @@ void applyFlappingToServos(int16_t *input) {
   uint32_t nowUs = micros();
   bool isFlapping = (rcData[THROTTLE] > GLIDE_MODE_THRESHOLD);
 
-  // ── Determine EMA alpha from wave shape (GralhaAzul: adaptive α) ──
-  // Glide: α=0.30 (fc≈3.4Hz, gentle stick response)
-  // Sinusoidal flap (f<5): α=0.85 (fc≈45Hz, tracks wave up to ~15Hz)
-  // Mixed (5≤f<7): α=0.92 (fast transition)
-  // Square (f≥7): α=1.00 (raw — servo inertia provides physical damping)
+  // -- Determine EMA alpha from wave shape (GralhaAzul: adaptive alpha) --
+  // Glide: alpha=0.30 (fc~3.4Hz, gentle stick response)
+  // Sinusoidal flap (f<5): alpha=0.85 (fc~45Hz, tracks wave up to ~15Hz)
+  // Mixed (5<=f<7): alpha=0.92 (fast transition)
+  // Square (f>=7): alpha=1.00 (raw - servo inertia provides physical damping)
   float alphaEma;
   if (!isFlapping) {
     alphaEma = 0.30f;
@@ -421,7 +437,7 @@ void applyFlappingToServos(int16_t *input) {
   }
 
   if (isFlapping) {
-    // ── Flapping mode: exit glide transition, apply EMA ──
+    // -- Flapping mode: exit glide transition, apply EMA --
     glideTransitionActive = false;
 
     for (int p = 0; p < MAX_ORNITHOPTER_PAIRS; p++) {
@@ -444,9 +460,9 @@ void applyFlappingToServos(int16_t *input) {
     emaInitialised = true;
 
   } else {
-    // ── Glide mode: rate-limited transition from current angle to target ──
+    // -- Glide mode: rate-limited transition from current angle to target --
     int16_t glideTarget = currentOrnithopterProfile()->glide_angle * 5;
-    float vServo = servoDegPerUs();  // °/µs
+    float vServo = servoDegPerUs();  // deg/us
 
     // On first entry or re-entry after flapping, capture current position
     if (!glideTransitionActive) {
@@ -462,9 +478,9 @@ void applyFlappingToServos(int16_t *input) {
     if (deltaUs > 100000) deltaUs = 100000;  // safety clamp: max 100ms
     glideLastMicros = nowUs;
 
-    // Step = ferocity × v_servo × Δt. Use minimum ferocity=1 to guarantee movement.
-    float stepMax = 1.0f * vServo * (float)deltaUs;  // ° per frame at ferocity=1
-    // At 857°/s, stepMax ≈ 17° at 50Hz, 3.4° at 250Hz loop
+    // Step = ferocity x v_servo x dtt. Use minimum ferocity=1 to guarantee movement.
+    float stepMax = 1.0f * vServo * (float)deltaUs;  // deg per frame at ferocity=1
+    // At 857deg/s, stepMax ~ 17deg at 50Hz, 3.4deg at 250Hz loop
 
     for (int p = 0; p < MAX_ORNITHOPTER_PAIRS; p++) {
       // Ramp left and right independently toward target
@@ -477,7 +493,7 @@ void applyFlappingToServos(int16_t *input) {
       if (fabsf(errR) <= stepMax) glideCurrentRight[p] = (float)glideTarget;
       else glideCurrentRight[p] += (errR > 0.0f) ? stepMax : -stepMax;
 
-      // Apply EMA in glide too (gentle, α=0.30)
+      // Apply EMA in glide too (gentle, alpha=0.30)
       if (!emaInitialised) {
         emaFlappingLeft[p]  = glideCurrentLeft[p];
         emaFlappingRight[p] = glideCurrentRight[p];
@@ -724,8 +740,9 @@ static void servoTable(void)
         break;
     }
 
-    // camera stabilization
-    if (featureIsEnabled(FEATURE_SERVO_TILT)) {
+    // camera stabilization (gimbal servos 0/1 collide with ornithopter wing servos,
+    // so never run gimbal writes while in ornithopter mixer mode)
+    if (featureIsEnabled(FEATURE_SERVO_TILT) && currentMixerMode != MIXER_SERVO_ORNITHOPTER) {
         // center at fixed position, or vary either pitch or roll by RC channel
         servo[SERVO_GIMBAL_PITCH] = determineServoMiddleOrForwardFromChannel(SERVO_GIMBAL_PITCH);
         servo[SERVO_GIMBAL_ROLL] = determineServoMiddleOrForwardFromChannel(SERVO_GIMBAL_ROLL);
