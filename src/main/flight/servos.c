@@ -107,7 +107,7 @@ PG_REGISTER(gimbalConfig_t, gimbalConfig, PG_GIMBAL_CONFIG, 0);
 int16_t servo[MAX_SUPPORTED_SERVOS];
 
 static uint8_t servoRuleCount = 0;
-static servoMixer_t currentServoMixer[MAX_SERVO_RULES];
+static servoMixer_t currentServoMixer[MAX_ORNITHOPTER_SERVO_RULES];
 static int useServo;
 
 
@@ -289,6 +289,19 @@ void servosInit(void)
 
 void loadCustomServoMixer(void)
 {
+    // Ornithopter always uses its built-in 32-rule table (8 wing servos × 4 inputs:
+    // roll, pitch, yaw, flapping). The user's custom smix array is capped at
+    // MAX_SERVO_RULES (= 2 × MAX_SUPPORTED_SERVOS = 16) and therefore cannot hold
+    // the ornithopter mixer — falling back to it would silently drop the YAW (and
+    // flapping) rules, leaving the wings unresponsive to rudder/roll input.
+    if (currentMixerMode == MIXER_SERVO_ORNITHOPTER) {
+        servoRuleCount = COUNT_SERVO_RULES(servoMixerOrnithopter);
+        for (int i = 0; i < servoRuleCount; i++) {
+            currentServoMixer[i] = servoMixerOrnithopter[i];
+        }
+        return;
+    }
+
     // reset settings
     servoRuleCount = 0;
     memset(currentServoMixer, 0, sizeof(currentServoMixer));
@@ -599,7 +612,7 @@ void writeServos(void)
 void servoMixer(void)
 {
     int16_t input[INPUT_SOURCE_COUNT]; // Range [-500:+500]
-    static int16_t currentOutput[MAX_SERVO_RULES];
+    static int16_t currentOutput[MAX_ORNITHOPTER_SERVO_RULES];
 
     if (FLIGHT_MODE(PASSTHRU_MODE)) {
         // Direct passthru from RX

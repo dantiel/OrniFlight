@@ -96,6 +96,11 @@ typedef enum {
 
 #define MAX_ORNITHOPTER_PAIRS 4
 
+// Each ornithopter pair = 2 wing servos × 4 inputs (roll, pitch, yaw, flapping).
+// The built-in servoMixerOrnithopter table is fixed at this many rules and cannot
+// be represented by the user's custom smix array (MAX_SERVO_RULES = 2×servos = 16).
+#define MAX_ORNITHOPTER_SERVO_RULES (MAX_ORNITHOPTER_PAIRS * 2 * 4)
+
 #define SERVO_PLANE_INDEX_MIN SERVO_FLAPS
 #define SERVO_PLANE_INDEX_MAX SERVO_THROTTLE
 
