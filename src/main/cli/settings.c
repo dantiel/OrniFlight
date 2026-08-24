@@ -1423,6 +1423,10 @@ const clivalue_t valueTable[] = {
 #endif
     
     { "servo_mount_angle",      VAR_INT8 | MASTER_VALUE | MODE_ARRAY, .config.array.length = MAX_ORNITHOPTER_PAIRS, PG_SERVO_CONFIG, offsetof(servoConfig_t, servo_mount_angle) },
+    { "servo_mount_distance",   VAR_INT8 | MASTER_VALUE | MODE_ARRAY, .config.array.length = MAX_ORNITHOPTER_PAIRS, PG_SERVO_CONFIG, offsetof(servoConfig_t, servo_mount_distance) },
+    { "ornithopter_cg",         VAR_INT8 | MASTER_VALUE, .config.minmax = { -100, 100 }, PG_SERVO_CONFIG, offsetof(servoConfig_t, ornithopter_cg) },
+    { "ornithopter_pair_count", VAR_UINT8 | MASTER_VALUE, .config.minmaxUnsigned = { 1, 4 }, PG_SERVO_CONFIG, offsetof(servoConfig_t, ornithopter_pair_count) },
+    { "yaw_amp_mix",            VAR_UINT8 | MASTER_VALUE, .config.minmaxUnsigned = { 0, 100 }, PG_SERVO_CONFIG, offsetof(servoConfig_t, yaw_amp_mix) },
     { "flapping_phase_shift",  VAR_INT8 | MASTER_VALUE | MODE_ARRAY, .config.array.length = MAX_ORNITHOPTER_PAIRS, PG_SERVO_CONFIG, offsetof(servoConfig_t, flapping_phase_shift) },
     { "flap_base_amplitude",   VAR_INT8 | MASTER_VALUE, .config.minmax = { -128, 127 }, PG_SERVO_CONFIG, offsetof(servoConfig_t, flap_base_amplitude) },
     { "servo_speed_deg_s",      VAR_UINT16 | MASTER_VALUE, .config.minmaxUnsigned = { 100, 2000 }, PG_SERVO_CONFIG, offsetof(servoConfig_t, servo_speed_deg_s) },

@@ -163,6 +163,10 @@ typedef struct servoConfig_s {
     uint8_t channel_forwarding_start_channel;
 
     int8_t servo_mount_angle[MAX_ORNITHOPTER_PAIRS]; // per-pair incidence deg: 0=parallel, +=inward, -=outward, max +/-30
+    int8_t servo_mount_distance[MAX_ORNITHOPTER_PAIRS]; // per-pair fore/aft station σ*100: +nose, -tail, 0=absent
+    int8_t ornithopter_cg;                       // CG station σ*100: +nose, -tail (default 0)
+    uint8_t ornithopter_pair_count;              // active wing pairs 1..4 (default 2)
+    uint8_t yaw_amp_mix;                         // 0=flap-centre yaw, 100=amplitude yaw (default 50)
     int8_t flapping_phase_shift[MAX_ORNITHOPTER_PAIRS]; // per-pair phase offset deg: -180..+180, 0=all wings in phase
     int8_t wing_origin_offset[MAX_ORNITHOPTER_PAIRS];  // per-pair mechanical asymmetry trim deg (-30..+30)
     int8_t flap_base_amplitude;
@@ -192,6 +196,7 @@ bool isMixerUsingServos(void);
 void writeServos(void);
 void servoMixerLoadMix(int index);
 void loadCustomServoMixer(void);
+float ornithopterPitchRank(uint8_t pair);   // +1 frontmost .. -1 rearmost, 0=inactive
 int servoDirection(int servoIndex, int fromChannel);
 void servoConfigureOutput(void);
 void servosInit(void);

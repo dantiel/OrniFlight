@@ -69,10 +69,19 @@ void pgResetFn_servoConfig(servoConfig_t *servoConfig) {
     // Per-pair wing incidence. YAW authority = sin(angle); PITCH/ROLL = cos(angle).
     // Front (+) and hind (-) pairs are opposed so a yaw command twists them in
     // opposite directions (fore/aft twist couple -> differential drag yaw).
-    servoConfig->servo_mount_angle[0] = 20;   // front pair: mild inward - drag-rudder yaw
+    servoConfig->servo_mount_angle[0] = 30;   // front pair: inward - drag-rudder yaw
     servoConfig->servo_mount_angle[1] = -30;  // hind pair: opposite incidence - fore/aft twist couple
     servoConfig->servo_mount_angle[2] = 0;    // future pair: parallel (no yaw authority)
     servoConfig->servo_mount_angle[3] = 0;    // future pair: parallel (no yaw authority)
+    // Fore/aft stations (tandem_x): front pair at nose, hind pair at tail.
+    // A pair with 0 station is absent (no lever arm, contributes nothing).
+    servoConfig->servo_mount_distance[0] = 40;   // front: nose station (σ=+0.40)
+    servoConfig->servo_mount_distance[1] = -40;  // hind: tail station (σ=-0.40)
+    servoConfig->servo_mount_distance[2] = 0;
+    servoConfig->servo_mount_distance[3] = 0;
+    servoConfig->ornithopter_cg = 0;             // CG at centre
+    servoConfig->ornithopter_pair_count = 2;      // tandem: 2 active pairs
+    servoConfig->yaw_amp_mix = 50;               // 50/50 flap-centre vs amplitude yaw
     // flapping_phase_shift defaults to 0deg for all pairs (all wings flap in phase)
     servoConfig->flap_base_amplitude = 60;
     servoConfig->servo_speed_deg_s = 857;       // 60deg / 70ms - typical micro servo
@@ -292,15 +301,66 @@ void servosInit(void)
     }
 }
 
+// Sweep lever arm, normalised by half-body: the wing MAC sits 28 model units
+// outboard of the mount pivot, so rearward sweep shifts the aerodynamic centre
+// fore/aft by A_LAT·tan(θ).  (Was 0.164 = shoulder half-width — ~6× too weak.)
+#define ORNITHOPTER_A_LAT 1.018f
+
+static float ornithopterZEff(int pair)
+{
+    float d  = servoConfig()->servo_mount_distance[pair] * 0.01f;   // σ ∈ [-1,1]
+    float th = servoConfig()->servo_mount_angle[pair] * RAD;
+    return d - ORNITHOPTER_A_LAT * tan_approx(th);
+}
+
+static float ornithopterLever(int pair)
+{
+    return ornithopterZEff(pair) - servoConfig()->ornithopter_cg * 0.01f;
+}
+
+static uint8_t ornithopterActivePairCount(void)
+{
+    uint8_t n = servoConfig()->ornithopter_pair_count;
+    if (n < 1) n = 1;
+    if (n > MAX_ORNITHOPTER_PAIRS) n = MAX_ORNITHOPTER_PAIRS;
+    return n;
+}
+
+// Fore/aft pitch rank: lever arm normalised by the largest |lever| so grouped
+// stations deflect identically and the sign follows the actual station, NOT the
+// pair index.  Front (+) / hind (−) gives fore/aft differential pitch; a single
+// active pair degenerates to ±1 (common-mode elevator whose direction flips
+// between canard and tail via the lever sign).
+float ornithopterPitchRank(uint8_t pair)
+{
+    if (pair >= MAX_ORNITHOPTER_PAIRS) {
+        return 0.0f;
+    }
+    uint8_t n = ornithopterActivePairCount();
+    float maxLever = 1e-6f;
+    for (int p = 0; p < n; p++) {
+        float l = fabsf(ornithopterLever(p));
+        if (l > maxLever) {
+            maxLever = l;
+        }
+    }
+    if (pair >= n) {
+        return 0.0f;
+    }
+    return ornithopterLever(pair) / maxLever;
+}
+
 // Scale ornithopter mixer rates by per-pair wing incidence angle:
-//   YAW   *= sin(angle) -> 0 at parallel (0deg), max at +/-30deg (drag-rudder)
-//   PITCH *= cos(angle) -> vertical thrust component
-//   ROLL  *= cos(angle) -> differential-lift component (same geometry as pitch)
+//   YAW   *= sin(angle) * (1 - yaw_amp_mix)  → 0 at parallel, peak at +/-30deg (drag-rudder)
+//   PITCH  = pitchRank * cos(angle)          → fore/aft differential, canard/tail sign
+//   ROLL  *= cos(angle)                       → differential-lift component
 static void applyOrnithopterMountScaling(void)
 {
     if (!useServo || currentMixerMode != MIXER_SERVO_ORNITHOPTER) {
         return;
     }
+
+    float flapCentreYaw = 1.0f - (float)servoConfig()->yaw_amp_mix * 0.01f;
 
     for (int i = 0; i < servoRuleCount; i++) {
         uint8_t ch = currentServoMixer[i].targetChannel;
@@ -313,9 +373,10 @@ static void applyOrnithopterMountScaling(void)
         }
         float a = servoConfig()->servo_mount_angle[pair] * RAD;
         if (currentServoMixer[i].inputSource == INPUT_STABILIZED_YAW) {
-            currentServoMixer[i].rate = (int8_t)lrintf(currentServoMixer[i].rate * sin_approx(a));
-        } else if (currentServoMixer[i].inputSource == INPUT_STABILIZED_PITCH ||
-                   currentServoMixer[i].inputSource == INPUT_STABILIZED_ROLL) {
+            currentServoMixer[i].rate = (int8_t)lrintf(currentServoMixer[i].rate * sin_approx(a) * flapCentreYaw);
+        } else if (currentServoMixer[i].inputSource == INPUT_STABILIZED_PITCH) {
+            currentServoMixer[i].rate = (int8_t)lrintf(ornithopterPitchRank(pair) * cos_approx(a) * 100.0f);
+        } else if (currentServoMixer[i].inputSource == INPUT_STABILIZED_ROLL) {
             currentServoMixer[i].rate = (int8_t)lrintf(currentServoMixer[i].rate * cos_approx(a));
         }
     }

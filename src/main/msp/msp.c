@@ -1548,6 +1548,14 @@ static bool mspProcessOutCommand(uint8_t cmdMSP, sbuf_t *dst)
         sbufWriteU8(dst, (uint8_t)(ornithopterProfiles(getOrnithopterProfileIndexMSP())->aeroelastic_glide_coefficient + 128));  // offset 85: signed s8+128
         sbufWriteU8(dst, (uint8_t)(ornithopterProfiles(getOrnithopterProfileIndexMSP())->aeroelastic_flap_coefficient + 128));   // offset 86: signed s8+128
 
+        // ── Fore/aft pitch geometry + yaw mix (API 1.47) ──
+        for (int p = 0; p < MAX_ORNITHOPTER_PAIRS; p++) {
+            sbufWriteU8(dst, (uint8_t)(servoConfigMutable()->servo_mount_distance[p] + 128)); // offsets 87-90: signed σ*100
+        }
+        sbufWriteU8(dst, (uint8_t)(servoConfigMutable()->ornithopter_cg + 128));        // offset 91: signed σ*100
+        sbufWriteU8(dst, servoConfigMutable()->ornithopter_pair_count);                 // offset 92: 1-4
+        sbufWriteU8(dst, servoConfigMutable()->yaw_amp_mix);                            // offset 93: 0-100
+
         break;
     case MSP_SENSOR_CONFIG:
 #if defined(USE_ACC)
@@ -2312,6 +2320,15 @@ static mspResult_e mspProcessInCommand(uint8_t cmdMSP, sbuf_t *src)
             ornithopterProfilesMutable(profileIndex)->ferocity_upstroke             = constrain(sbufReadU8(src), 1, 100);
             ornithopterProfilesMutable(profileIndex)->aeroelastic_glide_coefficient = (int8_t)(sbufReadU8(src) - 128);
             ornithopterProfilesMutable(profileIndex)->aeroelastic_flap_coefficient  = (int8_t)(sbufReadU8(src) - 128);
+        }
+        if (sbufBytesRemaining(src) >= 7) {
+            // Added in MSP API 1.47 — fore/aft pitch geometry + yaw mix
+            for (int p = 0; p < MAX_ORNITHOPTER_PAIRS; p++) {
+                servoConfigMutable()->servo_mount_distance[p] = (int8_t)(sbufReadU8(src) - 128);
+            }
+            servoConfigMutable()->ornithopter_cg        = (int8_t)(sbufReadU8(src) - 128);
+            servoConfigMutable()->ornithopter_pair_count = constrain(sbufReadU8(src), 1, MAX_ORNITHOPTER_PAIRS);
+            servoConfigMutable()->yaw_amp_mix            = constrain(sbufReadU8(src), 0, 100);
         }
 
         pidInitConfig(currentPidProfile);

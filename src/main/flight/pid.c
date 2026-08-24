@@ -918,15 +918,20 @@ void calculateFlappingFromThrottle(float rc_throttle) {
         flappingSinusoid = sinf(theta);
 
         // ── Wave shaping ──
-        float leftMod  = flappingFerocityModulation
-                       + flappingFerocityDifferentialRoll
-                       - flappingFerocityDifferentialYaw;
-        float rightMod = flappingFerocityModulation
-                       - flappingFerocityDifferentialRoll
-                       + flappingFerocityDifferentialYaw;
-
+        // Roll differential = L/R (left +, right −).  Yaw differential = fore/aft
+        // (front +, hind −) scaled per-pair by sin(mount): parallel wings (0°) have
+        // no drag-rudder authority, swept wings peak at ±30°.
         float legacySum = 0.0f;
         for (int p = 0; p < MAX_ORNITHOPTER_PAIRS; p++) {
+            float yawMod = flappingFerocityDifferentialYaw
+                         * ornithopterPitchRank(p)
+                         * sin_approx(sc->servo_mount_angle[p] * RAD);
+            float leftMod  = flappingFerocityModulation
+                           + flappingFerocityDifferentialRoll
+                           + yawMod;
+            float rightMod = flappingFerocityModulation
+                           - flappingFerocityDifferentialRoll
+                           + yawMod;
             float thetaP = theta + (float)sc->flapping_phase_shift[p] * RAD;
             applyFerocityWaveShaping(thetaP, leftMod,  flappingAsymmetryBias,
                                      &shapedFlappingSinusoidLeft[p], &flappingDerivativeLeft[p]);
@@ -950,15 +955,17 @@ void calculateFlappingFromThrottle(float rc_throttle) {
 
         flappingSinusoid = sinf(theta);
 
-        float leftMod  = flappingFerocityModulation
-                       + flappingFerocityDifferentialRoll
-                       - flappingFerocityDifferentialYaw;
-        float rightMod = flappingFerocityModulation
-                       - flappingFerocityDifferentialRoll
-                       + flappingFerocityDifferentialYaw;
-
         float legacySum = 0.0f;
         for (int p = 0; p < MAX_ORNITHOPTER_PAIRS; p++) {
+            float yawMod = flappingFerocityDifferentialYaw
+                         * ornithopterPitchRank(p)
+                         * sin_approx(sc->servo_mount_angle[p] * RAD);
+            float leftMod  = flappingFerocityModulation
+                           + flappingFerocityDifferentialRoll
+                           + yawMod;
+            float rightMod = flappingFerocityModulation
+                           - flappingFerocityDifferentialRoll
+                           + yawMod;
             float thetaP = theta + (float)sc->flapping_phase_shift[p] * RAD;
             applyFerocityWaveShaping(thetaP, leftMod,  flappingAsymmetryBias,
                                      &shapedFlappingSinusoidLeft[p], &flappingDerivativeLeft[p]);
@@ -1923,18 +1930,20 @@ void FAST_CODE pidController(const pidProfile_t *pidProfile, timeUs_t currentTim
         }
 
         if (axis == FD_YAW) {
-            // Mount-angle coupling: amplitude (ferocity) yaw shares the same
-            // drag/AOA authority as the static wing-twist yaw, so it must also
-            // vanish at parallel incidence (sin(0)=0) and peak at +/-30deg.
-            float yawMountScale = sin_approx(servoConfig()->servo_mount_angle[0] * RAD);
+            // Amplitude (ferocity) yaw is gated by yaw_amp_mix: at 0 it is fully
+            // handed to the static flap-centre wing twist, at 100 the flap-centre
+            // path is suppressed and yaw comes purely from fore/aft ferocity.
+            // Per-pair sin(mount) coupling is applied in calculateFlappingFromThrottle
+            // (each pair scales by its own incidence angle).
+            float yawAmpMix = (float)servoConfig()->yaw_amp_mix * 0.01f;
             if (currentOrnithopterProfile()->warp_yaw_gain != 0) {
                 flappingFerocityDifferentialYaw = constrainf(
-                    pidData[axis].P * (float)currentOrnithopterProfile()->warp_yaw_gain * WARP_SCALE * yawMountScale,
+                    pidData[axis].P * (float)currentOrnithopterProfile()->warp_yaw_gain * WARP_SCALE * yawAmpMix,
                     -0.5f, 0.5f);
             }
             if (currentOrnithopterProfile()->ferocity_yaw_gain != 0) {
                 flappingFerocityModulation += constrainf(
-                    pidData[axis].P * (float)currentOrnithopterProfile()->ferocity_yaw_gain * FEROCITY_P_SCALE * yawMountScale,
+                    pidData[axis].P * (float)currentOrnithopterProfile()->ferocity_yaw_gain * FEROCITY_P_SCALE * yawAmpMix,
                     -0.15f, 0.15f);
             }
         }
