@@ -62,7 +62,7 @@
 #define MSP_PROTOCOL_VERSION                0
 
 #define API_VERSION_MAJOR                   1  // increment when major changes are made
-#define API_VERSION_MINOR                   46 // Unified frequency + flight profiles: 4× profile slots, BOXORNITHOPTERPROFILE
+#define API_VERSION_MINOR                   47 // Fore/aft pitch geometry: mount_distance, CG, pair_count, yaw_amp_mix
 
 #define MULTIWII_IDENTIFIER "MWII";
 #define BASEFLIGHT_IDENTIFIER "BAFL";
