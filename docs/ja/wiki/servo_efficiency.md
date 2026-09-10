@@ -102,12 +102,12 @@ Higher is better. Click column headers to sort — <strong>Shift+click</strong> 
       <tr class="untested" data-voltage="6.0" data-brand="Blue Arrow">
         <td>Blue Arrow D05023MG</td>
         <td class="num">6.0</td>
-        <td class="num">12.0</td>
-        <td class="num">2.20</td>
-        <td class="num">0.11</td>
-        <td class="num">1.67</td>
-        <td class="num" data-price-eur="14.30">€14.30</td>
-        <td class="num strong">0.15</td>
+        <td class="num">5.4</td>
+        <td class="num">1.42</td>
+        <td class="num">0.04</td>
+        <td class="num">6.57</td>
+        <td class="num" data-price-eur="12.00">€12.00</td>
+        <td class="num strong">0.62</td>
         <td class="flight untested-cell">Untested</td>
         <td class="notes"></td>
       </tr>
@@ -157,7 +157,7 @@ Higher is better. Click column headers to sort — <strong>Shift+click</strong> 
         <td class="num" data-price-eur="7.00">€7.00</td>
         <td class="num strong">0.46</td>
         <td class="flight untested-cell">Untested</td>
-        <td class="notes">HV coreless, metal gear, waterproof, 180°, 25T. 5kg = stall torque; effective torque lower. Most flights at 8.4V — see 8.4V entry.</td>
+        <td class="notes">HV coreless, metal gear, waterproof, 180°, 25T. 5kg = stall torque; effective torque lower. Most flights at 8.4V — see 8.4V entry for flight, jitter tuning, durability.</td>
       </tr>
       <tr data-voltage="8.4" data-brand="VOTIK">
         <td>VOTIK PTK 7465 / 7465W MG</td>
@@ -169,7 +169,7 @@ Higher is better. Click column headers to sort — <strong>Shift+click</strong> 
         <td class="num" data-price-eur="7.00">€7.00</td>
         <td class="num strong">0.56</td>
         <td class="flight" data-flight-rating="5">Strong Flight <a href="https://youtu.be/iSIwwHDRsHg" class="yt-link" target="_blank">📺</a><a href="https://youtu.be/Ta3ghJrFt-0" class="yt-link" target="_blank">📺</a><a href="https://youtu.be/6kXmIZEmYUA" class="yt-link" target="_blank">📺</a><a href="https://youtu.be/Zoqq1vi_pIQ" class="yt-link" target="_blank">📺</a><a href="https://youtu.be/S_oFCYte0PA" class="yt-link" target="_blank">📺</a></td>
-        <td class="notes">8.4V spec — most flights at this voltage. Kestrel 45g, Albatross 57g, Butterfly 54g, Entomoid. SFOArchaeopteryx153 53g.</td>
+        <td class="notes">8.4V spec — most flights at this voltage. Kestrel 45g, Albatross 57g, Butterfly 54g, Entomoid. SFOArchaeopteryx153 53g. Slow but good torque, no gear damage so far; jitters when stopped but no problems during flapping. Durability testing ongoing. Jitter fix: increase deadband (degrades accuracy, fine for flapping) or reduce gain + increase damping (slower flapping), via PTK programming card + PTK Programming Software V2.1.3 or PTK programmer's box.</td>
       </tr>
       <tr class="untested" data-voltage="7.4" data-brand="VOTIK">
         <td>VOTIK PTK 7465 Plus</td>
@@ -194,6 +194,18 @@ Higher is better. Click column headers to sort — <strong>Shift+click</strong> 
         <td class="num strong">0.77</td>
         <td class="flight" data-flight-rating="5">Strong Flight <a href="https://youtu.be/ciE7EcND0qk" class="yt-link" target="_blank">📺</a><a href="https://youtu.be/E20FnTzsE6o" class="yt-link" target="_blank">📺</a><a href="https://youtu.be/KyeOrNMXXjU" class="yt-link" target="_blank">📺</a></td>
         <td class="notes">Inservos D0576HT-MG-HV = older batch. White Heron 44g 1175mm. E20FnTzsE6o: oversized model. Fenghuangopterus 1096mm. Nycto also uses this servo (not flown high yet).</td>
+      </tr>
+      <tr data-voltage="8.4" data-brand="RYservo">
+        <td>RYservo DS08</td>
+        <td class="num">8.4</td>
+        <td class="num"></td>
+        <td class="num">3.20</td>
+        <td class="num">0.06</td>
+        <td class="num"></td>
+        <td class="num"></td>
+        <td class="num strong"></td>
+        <td class="flight" data-flight-rating="1">Not recommended for flapping</td>
+        <td class="notes">Torque slightly lower than BlueArrow D0576HT. Failed during testing (stopped working, replaced). Final judgment pending.</td>
       </tr>
       <tr data-voltage="7.4" data-brand="Inservos">
         <td>Inservos D0474HT-MG-HV</td>
@@ -361,7 +373,7 @@ Higher is better. Click column headers to sort — <strong>Shift+click</strong> 
         <td class="num" data-price-eur="36.00">€36.00</td>
         <td class="num strong">0.16</td>
         <td class="flight" data-flight-rating="4">Good Flight</td>
-        <td class="notes">Magnet potentiometer. MS320 is newer version with similar specs</td>
+        <td class="notes">Magnet potentiometer. Wider horn operating angle than MS320 → better flight performance. MS320 is newer version with similar specs.</td>
       </tr>
       <tr data-voltage="7.4" data-brand="KST">
         <td>KST MS320</td>

@@ -73,17 +73,17 @@ servos:
     speed: 0.04
     price: 12.00
     efficiency: 6.57
-    eff_per_e# uro_scale: 0.62
+    eff_per_euro_scale: 0.62
 #
 #   - brand: KST
 #   model: DS 113 MG
-    voltage: 6.0
-    weight: 12.0
-    torque: 2.2
-    speed: 0.11
-    price: 14.30
-    efficiency: 1.67
-    eff_per_euro_scale: 0.15
+#   voltage: 6.0
+#   weight: 12.0
+#   torque: 2.2
+#   speed: 0.11
+#   price: 14.30
+#   efficiency: 1.67
+#   eff_per_euro_scale: 0.15
 
   - brand: Spektrum
     model: H2060
@@ -133,7 +133,7 @@ servos:
     price: 7.00
     efficiency: 5.56
     eff_per_euro_scale: 0.46
-    notes: HV coreless, metal gear, waterproof, 180°, 25T. 5kg = stall torque; effective torque lower. Most flights at 8.4V — see 8.4V entry.
+    notes: HV coreless, metal gear, waterproof, 180°, 25T. 5kg = stall torque; effective torque lower. Most flights at 8.4V — see 8.4V entry for flight, jitter tuning, durability.
 
   - brand: VOTIK
     model: PTK 7465 / 7465W MG
@@ -147,7 +147,7 @@ servos:
     flight_performance:
       rating: 5
       note: Strong Flight <a href="https://youtu.be/iSIwwHDRsHg" class="yt-link" target="_blank">📺</a><a href="https://youtu.be/Ta3ghJrFt-0" class="yt-link" target="_blank">📺</a><a href="https://youtu.be/6kXmIZEmYUA" class="yt-link" target="_blank">📺</a><a href="https://youtu.be/Zoqq1vi_pIQ" class="yt-link" target="_blank">📺</a><a href="https://youtu.be/S_oFCYte0PA" class="yt-link" target="_blank">📺</a>
-    notes: "8.4V spec — most flights at this voltage. Kestrel 45g, Albatross 57g, Butterfly 54g, Entomoid. SFOArchaeopteryx153 53g."
+    notes: "8.4V spec — most flights at this voltage. Kestrel 45g, Albatross 57g, Butterfly 54g, Entomoid. SFOArchaeopteryx153 53g. Slow but good torque, no gear damage so far; jitters when stopped but no problems during flapping. Durability testing ongoing. Jitter fix: increase deadband (degrades accuracy, fine for flapping) or reduce gain + increase damping (slower flapping), via PTK programming card + PTK Programming Software V2.1.3 or PTK programmer's box."
 
   - brand: VOTIK
     model: PTK 7465 Plus
@@ -173,6 +173,20 @@ servos:
       rating: 5
       note: Strong Flight <a href="https://youtu.be/ciE7EcND0qk" class="yt-link" target="_blank">📺</a><a href="https://youtu.be/E20FnTzsE6o" class="yt-link" target="_blank">📺</a><a href="https://youtu.be/KyeOrNMXXjU" class="yt-link" target="_blank">📺</a>
     notes: "Inservos D0576HT-MG-HV = older batch. White Heron 44g 1175mm. E20FnTzsE6o: oversized model. Fenghuangopterus 1096mm. Nycto also uses this servo (not flown high yet)."
+   
+  - brand: RYservo
+    model: DS08
+    voltage: 8.4
+    weight: ~
+    torque: 3.2
+    speed: 0.055
+    price: ~
+    efficiency: ~
+    eff_per_euro_scale: ~
+    flight_performance:
+      rating: 1
+      note: Not recommended for flapping
+    notes: "Torque slightly lower than BlueArrow D0576HT. Failed during testing (stopped working, replaced). Final judgment pending."
 
   - brand: Inservos
     model: D0474HT-MG-HV
@@ -333,7 +347,7 @@ servos:
     flight_performance:
       rating: 4
       note: Good Flight
-    notes: Magnet potentiometer. MS320 is newer version with similar specs
+    notes: Magnet potentiometer. Wider horn operating angle than MS320 → better flight performance. MS320 is newer version with similar specs.
 
   - brand: KST
     model: MS320
