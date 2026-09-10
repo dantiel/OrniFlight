@@ -164,13 +164,15 @@ typedef struct servoConfig_s {
 
     int8_t servo_mount_angle[MAX_ORNITHOPTER_PAIRS]; // per-pair incidence deg: 0=parallel, +=inward, -=outward, max +/-30
     int8_t servo_mount_distance[MAX_ORNITHOPTER_PAIRS]; // per-pair fore/aft station σ*100: +nose, -tail, 0=absent
+    int8_t servo_mount_height[MAX_ORNITHOPTER_PAIRS]; // per-pair vertical station: +upper, -lower
+    uint8_t servo_pair_amplitude[MAX_ORNITHOPTER_PAIRS]; // per-pair flapping amplitude percent
     int8_t ornithopter_cg;                       // CG station σ*100: +nose, -tail (default 0)
     uint8_t ornithopter_pair_count;              // active wing pairs 1..4 (default 2)
     uint8_t yaw_amp_mix;                         // 0=flap-centre yaw, 100=amplitude yaw (default 50)
     int8_t flapping_phase_shift[MAX_ORNITHOPTER_PAIRS]; // per-pair phase offset deg: -180..+180, 0=all wings in phase
     int8_t wing_origin_offset[MAX_ORNITHOPTER_PAIRS];  // per-pair mechanical asymmetry trim deg (-30..+30)
     int8_t flap_base_amplitude;
-    uint16_t servo_speed_deg_s;      // max servo angular velocity deg/s (default 857 = 60deg/70ms). Drives glide transition rate, max frequency.
+    uint16_t servo_travel_time_ms;   // seconds-per-60deg represented in ms (100 = 0.10s/60deg)
     uint8_t servo_max_amplitude;     // hard amplitude clamp deg (default 55). Everything above is mechanically impossible.
     uint8_t flap_magnitude;          // throttle->amplitude scaling: centi-deg per us above threshold (default 4 -> 0.04 deg/us)
 

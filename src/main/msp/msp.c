@@ -1528,7 +1528,7 @@ static bool mspProcessOutCommand(uint8_t cmdMSP, sbuf_t *dst)
         sbufWriteU8(dst, (uint8_t)(currentOrnithopterProfile()->ssff_gain));          // offset 70: unsigned 0–100
 
         // ── GralhaAzul port: physical servo params + wing trim (API 1.44) ──
-        sbufWriteU16(dst, servoConfigMutable()->servo_speed_deg_s);             // offsets 71-72: °/s
+        sbufWriteU16(dst, servoConfigMutable()->servo_travel_time_ms);           // offsets 71-72: ms per 60°
         sbufWriteU8(dst, servoConfigMutable()->servo_max_amplitude);            // offset 73: °
         sbufWriteU8(dst, servoConfigMutable()->flap_magnitude);                 // offset 74: centi-deg/µs
         for (int p = 0; p < MAX_ORNITHOPTER_PAIRS; p++) {
@@ -1555,6 +1555,12 @@ static bool mspProcessOutCommand(uint8_t cmdMSP, sbuf_t *dst)
         sbufWriteU8(dst, (uint8_t)(servoConfigMutable()->ornithopter_cg + 128));        // offset 91: signed σ*100
         sbufWriteU8(dst, servoConfigMutable()->ornithopter_pair_count);                 // offset 92: 1-4
         sbufWriteU8(dst, servoConfigMutable()->yaw_amp_mix);                            // offset 93: 0-100
+        for (int p = 0; p < MAX_ORNITHOPTER_PAIRS; p++) {
+            sbufWriteU8(dst, (uint8_t)(servoConfigMutable()->servo_mount_height[p] + 128));
+        }
+        for (int p = 0; p < MAX_ORNITHOPTER_PAIRS; p++) {
+            sbufWriteU8(dst, servoConfigMutable()->servo_pair_amplitude[p]);
+        }
 
         break;
     case MSP_SENSOR_CONFIG:
@@ -2298,7 +2304,7 @@ static mspResult_e mspProcessInCommand(uint8_t cmdMSP, sbuf_t *src)
         }
         if (sbufBytesRemaining(src) >= 8) {
             // Added in MSP API 1.44 — GralhaAzul port: physical servo params + wing trim
-            servoConfigMutable()->servo_speed_deg_s   = sbufReadU16(src);
+            servoConfigMutable()->servo_travel_time_ms = constrain(sbufReadU16(src), 30, 500);
             servoConfigMutable()->servo_max_amplitude = sbufReadU8(src);
             servoConfigMutable()->flap_magnitude      = sbufReadU8(src);
             for (int p = 0; p < MAX_ORNITHOPTER_PAIRS; p++) {
@@ -2329,6 +2335,14 @@ static mspResult_e mspProcessInCommand(uint8_t cmdMSP, sbuf_t *src)
             servoConfigMutable()->ornithopter_cg        = (int8_t)(sbufReadU8(src) - 128);
             servoConfigMutable()->ornithopter_pair_count = constrain(sbufReadU8(src), 1, MAX_ORNITHOPTER_PAIRS);
             servoConfigMutable()->yaw_amp_mix            = constrain(sbufReadU8(src), 0, 100);
+        }
+        if (sbufBytesRemaining(src) >= 8) {
+            for (int p = 0; p < MAX_ORNITHOPTER_PAIRS; p++) {
+                servoConfigMutable()->servo_mount_height[p] = constrain((int16_t)sbufReadU8(src) - 128, -100, 100);
+            }
+            for (int p = 0; p < MAX_ORNITHOPTER_PAIRS; p++) {
+                servoConfigMutable()->servo_pair_amplitude[p] = constrain(sbufReadU8(src), 0, 125);
+            }
         }
 
         pidInitConfig(currentPidProfile);

@@ -1012,7 +1012,8 @@ float getFlappingAmplitude(float rc_throttle) {
             float amp = ((rc_throttle - 1000.0f) * (1.0f / 1000.0f))
                       * (float)sc->servo_max_amplitude;
             // Physical feasibility: A ≤ servo_speed / (2π·f_max)
-            float speedLimit = (float)sc->servo_speed_deg_s
+            float servoSpeedDegS = 60000.0f / (float)MAX(sc->servo_travel_time_ms, 1);
+            float speedLimit = servoSpeedDegS
                              / (2.0f * M_PIf * (float)sc->ornithopter_freq_max + 0.01f);
             if (amp > speedLimit) amp = speedLimit;
             return amp;

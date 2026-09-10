@@ -244,7 +244,11 @@ static bool mspSerialProcessReceivedData(mspPort_t *mspPort, uint8_t c)
                 mspPort->cmdMSP = hdrv2->cmd;
                 mspPort->cmdFlags = hdrv2->flags;
                 mspPort->offset = 0;                // re-use buffer
-                mspPort->c_state = mspPort->dataSize > 0 ? MSP_PAYLOAD_V2_NATIVE : MSP_CHECKSUM_V2_NATIVE;
+                if (mspPort->dataSize > MSP_PORT_INBUF_SIZE) {
+                    mspPort->c_state = MSP_IDLE;
+                } else {
+                    mspPort->c_state = mspPort->dataSize > 0 ? MSP_PAYLOAD_V2_NATIVE : MSP_CHECKSUM_V2_NATIVE;
+                }
             }
             break;
 

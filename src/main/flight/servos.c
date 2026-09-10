@@ -57,7 +57,7 @@
 
 extern mixerMode_e currentMixerMode;
 
-PG_REGISTER_WITH_RESET_FN(servoConfig_t, servoConfig, PG_SERVO_CONFIG, 1);
+PG_REGISTER_WITH_RESET_FN(servoConfig_t, servoConfig, PG_SERVO_CONFIG, 2);
 
 void pgResetFn_servoConfig(servoConfig_t *servoConfig) {
     servoConfig->dev.servoCenterPulse = 1500;
@@ -79,12 +79,16 @@ void pgResetFn_servoConfig(servoConfig_t *servoConfig) {
     servoConfig->servo_mount_distance[1] = -40;  // hind: tail station (σ=-0.40)
     servoConfig->servo_mount_distance[2] = 0;
     servoConfig->servo_mount_distance[3] = 0;
+    for (int p = 0; p < MAX_ORNITHOPTER_PAIRS; p++) {
+        servoConfig->servo_mount_height[p] = 0;
+        servoConfig->servo_pair_amplitude[p] = 100;
+    }
     servoConfig->ornithopter_cg = 0;             // CG at centre
     servoConfig->ornithopter_pair_count = 2;      // tandem: 2 active pairs
     servoConfig->yaw_amp_mix = 50;               // 50/50 flap-centre vs amplitude yaw
     // flapping_phase_shift defaults to 0deg for all pairs (all wings flap in phase)
     servoConfig->flap_base_amplitude = 60;
-    servoConfig->servo_speed_deg_s = 857;       // 60deg / 70ms - typical micro servo
+    servoConfig->servo_travel_time_ms = 100;    // 0.10s per 60deg - typical servo
     servoConfig->servo_max_amplitude = 55;       // deg, +/-55deg max mechanical throw
     servoConfig->flap_magnitude = 4;             // 4deg per 960us throttle above 1040
     servoConfig->ornithopter_freq_channel = 1;   // AUX2 / CH6
@@ -378,6 +382,11 @@ static void applyOrnithopterMountScaling(void)
             currentServoMixer[i].rate = (int8_t)lrintf(ornithopterPitchRank(pair) * cos_approx(a) * 100.0f);
         } else if (currentServoMixer[i].inputSource == INPUT_STABILIZED_ROLL) {
             currentServoMixer[i].rate = (int8_t)lrintf(currentServoMixer[i].rate * cos_approx(a));
+        } else if (currentServoMixer[i].inputSource >= INPUT_STABILIZED_FLAPPING_0 &&
+                   currentServoMixer[i].inputSource <= INPUT_STABILIZED_FLAPPING_7) {
+            currentServoMixer[i].rate = constrain(
+                (int16_t)currentServoMixer[i].rate * servoConfig()->servo_pair_amplitude[pair] / 100,
+                -125, 125);
         }
     }
 }
@@ -467,9 +476,9 @@ static float glideCurrentRight[MAX_ORNITHOPTER_PAIRS];
 static bool  glideTransitionActive = false;
 static uint32_t glideLastMicros = 0;
 
-// Servo speed in deg/us: 857deg/s -> 0.000857 deg/us
+// Convert the configured 60-degree travel time to degrees per microsecond.
 static inline float servoDegPerUs(void) {
-    return (float)servoConfig()->servo_speed_deg_s / 1e6f;
+    return 60.0f / ((float)MAX(servoConfig()->servo_travel_time_ms, 1) * 1000.0f);
 }
 
 // Function to apply flapping logic to servos based on motor output.
