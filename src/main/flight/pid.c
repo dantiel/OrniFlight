@@ -48,6 +48,8 @@
 #include "flight/imu.h"
 #include "flight/mixer.h"
 #include "flight/servos.h"
+#include "flight/ondas_metrics.h"
+#include "flight/ondas_tracker.h"
 
 #include "rx/rx.h"
 #include "pg/rx.h"
@@ -107,6 +109,13 @@ static FAST_RAM_ZERO_INIT float flappingAsymmetryBias;
 // Extracts the flap-coherent component via error×sin(θ) + leaky integrator,
 // then amplifies it: the wing "resonates" with errors at its own frequency.
 static FAST_RAM_ZERO_INIT float resonanceLockInState;
+
+// ONDAS "A": Vold–Kalman order tracker — 2nd-order bandpass whose center
+// follows the instantaneous flap ω, extracting the coherent error component
+// with true amplitude and phase. B-gated: the ondas_metrics consensus gate
+// blends the resonance boost from the lock-in waveform toward the tracker's
+// phase-true estimate (slowly, and only while both extractors agree).
+static FAST_RAM_ZERO_INIT ondasTrackerState_t orderTrackerState;
 
 // Espelho: wing-self-noise cancellation — lock-in amplifier in reverse.
 // Learns the flapping-coherent gyro component and subtracts it,
@@ -171,6 +180,16 @@ static FAST_RAM_ZERO_INIT float airmodeThrottleOffsetLimit;
 #define CRASH_RECOVERY_DETECTION_DELAY_US 1000000  // 1 second delay before crash recovery detection is active after entering a self-level mode
 
 #define LAUNCH_CONTROL_YAW_ITERM_LIMIT 50 // yaw iterm windup limit when launch mode is "FULL" (all axes)
+
+// Weak-L1 (rearrangement-invariant) anti-windup for the I-term.
+// The integrator is an L1 operator: its rearrangement distribution is dominated
+// by the tail — one gust or servo transient winds it up for seconds. Track the
+// running 90th percentile q90 of |iterm error| and censor per-sample increments
+// beyond a small multiple of it. Equilibrium percentile = UP / (UP + DN) = 0.9.
+#define WEAKL1_QUANTILE_UP_RATE 20.0f   // 1 / t_up, t_up =  50 ms
+#define WEAKL1_QUANTILE_DN_RATE 2.222f  // 1 / t_dn, t_dn = 450 ms
+#define WEAKL1_ITERM_KAPPA      2.0f    // integrate errors up to kappa * q90 fully
+#define WEAKL1_ITERM_FLOOR_DPS  10.0f   // deg/s floor so a calm start doesn't freeze I
 
 PG_REGISTER_ARRAY_WITH_RESET_FN(pidProfile_t, PID_PROFILE_COUNT, pidProfiles, PG_PID_PROFILE, 9);
 
@@ -355,6 +374,9 @@ static FAST_RAM_ZERO_INIT uint8_t itermRelaxType;
 static uint8_t itermRelaxCutoff;
 static FAST_RAM_ZERO_INIT float itermRelaxSetpointThreshold;
 #endif
+
+// Per-axis running 90th percentile of |iterm error| (weak-L1 anti-windup).
+static FAST_RAM_ZERO_INIT float itermErrorQ90[XYZ_AXIS_COUNT];
 
 #if defined(USE_ABSOLUTE_CONTROL)
 STATIC_UNIT_TESTED FAST_RAM_ZERO_INIT float axisError[XYZ_AXIS_COUNT];
@@ -605,6 +627,11 @@ static FAST_RAM_ZERO_INIT uint8_t integratedYawRelax;
 // ── Flapping ODE state + hysteresis (must precede pidResetIterm which resets them) ──
 static float omega = 0.0;
 static float theta = 0.0;
+static float basePhase = 0.0;    // virtual beat grid — always advances at commanded cadence
+static float phaseOffset = 0.0;  // debt to the grid — settles on whole strokes (2π·k)
+static float debtVel = 0.0;      // debt momentum — the pendulum's extra flap rate
+static float ferHold = 0.0;      // held ferocity dwell bias (mirror-pendulum)
+static float ferHoldVel = 0.0;   // ferocity pendulum momentum
 static bool hasCrossedFlightThreshold = false;
 static bool hysteresisElevated = false;
 #define GLIDE_HYSTERESIS 50
@@ -620,6 +647,11 @@ void pidResetIterm(void)
     // ── Reset flapping state on arm (GralhaAzul: aoDespertarParaOCantoDoEter) ──
     theta = M_PIf * 0.5f;  // π/2: neutral mid-stroke — avoids extreme on first frame
     omega = 0.0f;
+    basePhase = M_PIf * 0.5f;  // beat grid starts mid-stroke (matches theta)
+    phaseOffset = 0.0f;
+    debtVel = 0.0f;
+    ferHold = 0.0f;
+    ferHoldVel = 0.0f;
     hasCrossedFlightThreshold = false;
     hysteresisElevated = false;
 }
@@ -656,6 +688,10 @@ float thetadot = 0.0;
 #define WARP_SCALE               0.0002f   // Roll/Yaw P→ferocity differential: PID-P × gain → L/R or fore/aft
 #define PRESCIENCE_SCALE         0.001f    // error→ferocity bias: predicted-error × gain × scale → stroke bias
 #define FEROCITY_RANGE           8.0f      // Max ferocity for trapezoidal model (f=0→pure cosine, f=8→square)
+#define CADENCE_OMEGA0           10.0f     // beat-lock natural frequency [rad/s] (soft catch)
+#define CADENCE_ZETA             0.7f      // underdamped → the debt rings and decays (inertia)
+#define FEROCITY_OMEGA0          10.0f     // ferocity mirror-pendulum natural frequency [rad/s]
+#define FEROCITY_ZETA            0.7f
 
 float k0 = CADENCE_K0;
 float k2 = ANCHOR_BASE_K2;
@@ -665,7 +701,7 @@ float k2 = ANCHOR_BASE_K2;
 // and biases the next stroke's ferocity to cancel repetitive flap-frequency error.
 // Called from PID loop on PITCH axis with the raw pitch errorRate (deg/s).
 // Accumulating errorRate over a half-stroke gives total angle error accumulated.
-static void applyStrokeSynchronousFF(float pitchErrorRate) {
+static void applyStrokeSynchronousFF(float pitchErrorRate, bool strokeReversal, bool downstrokeEnded) {
     if (currentOrnithopterProfile()->ssff_gain == 0) return;
 
     // Prescience: predict error at next reversal from wing ODE state.
@@ -680,9 +716,7 @@ static void applyStrokeSynchronousFF(float pitchErrorRate) {
         prescienceBias = (float)prescienceGain * PRESCIENCE_SCALE * predictedError;
     }
 
-    // Detect zero crossing of flapping sinusoid
-    if (prevFlappingSinusoid * flappingSinusoid <= 0.0f
-        && prevFlappingSinusoid != flappingSinusoid) {
+    if (strokeReversal) {
 
         // Blend SSFF (accumulated, learned) + Prescience (predicted, fast)
         float meanError = (ssffAccumCount > 0) ? ssffAccumError / (float)ssffAccumCount : 0.0f;
@@ -695,7 +729,7 @@ static void applyStrokeSynchronousFF(float pitchErrorRate) {
         int8_t saudadeGain = currentOrnithopterProfile()->saudade_gain;
         if (saudadeGain != 0) {
             float learnRate = (float)saudadeGain * 0.0001f;  // very slow: ~0.1%/stroke at gain=10
-            if (prevFlappingSinusoid > 0.0f) {
+            if (downstrokeEnded) {
                 // Finished downstroke → learn for upstroke
                 saudadeTrimUp += learnRate * totalBias;
                 saudadeTrimUp = constrainf(saudadeTrimUp, -2.0f, 2.0f);
@@ -707,7 +741,7 @@ static void applyStrokeSynchronousFF(float pitchErrorRate) {
                 ssffFerocityDownBias = -(totalBias + saudadeTrimDown);
             }
         } else {
-            if (prevFlappingSinusoid > 0.0f) {
+            if (downstrokeEnded) {
                 ssffFerocityUpBias = totalBias;
             } else {
                 ssffFerocityDownBias = -totalBias;
@@ -720,7 +754,6 @@ static void applyStrokeSynchronousFF(float pitchErrorRate) {
 
     ssffAccumError += pitchErrorRate;
     ssffAccumCount++;
-    prevFlappingSinusoid = flappingSinusoid;
 }
 
 // Espelho: wing-self-noise cancellation via reverse lock-in amplifier.
@@ -885,6 +918,11 @@ void calculateFlappingFromThrottle(float rc_throttle) {
         omega = 0.0f;
         omegadot = 0.0f;
         thetadot = 0.0f;
+        basePhase = theta;      // snap the beat grid to the frozen wing phase
+        phaseOffset = 0.0f;
+        debtVel = 0.0f;
+        ferHold = 0.0f;
+        ferHoldVel = 0.0f;
         ornithopterFlapping = 0.0f;
         return;
     }
@@ -907,11 +945,28 @@ void calculateFlappingFromThrottle(float rc_throttle) {
 
     if (IS_RC_MODE_ACTIVE(BOXORNITHOPTERINDEPENDENT)) {
         // ── INDEPENDENT MODE ──
-        // Throttle stick → amplitude, AUX channel → frequency (direct)
-        float omegaCmd = 2.0f * M_PIf * freqFromAux;
-        omegaCmd *= flappingPhaseModulation;
-        theta = theta + omegaCmd * dT;
-        omega = omegaCmd;
+        // Throttle stick → amplitude, AUX channel → frequency (direct).
+        // Phase-quantized harmonization (Josephson washboard pendulum): the
+        // commanded frequency is a beat GRID; ONDAS cadence demand
+        // (flappingPhaseModulation) is a *rate* target for the phase debt,
+        // not a raw frequency scale. Weak demand nudges the phase and rings
+        // back onto the SAME beat; strong demand whips the debt over the π
+        // barrier — a quantized whole-stroke slip (2π) — never a fractional beat.
+        const float cadenceTarget = 2.0f * M_PIf * freqFromAux;
+        const float extraTarget = (flappingPhaseModulation - 1.0f) * cadenceTarget;
+
+        basePhase += cadenceTarget * dT;
+        basePhase = fmodf(basePhase, 2.0f * M_PIf);
+
+        debtVel += (-CADENCE_OMEGA0 * CADENCE_OMEGA0 * sinf(phaseOffset)
+                    - 2.0f * CADENCE_ZETA * CADENCE_OMEGA0 * (debtVel - extraTarget)) * dT;
+        phaseOffset += debtVel * dT;
+
+        theta = basePhase + phaseOffset;
+        theta = fmodf(theta, 2.0f * M_PIf);
+        if (theta < 0.0f) theta += 2.0f * M_PIf;
+
+        omega = cadenceTarget + debtVel;
         omegadot = 0.0f;
         thetadot = omega;
 
@@ -1009,23 +1064,26 @@ float getFlappingAmplitude(float rc_throttle) {
     if (rc_throttle > GLIDE_MODE_THRESHOLD) {
         if (IS_RC_MODE_ACTIVE(BOXORNITHOPTERINDEPENDENT)) {
             // Independent mode: throttle → raw amplitude % of servo_max_amplitude
-            float amp = ((rc_throttle - 1000.0f) * (1.0f / 1000.0f))
-                      * (float)sc->servo_max_amplitude;
+            float ampLin = ((rc_throttle - 1000.0f) * (1.0f / 1000.0f))
+                         * (float)sc->servo_max_amplitude;
             // Physical feasibility: A ≤ servo_speed / (2π·f_max)
             float servoSpeedDegS = 60000.0f / (float)MAX(sc->servo_travel_time_ms, 1);
             float speedLimit = servoSpeedDegS
                              / (2.0f * M_PIf * (float)sc->ornithopter_freq_max + 0.01f);
-            if (amp > speedLimit) amp = speedLimit;
-            return amp;
+            // Marcinkiewicz-consistent saturation: geometric soft knee in log-space.
+            // amp = ampLin·L / √(ampLin² + L²) preserves the linear small-signal
+            // sensitivity exactly and approaches the feasibility limit L without a
+            // hard truncation (which would violate the weak-type interpolation bound).
+            return (ampLin * speedLimit) / sqrtf(ampLin * ampLin + speedLimit * speedLimit);
         }
         // Coupled mode: flap_magnitude = 4 → 0.04 °/µs
-        float amp = ((rc_throttle - GLIDE_MODE_THRESHOLD) * (float)sc->flap_magnitude * 0.01f)
-                  * (float)sc->flap_base_amplitude * 0.1f;
-        // Hard clamp to servo mechanical limit
+        float ampLin = ((rc_throttle - GLIDE_MODE_THRESHOLD) * (float)sc->flap_magnitude * 0.01f)
+                     * (float)sc->flap_base_amplitude * 0.1f;
+        // Marcinkiewicz-consistent saturation to the servo mechanical limit:
+        // log-linear crossover between the linear low-authority regime and the
+        // saturated regime, replacing the hard clamp (see independent mode).
         float maxAmp = (float)sc->servo_max_amplitude;
-        if (amp > maxAmp) amp = maxAmp;
-        else if (amp < -maxAmp) amp = -maxAmp;
-        return amp;
+        return (ampLin * maxAmp) / sqrtf(ampLin * ampLin + maxAmp * maxAmp);
     } else return 0.0;
 }
 
@@ -1051,6 +1109,8 @@ static FAST_RAM_ZERO_INIT float dMinSetpointGain;
 
 void pidInitConfig(const pidProfile_t *pidProfile)
 {
+    ondasMetricsInit();
+
     if (pidProfile->feedForwardTransition == 0) {
         feedForwardTransition = 0;
     } else {
@@ -1779,7 +1839,15 @@ void FAST_CODE pidController(const pidProfile_t *pidProfile, timeUs_t currentTim
     k2 = ANCHOR_BASE_K2 + (float)currentOrnithopterProfile()->anchor_gain * ANCHOR_SCALE;
 
     calculateFlappingFromThrottle(throttle_ * 1000 + 1000);
-    
+
+    // Stroke-reversal detection (hoisted): one flag pair per loop, shared by
+    // SSFF/Prescience and the λ_e(s) phase-envelope strobe. A reversal ends a
+    // downstroke when the sinusoid was positive before the zero crossing.
+    const bool strokeReversal = (prevFlappingSinusoid * flappingSinusoid <= 0.0f)
+                                && (prevFlappingSinusoid != flappingSinusoid);
+    const bool downstrokeEnded = (prevFlappingSinusoid > 0.0f);
+    prevFlappingSinusoid = flappingSinusoid;
+
     // ----------PID controller----------
     // Reset per-frame accumulators for the NEXT calculateFlappingFromThrottle call
     flappingFerocityModulation = 0.0f;
@@ -1853,11 +1921,37 @@ void FAST_CODE pidController(const pidProfile_t *pidProfile, timeUs_t currentTim
             // with errors at its own rhythm, making corrections more efficient.
             // Filter the I-term error (most vulnerable to wing-frequency noise)
             // while leaving P and D on raw error for fast response.
+            const float itermErrorPreResonance = itermErrorRate;
             itermErrorRate = applyResonanceFilter(itermErrorRate, flappingSinusoid);
+
+            // ONDAS "A": Vold–Kalman order tracker on the pre-resonance error
+            // (open loop — the tracker never sees its own contribution).
+            const float trackedCoherent = ondasTrackerStep(&orderTrackerState,
+                                                           itermErrorPreResonance,
+                                                           fabsf(omega), dT);
+            ondasMetricsGateUpdate(trackedCoherent, flappingSinusoid, dT);
+
+            // B-gate: replace-blend of the resonance boost waveform. At α=0
+            // the legacy lock-in behavior is exact; at |α|→1 the boost is the
+            // tracker's phase-true coherent estimate (0.5× keeps the blend
+            // gain-neutral: trackerOut = A·sinθ ⇒ 0.5·out ≡ legacy waveform).
+            const float gateAlpha = ondasMetricsGateAuthority();
+            if (gateAlpha != 0.0f && currentOrnithopterProfile()->resonance_gain != 0) {
+                const float rg = (float)currentOrnithopterProfile()->resonance_gain * 0.01f;
+                const float legacyWave = resonanceLockInState * flappingSinusoid;
+                const float blendedWave = legacyWave * (1.0f - fabsf(gateAlpha))
+                                        + 0.5f * trackedCoherent * gateAlpha;
+                itermErrorRate += rg * (blendedWave - legacyWave);
+            }
 
             // Stroke-synchronous feed-forward: accumulate pitch error over half-stroke
             // and bias next stroke's ferocity to cancel repetitive flap-frequency error
-            applyStrokeSynchronousFF(errorRate);
+            applyStrokeSynchronousFF(errorRate, strokeReversal, downstrokeEnded);
+
+            // λ_e(s) phase envelope: golden-angle Poincaré strobe, one sample
+            // per stroke reversal — the regression metric for the future
+            // order tracker (harmonization chain B → A).
+            ondasMetricsPhaseStrobe(fabsf(itermErrorRate), strokeReversal);
 
             // -------- ONDAS: Three-channel wing-trajectory modulation -------
             // Each PID term modulates a different wing property:
@@ -1960,6 +2054,10 @@ void FAST_CODE pidController(const pidProfile_t *pidProfile, timeUs_t currentTim
             pidData[axis].P = ptermYawLowpassApplyFn((filter_t *) &ptermYawLowpass, pidData[axis].P);
         }
         
+        // λ_e(s) statistical envelope: 32-bin running histogram of |I error| —
+        // raw view for windup and D-cutoff adaptation (ONDAS "B" substrate).
+        ondasMetricsUpdate(axis, fabsf(itermErrorRate), dT);
+
         // -----calculate I component
 #ifdef USE_LAUNCH_CONTROL
         // if launch control is active override the iterm gains
@@ -1967,8 +2065,25 @@ void FAST_CODE pidController(const pidProfile_t *pidProfile, timeUs_t currentTim
             Ki = launchControlKi;
         }
 #endif
-        pidData[axis].I = constrainf(previousIterm + 
-          Ki * itermErrorRate * dynCi, -itermLimit, itermLimit);
+        // Weak-L1 (r.i.) anti-windup: the integrator is an L1 operator whose
+        // rearrangement tail is dominated by single large events. Track the
+        // running 90th percentile of |iterm error| and censor the per-sample
+        // increment beyond κ × q90 — bulk errors integrate unchanged, gusts
+        // and servo transients are discarded. Keeps the I feed into ONDAS
+        // BALANCE free of windup imprints.
+        {
+            const float y = fabsf(itermErrorRate);
+            const float q = itermErrorQ90[axis];
+            if (y > q) {
+                itermErrorQ90[axis] = q + (y - q) * dT * WEAKL1_QUANTILE_UP_RATE;
+            } else {
+                itermErrorQ90[axis] = q - (q - y) * dT * WEAKL1_QUANTILE_DN_RATE;
+            }
+            const float clipError = fmaxf(itermErrorQ90[axis] * WEAKL1_ITERM_KAPPA, WEAKL1_ITERM_FLOOR_DPS);
+            const float clipInc = clipError * fabsf(Ki * dynCi);
+            const float itermIncrement = constrainf(Ki * itermErrorRate * dynCi, -clipInc, clipInc);
+            pidData[axis].I = constrainf(previousIterm + itermIncrement, -itermLimit, itermLimit);
+        }
 
         // -----calculate pidSetpointDelta
         float pidSetpointDelta = 0;
@@ -2081,8 +2196,26 @@ void FAST_CODE pidController(const pidProfile_t *pidProfile, timeUs_t currentTim
         }
     }
 
+    // ONDAS metrics debug: weak-L² (pitch), q90, phase envelope, phase coverage
+    DEBUG_SET(DEBUG_ONDAS_METRICS, 0, lrintf(ondasMetricsWeakL2(FD_PITCH) * 10.0f));
+    DEBUG_SET(DEBUG_ONDAS_METRICS, 1, lrintf(ondasMetricsQuantile(FD_PITCH, 0.9f)));
+    DEBUG_SET(DEBUG_ONDAS_METRICS, 2, lrintf(ondasMetricsPhaseEnvelope() * 10.0f));
+    DEBUG_SET(DEBUG_ONDAS_METRICS, 3, lrintf(ondasMetricsCoverage() * 1000.0f));
+    DEBUG_SET(DEBUG_ONDAS_METRICS, 4, lrintf(orderTrackerState.x * 10.0f));
+    DEBUG_SET(DEBUG_ONDAS_METRICS, 5, lrintf(ondasMetricsGateAuthority() * 1000.0f));
+
     // Clamp accumulated ferocity modulation from all axes (pitch PD + roll P + yaw P)
     flappingFerocityModulation = constrainf(flappingFerocityModulation, -0.5f, 0.5f);
+
+    // Inertial harmonizer: the held dwell bias is a damped pendulum (ω₀=10,
+    // ζ=0.7) tracking the live blend. It catches the demanded ferocity with
+    // pendulum momentum and decays back inertially, so the dwell change lands
+    // in step with the phase-quantized cadence rather than snapping the
+    // reversal boundary mid-stroke.
+    ferHoldVel += (-FEROCITY_OMEGA0 * FEROCITY_OMEGA0 * (ferHold - flappingFerocityModulation)
+                   - 2.0f * FEROCITY_ZETA * FEROCITY_OMEGA0 * ferHoldVel) * dT;
+    ferHold += ferHoldVel * dT;
+    flappingFerocityModulation = ferHold;
 
     // Disable PID control if at zero throttle or if gyro overflow detected
     // This may look very innefficient, but it is done on purpose to always show real CPU usage as in flight

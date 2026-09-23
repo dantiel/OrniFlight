@@ -157,6 +157,23 @@ set tlm_halfduplex = ON
 <script>
   const btn = document.querySelector('.scroll-top');
   addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+  // Mermaid diagrams: lazy-load only when a diagram block exists.
+  const mm = document.querySelectorAll('pre > code.language-mermaid');
+  if (mm.length) {
+    const s = document.createElement('script');
+    s.src = 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js';
+    s.onload = () => {
+      mermaid.initialize({ startOnLoad: false, theme: 'neutral', securityLevel: 'loose', fontFamily: 'Outfit' });
+      mm.forEach((el) => {
+        const host = document.createElement('div');
+        host.className = 'mermaid';
+        host.textContent = el.textContent;
+        el.closest('pre').replaceWith(host);
+      });
+      mermaid.run();
+    };
+    document.head.appendChild(s);
+  }
 </script>
 </body>
 </html>

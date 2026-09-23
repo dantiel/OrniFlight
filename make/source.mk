@@ -86,6 +86,8 @@ COMMON_SRC = \
             flight/mixer.c \
             flight/mixer_tricopter.c \
             flight/ornithopter_profile.c \
+            flight/ondas_metrics.c \
+            flight/ondas_tracker.c \
             flight/pid.c \
             flight/servos.c \
             flight/servos_tricopter.c \
@@ -249,6 +251,8 @@ SPEED_OPTIMISED_SRC := $(SPEED_OPTIMISED_SRC) \
             $(DEVICE_STDPERIPH_SRC) \
 
 SIZE_OPTIMISED_SRC := $(SIZE_OPTIMISED_SRC) \
+            flight/ondas_metrics.c \
+            flight/ondas_tracker.c \
             flight/pid.c \
             bus_bst_stm32f30x.c \
             cli/cli.c \

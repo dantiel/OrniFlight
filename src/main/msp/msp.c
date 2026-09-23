@@ -2250,7 +2250,7 @@ static mspResult_e mspProcessInCommand(uint8_t cmdMSP, sbuf_t *src)
 
             currentPidProfile->antiGravityMode = sbufReadU8(src);
         }
-        if (sbufBytesRemaining(src) >= 7) {
+        if (sbufBytesRemaining(src) >= 9) {
             // Added in MSP API 1.41
 #if defined(USE_D_MIN)
             currentPidProfile->d_min[PID_ROLL] = sbufReadU8(src);
@@ -2314,9 +2314,9 @@ static mspResult_e mspProcessInCommand(uint8_t cmdMSP, sbuf_t *src)
         if (sbufBytesRemaining(src) >= 3) {
             // Added in MSP API 1.45 — Independent flight mode
             // ornithopter_independent_mode is now a BOX — not a parameter byte
-            servoConfigMutable()->ornithopter_freq_channel = sbufReadU8(src);
-            servoConfigMutable()->ornithopter_freq_min    = sbufReadU8(src);
-            servoConfigMutable()->ornithopter_freq_max    = sbufReadU8(src);
+            servoConfigMutable()->ornithopter_freq_channel = constrain(sbufReadU8(src), 0, 13);
+            servoConfigMutable()->ornithopter_freq_min    = constrain(sbufReadU8(src), 1, 50);
+            servoConfigMutable()->ornithopter_freq_max    = constrain(sbufReadU8(src), 1, 50);
         }
         if (sbufBytesRemaining(src) >= 5) {
             // Added in MSP API 1.46 — Ornithopter Profile Index + per-profile aeroelastic fields

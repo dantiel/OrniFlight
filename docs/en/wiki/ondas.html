@@ -176,6 +176,43 @@
 
 <hr />
 
+<h2 id="the-new-generation-statistical-envelope-and-order-tracker">The New Generation: Statistical Envelope and Order Tracker</h2>
+
+<p>The eight layers above are the <strong>oscillator domain</strong> — they modulate the wingbeat. Around them,
+two measurement modules now form the <strong>statistical envelope</strong> that schedules the layers and
+adapts them online:</p>
+
+<pre><code class="language-mermaid">flowchart LR
+    e["Attitude error"] --&gt; M["ondas_metrics&lt;br/&gt;λ_e(s) · q90 · weak-L²&lt;br/&gt;phase envelope"]
+    e --&gt; T["ondas_tracker&lt;br/&gt;Vold–Kalman, follows ω(t)"]
+    T --&gt;|"b"| G["Consensus gate&lt;br/&gt;r vs. lock-in sinθ"]
+    G --&gt;|"α ∈ [−1,+1]"| R["Resonance replace-blend"]
+    M --&gt;|"q90"| W["Anti-windup I-clamp"]
+    M -.-&gt;|"q90 (roadmap)"| D["D-cutoff adaptation"]
+</code></pre>
+
+<ul>
+  <li><strong>ondas_metrics (B)</strong> — a 32-bin survival-function histogram of |error| per axis
+(λ_e(s), log-spaced, exponential leak τ ≈ 1 s) providing q90, the weak-L² tail norm and the
+tail mass; plus a 16-bin <strong>Poincaré phase envelope</strong> sampled at stroke reversals with a
+golden-angle rotation — the synchronous residual, logged to Blackbox.</li>
+  <li><strong>ondas_tracker (A)</strong> — a Vold–Kalman order tracker: a 2nd-order resonator (ζ = 0.06,
+Q ≈ 8.3) whose coefficients follow the instantaneous wingbeat frequency per sample, so it
+keeps extracting the flap-synchronous error component under throttle sweeps where fixed
+filters detune. Feed is pre-resonance (open loop — it never sees its own contribution).</li>
+  <li><strong>Consensus gate</strong> — the tracker may take over the resonance boost only when it and the
+independent lock-in reference agree: correlation r = EMA(b·sinθ)/√(EMA(sin²θ)·EMA(b²)) with
+a soft-knee over r = 0.3, slow in / fast out. At α = 0 the legacy resonance path is restored
+<strong>exactly</strong>.</li>
+  <li><strong>Substrate</strong> — the flapping amplitude uses a Marcinkiewicz-consistent geometric soft-knee
+(no authority kink), and the I-branch is anti-windup censored at κ·q90 so BALANCE and
+SAUDADE never absorb gust spikes as learned trim.</li>
+</ul>
+
+<p>Full mathematics, simulated testing and build verification: see the development article below.</p>
+
+<hr />
+
 <h2 id="analogy">Analogy</h2>
 
 <p><strong>Cadence is the conductor. Ferocity P and D are the instruments.</strong></p>
@@ -187,6 +224,7 @@
 <h2 id="see-also">See Also</h2>
 
 <ul>
+  <li><a href="ondas_development.html">ONDAS Development — Mathematical Methods and Simulated Testing</a> — the envelope/tracker generation</li>
   <li><a href="../../tutorials/ondas_tuning.html">ONDAS Tuning Guide</a> — practical tuning procedure</li>
   <li><a href="msp.html">MSP Protocol</a> — wire format for ONDAS parameters</li>
   <li><a href="profiles.html">Flight Profiles</a> — profile-aware ONDAS configuration</li>
@@ -242,6 +280,23 @@
 <script>
   const btn = document.querySelector('.scroll-top');
   addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+  // Mermaid diagrams: lazy-load only when a diagram block exists.
+  const mm = document.querySelectorAll('pre > code.language-mermaid');
+  if (mm.length) {
+    const s = document.createElement('script');
+    s.src = 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js';
+    s.onload = () => {
+      mermaid.initialize({ startOnLoad: false, theme: 'neutral', securityLevel: 'loose', fontFamily: 'Outfit' });
+      mm.forEach((el) => {
+        const host = document.createElement('div');
+        host.className = 'mermaid';
+        host.textContent = el.textContent;
+        el.closest('pre').replaceWith(host);
+      });
+      mermaid.run();
+    };
+    document.head.appendChild(s);
+  }
 </script>
 </body>
 </html>

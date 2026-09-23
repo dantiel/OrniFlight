@@ -429,6 +429,24 @@ code {
   -webkit-backdrop-filter: none;
 }
 
+.mermaid {
+  background: rgba(var(--box-rgb), 0.22);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid var(--glass-edge);
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin: 2rem 0;
+  overflow-x: auto;
+  text-align: center;
+  font-family: "JetBrains Mono", "SF Mono", "Fira Code", monospace;
+  font-size: 0.82rem;
+}
+.mermaid svg {
+  max-width: 100%;
+  height: auto;
+}
+
 .doc-link {
   margin-top: 1.5rem;
   font-weight: 500;

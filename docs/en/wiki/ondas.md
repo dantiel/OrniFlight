@@ -78,6 +78,42 @@ In a stall: high sink rate → D detects the rate → increases ferocity. Simult
 
 ---
 
+## The New Generation: Statistical Envelope and Order Tracker
+
+The eight layers above are the **oscillator domain** — they modulate the wingbeat. Around them,
+two measurement modules now form the **statistical envelope** that schedules the layers and
+adapts them online:
+
+~~~mermaid
+flowchart LR
+    e["Attitude error"] --> M["ondas_metrics<br/>λ_e(s) · q90 · weak-L²<br/>phase envelope"]
+    e --> T["ondas_tracker<br/>Vold–Kalman, follows ω(t)"]
+    T -->|"b"| G["Consensus gate<br/>r vs. lock-in sinθ"]
+    G -->|"α ∈ [−1,+1]"| R["Resonance replace-blend"]
+    M -->|"q90"| W["Anti-windup I-clamp"]
+    M -.->|"q90 (roadmap)"| D["D-cutoff adaptation"]
+~~~
+
+- **ondas_metrics (B)** — a 32-bin survival-function histogram of |error| per axis
+  (λ_e(s), log-spaced, exponential leak τ ≈ 1 s) providing q90, the weak-L² tail norm and the
+  tail mass; plus a 16-bin **Poincaré phase envelope** sampled at stroke reversals with a
+  golden-angle rotation — the synchronous residual, logged to Blackbox.
+- **ondas_tracker (A)** — a Vold–Kalman order tracker: a 2nd-order resonator (ζ = 0.06,
+  Q ≈ 8.3) whose coefficients follow the instantaneous wingbeat frequency per sample, so it
+  keeps extracting the flap-synchronous error component under throttle sweeps where fixed
+  filters detune. Feed is pre-resonance (open loop — it never sees its own contribution).
+- **Consensus gate** — the tracker may take over the resonance boost only when it and the
+  independent lock-in reference agree: correlation r = EMA(b·sinθ)/√(EMA(sin²θ)·EMA(b²)) with
+  a soft-knee over r = 0.3, slow in / fast out. At α = 0 the legacy resonance path is restored
+  **exactly**.
+- **Substrate** — the flapping amplitude uses a Marcinkiewicz-consistent geometric soft-knee
+  (no authority kink), and the I-branch is anti-windup censored at κ·q90 so BALANCE and
+  SAUDADE never absorb gust spikes as learned trim.
+
+Full mathematics, simulated testing and build verification: see the development article below.
+
+---
+
 ## Analogy
 
 **Cadence is the conductor. Ferocity P and D are the instruments.**
@@ -88,6 +124,7 @@ Without a conductor, they play — but not together. With one, noise becomes mus
 
 ## See Also
 
+- [ONDAS Development — Mathematical Methods and Simulated Testing](ondas_development.html) — the envelope/tracker generation
 - [ONDAS Tuning Guide](../../tutorials/ondas_tuning.html) — practical tuning procedure
 - [MSP Protocol](msp.html) — wire format for ONDAS parameters
 - [Flight Profiles](profiles.html) — profile-aware ONDAS configuration

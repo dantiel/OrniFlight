@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html dir='ltr' lang='en'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<title>ONDAS Development — Mathematical Methods and Simulated Testing — OrniFlight</title>
+<link href='https://fonts.googleapis.com' rel='preconnect'>
+<link crossorigin='true' href='https://fonts.gstatic.com' rel='preconnect'>
+<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;display=swap' rel='stylesheet'>
+<link href='../../assets/css/style.css' rel='stylesheet'>
+</head>
+<body class='subpage'>
+<div class='hero-bg'></div>
+<nav>
+<a class='home-link' href='../../' title='OrniFlight'>
+<img alt='OrniFlight' class='nav-logo' src='../../assets/images/cf_logo_bird_black.svg'>
+</a>
+<a href='../../#manifest'>Manifest</a>
+<a href='../../en/wiki/'>Wiki</a>
+<a href='../../en/docs/'>Documentation</a>
+<a href='../../en/wiki/servo_efficiency.html'>Servos</a>
+<a href='../../en/tutorials/'>Tutorials</a>
+</nav>
+<div class='subpage-hero'>
+<picture class='subpage-bird'>
+<source media='(prefers-color-scheme: light)' srcset='../../assets/images/cf_logo_white.svg'>
+<img alt='' src='../../assets/images/cf_logo_black.svg'>
+</picture>
+<p class='subpage-label'>Wiki</p>
+<h1>ONDAS Development — Mathematical Methods and Simulated Testing</h1>
+</div>
+<main class='content-page'>
+<article>
+<h1 id="ondas-development--mathematical-methods-and-simulated-testing">ONDAS Development — Mathematical Methods and Simulated Testing</h1>
+
+<p>This article documents the statistical and adaptive generation of the ONDAS stabilizer: the
+<strong>envelope modules</strong> (B) that measure how much of the attitude error is real signal, the
+<strong>Vold–Kalman order tracker</strong> (A) that extracts the flap-synchronous component under variable
+frequency sweeps, the <strong>consensus gate</strong> that lets A take over only when both independent
+extractors agree, the <strong>rearrangement-invariant scheduling</strong> underneath the whole chain, and the
+<strong>ferocity phase-lock model</strong> that re-frames ferocity as a local clock shift taking over the wind.
+Every method was prototyped in the Ruby simulation harness (<code>sim_ferocity.rb</code>) before the
+firmware port; the simulated-testing section reproduces the discriminating numbers.</p>
+
+<hr />
+
+<h2 id="the-problem-a-stabilizer-that-cannot-see-its-own-error">1. The Problem: A Stabilizer That Cannot See Its Own Error</h2>
+
+<p>An ornithopter’s attitude error is a mixture of two components:</p>
+
+<ol>
+  <li><strong>Flap-synchronous oscillation</strong> — the component the wings can actually correct. It lives
+exactly at the wingbeat frequency ω(t) and its harmonics.</li>
+  <li><strong>Broadband disturbance</strong> — gusts, turbulence, sensor noise, servo chatter. It carries most
+of the RMS energy but is largely uncorrectable phase-bound actuation.</li>
+</ol>
+
+<p>The classical PID loop cannot tell them apart. Correcting broadband noise at the wingbeat phase
+<em>dissipates</em> control authority and excites the airframe. Correcting the synchronous component
+<em>late</em> (wrong stroke phase) is equally wasteful. The development goal was therefore:</p>
+
+<blockquote>
+  <p>Measure the two components <strong>separately, online, on the flight controller</strong>, and schedule
+every ONDAS layer from that measurement — instead of from fixed gains.</p>
+</blockquote>
+
+<hr />
+
+<h2 id="architecture-the-chain-b--a--ondas">2. Architecture: The Chain B → A → ONDAS</h2>
+
+<pre><code class="language-mermaid">flowchart TD
+    subgraph ERR["Attitude error (per axis)"]
+        e["e = setpoint − measured"]
+    end
+    subgraph B["B — Statistical Envelope (ondas_metrics)"]
+        B1["λ_e(s) histogram&lt;br/&gt;32 log-bins, τ≈1 s leak"]
+        B2["q90 · weak-L² · tail mass"]
+        B3["Poincaré phase envelope&lt;br/&gt;16 golden-angle bins @ reversal"]
+    end
+    subgraph GATE["Consensus Gate"]
+        G1["r = EMA(b·sinθ)/√(EMA(sin²θ)·EMA(b²))"]
+        G2["α = soft-knee(r), floor 0.3&lt;br/&gt;τ_in 1 s, τ_out 0.4 s"]
+    end
+    subgraph A["A — Vold–Kalman Order Tracker (ondas_tracker)"]
+        A1["2nd-order resonator, ζ=0.06, Q≈8.3"]
+        A2["coefficients follow ω(t) per sample"]
+    end
+    subgraph LAYERS["ONDAS 8 Layers (oscillator domain)"]
+        L1["CADENCE · FEROCITY · BALANCE · WARP"]
+        L2["RESONANCE · PRESCIENCE · ESPELHO · SAUDADE · ANCHOR"]
+    end
+    e --&gt; B1 --&gt; B2
+    e --&gt; B3
+    e --&gt; A1 --&gt; A2 --&gt;|"b (tracker output)"| G1
+    A1 -.-&gt;|"sinθ (lock-in ref)"| G1
+    G1 --&gt; G2 --&gt;|"α ∈ [−1, +1]"| L1
+    A2 --&gt;|"replace-blend:&lt;br/&gt;legacy·(1−|α|) + 0.5·b·α"| L2
+    B2 -.-&gt;|"windup q90 clamp"| L1
+    B2 -.-&gt;|"D-cutoff adaptation (roadmap)"| L2
+</code></pre>
+
+<p><strong>Design principle — open loop.</strong> The tracker consumes the <em>pre-resonance</em> error: it never sees
+its own contribution, so the gate cannot fall into a self-confirming loop. The phase envelope
+(B3) is deliberately <strong>not</strong> part of the activation path — it stays a pure measurement, the
+blackbox evidence that will verify the tracker in real flight.</p>
+
+<p><strong>Fail-safe invariance.</strong> At α = 0 the replace-blend reduces to the legacy resonance path
+exactly. No validated ONDAS layer is touched by the new chain until both extractors agree.</p>
+
+<hr />
+
+<h2 id="method-a-voldkalman-order-tracking--reorganizing-the-transient-clock">3. Method A: Vold–Kalman Order Tracking — Reorganizing the Transient Clock</h2>
+
+<p>Classical bandpass filters are tuned to a <em>fixed</em> center frequency. Under a throttle chirp the
+wingbeat frequency moves, and a fixed filter detunes: the extracted amplitude collapses and the
+phase rotates. The Vold–Kalman order tracker solves this by making the filter coefficients
+<em>follow</em> the instantaneous frequency:</p>
+
+<pre><code class="language-text">Resonator (order 1, analog prototype):
+    b'' + 2·ζ·ω(t)·b' + ω(t)²·b = 2·ζ·ω(t)·e'
+
+Discretization (per sample, explicit Euler, DT = loop period):
+    b[n+1] = b[n] + DT · v[n]
+    v[n+1] = v[n] + DT · ( 2·ζ·ω(t)·(e[n] − e[n−1]) − 2·ζ·ω(t)·v[n] − ω(t)²·b[n] )
+
+with ζ = 0.06  →  Q = 1/(2ζ) ≈ 8.3
+</code></pre>
+
+<p>ω(t) is the <strong>measured</strong> wingbeat rate (flap phase derivative) — the tracker’s clock is the
+wing’s own clock, not the lab clock. Below ω &lt; 0.1 rad/s the states are zeroed: an Euler
+resonator on stale coefficients drifts linearly during glide, a failure mode the simulation
+never saw because it never glided. The firmware port found it; the fix is a hard state reset.</p>
+
+<p>The lock-in reference <code>sinθ</code> (flap phase) forms the second, <em>independent</em> extractor: the
+wingbeat-coherent component of the error is exactly the projection of the tracker output onto
+the flap sine. Two extractors, one measurement, zero shared code path.</p>
+
+<hr />
+
+<h2 id="method-b-the-es-envelope--rearrangement-invariant-statistics">4. Method B: The λ_e(s) Envelope — Rearrangement-Invariant Statistics</h2>
+
+<p>Following the rearrangement-invariant viewpoint (Tao, 247A): oscillatory structure is ignored;
+the distribution of |e| <em>is</em> the signal. Two views of one 32-bin module:</p>
+
+<h3 id="raw-view--es-weak-l-q90">4.1 Raw view — λ_e(s), weak-L², q90</h3>
+
+<pre><code class="language-text">λ_e(s) = P( |e| &gt; s )          (survival function, 3 axes)
+bins:   32 log-spaced over [0.25, 256] °/s
+leak:   exponential, τ ≈ 1 s (shift derived from dT via float-bit ilog2)
+
+weak-L² = sup_s  s · √λ(s)     (scale-invariant tail norm)
+q90     = interpolated 90th percentile
+</code></pre>
+
+<p>The weak-L² norm is the correct tool for a controller: ordinary RMS is dominated by rare large
+events (gusts), but the <em>control</em> decision needs the typical scale. q90 feeds two existing
+consumers: the weak-L¹ anti-windup clamp (Section 6) and, later, D-cutoff adaptation.</p>
+
+<h3 id="phase-view--the-poincar-envelope">4.2 Phase view — the Poincaré envelope</h3>
+
+<pre><code class="language-text">16 bins, one per stroke reversal
+bin index k → k·0.618·16 mod 16   (golden-angle rotation)
+EMA 1/16 per strobe
+metric = ‖⟨e⟩_θ‖₂,∞ = sup over bins of |phase-averaged error|
+</code></pre>
+
+<p>The phase view demodulates the error against the flap phase and averages per bin. What survives
+the averaging is the <strong>synchronous residual</strong> — exactly the quantity the tracker must reduce.</p>
+
+<hr />
+
+<h2 id="serendipity-by-construction-the-golden-angle-strobe">5. Serendipity by Construction: The Golden-Angle Strobe</h2>
+
+<p>The first naive implementation sampled every loop tick into a phase histogram — and exposed a
+genuine number-theoretic trap:</p>
+
+<pre><code class="language-text">ω = 4.8 rad/s, DT = 1 ms  →  2π/(ω·DT) = 1308.997 samples per cycle
+</code></pre>
+
+<p>Lab clock and flap clock are <strong>almost commensurable</strong>. The sampling grid repeats nearly
+identically from cycle to cycle, so the histogram converges only with the <em>beat period</em>
+(≈ 90 s). At firmware rates the trap is worse: 4 kHz loop, 6 Hz flap = 666.67 samples/cycle —
+a per-sample histogram would <em>never</em> converge on some phase bins.</p>
+
+<p>The fix is the phyllotactic constellation: <strong>one sample per stroke reversal</strong>, bin index
+rotated by the golden angle {k·0.618}. Deterministic uniform coverage, minimal sample count,
+immune to any clock ratio — because the coverage law depends only on the irrationality of the
+rotation, not on the clocks.</p>
+
+<pre><code class="language-mermaid">flowchart LR
+    R["Stroke reversal"] --&gt; S["Strobe sample"]
+    S --&gt; B["bin k = round(k·0.618·16) mod 16"]
+    B --&gt; E["EMA 1/16 per bin"]
+    E --&gt; M["‖⟨e⟩_θ‖₂,∞"]
+    R --&gt; N["k += 1"]
+    N --&gt; R
+</code></pre>
+
+<hr />
+
+<h2 id="scheduling-marcinkiewicz-soft-knee-and-weak-l-anti-windup">6. Scheduling: Marcinkiewicz Soft-Knee and Weak-L¹ Anti-Windup</h2>
+
+<p>The substrate beneath all ONDAS layers:</p>
+
+<p><strong>Soft-knee amplitude scheduling</strong> — the flapping amplitude A is shaped by the geometric
+soft-knee</p>
+
+<pre><code class="language-text">A = (A_lin · L) / √(A_lin² + L²)
+</code></pre>
+
+<p>which is the canonical interpolation between linear authority (small signal: A ≈ A_lin, the
+<code>flap_magnitude</code> sensitivity is preserved exactly) and saturation (large signal: A → L). The
+former hard clamp produced a kink in dA/dThrottle — every ONDAS layer inherited a discontinuity
+of its effectiveness there.</p>
+
+<p><strong>Weak-L¹ anti-windup</strong> — the I-branch feeds BALANCE (up/down asymmetry), and SAUDADE would
+permanently absorb any windup-induced bias as learned trim. The fix: the per-sample I-increment
+is censored at κ·q90 of |itermErrorRate| (κ = 2, floor 10 °/s), where q90 tracks with
+asymmetric leak (up 50 ms, down 450 ms → equilibrium percentile 0.9). Bulk errors integrate
+unchanged; tail spikes are rejected.</p>
+
+<hr />
+
+<h2 id="the-consensus-gate--when-may-a-take-over">7. The Consensus Gate — When May A Take Over?</h2>
+
+<p>The gate asks: do the tracker output <code>b</code> and the lock-in reference <code>sinθ</code> tell the same story?</p>
+
+<pre><code class="language-text">r = EMA(b·sinθ) / √( EMA(sin²θ) · EMA(b²) )
+α = soft-knee over floor:  r &lt; 0.3 → 0,  r &gt; 0.9 → ±1
+    (slow in: τ = 1 s — evidence must accumulate;
+     fast out: τ = 0.4 s — consensus loss must retreat quickly)
+</code></pre>
+
+<p>In-phase oscillation yields α → +1, anti-phase α → −1 (the sign is <em>learned</em>, not assumed),
+quadrature and pure noise yield α = 0. The resonance boost is then replace-blended:</p>
+
+<pre><code class="language-text">boost = legacy · (1 − |α|) + 0.5 · b · α
+</code></pre>
+
+<p>(the 0.5 keeps the blend gain-neutral: the lock-in extracts only half the amplitude of a
+full-wave rectified projection).</p>
+
+<hr />
+
+<h2 id="simulated-testing--what-the-numbers-say">8. Simulated Testing — What the Numbers Say</h2>
+
+<p>Harness: <code>ruby sim_ferocity.rb harmonize ...</code> — wing ODE, trapezoidal wave shaper, PID,
+throttle chirp driving ω from 2.4 to 7.2 rad/s; 3 s warmup for filter settling.</p>
+
+<h3 id="order-tracker-vs-fixed-bandpass-triangle-throttle-chirp">8.1 Order tracker vs. fixed bandpass (triangle throttle chirp)</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>Metric</th>
+      <th>Vold–Kalman</th>
+      <th>Fixed bandpass</th>
+      <th>Ratio</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Amplitude fidelity (extracted vs. proxy)</td>
+      <td>—</td>
+      <td>—</td>
+      <td><strong>2.5×</strong> under chirp</td>
+    </tr>
+    <tr>
+      <td>Phase correlation ρ (vs. shaped wing proxy)</td>
+      <td><strong>−0.504</strong></td>
+      <td>0.001</td>
+      <td>coherence kept vs. lost</td>
+    </tr>
+    <tr>
+      <td>Residual RMS</td>
+      <td>4.30°</td>
+      <td>4.27°</td>
+      <td>1.006 (breitband-dominated)</td>
+    </tr>
+    <tr>
+      <td>Const-ω sanity</td>
+      <td>—</td>
+      <td>—</td>
+      <td><strong>1.000</strong> (exact baseline)</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>The tracker wins where it matters: it <em>keeps</em> the flap component under frequency sweep (ρ
+intact) while the fixed filter loses it completely. The residual is marginally worse — the
+the extractor injects filter ringing into the broadband, which is the honest cost of extraction.</p>
+
+<h3 id="the-es-finding-raw-fails-phase-demodulated-discriminates">8.2 The λ_e(s) finding: raw fails, phase-demodulated discriminates</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>Metric</th>
+      <th>Chirp</th>
+      <th>Const ω</th>
+      <th>Ratio</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>weak-L² of raw residual, VK/fixed</td>
+      <td>1.000</td>
+      <td>1.000</td>
+      <td><strong>blind</strong></td>
+    </tr>
+    <tr>
+      <td>‖⟨e⟩_θ‖₂,∞ envelope, VK</td>
+      <td>3.260°</td>
+      <td>3.166°</td>
+      <td>—</td>
+    </tr>
+    <tr>
+      <td>‖⟨e⟩_θ‖₂,∞ envelope, fixed</td>
+      <td>3.219°</td>
+      <td>3.166°</td>
+      <td><strong>1.013</strong></td>
+    </tr>
+  </tbody>
+</table>
+
+<p>The raw residual is broadband-dominated — tail events hit both filters identically, so raw
+λ_e(s) cannot judge the tracker (this falsified the naive design of B). The phase-demodulated
+envelope sees exactly what ρ sees, on the error level, with direction physically consistent:
+the tracker extracts 2.4× more amplitude but anti-phased (ρ = −0.5), so it slightly <em>raises</em>
+the synchronous residual until the gate learns the sign. Const-ω sanity: 1.000 exactly.</p>
+
+<h3 id="consensus-gate-validation-exact-c-math-port-2-khz-10-s">8.3 Consensus gate validation (exact C-math port, 2 kHz, 10 s)</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>Scenario</th>
+      <th>α</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>In-phase</td>
+      <td><strong>+0.97</strong></td>
+    </tr>
+    <tr>
+      <td>Anti-phase</td>
+      <td><strong>−0.97</strong> (sign learned)</td>
+    </tr>
+    <tr>
+      <td>Quadrature</td>
+      <td>0.000</td>
+    </tr>
+    <tr>
+      <td>Pure noise</td>
+      <td>0.000</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="commensurability-discovery">8.4 Commensurability discovery</h3>
+
+<p>At ω = 4.8 rad/s, DT = 1 ms: 2π/(ω·DT) = 1308.997 — the near-integer that motivated the
+golden-angle strobe (Section 5). Per-sample phase histograms are beat-limited to ~90 s
+convergence; the phyllotactic strobe is deterministic from the first reversal.</p>
+
+<hr />
+
+<h2 id="ferocity-as-a-clock-shift--the-phase-lock-model">9. Ferocity as a Clock Shift — The Phase-Lock Model</h2>
+
+<p>The chain above schedules <em>how much</em> of the flap-synchronous component to trust. But the
+commensurability finding (8.4) exposed a deeper question: what <em>is</em> ferocity, physically? The
+working thesis — stated before any flight test — is that ferocity is not a force law but a
+<strong>local clock shift</strong> (Taktverschiebung). The dwell parks the wing at stroke reversal, which is a
+phase-resetting event. The reversal grid itself moves at the free flap rate ω, so the dwell’s
+parking well does not live in the lab frame but in the <strong>rotating error frame</strong> δ = θ − ωt.</p>
+
+<pre><code class="language-mermaid">flowchart TD
+    W["wind η(t)&lt;br/&gt;chaotic detuning"] --&gt; D["phase error δ = θ − ωt"]
+    WELL["dwell well −2κ·d·sin(2δ)"] --&gt; D
+    D --&gt; S["stable clock → Poincaré + golden-angle samplers"]
+    subgraph eq["dδ/dt = η − 2κ·d·sin(2δ)"]
+        D
+        WELL
+    end
+</code></pre>
+
+<p>The governing equation, in the rotating frame:</p>
+
+<pre><code class="language-text">dδ/dt = η(t) − 2·κ·d·sin(2δ)
+   δ = phase error (pendulum phase vs free-running reversal grid)
+   η = wind phase noise (chaotic detuning)
+   d = ferocity dwell fraction ∈ [0,1]
+   κ = dwell → coupling strength
+</code></pre>
+
+<p><code>sin(2δ)</code> has period π — the two reversals per cycle. At d = 0 the equation is a free random
+walk: the wind <em>owns</em> the clock and δ drifts without bound. At d &gt; 0 the dwell well confines δ
+near a reversal: ferocity <em>owns</em> the clock.</p>
+
+<h3 id="the-correctness-trap-sin2-not-sin2">9.1 The correctness trap: sin(2δ), not sin(2θ)</h3>
+
+<p>A first implementation coupled <code>sin(2θ)</code> in the <strong>lab frame</strong> — and the result inverted the
+thesis (dwell made jitter 16× worse). This is not a bug but the physics speaking: a lab-frame
+well pins the phase to a <em>fixed</em> angle and locks the pendulum, instead of re-anchoring it at the
+reversal. The well must be <code>sin(2δ)</code> in the error frame — the shift is <em>relative to the moving
+reversal</em>, exactly the “phase translation of the pendulum system”.</p>
+
+<h3 id="dwell-takes-over-the-wind">9.2 Dwell takes over the wind</h3>
+
+<p>Harness: <code>ruby sim_ferocity.rb phaselock</code> — pendulum phase ω = 4.8 rad/s, κ = 8.0, wind
+σ = 0.6 rad/s, 20 s, seeded.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Dwell d</th>
+      <th>Phase std δ (rad)</th>
+      <th>Max |δ| (rad)</th>
+      <th>Wind → lock gain</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>0.00 (cos)</td>
+      <td>0.1142</td>
+      <td>0.2228</td>
+      <td>— (unbounded)</td>
+    </tr>
+    <tr>
+      <td>0.05</td>
+      <td>0.0105</td>
+      <td>0.0363</td>
+      <td><strong>10.8×</strong></td>
+    </tr>
+    <tr>
+      <td>0.15</td>
+      <td>0.0060</td>
+      <td>0.0216</td>
+      <td>19.0×</td>
+    </tr>
+    <tr>
+      <td>0.30</td>
+      <td>0.0043</td>
+      <td>0.0157</td>
+      <td>26.5×</td>
+    </tr>
+    <tr>
+      <td>0.50</td>
+      <td>0.0033</td>
+      <td>0.0129</td>
+      <td>34.2×</td>
+    </tr>
+    <tr>
+      <td>0.80</td>
+      <td>0.0026</td>
+      <td>0.0101</td>
+      <td><strong>43.3×</strong></td>
+    </tr>
+  </tbody>
+</table>
+
+<p>The decisive test for “taking over”: over increasing horizons, d = 0 lets δ grow without bound
+(0.011 → 0.114 → 0.314 rad over 5/20/80 s) while d = 0.3 <strong>saturates</strong> (0.0037 → 0.0043 →
+0.0044 rad). The wind owns an unlocked clock; ferocity owns a locked one.</p>
+
+<h3 id="the-clock-shift-itself-limiar-translation">9.3 The clock shift itself (limiar translation)</h3>
+
+<p>Ferocity asymmetry translates the reversal point <code>limiar</code> away from 180°:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>f_down</th>
+      <th>f_up</th>
+      <th>limiar (°)</th>
+      <th>Reversal shift</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>0</td>
+      <td>0</td>
+      <td>180.0</td>
+      <td>0°</td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td>0</td>
+      <td>120.0</td>
+      <td>−60°</td>
+    </tr>
+    <tr>
+      <td>8</td>
+      <td>0</td>
+      <td>0.4</td>
+      <td><strong>−179.6°</strong></td>
+    </tr>
+    <tr>
+      <td>0</td>
+      <td>8</td>
+      <td>359.6</td>
+      <td><strong>+179.6°</strong></td>
+    </tr>
+  </tbody>
+</table>
+
+<p>The local, phase-translational nature: a full asymmetry swing moves the reversal point up to
+±179.6° — a clock shift, not a gain change. And its dwell well is what re-anchors the pendulum
+phase against the wind’s detuning.</p>
+
+<h3 id="the-link-to-commensurability">9.4 The link to commensurability</h3>
+
+<p>Wind detunes the flap clock (η), the lab/flap ratio drifts, and per-sample phase coverage
+collapses — the “never-converging samples” of 8.4. The dwell re-anchors δ near the reversal grid
+and restores a stable clock for the Poincaré and golden-angle samplers. Commensurability is thus
+not only a <em>sampling</em> problem (solved by phyllotaxis) but also a <em>clock</em> problem — and ferocity
+is its physical solution.</p>
+
+<hr />
+
+<h2 id="firmware-verification-status">10. Firmware Verification Status</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Component</th>
+      <th>File</th>
+      <th>Status</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>B: λ_e(s) + phase envelope</td>
+      <td><code>src/main/flight/ondas_metrics.c</code></td>
+      <td>✅ in loop, debug <code>ONDAS_METRICS</code> slots 0–3</td>
+    </tr>
+    <tr>
+      <td>A: Vold–Kalman tracker</td>
+      <td><code>src/main/flight/ondas_tracker.c</code></td>
+      <td>✅ in loop, pre-resonance feed</td>
+    </tr>
+    <tr>
+      <td>Consensus gate</td>
+      <td><code>ondas_metrics.c</code></td>
+      <td>✅ validated in Ruby before port</td>
+    </tr>
+    <tr>
+      <td>Resonance replace-blend</td>
+      <td><code>src/main/flight/pid.c</code></td>
+      <td>✅ α = 0 → legacy exactly</td>
+    </tr>
+    <tr>
+      <td>Soft-knee amplitude</td>
+      <td><code>pid.c</code> (getFlappingAmplitude)</td>
+      <td>✅ both coupling modes</td>
+    </tr>
+    <tr>
+      <td>Weak-L¹ I-clamp</td>
+      <td><code>pid.c</code> (I-branch)</td>
+      <td>✅ q90-censored increments</td>
+    </tr>
+    <tr>
+      <td>Debug logging</td>
+      <td><code>src/main/build/debug.h</code></td>
+      <td>✅ slots 0–5 (envelope, q90, coverage, b, α)</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>Build (TINYFISH): <strong>FLASH 88.77 %, RAM 67.10 %</strong> — clean, HEX produced.</p>
+
+<hr />
+
+<h2 id="roadmap">11. Roadmap</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Step</th>
+      <th>Feeds From</th>
+      <th>Status</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>D-cutoff adaptation</td>
+      <td>B raw view q90 — shrink D pass-through when the error drowns in noise</td>
+      <td>⏳ next</td>
+    </tr>
+    <tr>
+      <td>Flight regression of A against B3</td>
+      <td>phase envelope as blackbox evidence</td>
+      <td>⏳ flight test</td>
+    </tr>
+    <tr>
+      <td>Full-phase gate (quadrature)</td>
+      <td>envelope-vs-tracker coherence</td>
+      <td>⏳ after regression</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h2 id="see-also">See Also</h2>
+
+<ul>
+  <li><a href="ondas.html">ONDAS</a> — the stabilization system this chain schedules</li>
+  <li><a href="../../tutorials/ondas_tuning.html">ONDAS Tuning Guide</a> — practical tuning procedure</li>
+  <li><a href="msp.html">MSP Protocol</a> — wire format for ONDAS parameters</li>
+</ul>
+
+</article>
+</main>
+<footer>
+<p>
+<a href='https://github.com/dantiel/OrniFlight'>GitHub</a>
+◇
+<a href='../../en/wiki/'>Wiki</a>
+◇
+<a href='../../en/tutorials/'>Tutorials</a>
+</p>
+<p class='lang-footer'>
+<strong>English</strong>
+&nbsp;◇&nbsp;
+<a href='../../de/'>Deutsch</a>
+&nbsp;◇&nbsp;
+<a href='../../ca/'>Català</a>
+&nbsp;◇&nbsp;
+<a href='../../es/'>Español</a>
+&nbsp;◇&nbsp;
+<a href='../../fr/'>Français</a>
+&nbsp;◇&nbsp;
+<a href='../../gl/'>Galego</a>
+&nbsp;◇&nbsp;
+<a href='../../hr/'>Hrvatski</a>
+&nbsp;◇&nbsp;
+<a href='../../id/'>Bahasa Indonesia</a>
+&nbsp;◇&nbsp;
+<a href='../../it/'>Italiano</a>
+&nbsp;◇&nbsp;
+<a href='../../ja/'>日本語</a>
+&nbsp;◇&nbsp;
+<a href='../../ko/'>한국어</a>
+&nbsp;◇&nbsp;
+<a href='../../lv/'>Latviešu</a>
+&nbsp;◇&nbsp;
+<a href='../../pt/'>Português</a>
+&nbsp;◇&nbsp;
+<a href='../../ru/'>Русский</a>
+&nbsp;◇&nbsp;
+<a href='../../sv/'>Svenska</a>
+&nbsp;◇&nbsp;
+<a href='../../zh_CN/'>中文</a>
+</p>
+<p>Hermetic Firmware ◇ STM32F4 ◇ GPL v3</p>
+<p class='credit'>OrniFlight — Flapping-wing flight, redefined.</p>
+</footer>
+<button aria-label='Scroll to top' class='scroll-top' onclick='window.scrollTo({top:0,behavior:&#39;smooth&#39;})'></button>
+<script>
+  const btn = document.querySelector('.scroll-top');
+  addEventListener('scroll', () => btn.classList.toggle('visible', scrollY > window.innerHeight * 0.6));
+  // Mermaid diagrams: lazy-load only when a diagram block exists.
+  const mm = document.querySelectorAll('pre > code.language-mermaid');
+  if (mm.length) {
+    const s = document.createElement('script');
+    s.src = 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js';
+    s.onload = () => {
+      mermaid.initialize({ startOnLoad: false, theme: 'neutral', securityLevel: 'loose', fontFamily: 'Outfit' });
+      mm.forEach((el) => {
+        const host = document.createElement('div');
+        host.className = 'mermaid';
+        host.textContent = el.textContent;
+        el.closest('pre').replaceWith(host);
+      });
+      mermaid.run();
+    };
+    document.head.appendChild(s);
+  }
+</script>
+</body>
+</html>
