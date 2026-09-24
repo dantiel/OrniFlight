@@ -386,7 +386,17 @@ And the three faces resolve into one payment. The constant clock of 9.2, which t
 is what the spending *defends*; the momentary extra force is what the spending *delivers*; the clear
 trajectory is what the spending *buys*. You do not choose among them — you pay once and receive all
 three, the way a wrist commits harder the instant before the gust without ever losing the count.
-What is tunable is time; what the air feels is force; what the body pays is ferocity.
+What is tunable is time; what the air feels is force; what the body pays for is its freedom.
+
+The last turn sets the whole reading right. The truly well-defined ferocity — the dwell, the
+trapezoid, the exact wave whose heart is naturally wild — is not, at bottom, the spending. It is the
+*spent-for*: the eternal posture, the fixpoint centre of the universe. The dwell well of 9.2 is that
+fixpoint literally — a stable fixed point in the rotating frame, a stance the wind cannot dissolve.
+To hold that stance while the fluidum of detunings flows around it is freedom; and freedom is what we
+have to pay for. The torque, the power — those are the price of that freedom. And the establishment —
+the being-held in a fluidum of stances, unowned — is the value of freedom, the value that makes any
+price worth paying. The receipt stays on the table. What it bought was never a thing; it was a place
+to stand.
 
 ---
 
