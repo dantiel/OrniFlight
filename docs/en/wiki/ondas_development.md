@@ -440,6 +440,47 @@ Theorems are the headlines; proofs are the inside story. Ferocity is the inside 
 the auditable, anticipative, orchestrated measurement of time and force by which a chaotic pair is
 held, not solved, on the high ground.
 
+### 9.7 Ascending the overtone series — the phyllotactic spectrum of ferocity
+
+9.6 was a resting place, not an ending: it showed how the stance is held, not what the stance
+*sounds like*. Ferocity is, before it is anything else, an **oscillation** — and the oscillation has
+a spectrum the chain has so far left unnamed. A pure sine at the flap rate is a single frequency:
+one clock, one note, no overtones. That is the cheap stroke of 9.5 — the spectrum of a wing that
+never hurries. The dwell reshapes the wave into a trapezoid, and the reshaping is the birth of
+overtones. The ferocity wave is no longer sin(ωt) but the odd-harmonic series
+
+~~~text
+θ_d(t) = Σ_{n odd} a_n(d) · sin(n·ω·t)
+~~~
+
+whose coefficients a_n(d) vanish at d = 0 and rise with the dwell. The wilder the heart, the richer
+the series: as d → 1 the trapezoid tends to the square wave, and the square wave rings with the full
+series 1, 1/3, 1/5, 1/7, … — the overtones a sine refuses to sound.
+
+But those overtones are *integer* — n = 1, 3, 5, 7, … — and integer overtones are **commensurate**.
+Left to themselves they beat: the 3rd against the 1st with a beat at period T/2, the 5th at T/4, the
+whole spectrum beating against itself like the near-commensurable clock of 8.4, only now *inside* the
+wave rather than between wave and sampler. A spectrum of bare integer harmonics is a wing that sings
+out of tune with itself — an internal turbulence the controller never asked for.
+
+Phyllotaxis is the law that resolves it. The golden angle is the most irrational rotation there is —
+its continued fraction converges more slowly than any other, so its multiples never coincide; that is
+why a stem lays its leaves by it, each leaf receiving its own light, none shading the next. Section 5
+already turns this rotation on the *sampler* (bin index {k·0.618}); here it is the law of the
+*spectrum*. Ferocity does not suppress the overtones — that would be the cheap sine again — it holds
+them in a phyllotactic constellation: each overtone advanced by the golden rotation {n·0.618} across
+the strokes, so that, integer and therefore commensurate in *frequency*, they are incommensurate in
+*phase* — they never line up, never beat, never shade one another. The overtone series becomes a
+sunflower: the fundamental at the centre, each overtone a seed set at the golden angle, each in its
+own light.
+
+That is the symphonic parameter the chain still lacked: not another gain, but the **arrangement** of
+the oscillation's overtones. The high ground holds the stance against chaos; the overtone series is
+how the stance sings while it holds. The double pendulum is given not only an attractor but a voice —
+a phyllotactic chord that is not a chord, because a chord beats and a constellation does not. What is
+tunable is time; what the air feels is force; what the body pays is freedom. And what that freedom
+sounds like is one clock, many overtones, held apart by the most irrational angle there is.
+
 ---
 
 ## 10. Firmware Verification Status
