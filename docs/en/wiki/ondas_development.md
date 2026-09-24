@@ -351,37 +351,42 @@ and restores a stable clock for the Poincaré and golden-angle samplers. Commens
 not only a *sampling* problem (solved by phyllotaxis) but also a *clock* problem — and ferocity
 is its physical solution.
 
-### 9.5 The name is the method — anticipation
+### 9.5 The name is the method — the price of ferocity
 
-The force face and the timing face are not two things to be reconciled; they are one thing, and its
-name is *anticipation*. Ferocity is the natural impulse to keep the clock constant while committing
-more force for a moment — to lean into the beat without hurrying it. The pendulum does not flap
-faster; the reversal grid keeps its rate. The trajectory stays the same clear arc — the same path
-through the air, the same stroke — only the weight of the moment changes. That is the whole of it:
-a constant clock, a momentary extra force, and a trajectory that remains clear. For emphasis, for
-stabilization, for whatever the moment demands.
+The force face and the timing face are not two things to be reconciled; they are two things that are
+*bought*. Anticipation is how the buying feels from inside — the constant clock, the momentary extra
+force, the trajectory that stays clear. But anticipation is itself only another timing-tendency: it
+names the posture, not the price. And ferocity, unlike anticipation, has a price.
 
-This is what the dwell physically is: not a pause, but a gather. The wing draws back the same
-stroke and, in the fraction of the beat that remains, delivers it whole. Because the air is a
-quadratic medium (F ∝ v², dynamic pressure ½ρv²), the same clear trajectory, delivered without
-softening, meets the air faster at the same arc — the commitment registers as momentary force. For
-the dwell/cos-ramp waveform of amplitude A and dwell fraction d (exact numeric integration,
-normalized to the sine baseline):
+The pure sine is the cheapest stroke there is. For a given arc and a given beat it is the motion that
+never has to hurry: its velocity and acceleration stay as low as the arc permits, so the wing spends
+as little as physics allows. Ferocity is the refusal of that cheapness. It takes the same arc, the
+same beat, the same clear trajectory — and *buys* the moment by spending the arc faster, in the
+fraction (1−d) of the stroke that remains. The air is a quadratic medium (F ∝ v², dynamic pressure
+½ρv²), so the force delivered rises with the square of that spending; the servo, in turn, pays with
+its own torque and power (exact numeric integration, normalized to the sine baseline):
 
-| Dwell d | Peak impact force ∝ 1/(1−d)² | Cycle thrust ∝ 1/(1−d) |
-|---|---|---|
-| 0.00 (sine) | 1.00× | 1.00× |
-| 0.05 | 1.11× | 1.05× |
-| 0.30 | 2.04× | 1.43× |
-| 0.80 | 25.0× | 5.00× |
+| Dwell d | Peak impact force ∝ 1/(1−d)² | Cycle thrust ∝ 1/(1−d) | Peak torque ∝ 1/(1−d)² | Peak power ∝ 1/(1−d)³ |
+|---|---|---|---|---|
+| 0.00 (sine) | 1.00× | 1.00× | 1.00× | 1.00× |
+| 0.05 | 1.11× | 1.05× | 1.11× | 1.16× |
+| 0.30 | 2.04× | 1.43× | 2.04× | 2.92× |
+| 0.80 | 25.0× | 5.00× | 25.0× | 125× |
 
-The numbers do not explain the name — they verify it. At d = 0.8 the same wing strikes twenty-five
-times harder and carries five times the thrust, not because it was made stronger but because it
-stopped holding back. And the two faces resolve into one instinct: anticipation is the refusal to
-let the wind soften the stroke — the constant clock of 9.2, which the wind cannot own — *expressed
-as* the momentary extra force the body leans into the beat. You do not choose between them; the body
-decides both at once, the way a wrist commits a little harder the instant before the gust without
-ever losing the count. What is tunable is time; what the air feels is ferocity.
+At d = 0.8 the same wing strikes twenty-five times harder and carries five times the thrust — but
+only because the servo pays twenty-five times the peak torque and one hundred and twenty-five times
+the peak power to drive it. That is the Aufwand — the expenditure — and it is the thing no
+timing-metaphor can reach: not a shift of the clock but a spending of the body. The name ferocity —
+Latin *ferox*, the wild thing — is the name of that willingness to spend. The wild thing is not the
+one that strikes harder; it is the one that does not flinch from the price of striking harder.
+Anticipation is how the spending is felt from within; ferocity is the spending itself. The numbers
+do not explain the name — they are the receipt.
+
+And the three faces resolve into one payment. The constant clock of 9.2, which the wind cannot own,
+is what the spending *defends*; the momentary extra force is what the spending *delivers*; the clear
+trajectory is what the spending *buys*. You do not choose among them — you pay once and receive all
+three, the way a wrist commits harder the instant before the gust without ever losing the count.
+What is tunable is time; what the air feels is force; what the body pays is ferocity.
 
 ---
 
