@@ -38,7 +38,8 @@
 <strong>Vold–Kalman order tracker</strong> (A) that extracts the flap-synchronous component under variable
 frequency sweeps, the <strong>consensus gate</strong> that lets A take over only when both independent
 extractors agree, the <strong>rearrangement-invariant scheduling</strong> underneath the whole chain, and the
-<strong>ferocity phase-lock model</strong> that re-frames ferocity as a local clock shift taking over the wind.
+<strong>ferocity phase-lock model</strong> that re-frames ferocity as a local clock shift which is <em>also</em> a
+force law — two conjugate faces of one knob — taking over the wind.
 Every method was prototyped in the Ruby simulation harness (<code>sim_ferocity.rb</code>) before the
 firmware port; the simulated-testing section reproduces the discriminating numbers.</p>
 
@@ -366,14 +367,18 @@ convergence; the phyllotactic strobe is deterministic from the first reversal.</
 
 <hr />
 
-<h2 id="ferocity-as-a-clock-shift--the-phase-lock-model">9. Ferocity as a Clock Shift — The Phase-Lock Model</h2>
+<h2 id="ferocity-clock-shift-and-force-law--the-phase-lock-model">9. Ferocity: Clock Shift and Force Law — The Phase-Lock Model</h2>
 
 <p>The chain above schedules <em>how much</em> of the flap-synchronous component to trust. But the
 commensurability finding (8.4) exposed a deeper question: what <em>is</em> ferocity, physically? The
-working thesis — stated before any flight test — is that ferocity is not a force law but a
-<strong>local clock shift</strong> (Taktverschiebung). The dwell parks the wing at stroke reversal, which is a
+working thesis — stated before any flight test — is that ferocity is a <strong>local clock shift</strong>
+(Taktverschiebung) <em>and a force law at the same time</em>: not alternatives but conjugate faces of a
+single control surface. The dwell parks the wing at stroke reversal, which is a
 phase-resetting event. The reversal grid itself moves at the free flap rate ω, so the dwell’s
-parking well does not live in the lab frame but in the <strong>rotating error frame</strong> δ = θ − ωt.</p>
+parking well does not live in the lab frame but in the <strong>rotating error frame</strong> δ = θ − ωt.
+Because the wing works against a quadratic medium (dynamic pressure ∝ v²), every redistribution of
+<em>time</em> is automatically a redistribution of <em>force</em> — you dial the clock, and the air pays in
+force (9.5).</p>
 
 <pre><code class="language-mermaid">flowchart TD
     W["wind η(t)&lt;br/&gt;chaotic detuning"] --&gt; D["phase error δ = θ − ωt"]
@@ -506,8 +511,8 @@ reversal</em>, exactly the “phase translation of the pendulum system”.</p>
 </table>
 
 <p>The local, phase-translational nature: a full asymmetry swing moves the reversal point up to
-±179.6° — a clock shift, not a gain change. And its dwell well is what re-anchors the pendulum
-phase against the wind’s detuning.</p>
+±179.6° — a clock shift rather than an amplitude-gain change; its force consequence follows via
+F ∝ v² (9.5). And its dwell well is what re-anchors the pendulum phase against the wind’s detuning.</p>
 
 <h3 id="the-link-to-commensurability">9.4 The link to commensurability</h3>
 
@@ -516,6 +521,58 @@ collapses — the “never-converging samples” of 8.4. The dwell re-anchors δ
 and restores a stable clock for the Poincaré and golden-angle samplers. Commensurability is thus
 not only a <em>sampling</em> problem (solved by phyllotaxis) but also a <em>clock</em> problem — and ferocity
 is its physical solution.</p>
+
+<h3 id="the-conjugate-face-force--the-golf-ball-reading">9.5 The conjugate face: force — the golf-ball reading</h3>
+
+<p>“Not a force law but a clock shift” is a false dichotomy. The same sweep, struck faster, meets more
+resistance: aerodynamic force is quadratic, F ∝ v² (dynamic pressure ½ρv²), so the force the air
+feels is set by the wing’s <em>instantaneous velocity at the strike</em>, not by the arc. A pure sine is
+the “balanced, restrained wave” — its velocity (and thus force) is smooth, centred, and symmetric.
+Ferocity releases that restraint: the dwell forces the same amplitude 2A to be covered in the
+moving fraction (1−d) of the stroke, so the peak velocity — and the peak force — rise as the clock
+is squeezed.</p>
+
+<p>For the dwell/cos-ramp waveform of amplitude A and dwell fraction d (exact numeric integration,
+normalized to the sine baseline):</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Dwell d</th>
+      <th>Peak impact force ∝ 1/(1−d)²</th>
+      <th>Cycle thrust ∝ 1/(1−d)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>0.00 (sine)</td>
+      <td>1.00×</td>
+      <td>1.00×</td>
+    </tr>
+    <tr>
+      <td>0.05</td>
+      <td>1.11×</td>
+      <td>1.05×</td>
+    </tr>
+    <tr>
+      <td>0.30</td>
+      <td>2.04×</td>
+      <td>1.43×</td>
+    </tr>
+    <tr>
+      <td>0.80</td>
+      <td>25.0×</td>
+      <td>5.00×</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>The two faces share the <em>same knob</em> d: the timing face (9.2) re-anchors phase, the force face
+(above) concentrates thrust. And the golf-ball image carries its cost too: hitting faster over the
+same arc is not free — the servo pays in peak torque and power. Ferocity is therefore not “timing
+instead of force”, but a clock shift <em>implemented by</em> a force law, and a force law <em>expressed
+through</em> a clock shift. What is tunable is time; what the air feels is force — one control surface,
+two conjugate readings.</p>
 
 <hr />
 
