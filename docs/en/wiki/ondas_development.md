@@ -398,6 +398,48 @@ the being-held in a fluidum of stances, unowned — is the value of freedom, the
 price worth paying. The receipt stays on the table. What it bought was never a thing; it was a place
 to stand.
 
+### 9.6 The high ground — chaos, turbulence, and the auditable fixpoint
+
+Turbulence is the solution of the Navier–Stokes equation that is *ubiquitously realized* — the one
+that actually happens, unlike the finite-time blow-up that makes headlines. A wing in weather does
+not fly through a medium; it flies inside a turbulence field. The cloud vortices are not anomalies in
+that field; they are its normal state — energy concentrating at one scale, dissipating at the
+Kolmogorov scale, cascading between them with no closed form. This is the regime in which the ONDAS
+chain must hold its stance.
+
+A flapping wing in gusty air is, structurally, a driven double pendulum: hinged at the body, the body
+itself free in the air. The double pendulum is the canonical chaotic system — no static equilibrium,
+no closed orbit, sensitive dependence on initial conditions, nothing to hold onto except a strange
+attractor. In calm air it flaps on its deterministic reversal grid; in weather, the gusts are the
+free coupling that turns that grid into the driven leg of a chaotic pair. The PID error build-ups —
+the places where the deterministic model and the turbulent reality disagree — are the cloud vortices
+of the controller: error concentrating where the two flows shear against each other, exactly as a
+vortex concentrates energy in a flow. Unchecked, they cascade, and the clock detunes (the η of 9.2).
+
+A black-box controller in this regime is *techne without episteme* — it can predict the next gust
+only by having already seen a similar gust, and verification comes too late: the gust is novel, the
+flight is the test. That is not a position you can hold. Ferocity is the other kind of controller —
+the auditable scaffold. The resolved large scale is the reversal grid: the clock, deterministic,
+stability-tested, the part of the system that behaves the same in any weather. The closure for the
+unresolved small scale is the dwell: the force, whose links are individually testable — F ∝ v², the
+1/(1−d)² scaling, the torque and power receipts of 9.5. Anticipation is the controller's name for
+running this chain ahead of the gust — the anticipative, orchestrated measurement of time and force
+in one act, not two.
+
+This is why ferocity holds the high ground. In a chaotic system there is *no low ground* — no static
+equilibrium to return to, no still point the turbulence can be allowed to reach. The only stable
+stance is a fixpoint in the rotating frame, the dwell well of 9.2, and it is stable precisely because
+it is *re-built at every reversal*, faster than the chaos can dissolve it. The high ground is not a
+place the chaos cannot reach; it is a place re-created at every stroke. The double pendulum does not
+become predictable — it is given an attractor it cannot escape. The wing, held by ferocity's
+fixpoint, becomes the fixed body, and the turbulence organizes around it the way a vortex street
+forms downstream of a fixed cylinder: still chaotic, still turbulent, but *ordered around* a stance
+that does not yield.
+
+Theorems are the headlines; proofs are the inside story. Ferocity is the inside story of the wing —
+the auditable, anticipative, orchestrated measurement of time and force by which a chaotic pair is
+held, not solved, on the high ground.
+
 ---
 
 ## 10. Firmware Verification Status
@@ -431,3 +473,4 @@ Build (TINYFISH): **FLASH 88.77 %, RAM 67.10 %** — clean, HEX produced.
 - [ONDAS](ondas.html) — the stabilization system this chain schedules
 - [ONDAS Tuning Guide](../../tutorials/ondas_tuning.html) — practical tuning procedure
 - [MSP Protocol](msp.html) — wire format for ONDAS parameters
+- [Terence Tao, "Headlines and inside stories: understanding and trust in AI for mathematics, science, and engineering"](https://terrytao.wordpress.com/2026/09/23/headlines-and-inside-stories-understanding-and-trust-in-ai-for-mathematics-science-and-engineering/) — the episteme/techne distinction and the auditable-scaffold argument behind 9.6
