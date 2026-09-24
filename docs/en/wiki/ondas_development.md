@@ -351,22 +351,22 @@ and restores a stable clock for the Poincaré and golden-angle samplers. Commens
 not only a *sampling* problem (solved by phyllotaxis) but also a *clock* problem — and ferocity
 is its physical solution.
 
-### 9.5 The name is the method
+### 9.5 The name is the method — anticipation
 
-The force face does not need a mechanical analogy to be understood — it needs the word itself.
-*Ferocity* (from Latin *ferox*, the wild thing) does not name a bigger swing. It names the same
-swing released without the softening. A pure sine is the wing being *polite*: it eases into and out
-of each stroke so its velocity — and therefore the force it meets — stays smooth, centred,
-distributed. Ferocity is the wing *committing*: the same arc, flung through the air with the
-restraint dropped. This is not a fact to reason about with a diagram; it is something known in the
-body — the difference between a careful gesture and a committed strike, between holding back and
-letting go.
+The force face and the timing face are not two things to be reconciled; they are one thing, and its
+name is *anticipation*. Ferocity is the natural impulse to keep the clock constant while committing
+more force for a moment — to lean into the beat without hurrying it. The pendulum does not flap
+faster; the reversal grid keeps its rate. The trajectory stays the same clear arc — the same path
+through the air, the same stroke — only the weight of the moment changes. That is the whole of it:
+a constant clock, a momentary extra force, and a trajectory that remains clear. For emphasis, for
+stabilization, for whatever the moment demands.
 
-The physics is only the fingerprint of that commitment. Because the air is a quadratic medium
-(F ∝ v², dynamic pressure ½ρv²), a wing that refuses to soften its stroke meets the air faster at
-the same arc, and the commitment registers as force. The dwell is not idleness; it is the stillness
-before the strike, the coiling that makes the release absolute. For the dwell/cos-ramp waveform of
-amplitude A and dwell fraction d (exact numeric integration, normalized to the sine baseline):
+This is what the dwell physically is: not a pause, but a gather. The wing draws back the same
+stroke and, in the fraction of the beat that remains, delivers it whole. Because the air is a
+quadratic medium (F ∝ v², dynamic pressure ½ρv²), the same clear trajectory, delivered without
+softening, meets the air faster at the same arc — the commitment registers as momentary force. For
+the dwell/cos-ramp waveform of amplitude A and dwell fraction d (exact numeric integration,
+normalized to the sine baseline):
 
 | Dwell d | Peak impact force ∝ 1/(1−d)² | Cycle thrust ∝ 1/(1−d) |
 |---|---|---|
@@ -377,9 +377,11 @@ amplitude A and dwell fraction d (exact numeric integration, normalized to the s
 
 The numbers do not explain the name — they verify it. At d = 0.8 the same wing strikes twenty-five
 times harder and carries five times the thrust, not because it was made stronger but because it
-stopped holding back. And that release *is* the timing face of 9.2: to re-anchor the phase against
-the wind is to refuse to let the wind soften the strike. One knob, one commitment — read in the
-clock or felt in the force. What is tunable is time; what the air feels is ferocity.
+stopped holding back. And the two faces resolve into one instinct: anticipation is the refusal to
+let the wind soften the stroke — the constant clock of 9.2, which the wind cannot own — *expressed
+as* the momentary extra force the body leans into the beat. You do not choose between them; the body
+decides both at once, the way a wrist commits a little harder the instant before the gust without
+ever losing the count. What is tunable is time; what the air feels is ferocity.
 
 ---
 
