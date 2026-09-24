@@ -351,18 +351,22 @@ and restores a stable clock for the Poincaré and golden-angle samplers. Commens
 not only a *sampling* problem (solved by phyllotaxis) but also a *clock* problem — and ferocity
 is its physical solution.
 
-### 9.5 The conjugate face: force — the golf-ball reading
+### 9.5 The name is the method
 
-"Not a force law but a clock shift" is a false dichotomy. The same sweep, struck faster, meets more
-resistance: aerodynamic force is quadratic, F ∝ v² (dynamic pressure ½ρv²), so the force the air
-feels is set by the wing's *instantaneous velocity at the strike*, not by the arc. A pure sine is
-the "balanced, restrained wave" — its velocity (and thus force) is smooth, centred, and symmetric.
-Ferocity releases that restraint: the dwell forces the same amplitude 2A to be covered in the
-moving fraction (1−d) of the stroke, so the peak velocity — and the peak force — rise as the clock
-is squeezed.
+The force face does not need a mechanical analogy to be understood — it needs the word itself.
+*Ferocity* (from Latin *ferox*, the wild thing) does not name a bigger swing. It names the same
+swing released without the softening. A pure sine is the wing being *polite*: it eases into and out
+of each stroke so its velocity — and therefore the force it meets — stays smooth, centred,
+distributed. Ferocity is the wing *committing*: the same arc, flung through the air with the
+restraint dropped. This is not a fact to reason about with a diagram; it is something known in the
+body — the difference between a careful gesture and a committed strike, between holding back and
+letting go.
 
-For the dwell/cos-ramp waveform of amplitude A and dwell fraction d (exact numeric integration,
-normalized to the sine baseline):
+The physics is only the fingerprint of that commitment. Because the air is a quadratic medium
+(F ∝ v², dynamic pressure ½ρv²), a wing that refuses to soften its stroke meets the air faster at
+the same arc, and the commitment registers as force. The dwell is not idleness; it is the stillness
+before the strike, the coiling that makes the release absolute. For the dwell/cos-ramp waveform of
+amplitude A and dwell fraction d (exact numeric integration, normalized to the sine baseline):
 
 | Dwell d | Peak impact force ∝ 1/(1−d)² | Cycle thrust ∝ 1/(1−d) |
 |---|---|---|
@@ -371,12 +375,11 @@ normalized to the sine baseline):
 | 0.30 | 2.04× | 1.43× |
 | 0.80 | 25.0× | 5.00× |
 
-The two faces share the *same knob* d: the timing face (9.2) re-anchors phase, the force face
-(above) concentrates thrust. And the golf-ball image carries its cost too: hitting faster over the
-same arc is not free — the servo pays in peak torque and power. Ferocity is therefore not "timing
-instead of force", but a clock shift *implemented by* a force law, and a force law *expressed
-through* a clock shift. What is tunable is time; what the air feels is force — one control surface,
-two conjugate readings.
+The numbers do not explain the name — they verify it. At d = 0.8 the same wing strikes twenty-five
+times harder and carries five times the thrust, not because it was made stronger but because it
+stopped holding back. And that release *is* the timing face of 9.2: to re-anchor the phase against
+the wind is to refuse to let the wind soften the strike. One knob, one commitment — read in the
+clock or felt in the force. What is tunable is time; what the air feels is ferocity.
 
 ---
 

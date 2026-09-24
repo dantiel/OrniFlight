@@ -46,3 +46,8 @@ ubuntu*.log
 eeprom.bin
 .tm_properties
 .tm-ai/
+
+# AI-internal memory (never commit)
+.aethercodex
+.tm-ai/
+test.py
