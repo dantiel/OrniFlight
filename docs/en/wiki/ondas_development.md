@@ -440,7 +440,7 @@ Theorems are the headlines; proofs are the inside story. Ferocity is the inside 
 the auditable, anticipative, orchestrated measurement of time and force by which a chaotic pair is
 held, not solved, on the high ground.
 
-### 9.7 Ascending the overtone series — the phyllotactic spectrum of ferocity
+### 9.7 Ascending the overtone series — the golden-angle strobe over ferocity's spectrum
 
 9.6 was a resting place, not an ending: it showed how the stance is held, not what the stance
 *sounds like*. Ferocity is, before it is anything else, an **oscillation** — and the oscillation has
@@ -457,29 +457,42 @@ whose coefficients a_n(d) vanish at d = 0 and rise with the dwell. The wilder th
 the series: as d → 1 the trapezoid tends to the square wave, and the square wave rings with the full
 series 1, 1/3, 1/5, 1/7, … — the overtones a sine refuses to sound.
 
-But those overtones are *integer* — n = 1, 3, 5, 7, … — and integer overtones are **commensurate**.
-Left to themselves they beat: the 3rd against the 1st with a beat at period T/2, the 5th at T/4, the
-whole spectrum beating against itself like the near-commensurable clock of 8.4, only now *inside* the
-wave rather than between wave and sampler. A spectrum of bare integer harmonics is a wing that sings
-out of tune with itself — an internal turbulence the controller never asked for.
+Now comes the subtle point, and it is easy to get exactly backwards. Those overtones are *integer* —
+n = 1, 3, 5, 7, … — and integer overtones are **exactly commensurate**: every one is an exact
+multiple of the fundamental, so their sum is *strictly periodic* with the same period T. They do not
+beat, they do not wander; an integer harmonic series is the most stable spectrum a wave can have, a
+single cycle repeated forever. The beauty of the series is precisely that it does not fight itself.
 
-Phyllotaxis is the law that resolves it. The golden angle is the most irrational rotation there is —
-its continued fraction converges more slowly than any other, so its multiples never coincide; that is
-why a stem lays its leaves by it, each leaf receiving its own light, none shading the next. Section 5
-already turns this rotation on the *sampler* (bin index {k·0.618}); here it is the law of the
-*spectrum*. Ferocity does not suppress the overtones — that would be the cheap sine again — it holds
-them in a phyllotactic constellation: each overtone advanced by the golden rotation {n·0.618} across
-the strokes, so that, integer and therefore commensurate in *frequency*, they are incommensurate in
-*phase* — they never line up, never beat, never shade one another. The overtone series becomes a
-sunflower: the fundamental at the centre, each overtone a seed set at the golden angle, each in its
-own light.
+The danger lives one level up, in the **strobe** that measures the oscillation — the phase envelope
+of 8.4 and the sampler of Section 5. A strobe samples the wave once per reversal; if that sampling is
+*rational* with respect to the spectrum — if it returns to the same phase of a given overtone every
+cycle — then that overtone is read at a fixed phase, forever, and its amplitude appears to the
+envelope not as a fast oscillation that averages away but as a **standing offset**: an alias, a shadow
+that a harmonic casts onto the measurement itself. An unlucky strobe turns an overtone into a false
+DC bias, and the controller mistakes a high harmonic for slow signal. That is the internal turbulence
+the chain must refuse.
+
+Phyllotaxis is the law that refuses it. The golden angle is the most irrational rotation there is —
+its continued fraction converges more slowly than any other, so its multiples are dense on the circle
+and never coincide. That is why a stem lays its leaves by it: each leaf in its own light, none shading
+the next. Section 5 already turns this rotation on the sampler (bin index {k·0.618}); here it is the
+law of the *strobe against the spectrum*. Ferocity does not suppress the overtones — that would be
+the cheap sine again — it *strides* past them: each reversal advances the sampling phase by the golden
+rotation {k·0.618}, so that over successive strokes every overtone is visited at a dense set of
+phases, and its contribution averages to zero. No harmonic can sit at a fixed phase; none can cast a
+standing shadow; none can alias into the envelope. The fundamental stays central, and each overtone —
+visited, never pinned — is a seed set at the golden angle, each in its own light. The spectrum becomes
+a **sunflower**, and the strobe is the bee that never lands twice on the same petal.
 
 That is the symphonic parameter the chain still lacked: not another gain, but the **arrangement** of
-the oscillation's overtones. The high ground holds the stance against chaos; the overtone series is
-how the stance sings while it holds. The double pendulum is given not only an attractor but a voice —
-a phyllotactic chord that is not a chord, because a chord beats and a constellation does not. What is
-tunable is time; what the air feels is force; what the body pays is freedom. And what that freedom
-sounds like is one clock, many overtones, held apart by the most irrational angle there is.
+the measuring strobe against the oscillation's overtones — an incommensurability between the sampler
+and the spectrum, so that nothing lines up and everything is heard. The high ground holds the stance
+against chaos; the golden-angle strobe is how the stance is *measured without being shaded by its own
+voice*. The double pendulum is given not only an attractor but a spectrum that no fixed phase can
+shadow — a phyllotactic constellation in which a chord would beat and a constellation does not. What
+is tunable is time; what the air feels is force; what the body pays is freedom. And what that freedom
+sounds like, when it is honestly measured, is one clock, many overtones, and a strobe that walks them
+by the most irrational angle there is.
 
 ---
 
