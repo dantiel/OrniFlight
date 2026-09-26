@@ -1,0 +1,99 @@
+name: OrniFlight Cloud Build
+
+# On-demand single-target firmware build, driven by the "The Forge" worker
+# (worker/ in OrniFlight Studio) or the GitHub "Run workflow" button.
+# Produces a merged .bin + .hex that the "Molt" flasher writes over Web
+# Serial (USART bootloader) or Web USB (DFU) — no console, no PlatformIO.
+
+on:
+  workflow_dispatch:
+    inputs:
+      target:
+        description: 'Flight-controller target'
+        required: true
+        type: choice
+        default: 'TINYFISH'
+        options:
+          - 'TINYFISH'        # primary ornithopter board (F3)
+          - 'OMNIBUSF4'       # F405 — coaxial servo deck
+          - 'SPRACINGF7DUAL'  # F7 dual-gyro
+          - 'BETAFLIGHTF3'    # legacy F3
+      version_tag:
+        description: 'Optional build label (alphanumeric, dashes/underscores)'
+        required: false
+        type: string
+        default: ''
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Cache ARM SDK
+        id: cache-sdk
+        uses: actions/cache@v4
+        with:
+          path: tools/gcc-arm-none-eabi-7-2018-q2-update
+          key: arm-sdk-7-2018-q2-update-linux-v1
+
+      - name: Install ARM SDK
+        if: steps.cache-sdk.outputs.cache-hit != 'true'
+        run: |
+          mkdir -p /tmp/arm-sdk
+          curl -L --retry 3 --retry-delay 5 \
+            -o /tmp/arm-sdk/gcc.tar.bz2 \
+            "https://developer.arm.com/-/media/Files/downloads/gnu-rm/7-2018q2/gcc-arm-none-eabi-7-2018-q2-update-linux.tar.bz2"
+          tar -C tools -xjf /tmp/arm-sdk/gcc.tar.bz2
+          tools/gcc-arm-none-eabi-7-2018-q2-update/bin/arm-none-eabi-gcc --version
+
+      - name: Build firmware (.bin + .hex)
+        run: |
+          make TARGET="${{ inputs.target }}" hex binary
+
+      - name: Stage firmware artifact
+        run: |
+          FC_VER="$(make version)"
+          TARGET="${{ inputs.target }}"
+          BIN="obj/orniflight_${FC_VER}_${TARGET}.bin"
+          HEX="obj/orniflight_${FC_VER}_${TARGET}.hex"
+
+          test -f "$BIN" || { echo "missing $BIN"; exit 1; }
+          test -f "$HEX" || { echo "missing $HEX"; exit 1; }
+
+          mkdir -p dist
+          cp "$BIN" dist/orniflight.bin
+          cp "$HEX" dist/orniflight.hex
+
+          BIN_SHA="$(sha256sum dist/orniflight.bin | awk '{print $1}')"
+          HEX_SHA="$(sha256sum dist/orniflight.hex | awk '{print $1}')"
+          BIN_SIZE="$(stat -c%s dist/orniflight.bin)"
+          HEX_SIZE="$(stat -c%s dist/orniflight.hex)"
+
+          cat > dist/manifest.json <<JSON
+          {
+            "target": "${TARGET}",
+            "version": "${FC_VER}",
+            "version_tag": "${{ inputs.version_tag }}",
+            "head_sha": "${{ github.sha }}",
+            "run_id": "${{ github.run_id }}",
+            "built_at": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
+            "bin": { "file": "orniflight.bin", "size": ${BIN_SIZE}, "sha256": "${BIN_SHA}" },
+            "hex": { "file": "orniflight.hex", "size": ${HEX_SIZE}, "sha256": "${HEX_SHA}" }
+          }
+          JSON
+
+          echo "Built ${FC_VER} for ${TARGET} (bin=${BIN_SIZE}B, hex=${HEX_SIZE}B)"
+
+      - name: Upload firmware
+        uses: actions/upload-artifact@v4
+        with:
+          name: orniflight-firmware
+          path: |
+            dist/orniflight.bin
+            dist/orniflight.hex
+            dist/manifest.json
+          retention-days: 7
