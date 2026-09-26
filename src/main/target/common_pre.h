@@ -43,7 +43,9 @@
 
 #ifdef STM32F3
 #define MINIMAL_CLI
+#ifndef WITHOUT_DSHOT
 #define USE_DSHOT
+#endif
 #define USE_GYRO_DATA_ANALYSE
 #endif
 
@@ -52,7 +54,9 @@
 #if defined(STM32F40_41xxx)
 #define USE_FAST_RAM
 #endif
+#ifndef WITHOUT_DSHOT
 #define USE_DSHOT
+#endif
 #define USE_DSHOT_TELEMETRY
 #define USE_RPM_FILTER
 #define I2C3_OVERCLOCK true
@@ -78,7 +82,9 @@
 #define USE_SRAM2
 #define USE_ITCM_RAM
 #define USE_FAST_RAM
+#ifndef WITHOUT_DSHOT
 #define USE_DSHOT
+#endif
 #define USE_DSHOT_TELEMETRY
 #define USE_RPM_FILTER
 #define I2C3_OVERCLOCK true
@@ -163,20 +169,26 @@
 
 #if (FLASH_SIZE > 64)
 #define USE_ACRO_TRAINER
+#ifndef WITHOUT_BLACKBOX
 #define USE_BLACKBOX
+#endif
 #define USE_CLI_BATCH
 #define USE_RESOURCE_MGMT
 // #define USE_RUNAWAY_TAKEOFF     // Runaway Takeoff Prevention (anti-taz)
 #define USE_SERVOS
+#ifndef WITHOUT_TELEMETRY
 #define USE_TELEMETRY
 #define USE_TELEMETRY_FRSKY_HUB
 #define USE_TELEMETRY_SMARTPORT
+#endif
 #endif
 
 #if (FLASH_SIZE > 128)
 #define USE_GYRO_OVERFLOW_CHECK
 // #define USE_YAW_SPIN_RECOVERY
+#ifndef WITHOUT_DSHOT
 #define USE_DSHOT_DMAR
+#endif
 #define USE_SERIALRX_FPORT      // FrSky FPort
 #define USE_TELEMETRY_CRSF
 #define USE_TELEMETRY_SRXL
@@ -185,19 +197,25 @@
 #define USE_CMS
 #define USE_MSP_DISPLAYPORT
 #define USE_MSP_OVER_TELEMETRY
+#ifndef WITHOUT_LED_STRIP
 #define USE_LED_STRIP
+#endif
 #endif
 
 #if ((FLASH_SIZE > 256) || (FEATURE_CUT_LEVEL < 11))
+#ifndef WITHOUT_VTX
 #define USE_VTX_COMMON
 #define USE_VTX_CONTROL
 #define USE_VTX_SMARTAUDIO
 #define USE_VTX_TRAMP
 #endif
+#endif
 
 #if ((FLASH_SIZE > 256) || (FEATURE_CUT_LEVEL < 10))
 #define USE_VIRTUAL_CURRENT_METER
+#ifndef WITHOUT_CAMERA_CONTROL
 #define USE_CAMERA_CONTROL
+#endif
 #define USE_ESC_SENSOR
 #define USE_SERIAL_4WAY_BLHELI_BOOTLOADER
 #define USE_RCDEVICE
@@ -208,7 +226,9 @@
 #endif
 
 #if ((FLASH_SIZE > 256) || (FEATURE_CUT_LEVEL < 8))
+#ifndef WITHOUT_LAUNCH_CONTROL
 #define USE_LAUNCH_CONTROL
+#endif
 #define USE_DYN_LPF
 #define USE_D_MIN
 #endif
@@ -268,14 +288,18 @@
 
 #if (FLASH_SIZE > 256)
 #define USE_AIRMODE_LPF
+#ifndef WITHOUT_DASHBOARD
 #define USE_DASHBOARD
+#endif
 // #define USE_GPS
 // #define USE_GPS_NMEA
 // #define USE_GPS_UBLOX
 // #define USE_GPS_RESCUE
-// #define USE_GYRO_DLPF_EXPERIMENTAL
+#define USE_GYRO_DLPF_EXPERIMENTAL
+#ifndef WITHOUT_OSD
 #define USE_OSD
 #define USE_OSD_OVER_MSP_DISPLAYPORT
+#endif
 // #define USE_MULTI_GYRO
 #define USE_OSD_ADJUSTMENTS
 #define USE_SENSOR_NAMES

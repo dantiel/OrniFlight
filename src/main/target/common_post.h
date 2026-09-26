@@ -187,7 +187,9 @@
 #endif
 
 #if defined(USE_MAX7456)
+#ifndef WITHOUT_OSD
 #define USE_OSD
+#endif
 #endif
 
 #if !defined(USE_OSD)

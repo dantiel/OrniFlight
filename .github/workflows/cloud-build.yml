@@ -23,6 +23,11 @@ on:
         required: false
         type: string
         default: ''
+      options:
+        description: 'Space-separated compile-time defines, e.g. WITHOUT_OSD WITHOUT_VTX — empty = stock build'
+        required: false
+        type: string
+        default: ''
 
 jobs:
   build:
@@ -43,16 +48,16 @@ jobs:
       - name: Install ARM SDK
         if: steps.cache-sdk.outputs.cache-hit != 'true'
         run: |
-          mkdir -p /tmp/arm-sdk
+          mkdir -p tools /tmp/arm-sdk
           curl -L --retry 3 --retry-delay 5 \
             -o /tmp/arm-sdk/gcc.tar.bz2 \
-            "https://developer.arm.com/-/media/Files/downloads/gnu-rm/7-2018q2/gcc-arm-none-eabi-7-2018-q2-update-linux.tar.bz2"
+            "https://armkeil.blob.core.windows.net/developer/Files/downloads/gnu-rm/7-2018q2/gcc-arm-none-eabi-7-2018-q2-update-linux.tar.bz2"
           tar -C tools -xjf /tmp/arm-sdk/gcc.tar.bz2
           tools/gcc-arm-none-eabi-7-2018-q2-update/bin/arm-none-eabi-gcc --version
 
       - name: Build firmware (.bin + .hex)
         run: |
-          make TARGET="${{ inputs.target }}" hex binary
+          make TARGET="${{ inputs.target }}" OPTIONS="${{ inputs.options }}" hex binary
 
       - name: Stage firmware artifact
         run: |
@@ -78,6 +83,7 @@ jobs:
             "target": "${TARGET}",
             "version": "${FC_VER}",
             "version_tag": "${{ inputs.version_tag }}",
+            "options": "${{ inputs.options }}",
             "head_sha": "${{ github.sha }}",
             "run_id": "${{ github.run_id }}",
             "built_at": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
