@@ -87,6 +87,7 @@ static FAST_RAM_ZERO_INIT float pidFrequency;
 
 FAST_RAM_ZERO_INIT float throttle_;
 static FAST_RAM_ZERO_INIT float flappingSinusoid;
+static FAST_RAM_ZERO_INIT float flappingCosinusoid;
 FAST_RAM_ZERO_INIT float flappingAmplitude;
 FAST_RAM_ZERO_INIT float ornithopterFlapping;
 FAST_RAM_ZERO_INIT float shapedFlappingSinusoidLeft[MAX_ORNITHOPTER_PAIRS];
@@ -120,7 +121,15 @@ static FAST_RAM_ZERO_INIT ondasTrackerState_t orderTrackerState;
 // Espelho: wing-self-noise cancellation — lock-in amplifier in reverse.
 // Learns the flapping-coherent gyro component and subtracts it,
 // leaving only external disturbances and actual attitude response.
-static FAST_RAM_ZERO_INIT float espelhoState[XYZ_AXIS_COUNT];
+typedef struct {
+    float sin1;   // fundamental in-phase    (lock-in holds A/2)
+    float cos1;   // fundamental quadrature  (reaction torque ~cosθ)
+    float sin2;   // 2nd-harmonic in-phase   (stroke skew)
+    float cos2;   // 2nd-harmonic quadrature (skew type)
+} espelhoLockin_t;
+
+static FAST_RAM_ZERO_INIT espelhoLockin_t espelhoState[XYZ_AXIS_COUNT];
+static FAST_RAM_ZERO_INIT float espelhoSkewRatio[XYZ_AXIS_COUNT];
 
 // SSFF: Stroke-Synchronous Feed-Forward
 // and biases the next stroke's ferocity to cancel repetitive flap-frequency error
@@ -756,23 +765,45 @@ static void applyStrokeSynchronousFF(float pitchErrorRate, bool strokeReversal, 
     ssffAccumCount++;
 }
 
-// Espelho: wing-self-noise cancellation via reverse lock-in amplifier.
-// Learns the gyro component phase-coherent with flapping and subtracts it.
-// This is Resonance's inverse: instead of amplifying the coherent signal,
-// we cancel it — removing the wing's self-image from the gyro reading.
-static float applyEspelho(int axis, float gyroRate, float sinTheta) {
+// Espelho: wing-self-noise cancellation — reverse lock-in amplifier.
+// A single ×sin(θ) lock-in is wrong three ways: (1) it halves every
+// amplitude (mix DC = A/2, reconstructed at A), (2) it is blind to the
+// quadrature axis — the wing's reaction torque is ~cos(θ), orthogonal to
+// sin(θ) — and (3) it is blind to stroke skew: downstroke ≠ upstroke puts
+// energy in the 2nd harmonic, which the fundamental mixer cannot see.
+// So we run a 4-mixer orthogonal bank {sinθ, cosθ, sin2θ, cos2θ}:
+//   · cancel the full coherent self-image (fundamental + 2nd harmonic,
+//     phase-true, ×2 to undo the lock-in's A/2) → a clean gyro image;
+//   · report the skew ratio |2nd| / |fundamental| per axis — a diagnostic
+//     of stroke asymmetry (aerodynamic force imbalance, wing/mount skew),
+//     not harmonic error to be silently discarded.
+// sin2θ = 2·sinθ·cosθ and cos2θ = cos²θ − sin²θ are derived — no extra trig.
+static float applyEspelho(int axis, float gyroRate, float sinTheta, float cosTheta) {
     int8_t gain = currentOrnithopterProfile()->espelho_gain;
     if (gain == 0) return 0.0f;
 
     float g = (float)gain * 0.01f;  // [0 → 1]
+    const float alpha = targetPidLooptime * 1e-6f / ESPELHO_TAU;
 
-    // Leaky integrator: extract in-phase amplitude at flapping frequency
-    // modulated = gyro × sin(θ) → DC = 0.5 × (in-phase amplitude)
-    espelhoState[axis] += (gyroRate * sinTheta - espelhoState[axis])
-                        * targetPidLooptime * 1e-6f / ESPELHO_TAU;
+    const float sin2 = 2.0f * sinTheta * cosTheta;
+    const float cos2 = cosTheta * cosTheta - sinTheta * sinTheta;
 
-    // Reconstruct and scale: the self-signal in phase with the wing
-    return g * espelhoState[axis] * sinTheta;
+    espelhoLockin_t *s = &espelhoState[axis];
+
+    // Leaky-integrator lock-in bank: each mixer's DC = A/2 of its coefficient
+    s->sin1 += (gyroRate * sinTheta - s->sin1) * alpha;
+    s->cos1 += (gyroRate * cosTheta - s->cos1) * alpha;
+    s->sin2 += (gyroRate * sin2     - s->sin2) * alpha;
+    s->cos2 += (gyroRate * cos2     - s->cos2) * alpha;
+
+    // Skew diagnostic: |2nd harmonic| / |fundamental| (phase = atan2(cos2, sin2))
+    const float f1sq = s->sin1 * s->sin1 + s->cos1 * s->cos1;
+    const float f2sq = s->sin2 * s->sin2 + s->cos2 * s->cos2;
+    espelhoSkewRatio[axis] = (f1sq > 1e-9f) ? sqrtf(f2sq / f1sq) : 0.0f;
+
+    // Reconstruct and cancel the full coherent self-image (×2 recovers A/2)
+    return g * 2.0f * (s->sin1 * sinTheta + s->cos1 * cosTheta
+                     + s->sin2 * sin2     + s->cos2 * cos2);
 }
 
 // Resonance: phase-locked error filter (lock-in amplifier for attitude).
@@ -971,6 +1002,7 @@ void calculateFlappingFromThrottle(float rc_throttle) {
         thetadot = omega;
 
         flappingSinusoid = sinf(theta);
+        flappingCosinusoid = cosf(theta);
 
         // ── Wave shaping ──
         // Roll differential = L/R (left +, right −).  Yaw differential = fore/aft
@@ -1009,6 +1041,7 @@ void calculateFlappingFromThrottle(float rc_throttle) {
         omega = omega + omegadot * dT;
 
         flappingSinusoid = sinf(theta);
+        flappingCosinusoid = cosf(theta);
 
         float legacySum = 0.0f;
         for (int p = 0; p < MAX_ORNITHOPTER_PAIRS; p++) {
@@ -1895,7 +1928,7 @@ void FAST_CODE pidController(const pidProfile_t *pidProfile, timeUs_t currentTim
         // -----calculate error rate
         // Espelho: cancel wing self-noise from gyro before PID sees it
         float gyroRate = gyro.gyroADCf[axis]; // Process variable from gyro output in deg/sec
-        gyroRate -= applyEspelho(axis, gyroRate, flappingSinusoid);
+        gyroRate -= applyEspelho(axis, gyroRate, flappingSinusoid, flappingCosinusoid);
         float errorRate = currentPidSetpoint - gyroRate; // r - y
 #if defined(USE_ACC)
         handleCrashRecovery(
@@ -2203,6 +2236,17 @@ void FAST_CODE pidController(const pidProfile_t *pidProfile, timeUs_t currentTim
     DEBUG_SET(DEBUG_ONDAS_METRICS, 3, lrintf(ondasMetricsCoverage() * 1000.0f));
     DEBUG_SET(DEBUG_ONDAS_METRICS, 4, lrintf(orderTrackerState.x * 10.0f));
     DEBUG_SET(DEBUG_ONDAS_METRICS, 5, lrintf(ondasMetricsGateAuthority() * 1000.0f));
+
+    // ESPELHO diagnostics: the stroke-asymmetry fingerprint the lock-in bank
+    // extracts. [0..2] skew ratio per axis (×1000, unitless) — downstroke vs
+    // upstroke amplitude asymmetry; [3] pitch skew phase (°, -180..180) — WHICH
+    // phase carries the asymmetry (0 = in-phase skew, ±90 = quadrature). This is
+    // the diagnostic the single-×sin(θ) mixer could never resolve.
+    DEBUG_SET(DEBUG_ESPELHO, 0, lrintf(espelhoSkewRatio[FD_ROLL] * 1000.0f));
+    DEBUG_SET(DEBUG_ESPELHO, 1, lrintf(espelhoSkewRatio[FD_PITCH] * 1000.0f));
+    DEBUG_SET(DEBUG_ESPELHO, 2, lrintf(espelhoSkewRatio[FD_YAW] * 1000.0f));
+    DEBUG_SET(DEBUG_ESPELHO, 3, lrintf(atan2f(espelhoState[FD_PITCH].sin2,
+                                              espelhoState[FD_PITCH].cos2) * 57.29577951f));
 
     // Clamp accumulated ferocity modulation from all axes (pitch PD + roll P + yaw P)
     flappingFerocityModulation = constrainf(flappingFerocityModulation, -0.5f, 0.5f);

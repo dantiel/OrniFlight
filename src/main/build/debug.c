@@ -86,4 +86,5 @@ const char * const debugModeNames[DEBUG_COUNT] = {
     "AC_CORRECTION",
     "AC_ERROR",
     "ONDAS_METRICS",
+    "ESPELHO",
 };
